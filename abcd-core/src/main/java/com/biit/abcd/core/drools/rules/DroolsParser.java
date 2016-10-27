@@ -722,7 +722,7 @@ public class DroolsParser {
 				}
 				break;
 			case STRING:
-				return "'$" + id + ".getVariableValue('" + variable.getName() + "')'";
+				return "(String)$" + id + ".getVariableValue('" + variable.getName() + "')";
 			}
 		} else {
 			// If it is a question of input type

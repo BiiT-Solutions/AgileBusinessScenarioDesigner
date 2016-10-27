@@ -283,6 +283,32 @@ public class OperatorsTest extends KidsFormCreator {
 		// Create the rules and launch the engine
 		createAndRunDroolsRules(form);
 	}
+	
+	@Test(enabled = true, groups = { "droolsOperators" })
+	public void concatenateVariables() throws DroolsRuleGenerationException, DocumentException, IOException, DroolsRuleExecutionException,
+			FieldTooLongException, CharacterNotAllowedException, NotValidChildException, InvalidAnswerFormatException, NotValidTypeInVariableData,
+			ElementIsReadOnly, RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
+			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
+			BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException,
+			InvalidRuleException, ActionNotImplementedException {
+		// Create a new form
+		Form form = createForm();
+		// AVG expression
+		CustomVariable stringCustomVariable = new CustomVariable(form, CONCAT, CustomVariableType.STRING, CustomVariableScope.FORM);
+		CustomVariable firstCustomVariable = new CustomVariable(form, "first", CustomVariableType.STRING, CustomVariableScope.FORM, "abc");
+		CustomVariable secondCustomVariable = new CustomVariable(form, "second", CustomVariableType.STRING, CustomVariableScope.FORM, "def");
+		
+		ExpressionChain expression = new ExpressionChain("concatExpression", new ExpressionValueCustomVariable(form, stringCustomVariable),
+				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionFunction(AvailableFunction.CONCAT),
+				new ExpressionValueCustomVariable(form, firstCustomVariable), new ExpressionSymbol(AvailableSymbol.COMMA),
+				new ExpressionValueCustomVariable(form, secondCustomVariable), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
+		form.getExpressionChains().add(expression);
+		form.addDiagram(createExpressionsDiagram(form));
+		// Create the rules and launch the engine
+		DroolsForm droolsForm = createAndRunDroolsRules(form);
+		// Check new string
+		Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CONCAT), "abcdef");
+	}
 
 	@Test(enabled = true, groups = { "droolsOperators" })
 	public void pmtOperatorTest() throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException, CharacterNotAllowedException,
