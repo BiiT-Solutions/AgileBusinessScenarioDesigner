@@ -45,14 +45,14 @@ public class RuleToDroolsRule {
 
 	private static DroolsHelper droolsHelper;
 
-	public static List<DroolsRule> parse(DroolsRule droolsRule, DroolsHelper droolsHelper) throws InvalidRuleException,
-			RuleNotImplementedException, ExpressionInvalidException {
+	public static List<DroolsRule> parse(DroolsRule droolsRule, DroolsHelper droolsHelper) throws InvalidRuleException, RuleNotImplementedException,
+			ExpressionInvalidException, NotCompatibleTypeException {
 		setDroolsHelper(droolsHelper);
 		return parse(droolsRule, null, droolsHelper);
 	}
 
-	public static List<DroolsRule> parse(Rule rule, ExpressionChain extraConditions, DroolsHelper droolsHelper)
-			throws InvalidRuleException, RuleNotImplementedException, ExpressionInvalidException {
+	public static List<DroolsRule> parse(Rule rule, ExpressionChain extraConditions, DroolsHelper droolsHelper) throws InvalidRuleException,
+			RuleNotImplementedException, ExpressionInvalidException, NotCompatibleTypeException {
 
 		List<DroolsRule> conditionsRules = new ArrayList<>();
 		setDroolsHelper(droolsHelper);
@@ -79,19 +79,15 @@ public class RuleToDroolsRule {
 				// Set the name for the rules
 				int ruleNumber = 0;
 				for (DroolsRule droolsRule : droolsRuleList) {
-					droolsRule.setName(RuleGenerationUtils
-							.createRuleName(droolsRule, extraConditions, "_" + ruleNumber));
+					droolsRule.setName(RuleGenerationUtils.createRuleName(droolsRule, extraConditions, "_" + ruleNumber));
 					// Add identifiers to the drools rule end group
 					if (droolsRule instanceof DroolsRuleGroupEndRule) {
 						for (DroolsRule generatedDroolsRule : droolsRuleList) {
-							if ((generatedDroolsRule instanceof DroolsRuleGroup)
-									&& !(generatedDroolsRule instanceof DroolsRuleGroupEndRule)) {
+							if ((generatedDroolsRule instanceof DroolsRuleGroup) && !(generatedDroolsRule instanceof DroolsRuleGroupEndRule)) {
 
-								String droolsRuleName = RuleGenerationUtils.getCleanRuleName(generatedDroolsRule
-										.getName());
+								String droolsRuleName = RuleGenerationUtils.getCleanRuleName(generatedDroolsRule.getName());
 								((DroolsRuleGroupEndRule) droolsRule).putExpresionRuleIdentifiers(
-										((DroolsRuleGroup) generatedDroolsRule).getConditionExpressionChainId(),
-										droolsRuleName);
+										((DroolsRuleGroup) generatedDroolsRule).getConditionExpressionChainId(), droolsRuleName);
 							}
 						}
 					}
@@ -126,8 +122,7 @@ public class RuleToDroolsRule {
 		for (Expression expression : conditions.getExpressions()) {
 			if (expression instanceof ExpressionChain) {
 				hasGenericVariables((ExpressionChain) expression);
-			} else if ((expression instanceof ExpressionValueGenericVariable)
-					|| (expression instanceof ExpressionValueGenericCustomVariable)) {
+			} else if ((expression instanceof ExpressionValueGenericVariable) || (expression instanceof ExpressionValueGenericCustomVariable)) {
 				return true;
 			}
 		}
@@ -142,8 +137,7 @@ public class RuleToDroolsRule {
 
 		for (int originalExpressionIndex = 0; originalExpressionIndex < rule.getConditions().getExpressions().size(); originalExpressionIndex++) {
 			Expression expression = rule.getConditions().getExpressions().get(originalExpressionIndex);
-			if ((expression instanceof ExpressionValueGenericCustomVariable)
-					|| (expression instanceof ExpressionValueGenericVariable)) {
+			if ((expression instanceof ExpressionValueGenericCustomVariable) || (expression instanceof ExpressionValueGenericVariable)) {
 				// Unwrap the generic variables being analyzed
 				unwrappedObjects = getUnwrappedTreeObjects((ExpressionValueGenericCustomVariable) expression);
 				break;
@@ -152,19 +146,15 @@ public class RuleToDroolsRule {
 		if (unwrappedObjects != null && !unwrappedObjects.isEmpty()) {
 			for (TreeObject treeObjectUnwrapped : unwrappedObjects) {
 				DroolsRule droolsRule = new DroolsRule();
-				for (int originalExpressionIndex = 0; originalExpressionIndex < rule.getConditions().getExpressions()
-						.size(); originalExpressionIndex++) {
+				for (int originalExpressionIndex = 0; originalExpressionIndex < rule.getConditions().getExpressions().size(); originalExpressionIndex++) {
 					Expression expression = rule.getConditions().getExpressions().get(originalExpressionIndex);
 
 					if (expression instanceof ExpressionValueGenericCustomVariable) {
-						CustomVariable customVariableOfGeneric = ((ExpressionValueGenericCustomVariable) expression)
-								.getVariable();
-						droolsRule.getConditions().addExpression(
-								new ExpressionValueCustomVariable(treeObjectUnwrapped, customVariableOfGeneric));
+						CustomVariable customVariableOfGeneric = ((ExpressionValueGenericCustomVariable) expression).getVariable();
+						droolsRule.getConditions().addExpression(new ExpressionValueCustomVariable(treeObjectUnwrapped, customVariableOfGeneric));
 
 					} else if (expression instanceof ExpressionValueGenericVariable) {
-						droolsRule.getConditions().addExpression(
-								new ExpressionValueTreeObjectReference(treeObjectUnwrapped));
+						droolsRule.getConditions().addExpression(new ExpressionValueTreeObjectReference(treeObjectUnwrapped));
 
 					} else {
 						droolsRule.getConditions().addExpression(expression);
@@ -189,8 +179,7 @@ public class RuleToDroolsRule {
 	 * @param expressionValueGenericVariable
 	 * @return
 	 */
-	private static List<TreeObject> getUnwrappedTreeObjects(
-			ExpressionValueGenericVariable expressionValueGenericVariable) {
+	private static List<TreeObject> getUnwrappedTreeObjects(ExpressionValueGenericVariable expressionValueGenericVariable) {
 		List<TreeObject> treeObjects = null;
 		switch (expressionValueGenericVariable.getType()) {
 		case CATEGORY:
@@ -230,8 +219,7 @@ public class RuleToDroolsRule {
 			} else {
 				if (expression instanceof ExpressionOperatorLogic) {
 					ExpressionOperatorLogic expressionOperatorLogic = (ExpressionOperatorLogic) expression;
-					if (expressionOperatorLogic.getValue().equals(AvailableOperator.AND)
-							|| expressionOperatorLogic.getValue().equals(AvailableOperator.OR)) {
+					if (expressionOperatorLogic.getValue().equals(AvailableOperator.AND) || expressionOperatorLogic.getValue().equals(AvailableOperator.OR)) {
 						return true;
 					}
 				} else if (expression instanceof ExpressionFunction) {
@@ -257,55 +245,44 @@ public class RuleToDroolsRule {
 		Expression expression = expressionChain.getExpressions().get(notExpressionIndex + 1);
 
 		if (!(expression instanceof ExpressionSymbol)) {
-			expressionChain.getExpressions().add(notExpressionIndex + 1,
-					new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET));
-		} else if (expression instanceof ExpressionSymbol
-				&& !(((ExpressionSymbol) expression).getValue().equals(AvailableSymbol.LEFT_BRACKET))) {
-			expressionChain.getExpressions().add(notExpressionIndex + 1,
-					new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET));
+			expressionChain.getExpressions().add(notExpressionIndex + 1, new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET));
+		} else if (expression instanceof ExpressionSymbol && !(((ExpressionSymbol) expression).getValue().equals(AvailableSymbol.LEFT_BRACKET))) {
+			expressionChain.getExpressions().add(notExpressionIndex + 1, new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET));
 		}
 	}
 
-	private static List<DroolsRule> parseAndOrNotConditions(List<DroolsRule> droolsRuleList) {
+	private static List<DroolsRule> parseAndOrNotConditions(List<DroolsRule> droolsRuleList) throws NotCompatibleTypeException {
 		List<DroolsRule> newConditions = new ArrayList<DroolsRule>();
 		for (DroolsRule droolsRule : droolsRuleList) {
 			ITreeElement result = calculatePrattParserResult(droolsRule.getConditions());
 			TreeElementGroupConditionFinderVisitor treeVisitor = new TreeElementGroupConditionFinderVisitor();
-			try {
-				result.accept(treeVisitor);
-				if (!treeVisitor.getConditions().isEmpty()) {
-					for (ExpressionChain visitorRules : treeVisitor.getConditions()) {
-						DroolsRuleGroup droolsRuleGroup = new DroolsRuleGroup();
-						droolsRuleGroup.setName(RuleGenerationUtils.createRuleName(droolsRule));
-						droolsRuleGroup.setConditionExpressionChainId(visitorRules.getName());
-						droolsRuleGroup.setConditions(visitorRules);
-						newConditions.add(droolsRuleGroup);
-					}
-					createEndCombinationRule(result, newConditions, droolsRule);
+			result.accept(treeVisitor);
+			if (!treeVisitor.getConditions().isEmpty()) {
+				for (ExpressionChain visitorRules : treeVisitor.getConditions()) {
+					DroolsRuleGroup droolsRuleGroup = new DroolsRuleGroup();
+					droolsRuleGroup.setName(RuleGenerationUtils.createRuleName(droolsRule));
+					droolsRuleGroup.setConditionExpressionChainId(visitorRules.getName());
+					droolsRuleGroup.setConditions(visitorRules);
+					newConditions.add(droolsRuleGroup);
 				}
-			} catch (NotCompatibleTypeException e) {
-				AbcdLogger.errorMessage(RuleToDroolsRule.class.getName(), e);
+				createEndCombinationRule(result, newConditions, droolsRule);
 			}
 		}
 		return newConditions;
 	}
 
-	private static DroolsRule createEndCombinationRule(ITreeElement result, List<DroolsRule> newConditions,
-			DroolsRule droolsRule) {
+	private static DroolsRule createEndCombinationRule(ITreeElement result, List<DroolsRule> newConditions, DroolsRule droolsRule)
+			throws NotCompatibleTypeException {
 		DroolsRuleGroupEndRule droolsEngGroupRule = null;
 		TreeElementGroupEndConditionFinderVisitor treeVisitor = new TreeElementGroupEndConditionFinderVisitor();
-		try {
-			result.accept(treeVisitor);
-			droolsEngGroupRule = new DroolsRuleGroupEndRule();
-			droolsEngGroupRule.setName(RuleGenerationUtils.createRuleName(droolsRule));
-			droolsEngGroupRule.setConditions(treeVisitor.getCompleteExpression());
-			// Set the special conditions/actions for the group rules
-			droolsEngGroupRule.setParserResult(result);
-			droolsEngGroupRule.setActions(droolsRule.getActions());
-			newConditions.add(droolsEngGroupRule);
-		} catch (NotCompatibleTypeException e) {
-			AbcdLogger.errorMessage(RuleToDroolsRule.class.getName(), e);
-		}
+		result.accept(treeVisitor);
+		droolsEngGroupRule = new DroolsRuleGroupEndRule();
+		droolsEngGroupRule.setName(RuleGenerationUtils.createRuleName(droolsRule));
+		droolsEngGroupRule.setConditions(treeVisitor.getCompleteExpression());
+		// Set the special conditions/actions for the group rules
+		droolsEngGroupRule.setParserResult(result);
+		droolsEngGroupRule.setActions(droolsRule.getActions());
+		newConditions.add(droolsEngGroupRule);
 		return droolsEngGroupRule;
 	}
 

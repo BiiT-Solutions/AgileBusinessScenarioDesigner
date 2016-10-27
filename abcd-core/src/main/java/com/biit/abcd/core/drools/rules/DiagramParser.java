@@ -90,7 +90,7 @@ public class DiagramParser {
 	}
 
 	private List<Rule> parse(Diagram diagram, ExpressionChain extraConditions) throws ExpressionInvalidException, InvalidRuleException,
-			RuleNotImplementedException, ActionNotImplementedException {
+			RuleNotImplementedException, ActionNotImplementedException, NotCompatibleTypeException {
 		List<Rule> newRules = new ArrayList<>();
 		Set<DiagramObject> diagramNodes = diagram.getDiagramObjects();
 		for (DiagramObject diagramNode : diagramNodes) {
@@ -112,9 +112,10 @@ public class DiagramParser {
 	 * @throws InvalidRuleException
 	 * @throws RuleNotImplementedException
 	 * @throws ActionNotImplementedException
+	 * @throws NotCompatibleTypeException
 	 */
 	private List<Rule> parseDiagramElement(DiagramElement node, ExpressionChain extraConditions, List<Rule> newRules) throws ExpressionInvalidException,
-			InvalidRuleException, RuleNotImplementedException, ActionNotImplementedException {
+			InvalidRuleException, RuleNotImplementedException, ActionNotImplementedException, NotCompatibleTypeException {
 		List<ExpressionChain> forkConditions = new ArrayList<>();
 		// Parse the corresponding node
 		switch (node.getType()) {
