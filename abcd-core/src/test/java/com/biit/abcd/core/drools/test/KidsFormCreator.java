@@ -1,6 +1,9 @@
 package com.biit.abcd.core.drools.test;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -15,8 +18,23 @@ import org.junit.Assert;
 import org.testng.annotations.Test;
 
 import com.biit.abcd.core.drools.FormToDroolsExporter;
+import com.biit.abcd.core.drools.prattparser.exceptions.PrattParserException;
+import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
 import com.biit.abcd.core.drools.rules.DroolsRulesGenerator;
+import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
+import com.biit.abcd.core.drools.rules.exceptions.BetweenFunctionInvalidException;
+import com.biit.abcd.core.drools.rules.exceptions.DateComparisonNotPossibleException;
+import com.biit.abcd.core.drools.rules.exceptions.DroolsRuleCreationException;
 import com.biit.abcd.core.drools.rules.exceptions.DroolsRuleGenerationException;
+import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
+import com.biit.abcd.core.drools.rules.exceptions.InvalidRuleException;
+import com.biit.abcd.core.drools.rules.exceptions.NullCustomVariableException;
+import com.biit.abcd.core.drools.rules.exceptions.NullExpressionValueException;
+import com.biit.abcd.core.drools.rules.exceptions.NullTreeObjectException;
+import com.biit.abcd.core.drools.rules.exceptions.PluginInvocationException;
+import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
+import com.biit.abcd.core.drools.rules.exceptions.TreeObjectInstanceNotRecognizedException;
+import com.biit.abcd.core.drools.rules.exceptions.TreeObjectParentNotValidException;
 import com.biit.abcd.core.drools.utils.RuleGenerationUtils;
 import com.biit.abcd.persistence.entity.Answer;
 import com.biit.abcd.persistence.entity.AnswerFormat;
@@ -93,7 +111,11 @@ public class KidsFormCreator {
 
 	private ISubmittedForm submittedForm;
 
-	public String createDroolsRules(Form form) throws DocumentException, IOException, DroolsRuleGenerationException {
+	public String createDroolsRules(Form form) throws DocumentException, IOException, RuleNotImplementedException, NotCompatibleTypeException,
+			ExpressionInvalidException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException,
+			NullCustomVariableException, NullExpressionValueException, BetweenFunctionInvalidException, DateComparisonNotPossibleException,
+			PluginInvocationException, DroolsRuleCreationException, PrattParserException, InvalidRuleException, ActionNotImplementedException,
+			DroolsRuleGenerationException {
 		FormToDroolsExporter formDrools = new FormToDroolsExporter();
 		DroolsRulesGenerator rulesGenerator = formDrools.generateDroolRules(form, getGlobalVariables());
 		readStaticSubmittedForm();
@@ -107,9 +129,22 @@ public class KidsFormCreator {
 				RuleGenerationUtils.convertGlobalVariablesToDroolsGlobalVariables(getGlobalVariables()));
 	}
 
-	public DroolsForm createAndRunDroolsRules(Form form) throws DroolsRuleGenerationException, DocumentException, IOException, DroolsRuleExecutionException {
+	public DroolsForm createAndRunDroolsRules(Form form) throws DroolsRuleGenerationException, DocumentException, IOException, DroolsRuleExecutionException,
+			RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
+			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
+			BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException,
+			InvalidRuleException, ActionNotImplementedException {
 		String droolsRules = createDroolsRules(form);
+		storeInFile(droolsRules);
 		return runDroolsRules(droolsRules);
+	}
+
+	private void storeInFile(String text) {
+		try (PrintStream out = new PrintStream(new FileOutputStream("/tmp/drool_test.txt"))) {
+			out.print(text);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -523,6 +558,11 @@ public class KidsFormCreator {
 		health.addChild(yes);
 		health.addChild(no);
 		gezondheid.addChild(health);
+
+		Question healthExtra = new Question("healthExtra");
+		healthExtra.setAnswerType(AnswerType.INPUT);
+		healthExtra.setAnswerFormat(AnswerFormat.TEXT);
+		gezondheid.addChild(healthExtra);
 
 		Category lifestyle = new Category(CATEGORY_LIFESTYLE);
 		form.addChild(lifestyle);

@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 
+import net.xeoh.plugins.base.Plugin;
+
 import com.biit.abcd.core.drools.prattparser.ExpressionChainPrattParser;
 import com.biit.abcd.core.drools.prattparser.PrattParser;
 import com.biit.abcd.core.drools.prattparser.exceptions.PrattParserException;
@@ -58,8 +60,6 @@ import com.biit.drools.form.DroolsQuestionFormat;
 import com.biit.drools.plugins.PluginController;
 import com.biit.form.entity.TreeObject;
 import com.biit.plugins.interfaces.IPlugin;
-
-import net.xeoh.plugins.base.Plugin;
 
 public class DroolsParser {
 
@@ -736,11 +736,11 @@ public class DroolsParser {
 					}
 					break;
 				case TEXT:
-					return "'$" + id + ".getAnswer('" + AnswerFormat.TEXT.getDroolsFormat() + "')'";
+					return "$" + id + ".getAnswer('" + AnswerFormat.TEXT.getDroolsFormat() + "')";
 				case POSTAL_CODE:
-					return "'$" + id + ".getAnswer('" + AnswerFormat.POSTAL_CODE.getDroolsFormat() + "')'";
+					return "$" + id + ".getAnswer('" + AnswerFormat.POSTAL_CODE.getDroolsFormat() + "')";
 				case MULTI_TEXT:
-					return "'$" + id + ".getAnswer('" + AnswerFormat.MULTI_TEXT.getDroolsFormat() + "')'";
+					return "$" + id + ".getAnswer('" + AnswerFormat.MULTI_TEXT.getDroolsFormat() + "')";
 				default:
 					break;
 				}
@@ -908,12 +908,36 @@ public class DroolsParser {
 
 	private static String getVariablesListValuesForFunctions(ExpressionValueCustomVariable leftExpressionCustomVariable, List<Expression> variables) {
 		String ruleCore = "";
-		// Concat uses strings. Other uses numbers.
-		if (variables != null && !variables.isEmpty() && variables.get(0) instanceof ExpressionValueString) {
+
+		if (variables == null || variables.isEmpty()) {
+			if (leftExpressionCustomVariable.getVariable().getType().equals(CustomVariableType.STRING)) {
+				return "\tList<String> variablesList = new ArrayList<String>();\n";
+			} else {
+				return "\tList<Double> variablesList = new ArrayList<Double>();\n";
+			}
+		}
+
+		// Concatenation uses strings. Other uses numbers.
+		// Is a variable parameter variables
+		if ((variables.get(0) instanceof ExpressionValueString ||
+		// It is using a custom variable that is a string.
+				(variables.get(0) instanceof ExpressionValueCustomVariable && ((ExpressionValueCustomVariable) variables.get(0)).getVariable().getType()
+						.equals(CustomVariableType.STRING)) ||
+		// It is a variable in a treeobject that is a string.
+		// is a question with string values.
+		((variables.get(0) instanceof ExpressionValueTreeObjectReference) && !(variables.get(0) instanceof ExpressionValueCustomVariable)
+				&& (((ExpressionValueTreeObjectReference) variables.get(0)).getReference() instanceof Question) && (
+		// Questions with text format.
+		((Question) (((ExpressionValueTreeObjectReference) variables.get(0)).getReference())).getAnswerType().equals(AnswerType.RADIO)
+				|| ((Question) (((ExpressionValueTreeObjectReference) variables.get(0)).getReference())).getAnswerType().equals(AnswerType.MULTI_CHECKBOX) ||
+		// Input value only if it is formatted as text
+		(((Question) (((ExpressionValueTreeObjectReference) variables.get(0)).getReference())).getAnswerType().equals(AnswerType.INPUT) && ((Question) (((ExpressionValueTreeObjectReference) variables
+				.get(0)).getReference())).getAnswerFormat().equals(AnswerFormat.TEXT)))))) {
 			ruleCore += "\tList<String> variablesList = new ArrayList<String>();\n";
 		} else {
 			ruleCore += "\tList<Double> variablesList = new ArrayList<Double>();\n";
 		}
+
 		for (Expression variable : variables) {
 			if (variable instanceof ExpressionValueCustomVariable) {
 				ExpressionValueCustomVariable expressionValueCustomVariable = (ExpressionValueCustomVariable) variable;
@@ -926,36 +950,49 @@ public class DroolsParser {
 					if (parent != null) {
 						String parentId = "$" + parent.getUniqueNameReadable();
 						ruleCore += "\tif(" + parentId + ".isVariableDefined('" + leftExpressionCustomVariable.getVariable().getName() + "')){";
-						ruleCore += "variablesList.add(" + getDroolsVariableValueFromExpressionValueTreeObject(leftExpressionCustomVariable) + ");}\n";
+						ruleCore += "\tvariablesList.add(" + getDroolsVariableValueFromExpressionValueTreeObject(leftExpressionCustomVariable) + ");}\n";
 					}
 				}
 
 			} else if (variable instanceof ExpressionValueTreeObjectReference) {
 				ExpressionValueTreeObjectReference expressionValueTreeObject = (ExpressionValueTreeObjectReference) variable;
-				ruleCore += "variablesList.add(" + getDroolsVariableValueFromExpressionValueTreeObject(expressionValueTreeObject) + ");\n";
-
+				if (expressionValueTreeObject instanceof ExpressionValueCustomVariable) {
+					if (((ExpressionValueCustomVariable) expressionValueTreeObject).getVariable().getType().equals(CustomVariableType.NUMBER)) {
+						ruleCore += "\tvariablesList.add((Double)" + getDroolsVariableValueFromExpressionValueTreeObject(expressionValueTreeObject) + ");\n";
+					} else {
+						ruleCore += "\tvariablesList.add((String)" + getDroolsVariableValueFromExpressionValueTreeObject(expressionValueTreeObject) + ");\n";
+					}
+				} else {
+					if ((expressionValueTreeObject.getReference() instanceof Question)
+							&& ((Question) expressionValueTreeObject.getReference()).getAnswerType().equals(AnswerType.INPUT)
+							&& ((Question) expressionValueTreeObject.getReference()).getAnswerFormat().equals(AnswerFormat.NUMBER)) {
+						ruleCore += "\tvariablesList.add((Double)" + getDroolsVariableValueFromExpressionValueTreeObject(expressionValueTreeObject) + ");\n";
+					} else {
+						ruleCore += "\tvariablesList.add((String)" + getDroolsVariableValueFromExpressionValueTreeObject(expressionValueTreeObject) + ");\n";
+					}
+				}
 			} else if (variable instanceof ExpressionValueGlobalConstant) {
 				GlobalVariable globalExpression = ((ExpressionValueGlobalConstant) variable).getValue();
 				switch (globalExpression.getFormat()) {
 				case NUMBER:
-					ruleCore += "variablesList.add((Double)" + globalExpression.getName() + ");\n";
+					ruleCore += "\tvariablesList.add((Double)" + globalExpression.getName() + ");\n";
 					break;
 				case POSTAL_CODE:
-					ruleCore += "variablesList.add(((String)" + globalExpression.getName() + ").toUpperCase());\n";
+					ruleCore += "\tvariablesList.add(((String)" + globalExpression.getName() + ").toUpperCase());\n";
 					break;
 				case MULTI_TEXT:
 				case TEXT:
-					ruleCore += "variablesList.add(" + globalExpression.getName() + ");\n";
+					ruleCore += "\tvariablesList.add((String)" + globalExpression.getName() + ");\n";
 					break;
 				case DATE:
-					ruleCore += "variablesList.add(" + globalExpression.getName() + ");\n";
+					ruleCore += "\tvariablesList.add(" + globalExpression.getName() + ");\n";
 					break;
 				}
 			} else if (variable instanceof ExpressionValue) {
 				if (variable instanceof ExpressionValueNumber) {
-					ruleCore += "variablesList.add(" + ((ExpressionValueNumber) variable).getValue() + "d);\n";
+					ruleCore += "\tvariablesList.add(" + ((ExpressionValueNumber) variable).getValue() + "d);\n";
 				} else if (variable instanceof ExpressionValueString) {
-					ruleCore += "variablesList.add(\"" + ((ExpressionValueString) variable).getValue() + "\");\n";
+					ruleCore += "\tvariablesList.add('" + ((ExpressionValueString) variable).getValue() + "');\n";
 				}
 			}
 		}

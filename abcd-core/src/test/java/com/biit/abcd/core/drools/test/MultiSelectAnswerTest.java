@@ -6,15 +6,19 @@ import org.dom4j.DocumentException;
 import org.junit.Assert;
 import org.testng.annotations.Test;
 
+import com.biit.abcd.core.drools.prattparser.exceptions.PrattParserException;
 import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
 import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.BetweenFunctionInvalidException;
+import com.biit.abcd.core.drools.rules.exceptions.DateComparisonNotPossibleException;
+import com.biit.abcd.core.drools.rules.exceptions.DroolsRuleCreationException;
 import com.biit.abcd.core.drools.rules.exceptions.DroolsRuleGenerationException;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.InvalidRuleException;
 import com.biit.abcd.core.drools.rules.exceptions.NullCustomVariableException;
 import com.biit.abcd.core.drools.rules.exceptions.NullExpressionValueException;
 import com.biit.abcd.core.drools.rules.exceptions.NullTreeObjectException;
+import com.biit.abcd.core.drools.rules.exceptions.PluginInvocationException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.TreeObjectInstanceNotRecognizedException;
 import com.biit.abcd.core.drools.rules.exceptions.TreeObjectParentNotValidException;
@@ -76,8 +80,7 @@ public class MultiSelectAnswerTest extends KidsFormCreator {
 	protected Form testForm = null;
 
 	@Override
-	public Form createForm()
-			throws FieldTooLongException, CharacterNotAllowedException, NotValidChildException, ElementIsReadOnly {
+	public Form createForm() throws FieldTooLongException, CharacterNotAllowedException, NotValidChildException, ElementIsReadOnly {
 		Form form = new Form(FORM_NAME);
 		form.setVersion(FORM_VERSION);
 		Category category = new Category(CATEGORY_NAME);
@@ -97,8 +100,7 @@ public class MultiSelectAnswerTest extends KidsFormCreator {
 		return form;
 	}
 
-	private Form createFormOnlyOneAnswer()
-			throws FieldTooLongException, CharacterNotAllowedException, NotValidChildException, ElementIsReadOnly {
+	private Form createFormOnlyOneAnswer() throws FieldTooLongException, CharacterNotAllowedException, NotValidChildException, ElementIsReadOnly {
 		Form form = new Form(FORM_NAME);
 		form.setVersion(FORM_VERSION);
 		Category category = new Category(CATEGORY_NAME);
@@ -115,14 +117,13 @@ public class MultiSelectAnswerTest extends KidsFormCreator {
 	}
 
 	@Test(groups = { "multiSelectAnswer" })
-	private void testQuestionOneAnswerTableRule() throws FieldTooLongException, NotValidChildException,
-			InvalidAnswerFormatException, CharacterNotAllowedException, NotValidTypeInVariableData,
-			ExpressionInvalidException, InvalidRuleException, IOException, RuleNotImplementedException,
-			DocumentException, ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
-			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
-			NullExpressionValueException, QuestionDoesNotExistException, GroupDoesNotExistException,
-			CategoryDoesNotExistException, BetweenFunctionInvalidException, ElementIsReadOnly,
-			DroolsRuleGenerationException, DroolsRuleExecutionException {
+	private void testQuestionOneAnswerTableRule() throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException,
+			CharacterNotAllowedException, NotValidTypeInVariableData, ExpressionInvalidException, InvalidRuleException, IOException,
+			RuleNotImplementedException, DocumentException, ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
+			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
+			QuestionDoesNotExistException, GroupDoesNotExistException, CategoryDoesNotExistException, BetweenFunctionInvalidException, ElementIsReadOnly,
+			DroolsRuleGenerationException, DroolsRuleExecutionException, DateComparisonNotPossibleException, PluginInvocationException,
+			DroolsRuleCreationException, PrattParserException {
 		// Create a simple form
 		Form form = createFormOnlyOneAnswer();
 		// Create the table and diagram
@@ -131,20 +132,18 @@ public class MultiSelectAnswerTest extends KidsFormCreator {
 		ISubmittedForm submittedForm = createAndRunDroolsRules(form);
 		// Check result
 		Assert.assertNotNull(submittedForm);
-		Assert.assertEquals(1.0,
-				((ISubmittedFormElement) ((DroolsSubmittedForm) ((DroolsForm) submittedForm).getDroolsSubmittedForm())
-						.getChild(ISubmittedCategory.class, CATEGORY_NAME)).getVariableValue(CATEGORY_VARIABLE_NAME));
+		Assert.assertEquals(1.0, ((ISubmittedFormElement) ((DroolsSubmittedForm) ((DroolsForm) submittedForm).getDroolsSubmittedForm()).getChild(
+				ISubmittedCategory.class, CATEGORY_NAME)).getVariableValue(CATEGORY_VARIABLE_NAME));
 	}
 
 	@Test(groups = { "multiSelectAnswer" })
-	private void testQuestionAnswerTableRule() throws FieldTooLongException, NotValidChildException,
-			InvalidAnswerFormatException, CharacterNotAllowedException, NotValidTypeInVariableData,
-			ExpressionInvalidException, InvalidRuleException, IOException, RuleNotImplementedException,
-			DocumentException, ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
-			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
-			NullExpressionValueException, QuestionDoesNotExistException, GroupDoesNotExistException,
-			CategoryDoesNotExistException, BetweenFunctionInvalidException, ElementIsReadOnly,
-			DroolsRuleGenerationException, DroolsRuleExecutionException {
+	private void testQuestionAnswerTableRule() throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException,
+			CharacterNotAllowedException, NotValidTypeInVariableData, ExpressionInvalidException, InvalidRuleException, IOException,
+			RuleNotImplementedException, DocumentException, ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException,
+			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
+			QuestionDoesNotExistException, GroupDoesNotExistException, CategoryDoesNotExistException, BetweenFunctionInvalidException, ElementIsReadOnly,
+			DroolsRuleGenerationException, DroolsRuleExecutionException, DateComparisonNotPossibleException, PluginInvocationException,
+			DroolsRuleCreationException, PrattParserException {
 		// Create a simple form
 		Form form = createForm();
 		// Create the table and diagram
@@ -154,22 +153,17 @@ public class MultiSelectAnswerTest extends KidsFormCreator {
 		// Check result
 		Assert.assertNotNull(submittedForm);
 
-		Assert.assertEquals(MULTI_SELECT_VALUE,
-				((ISubmittedFormElement) ((DroolsSubmittedForm) ((DroolsForm) submittedForm).getDroolsSubmittedForm())
-						.getChild(ISubmittedCategory.class, CATEGORY_NAME)).getVariableValue(CATEGORY_VARIABLE_NAME));
+		Assert.assertEquals(MULTI_SELECT_VALUE, ((ISubmittedFormElement) ((DroolsSubmittedForm) ((DroolsForm) submittedForm).getDroolsSubmittedForm())
+				.getChild(ISubmittedCategory.class, CATEGORY_NAME)).getVariableValue(CATEGORY_VARIABLE_NAME));
 	}
 
-	private void createQuestionAnswerTableRule(Form form)
-			throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException {
+	private void createQuestionAnswerTableRule(Form form) throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException {
 
-		CustomVariable categoryVariable = new CustomVariable(form, CATEGORY_VARIABLE_NAME, CustomVariableType.NUMBER,
-				CustomVariableScope.CATEGORY, "0.0");
+		CustomVariable categoryVariable = new CustomVariable(form, CATEGORY_VARIABLE_NAME, CustomVariableType.NUMBER, CustomVariableScope.CATEGORY, "0.0");
 
-		ExpressionChain commonAction = new ExpressionChain(
-				new ExpressionValueCustomVariable((Category) getTreeObject(form, CATEGORY_NAME), categoryVariable),
-				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
-				new ExpressionValueCustomVariable((Category) getTreeObject(form, CATEGORY_NAME), categoryVariable),
-				new ExpressionOperatorMath(AvailableOperator.PLUS), new ExpressionValueNumber(1.0));
+		ExpressionChain commonAction = new ExpressionChain(new ExpressionValueCustomVariable((Category) getTreeObject(form, CATEGORY_NAME), categoryVariable),
+				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueCustomVariable((Category) getTreeObject(form, CATEGORY_NAME),
+						categoryVariable), new ExpressionOperatorMath(AvailableOperator.PLUS), new ExpressionValueNumber(1.0));
 
 		// Create the tableRule
 		// Only with one conditions column
@@ -178,30 +172,24 @@ public class MultiSelectAnswerTest extends KidsFormCreator {
 		TableRuleRow ruleRow = new TableRuleRow();
 
 		if (getTreeObject(form, ANSWER1_NAME) != null) {
-			ruleRow.addCondition(
-					new ExpressionValueTreeObjectReference(((Question) getTreeObject(form, QUESTION_NAME))));
-			ruleRow.addCondition(
-					new ExpressionChain(new ExpressionValueTreeObjectReference(getTreeObject(form, ANSWER1_NAME))));
+			ruleRow.addCondition(new ExpressionValueTreeObjectReference(((Question) getTreeObject(form, QUESTION_NAME))));
+			ruleRow.addCondition(new ExpressionChain(new ExpressionValueTreeObjectReference(getTreeObject(form, ANSWER1_NAME))));
 			ruleRow.setAction(commonAction);
 			tableRule.getRules().add(ruleRow);
 		}
 
 		if (getTreeObject(form, ANSWER2_NAME) != null) {
 			ruleRow = new TableRuleRow();
-			ruleRow.addCondition(
-					new ExpressionValueTreeObjectReference(((Question) getTreeObject(form, QUESTION_NAME))));
-			ruleRow.addCondition(
-					new ExpressionChain(new ExpressionValueTreeObjectReference(getTreeObject(form, ANSWER2_NAME))));
+			ruleRow.addCondition(new ExpressionValueTreeObjectReference(((Question) getTreeObject(form, QUESTION_NAME))));
+			ruleRow.addCondition(new ExpressionChain(new ExpressionValueTreeObjectReference(getTreeObject(form, ANSWER2_NAME))));
 			ruleRow.setAction(commonAction);
 			tableRule.getRules().add(ruleRow);
 		}
 
 		if (getTreeObject(form, ANSWER3_NAME) != null) {
 			ruleRow = new TableRuleRow();
-			ruleRow.addCondition(
-					new ExpressionValueTreeObjectReference(((Question) getTreeObject(form, QUESTION_NAME))));
-			ruleRow.addCondition(
-					new ExpressionChain(new ExpressionValueTreeObjectReference(getTreeObject(form, ANSWER3_NAME))));
+			ruleRow.addCondition(new ExpressionValueTreeObjectReference(((Question) getTreeObject(form, QUESTION_NAME))));
+			ruleRow.addCondition(new ExpressionChain(new ExpressionValueTreeObjectReference(getTreeObject(form, ANSWER3_NAME))));
 			ruleRow.setAction(commonAction);
 			tableRule.getRules().add(ruleRow);
 		}

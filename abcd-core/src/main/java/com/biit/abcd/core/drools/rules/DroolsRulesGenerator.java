@@ -9,8 +9,20 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.biit.abcd.core.drools.prattparser.exceptions.PrattParserException;
+import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
+import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
+import com.biit.abcd.core.drools.rules.exceptions.BetweenFunctionInvalidException;
+import com.biit.abcd.core.drools.rules.exceptions.DateComparisonNotPossibleException;
+import com.biit.abcd.core.drools.rules.exceptions.DroolsRuleCreationException;
 import com.biit.abcd.core.drools.rules.exceptions.DroolsRuleGenerationException;
+import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
+import com.biit.abcd.core.drools.rules.exceptions.InvalidRuleException;
+import com.biit.abcd.core.drools.rules.exceptions.NullCustomVariableException;
+import com.biit.abcd.core.drools.rules.exceptions.NullExpressionValueException;
 import com.biit.abcd.core.drools.rules.exceptions.NullTreeObjectException;
+import com.biit.abcd.core.drools.rules.exceptions.PluginInvocationException;
+import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.TreeObjectInstanceNotRecognizedException;
 import com.biit.abcd.core.drools.rules.exceptions.TreeObjectParentNotValidException;
 import com.biit.abcd.core.drools.utils.RuleGenerationUtils;
@@ -37,14 +49,21 @@ public class DroolsRulesGenerator {
 	private StringBuilder builder;
 	private List<GlobalVariable> globalVariables;
 
-	public DroolsRulesGenerator(Form form, List<GlobalVariable> globalVariables) throws DroolsRuleGenerationException {
+	public DroolsRulesGenerator(Form form, List<GlobalVariable> globalVariables) throws DroolsRuleGenerationException, RuleNotImplementedException,
+			NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
+			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException, BetweenFunctionInvalidException,
+			DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException, InvalidRuleException,
+			ActionNotImplementedException {
 		this.form = form;
 		this.globalVariables = globalVariables;
 		droolsHelper = new DroolsHelper(form);
 		initParser();
 	}
 
-	private void initParser() throws DroolsRuleGenerationException {
+	private void initParser() throws DroolsRuleGenerationException, RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException,
+			NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException,
+			NullExpressionValueException, BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException,
+			DroolsRuleCreationException, PrattParserException, InvalidRuleException, ActionNotImplementedException {
 		if (form != null) {
 			// Define imports
 			importsDeclaration();
@@ -55,8 +74,7 @@ public class DroolsRulesGenerator {
 
 			try {
 				setCustomVariablesDefaultValues();
-			} catch (NullTreeObjectException | TreeObjectInstanceNotRecognizedException
-					| TreeObjectParentNotValidException e) {
+			} catch (NullTreeObjectException | TreeObjectInstanceNotRecognizedException | TreeObjectParentNotValidException e) {
 				e.printStackTrace();
 			}
 
@@ -73,12 +91,9 @@ public class DroolsRulesGenerator {
 				DiagramParser diagParser = new DiagramParser(droolsHelper);
 				// Parse the root diagrams
 				if (!rootDiagrams.isEmpty()) {
-					getRulesBuilder().append(
-							"//******************************************************************************\n");
-					getRulesBuilder().append(
-							"//*                                FORM RULES                                  *\n");
-					getRulesBuilder().append(
-							"//******************************************************************************\n");
+					getRulesBuilder().append("//******************************************************************************\n");
+					getRulesBuilder().append("//*                                FORM RULES                                  *\n");
+					getRulesBuilder().append("//******************************************************************************\n");
 					for (Diagram diagram : rootDiagrams) {
 						getRulesBuilder().append(diagParser.getDroolsRulesAsText(diagram));
 					}
@@ -127,12 +142,9 @@ public class DroolsRulesGenerator {
 	 */
 	private void globalVariablesDeclaration() {
 		if ((globalVariables != null) && !globalVariables.isEmpty()) {
-			getRulesBuilder().append(
-					"//******************************************************************************\n");
-			getRulesBuilder().append(
-					"//*                              GLOBAL VARIABLES                              *\n");
-			getRulesBuilder().append(
-					"//******************************************************************************\n");
+			getRulesBuilder().append("//******************************************************************************\n");
+			getRulesBuilder().append("//*                              GLOBAL VARIABLES                              *\n");
+			getRulesBuilder().append("//******************************************************************************\n");
 			getRulesBuilder().append(parseGlobalVariables());
 			getRulesBuilder().append("\n");
 		}
@@ -147,8 +159,7 @@ public class DroolsRulesGenerator {
 	 * @throws TreeObjectInstanceNotRecognizedException
 	 * @throws TreeObjectParentNotValidException
 	 */
-	private void setCustomVariablesDefaultValues() throws NullTreeObjectException,
-			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException {
+	private void setCustomVariablesDefaultValues() throws NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException {
 		// Look for the custom variables in the diagrams
 		Set<Diagram> diagrams = form.getDiagrams();
 		if (diagrams != null) {
@@ -169,16 +180,12 @@ public class DroolsRulesGenerator {
 			Set<String> variablesList = new HashSet<String>();
 
 			if (!customVariablesList.isEmpty()) {
-				getRulesBuilder().append(
-						"//******************************************************************************\n");
-				getRulesBuilder().append(
-						"//*                           DEFAULT VALUE VARIABLES                          *\n");
-				getRulesBuilder().append(
-						"//******************************************************************************\n");
+				getRulesBuilder().append("//******************************************************************************\n");
+				getRulesBuilder().append("//*                           DEFAULT VALUE VARIABLES                          *\n");
+				getRulesBuilder().append("//******************************************************************************\n");
 
 				for (ExpressionValueCustomVariable expressionValueCustomVariable : customVariablesList) {
-					String customVariableRule = createDefaultValueDroolsRules(variablesList,
-							expressionValueCustomVariable);
+					String customVariableRule = createDefaultValueDroolsRules(variablesList, expressionValueCustomVariable);
 					if (customVariableRule != null) {
 						getRulesBuilder().append(customVariableRule);
 					}
@@ -187,21 +194,18 @@ public class DroolsRulesGenerator {
 		}
 	}
 
-	private String createDefaultValueDroolsRules(Set<String> variablesList,
-			ExpressionValueCustomVariable expressionValueCustomVariable) throws NullTreeObjectException,
-			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException {
+	private String createDefaultValueDroolsRules(Set<String> variablesList, ExpressionValueCustomVariable expressionValueCustomVariable)
+			throws NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException {
 		StringBuilder defaultCustomVariableValue = new StringBuilder();
 		String ruleName = "";
 		if ((expressionValueCustomVariable != null) && (expressionValueCustomVariable.getReference() != null)
-				&& (expressionValueCustomVariable.getVariable() != null)
-				&& (expressionValueCustomVariable.getVariable().getDefaultValue() != null)
+				&& (expressionValueCustomVariable.getVariable() != null) && (expressionValueCustomVariable.getVariable().getDefaultValue() != null)
 				&& (!(expressionValueCustomVariable.getVariable().getDefaultValue()).equals(""))) {
 
 			String customVariableDefaultValue = "";
 			switch (expressionValueCustomVariable.getVariable().getType()) {
 			case STRING:
-				customVariableDefaultValue = "\'" + expressionValueCustomVariable.getVariable().getDefaultValue()
-						+ "\'";
+				customVariableDefaultValue = "\'" + expressionValueCustomVariable.getVariable().getDefaultValue() + "\'";
 				break;
 			case NUMBER:
 				customVariableDefaultValue = expressionValueCustomVariable.getVariable().getDefaultValue() + "d";
@@ -209,9 +213,8 @@ public class DroolsRulesGenerator {
 			case DATE:
 				try {
 					SimpleDateFormat userInputFormat = new SimpleDateFormat("dd/mm/yyyy");
-					customVariableDefaultValue = "(new Date("
-							+ userInputFormat.parse(expressionValueCustomVariable.getVariable().getDefaultValue())
-									.getTime() + "l))";
+					customVariableDefaultValue = "(new Date(" + userInputFormat.parse(expressionValueCustomVariable.getVariable().getDefaultValue()).getTime()
+							+ "l))";
 				} catch (ParseException e) {
 					AbcdLogger.errorMessage(this.getClass().getName(), e);
 				}
@@ -219,24 +222,19 @@ public class DroolsRulesGenerator {
 			}
 
 			// Rule name
-			ruleName = RuleGenerationUtils.getRuleName(expressionValueCustomVariable.getVariable().getName()
-					+ "_default_value");
+			ruleName = RuleGenerationUtils.getRuleName(expressionValueCustomVariable.getVariable().getName() + "_default_value");
 			// Conditions
 			defaultCustomVariableValue.append("when\n");
 			defaultCustomVariableValue.append("\t$droolsForm: DroolsForm()\n");
 
-			defaultCustomVariableValue.append(SimpleConditionsGenerator
-					.getTreeObjectConditions(expressionValueCustomVariable.getReference()));
+			defaultCustomVariableValue.append(SimpleConditionsGenerator.getTreeObjectConditions(expressionValueCustomVariable.getReference()));
 			// Actions
 			defaultCustomVariableValue.append("then\n");
-			defaultCustomVariableValue.append("\t$"
-					+ TreeObjectDroolsIdMap.get(expressionValueCustomVariable.getReference()) + ".setVariableValue('"
-					+ expressionValueCustomVariable.getVariable().getName() + "', " + customVariableDefaultValue
-					+ ");\n");
+			defaultCustomVariableValue.append("\t$" + TreeObjectDroolsIdMap.get(expressionValueCustomVariable.getReference()) + ".setVariableValue('"
+					+ expressionValueCustomVariable.getVariable().getName() + "', " + customVariableDefaultValue + ");\n");
 			defaultCustomVariableValue.append("\tDroolsEngineLogger.debug(\"DroolsRule\", \"Variable set ("
-					+ expressionValueCustomVariable.getReference().getName() + ", "
-					+ expressionValueCustomVariable.getVariable().getName() + ", " + customVariableDefaultValue
-					+ ")\");\n");
+					+ expressionValueCustomVariable.getReference().getName() + ", " + expressionValueCustomVariable.getVariable().getName() + ", "
+					+ customVariableDefaultValue + ")\");\n");
 			defaultCustomVariableValue.append("end\n\n");
 		}
 		if (!variablesList.contains(defaultCustomVariableValue.toString())) {
@@ -273,8 +271,7 @@ public class DroolsRulesGenerator {
 						Timestamp endTime = variableData.getValidTo();
 						// Sometimes endtime can be null, meaning that the
 						// variable data has no ending time
-						if ((currentTime.after(initTime) && (endTime == null))
-								|| (currentTime.after(initTime) && currentTime.before(endTime))) {
+						if ((currentTime.after(initTime) && (endTime == null)) || (currentTime.after(initTime) && currentTime.before(endTime))) {
 							globalConstants += this.globalVariableString(globalVariable);
 							break;
 						}

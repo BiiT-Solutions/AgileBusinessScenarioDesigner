@@ -8,7 +8,22 @@ import org.dom4j.DocumentException;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import com.biit.abcd.core.drools.prattparser.exceptions.PrattParserException;
+import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
+import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
+import com.biit.abcd.core.drools.rules.exceptions.BetweenFunctionInvalidException;
+import com.biit.abcd.core.drools.rules.exceptions.DateComparisonNotPossibleException;
+import com.biit.abcd.core.drools.rules.exceptions.DroolsRuleCreationException;
 import com.biit.abcd.core.drools.rules.exceptions.DroolsRuleGenerationException;
+import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
+import com.biit.abcd.core.drools.rules.exceptions.InvalidRuleException;
+import com.biit.abcd.core.drools.rules.exceptions.NullCustomVariableException;
+import com.biit.abcd.core.drools.rules.exceptions.NullExpressionValueException;
+import com.biit.abcd.core.drools.rules.exceptions.NullTreeObjectException;
+import com.biit.abcd.core.drools.rules.exceptions.PluginInvocationException;
+import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
+import com.biit.abcd.core.drools.rules.exceptions.TreeObjectInstanceNotRecognizedException;
+import com.biit.abcd.core.drools.rules.exceptions.TreeObjectParentNotValidException;
 import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.CustomVariableScope;
 import com.biit.abcd.persistence.entity.CustomVariableType;
@@ -85,7 +100,8 @@ public class PluginsTest extends KidsFormCreator {
 	@Test(groups = { "pluginsTest" })
 	public void helloWorldPluginDroolsCallWithoutParametersTest()
 			throws FieldTooLongException, CharacterNotAllowedException, NotValidChildException,
-			InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly, DroolsRuleGenerationException, DocumentException, IOException, DroolsRuleExecutionException {
+			InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly, DroolsRuleGenerationException, DocumentException, IOException,
+			DroolsRuleExecutionException, RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException, BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException, InvalidRuleException, ActionNotImplementedException {
 		// Restart the form to avoid test cross references
 		Form form = createForm();
 		CustomVariable customvariableToAssign = new CustomVariable(form, CUSTOM_VARIABLE_RESULT,
@@ -108,7 +124,8 @@ public class PluginsTest extends KidsFormCreator {
 	@Test(groups = { "pluginsTest" })
 	public void helloWorldPluginDroolsCallWithParametersTest()
 			throws FieldTooLongException, CharacterNotAllowedException, NotValidChildException,
-			InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly, DroolsRuleGenerationException, DocumentException, IOException, DroolsRuleExecutionException {
+			InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly, DroolsRuleGenerationException, DocumentException, IOException,
+			DroolsRuleExecutionException, RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException, BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException, InvalidRuleException, ActionNotImplementedException {
 		// Restart the form to avoid test cross references
 		Form form = createForm();
 		CustomVariable customVariableToAssign = new CustomVariable(form, CUSTOM_VARIABLE_RESULT,
@@ -131,7 +148,9 @@ public class PluginsTest extends KidsFormCreator {
 
 	@Test(groups = { "pluginsTest" })
 	public void liferayKnowledgeBasePlugin() throws FieldTooLongException, CharacterNotAllowedException,
-			NotValidChildException, InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly, DroolsRuleGenerationException, DocumentException, IOException, DroolsRuleExecutionException {
+ NotValidChildException, InvalidAnswerFormatException,
+			NotValidTypeInVariableData, ElementIsReadOnly, DroolsRuleGenerationException, DocumentException, IOException, DroolsRuleExecutionException,
+			RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException, BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException, InvalidRuleException, ActionNotImplementedException {
 		// Restart the form to avoid test cross references
 		Form form = createForm();
 		CustomVariable customVariableToAssign = new CustomVariable(form, CUSTOM_VARIABLE_RESULT,
@@ -155,7 +174,8 @@ public class PluginsTest extends KidsFormCreator {
 	@Test(groups = { "pluginsTest" })
 	public void liferayKnowledgeBasePluginBySettings() throws FieldTooLongException, CharacterNotAllowedException,
 			NotValidChildException, InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly,
-			DroolsRuleGenerationException, DocumentException, IOException, DroolsRuleExecutionException {
+ DroolsRuleGenerationException, DocumentException, IOException,
+			DroolsRuleExecutionException, RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException, BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException, InvalidRuleException, ActionNotImplementedException {
 		// Restart the form to avoid test cross references
 		Form form = createForm();
 		CustomVariable customVariableToAssign = new CustomVariable(form, CUSTOM_VARIABLE_RESULT,
