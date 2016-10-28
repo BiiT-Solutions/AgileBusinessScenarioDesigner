@@ -268,7 +268,7 @@ public class OperatorsTest extends KidsFormCreator {
 		Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CONCAT), "JanGood!");
 	}
 
-	@Test(enabled = true, groups = { "droolsOperators" }, expectedExceptions = { InvalidRuleException.class })
+	@Test(enabled = true, groups = { "droolsOperators" }, expectedExceptions = { NotCompatibleTypeException.class })
 	public void concatenateInvalidQuestionValueTest() throws DroolsRuleGenerationException, DocumentException, IOException, DroolsRuleExecutionException,
 			FieldTooLongException, CharacterNotAllowedException, NotValidChildException, InvalidAnswerFormatException, NotValidTypeInVariableData,
 			ElementIsReadOnly, RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
