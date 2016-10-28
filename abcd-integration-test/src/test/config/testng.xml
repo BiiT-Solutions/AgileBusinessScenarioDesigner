@@ -1,17 +1,17 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite thread-count="1" verbose="1" name="WebFormsCore">
+<suite thread-count="1" verbose="1" name="AbcdCore">
 	<test name="AbcdTest" enabled="true" preserve-order="true">
 		<groups>
 			<run>
-				<exclude name="login" />
-				<exclude name="basicFunctionalityTests" />
-				<exclude name="formDesigner" />
-				<exclude name="formVariables" />
-				<exclude name="statusPreserving" />
-				<exclude name="globalVariables" />
-				<exclude name="ruleExpression" />
-				<exclude name="ruleTableEditor" />
-				<exclude name="scenarioEditor" />
+				<include name="login" />
+				<include name="basicFunctionalityTests" />
+				<include name="formDesigner" />
+				<include name="formVariables" />
+				<include name="statusPreserving" />
+				<include name="globalVariables" />
+				<include name="ruleExpression" />
+				<include name="ruleTableEditor" />
+				<include name="scenarioEditor" />
 			</run>
 		</groups>
 		<classes>
