@@ -20,6 +20,7 @@ import com.biit.abcd.core.drools.rules.exceptions.PluginInvocationException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.TreeObjectInstanceNotRecognizedException;
 import com.biit.abcd.core.drools.rules.exceptions.TreeObjectParentNotValidException;
+import com.biit.abcd.core.drools.rules.validators.InvalidExpressionException;
 import com.biit.abcd.core.drools.rules.validators.RuleChecker;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
@@ -78,11 +79,13 @@ public class DiagramParser {
 	 * @throws RuleNotImplementedException
 	 * @throws ActionNotImplementedException
 	 * @throws InvalidRuleException
+	 * @throws InvalidExpressionException
 	 */
 	public String getDroolsRulesAsText(Diagram diagram) throws DroolsRuleGenerationException, RuleNotImplementedException, NotCompatibleTypeException,
 			ExpressionInvalidException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException,
 			NullCustomVariableException, NullExpressionValueException, BetweenFunctionInvalidException, DateComparisonNotPossibleException,
-			PluginInvocationException, DroolsRuleCreationException, PrattParserException, InvalidRuleException, ActionNotImplementedException {
+			PluginInvocationException, DroolsRuleCreationException, PrattParserException, InvalidRuleException, ActionNotImplementedException,
+			InvalidExpressionException {
 		String rulesAsString = "";
 		List<Rule> newRules = parse(diagram, null);
 		rulesAsString = DroolsParser.createDroolsRule(newRules, getDroolsHelper());
@@ -90,7 +93,7 @@ public class DiagramParser {
 	}
 
 	private List<Rule> parse(Diagram diagram, ExpressionChain extraConditions) throws ExpressionInvalidException, InvalidRuleException,
-			RuleNotImplementedException, ActionNotImplementedException, NotCompatibleTypeException {
+			RuleNotImplementedException, ActionNotImplementedException, NotCompatibleTypeException, PrattParserException, InvalidExpressionException {
 		List<Rule> newRules = new ArrayList<>();
 		Set<DiagramObject> diagramNodes = diagram.getDiagramObjects();
 		for (DiagramObject diagramNode : diagramNodes) {
@@ -113,9 +116,12 @@ public class DiagramParser {
 	 * @throws RuleNotImplementedException
 	 * @throws ActionNotImplementedException
 	 * @throws NotCompatibleTypeException
+	 * @throws InvalidExpressionException
+	 * @throws PrattParserException
 	 */
 	private List<Rule> parseDiagramElement(DiagramElement node, ExpressionChain extraConditions, List<Rule> newRules) throws ExpressionInvalidException,
-			InvalidRuleException, RuleNotImplementedException, ActionNotImplementedException, NotCompatibleTypeException {
+			RuleNotImplementedException, ActionNotImplementedException, NotCompatibleTypeException, PrattParserException, InvalidExpressionException,
+			InvalidRuleException {
 		List<ExpressionChain> forkConditions = new ArrayList<>();
 		// Parse the corresponding node
 		switch (node.getType()) {

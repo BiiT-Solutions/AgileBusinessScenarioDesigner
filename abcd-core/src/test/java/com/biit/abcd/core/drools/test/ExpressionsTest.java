@@ -25,6 +25,7 @@ import com.biit.abcd.core.drools.rules.exceptions.PluginInvocationException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.TreeObjectInstanceNotRecognizedException;
 import com.biit.abcd.core.drools.rules.exceptions.TreeObjectParentNotValidException;
+import com.biit.abcd.core.drools.rules.validators.InvalidExpressionException;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.CustomVariableScope;
@@ -67,7 +68,10 @@ public class ExpressionsTest extends KidsFormCreator {
 	@Test(groups = { "droolsExpressions" })
 	public void yearsDateExpressionTest() throws FieldTooLongException, CharacterNotAllowedException, NotValidChildException, InvalidAnswerFormatException,
 			NotValidTypeInVariableData, ElementIsReadOnly, DroolsRuleGenerationException, DocumentException, IOException, DroolsRuleExecutionException,
-			RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException, BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException, InvalidRuleException, ActionNotImplementedException {
+			RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
+			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
+			BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException,
+			InvalidRuleException, ActionNotImplementedException, InvalidExpressionException {
 		Form form = initFormAndVariables();
 		// Assign a date(years) to a custom variable
 		ExpressionChain expression = new ExpressionChain("YearsAssignation", new ExpressionValueCustomVariable(form, yearsCustomVariable),
@@ -93,7 +97,10 @@ public class ExpressionsTest extends KidsFormCreator {
 	@Test(groups = { "droolsExpressions" })
 	public void monthsDateExpressionTest() throws FieldTooLongException, CharacterNotAllowedException, NotValidChildException, InvalidAnswerFormatException,
 			NotValidTypeInVariableData, ElementIsReadOnly, ParseException, DroolsRuleGenerationException, DocumentException, IOException,
-			DroolsRuleExecutionException, RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException, BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException, InvalidRuleException, ActionNotImplementedException {
+			DroolsRuleExecutionException, RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
+			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
+			BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException,
+			InvalidRuleException, ActionNotImplementedException, InvalidExpressionException {
 		Form form = initFormAndVariables();
 		// Assign a date(months) to a custom variable
 		ExpressionChain expression = new ExpressionChain("MonthsAssignation", new ExpressionValueCustomVariable(getTreeObject(form, "Algemeen"),
@@ -115,7 +122,10 @@ public class ExpressionsTest extends KidsFormCreator {
 	@Test(groups = { "droolsExpressions" })
 	public void daysDateExpressionTest() throws ParseException, FieldTooLongException, CharacterNotAllowedException, NotValidChildException,
 			InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly, DroolsRuleGenerationException, DocumentException, IOException,
-			DroolsRuleExecutionException, RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException, BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException, InvalidRuleException, ActionNotImplementedException {
+			DroolsRuleExecutionException, RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
+			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
+			BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException,
+			InvalidRuleException, ActionNotImplementedException, InvalidExpressionException {
 		Form form = initFormAndVariables();
 		// Assign a date(days) to a custom variable
 		ExpressionChain expression = new ExpressionChain("DaysAssignation", new ExpressionValueCustomVariable(getTreeObject(form, KidsFormCreator.GROUP_NAME),
@@ -138,7 +148,7 @@ public class ExpressionsTest extends KidsFormCreator {
 	@Test(groups = { "droolsExpressions" })
 	public void testDateExpression() throws ParseException, FieldTooLongException, CharacterNotAllowedException, NotValidChildException,
 			InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly, DroolsRuleGenerationException, DocumentException, IOException,
-			DroolsRuleExecutionException, RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException, BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException, InvalidRuleException, ActionNotImplementedException {
+			DroolsRuleExecutionException, RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException, BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException, InvalidRuleException, ActionNotImplementedException, InvalidExpressionException {
 		Form form = initFormAndVariables();
 		// Assign a date(date) to a custom variable
 		ExpressionChain expression = new ExpressionChain("DateAssignation",
@@ -173,7 +183,7 @@ public class ExpressionsTest extends KidsFormCreator {
 			DroolsRuleExecutionException, RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
 			BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException,
-			InvalidRuleException, ActionNotImplementedException {
+			InvalidRuleException, ActionNotImplementedException, InvalidExpressionException {
 		// Add the expression to the form
 		form.getExpressionChains().add(expression);
 		// Create the node rule

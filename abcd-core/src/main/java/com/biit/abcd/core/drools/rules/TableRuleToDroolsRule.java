@@ -3,10 +3,13 @@ package com.biit.abcd.core.drools.rules;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.biit.abcd.core.drools.prattparser.exceptions.PrattParserException;
+import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
 import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.InvalidRuleException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
+import com.biit.abcd.core.drools.rules.validators.InvalidExpressionException;
 import com.biit.abcd.core.drools.rules.validators.RuleChecker;
 import com.biit.abcd.core.drools.utils.RuleGenerationUtils;
 import com.biit.abcd.persistence.entity.expressions.AvailableOperator;
@@ -32,17 +35,18 @@ public class TableRuleToDroolsRule {
 	 * @throws RuleNotImplementedException
 	 * @throws ActionNotImplementedException
 	 * @throws InvalidRuleException
+	 * @throws NotCompatibleTypeException
+	 * @throws InvalidExpressionException
+	 * @throws PrattParserException
 	 */
-	public static List<DroolsRule> parse(TableRule tableRule, ExpressionChain extraConditions)
-			throws ExpressionInvalidException, RuleNotImplementedException, ActionNotImplementedException,
-			InvalidRuleException {
+	public static List<DroolsRule> parse(TableRule tableRule, ExpressionChain extraConditions) throws ExpressionInvalidException, RuleNotImplementedException,
+			ActionNotImplementedException, PrattParserException, InvalidExpressionException, NotCompatibleTypeException {
 		List<DroolsRule> newRules = new ArrayList<>();
 		if (tableRule != null) {
 			String tableRuleName = tableRule.getName();
 			int i = 0;
 			for (TableRuleRow row : tableRule.getRules()) {
-				if (row.getAction() != null && row.getAction().getExpressions() != null
-						&& !row.getAction().getExpressions().isEmpty()) {
+				if (row.getAction() != null && row.getAction().getExpressions() != null && !row.getAction().getExpressions().isEmpty()) {
 					DroolsRule newRule = new DroolsRule();
 					ExpressionChain rowConditionExpression = convertTableRowToExpressionChain(row.getConditions());
 
@@ -82,8 +86,7 @@ public class TableRuleToDroolsRule {
 					&& (((ExpressionValueTreeObjectReference) questionExpression).getReference() != null)
 					&&
 					// Answer not empty
-					(answerExpression instanceof ExpressionChain)
-					&& (((ExpressionChain) answerExpression).getExpressions() != null)
+					(answerExpression instanceof ExpressionChain) && (((ExpressionChain) answerExpression).getExpressions() != null)
 					&& (!((ExpressionChain) answerExpression).getExpressions().isEmpty())) {
 
 				if (index > 0) {

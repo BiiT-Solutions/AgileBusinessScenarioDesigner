@@ -24,6 +24,7 @@ import com.biit.abcd.core.drools.rules.exceptions.PluginInvocationException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.TreeObjectInstanceNotRecognizedException;
 import com.biit.abcd.core.drools.rules.exceptions.TreeObjectParentNotValidException;
+import com.biit.abcd.core.drools.rules.validators.InvalidExpressionException;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.utils.ZipUtils;
@@ -67,7 +68,7 @@ public class SaveDroolsRulesAction implements SaveAction {
 		} catch (DroolsRuleGenerationException | RuleNotImplementedException | NotCompatibleTypeException | ExpressionInvalidException
 				| NullTreeObjectException | TreeObjectInstanceNotRecognizedException | TreeObjectParentNotValidException | NullCustomVariableException
 				| NullExpressionValueException | BetweenFunctionInvalidException | DateComparisonNotPossibleException | PluginInvocationException
-				| DroolsRuleCreationException | PrattParserException | ActionNotImplementedException e) {
+				| DroolsRuleCreationException | PrattParserException | ActionNotImplementedException | InvalidExpressionException e) {
 			AbcdLogger.errorMessage(SettingsWindow.class.getName(), e);
 			MessageManager.showError(LanguageCodes.ERROR_TITLE, LanguageCodes.DROOLS_RULES_GENERATION_EXCEPTION);
 		} catch (InvalidRuleException e) {

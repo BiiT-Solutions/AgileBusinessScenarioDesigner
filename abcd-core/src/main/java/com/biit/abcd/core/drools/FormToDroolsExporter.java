@@ -23,6 +23,7 @@ import com.biit.abcd.core.drools.rules.exceptions.PluginInvocationException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.TreeObjectInstanceNotRecognizedException;
 import com.biit.abcd.core.drools.rules.exceptions.TreeObjectParentNotValidException;
+import com.biit.abcd.core.drools.rules.validators.InvalidExpressionException;
 import com.biit.abcd.core.drools.utils.RuleGenerationUtils;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.Form;
@@ -58,12 +59,13 @@ public class FormToDroolsExporter {
 	 * @throws ExpressionInvalidException
 	 * @throws NotCompatibleTypeException
 	 * @throws RuleNotImplementedException
+	 * @throws InvalidExpressionException
 	 */
 	public DroolsRulesGenerator generateDroolRules(Form form, List<GlobalVariable> globalVariables) throws DroolsRuleGenerationException,
 			RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
 			BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException,
-			InvalidRuleException, ActionNotImplementedException {
+			InvalidRuleException, ActionNotImplementedException, InvalidExpressionException {
 		if (form != null && form.getChildren() != null && !form.getChildren().isEmpty()) {
 			DroolsRulesGenerator formRules;
 
@@ -84,7 +86,7 @@ public class FormToDroolsExporter {
 			NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
 			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException, BetweenFunctionInvalidException,
 			DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException, InvalidRuleException,
-			ActionNotImplementedException {
+			ActionNotImplementedException, InvalidExpressionException {
 		if (form != null && form.getChildren() != null && !form.getChildren().isEmpty()) {
 			DroolsRulesGenerator formRules;
 			// Creation of the rules
@@ -117,12 +119,13 @@ public class FormToDroolsExporter {
 	 * @throws ExpressionInvalidException
 	 * @throws NotCompatibleTypeException
 	 * @throws RuleNotImplementedException
+	 * @throws InvalidExpressionException
 	 */
 	public ISubmittedForm processForm(Form form, List<GlobalVariable> globalVariables, ISubmittedForm iSubmittedForm) throws DroolsRuleGenerationException,
 			DroolsRuleExecutionException, RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
 			BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException,
-			InvalidRuleException, ActionNotImplementedException {
+			InvalidRuleException, ActionNotImplementedException, InvalidExpressionException {
 		// Generate all drools rules.
 		DroolsRulesGenerator rulesGenerator = generateDroolRules(form, globalVariables);
 		// Obtain results

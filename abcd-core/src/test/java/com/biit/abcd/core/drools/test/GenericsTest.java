@@ -21,6 +21,7 @@ import com.biit.abcd.core.drools.rules.exceptions.PluginInvocationException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.TreeObjectInstanceNotRecognizedException;
 import com.biit.abcd.core.drools.rules.exceptions.TreeObjectParentNotValidException;
+import com.biit.abcd.core.drools.rules.validators.InvalidExpressionException;
 import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.CustomVariableScope;
 import com.biit.abcd.persistence.entity.CustomVariableType;
@@ -59,30 +60,36 @@ public class GenericsTest extends KidsFormCreator {
 			RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
 			BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException,
-			InvalidRuleException, ActionNotImplementedException, FieldTooLongException, CharacterNotAllowedException, NotValidChildException, InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly {
-			// Generate the form
-			Form form = initFormAndVariables();
-			// Generic expression (Generic category = generic category
-			// questions)
-			ExpressionChain expression = new ExpressionChain("genericCategoryQuestions", new ExpressionValueGenericCustomVariable(
-					GenericTreeObjectType.CATEGORY, getCategoryCustomVariable()), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
-					new ExpressionFunction(AvailableFunction.MIN), new ExpressionValueGenericCustomVariable(GenericTreeObjectType.QUESTION_CATEGORY,
-							getQuestionCustomVariable()), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
-			// Generate the drools rules
-			checkResults(form, expression);
+			InvalidRuleException, ActionNotImplementedException, FieldTooLongException, CharacterNotAllowedException, NotValidChildException,
+			InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly, InvalidExpressionException {
+		// Generate the form
+		Form form = initFormAndVariables();
+		// Generic expression (Generic category = generic category
+		// questions)
+		ExpressionChain expression = new ExpressionChain("genericCategoryQuestions", new ExpressionValueGenericCustomVariable(GenericTreeObjectType.CATEGORY,
+				getCategoryCustomVariable()), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionFunction(AvailableFunction.MIN),
+				new ExpressionValueGenericCustomVariable(GenericTreeObjectType.QUESTION_CATEGORY, getQuestionCustomVariable()), new ExpressionSymbol(
+						AvailableSymbol.RIGHT_BRACKET));
+		// Generate the drools rules
+		checkResults(form, expression);
 	}
 
 	@Test(groups = { "droolsGeneric" })
-	private void genericGroupQuestionsTest() throws FieldTooLongException, CharacterNotAllowedException, NotValidChildException, InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly, DroolsRuleGenerationException, DocumentException, IOException, DroolsRuleExecutionException, RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException, BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException, InvalidRuleException, ActionNotImplementedException {
-			// Generate the form
-			Form form = initFormAndVariables();
-			// Generic expression (Generic group = generic group questions)
-			ExpressionChain expression = new ExpressionChain("genericGroupQuestions", new ExpressionValueGenericCustomVariable(GenericTreeObjectType.GROUP,
-					groupCustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionFunction(AvailableFunction.MIN),
-					new ExpressionValueGenericCustomVariable(GenericTreeObjectType.QUESTION_GROUP, questionCustomVariable), new ExpressionSymbol(
-							AvailableSymbol.RIGHT_BRACKET));
-			// Generate the drools rules
-			checkResults(form, expression);
+	private void genericGroupQuestionsTest() throws FieldTooLongException, CharacterNotAllowedException, NotValidChildException, InvalidAnswerFormatException,
+			NotValidTypeInVariableData, ElementIsReadOnly, DroolsRuleGenerationException, DocumentException, IOException, DroolsRuleExecutionException,
+			RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
+			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
+			BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException,
+			InvalidRuleException, ActionNotImplementedException, InvalidExpressionException {
+		// Generate the form
+		Form form = initFormAndVariables();
+		// Generic expression (Generic group = generic group questions)
+		ExpressionChain expression = new ExpressionChain("genericGroupQuestions", new ExpressionValueGenericCustomVariable(GenericTreeObjectType.GROUP,
+				groupCustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionFunction(AvailableFunction.MIN),
+				new ExpressionValueGenericCustomVariable(GenericTreeObjectType.QUESTION_GROUP, questionCustomVariable), new ExpressionSymbol(
+						AvailableSymbol.RIGHT_BRACKET));
+		// Generate the drools rules
+		checkResults(form, expression);
 	}
 
 	@Test(groups = { "droolsGeneric" })
@@ -90,16 +97,16 @@ public class GenericsTest extends KidsFormCreator {
 			RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
 			BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException,
-			InvalidRuleException, ActionNotImplementedException, FieldTooLongException, CharacterNotAllowedException, NotValidChildException, InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly {
-			// Generate the form
-			Form form = initFormAndVariables();
-			// Generic expression (Generic category = generic category groups)
-			ExpressionChain expression = new ExpressionChain("genericCategoryGroups", new ExpressionValueGenericCustomVariable(GenericTreeObjectType.CATEGORY,
-					categoryCustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionFunction(AvailableFunction.MIN),
-					new ExpressionValueGenericCustomVariable(GenericTreeObjectType.GROUP, groupCustomVariable), new ExpressionSymbol(
-							AvailableSymbol.RIGHT_BRACKET));
-			// Generate the drools rules
-			checkResults(form, expression);
+			InvalidRuleException, ActionNotImplementedException, FieldTooLongException, CharacterNotAllowedException, NotValidChildException,
+			InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly, InvalidExpressionException {
+		// Generate the form
+		Form form = initFormAndVariables();
+		// Generic expression (Generic category = generic category groups)
+		ExpressionChain expression = new ExpressionChain("genericCategoryGroups", new ExpressionValueGenericCustomVariable(GenericTreeObjectType.CATEGORY,
+				categoryCustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionFunction(AvailableFunction.MIN),
+				new ExpressionValueGenericCustomVariable(GenericTreeObjectType.GROUP, groupCustomVariable), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
+		// Generate the drools rules
+		checkResults(form, expression);
 	}
 
 	@Test(groups = { "droolsGeneric" })
@@ -107,32 +114,37 @@ public class GenericsTest extends KidsFormCreator {
 			RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
 			BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException,
-			InvalidRuleException, ActionNotImplementedException, FieldTooLongException, CharacterNotAllowedException, NotValidChildException, InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly {
-			// Generate the form
-			Form form = initFormAndVariables();
-			// Generic expression (Form = generic categories)
-			ExpressionChain expression = new ExpressionChain("formGenericCategories", new ExpressionValueCustomVariable(form, formCustomVariable),
-					new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionFunction(AvailableFunction.MIN),
-					new ExpressionValueGenericCustomVariable(GenericTreeObjectType.CATEGORY, categoryCustomVariable), new ExpressionSymbol(
-							AvailableSymbol.RIGHT_BRACKET));
-			// Generate the drools rules
-			checkResults(form, expression);
+			InvalidRuleException, ActionNotImplementedException, FieldTooLongException, CharacterNotAllowedException, NotValidChildException,
+			InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly, InvalidExpressionException {
+		// Generate the form
+		Form form = initFormAndVariables();
+		// Generic expression (Form = generic categories)
+		ExpressionChain expression = new ExpressionChain("formGenericCategories", new ExpressionValueCustomVariable(form, formCustomVariable),
+				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionFunction(AvailableFunction.MIN),
+				new ExpressionValueGenericCustomVariable(GenericTreeObjectType.CATEGORY, categoryCustomVariable), new ExpressionSymbol(
+						AvailableSymbol.RIGHT_BRACKET));
+		// Generate the drools rules
+		checkResults(form, expression);
 	}
 
 	@Test(groups = { "droolsGeneric" })
 	private void genericCategoryGroupsQuestionsTest() throws FieldTooLongException, CharacterNotAllowedException, NotValidChildException,
-			InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly, DroolsRuleGenerationException, DocumentException, IOException, DroolsRuleExecutionException, RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException, BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException, InvalidRuleException, ActionNotImplementedException {
-			// Generate the form
-			Form form = initFormAndVariables();
-			// Generic expression with several generics (Generic category =
-			// generic category groups, generic category questions)
-			ExpressionChain expression = new ExpressionChain("genericCategoryGroupsQuestions", new ExpressionValueGenericCustomVariable(
-					GenericTreeObjectType.CATEGORY, categoryCustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionFunction(
-					AvailableFunction.MIN), new ExpressionValueGenericCustomVariable(GenericTreeObjectType.GROUP, groupCustomVariable), new ExpressionSymbol(
-					AvailableSymbol.COMMA), new ExpressionValueGenericCustomVariable(GenericTreeObjectType.QUESTION_CATEGORY, questionCustomVariable),
-					new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
-			// Generate the drools rules
-			checkResults(form, expression);
+			InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly, DroolsRuleGenerationException, DocumentException, IOException,
+			DroolsRuleExecutionException, RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
+			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
+			BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException,
+			InvalidRuleException, ActionNotImplementedException, InvalidExpressionException {
+		// Generate the form
+		Form form = initFormAndVariables();
+		// Generic expression with several generics (Generic category =
+		// generic category groups, generic category questions)
+		ExpressionChain expression = new ExpressionChain("genericCategoryGroupsQuestions", new ExpressionValueGenericCustomVariable(
+				GenericTreeObjectType.CATEGORY, categoryCustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionFunction(
+				AvailableFunction.MIN), new ExpressionValueGenericCustomVariable(GenericTreeObjectType.GROUP, groupCustomVariable), new ExpressionSymbol(
+				AvailableSymbol.COMMA), new ExpressionValueGenericCustomVariable(GenericTreeObjectType.QUESTION_CATEGORY, questionCustomVariable),
+				new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
+		// Generate the drools rules
+		checkResults(form, expression);
 	}
 
 	@Test(groups = { "droolsGeneric" })
@@ -140,18 +152,19 @@ public class GenericsTest extends KidsFormCreator {
 			RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
 			BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException,
-			InvalidRuleException, ActionNotImplementedException, FieldTooLongException, CharacterNotAllowedException, NotValidChildException, InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly {
-			// Generate the form
-			Form form = initFormAndVariables();
-			// Generic expression with several generics (Generic category =
-			// generic category questions, generic category groups)
-			ExpressionChain expression = new ExpressionChain("genericCategoryQuestionsGroups", new ExpressionValueGenericCustomVariable(
-					GenericTreeObjectType.CATEGORY, categoryCustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionFunction(
-					AvailableFunction.MIN), new ExpressionValueGenericCustomVariable(GenericTreeObjectType.QUESTION_CATEGORY, questionCustomVariable),
-					new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueGenericCustomVariable(GenericTreeObjectType.GROUP, groupCustomVariable),
-					new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
-			// Generate the drools rules
-			checkResults(form, expression);
+			InvalidRuleException, ActionNotImplementedException, FieldTooLongException, CharacterNotAllowedException, NotValidChildException,
+			InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly, InvalidExpressionException {
+		// Generate the form
+		Form form = initFormAndVariables();
+		// Generic expression with several generics (Generic category =
+		// generic category questions, generic category groups)
+		ExpressionChain expression = new ExpressionChain("genericCategoryQuestionsGroups", new ExpressionValueGenericCustomVariable(
+				GenericTreeObjectType.CATEGORY, categoryCustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionFunction(
+				AvailableFunction.MIN), new ExpressionValueGenericCustomVariable(GenericTreeObjectType.QUESTION_CATEGORY, questionCustomVariable),
+				new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueGenericCustomVariable(GenericTreeObjectType.GROUP, groupCustomVariable),
+				new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
+		// Generate the drools rules
+		checkResults(form, expression);
 	}
 
 	@Test(groups = { "droolsGeneric" })
@@ -159,18 +172,19 @@ public class GenericsTest extends KidsFormCreator {
 			RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
 			BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException,
-			InvalidRuleException, ActionNotImplementedException, FieldTooLongException, CharacterNotAllowedException, NotValidChildException, InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly {
-			// Generate the form
-			Form form = initFormAndVariables();
-			// Generic expression with several generics (Generic group = generic
-			// groups, generic group questions)
-			ExpressionChain expression = new ExpressionChain("genericGroupQuestionsGroups", new ExpressionValueGenericCustomVariable(
-					GenericTreeObjectType.GROUP, categoryCustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionFunction(
-					AvailableFunction.MIN), new ExpressionValueGenericCustomVariable(GenericTreeObjectType.GROUP, groupCustomVariable), new ExpressionSymbol(
-					AvailableSymbol.COMMA), new ExpressionValueGenericCustomVariable(GenericTreeObjectType.QUESTION_GROUP, questionCustomVariable),
-					new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
-			// Generate the drools rules
-			checkResults(form, expression);
+			InvalidRuleException, ActionNotImplementedException, FieldTooLongException, CharacterNotAllowedException, NotValidChildException,
+			InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly, InvalidExpressionException {
+		// Generate the form
+		Form form = initFormAndVariables();
+		// Generic expression with several generics (Generic group = generic
+		// groups, generic group questions)
+		ExpressionChain expression = new ExpressionChain("genericGroupQuestionsGroups", new ExpressionValueGenericCustomVariable(GenericTreeObjectType.GROUP,
+				categoryCustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionFunction(AvailableFunction.MIN),
+				new ExpressionValueGenericCustomVariable(GenericTreeObjectType.GROUP, groupCustomVariable), new ExpressionSymbol(AvailableSymbol.COMMA),
+				new ExpressionValueGenericCustomVariable(GenericTreeObjectType.QUESTION_GROUP, questionCustomVariable), new ExpressionSymbol(
+						AvailableSymbol.RIGHT_BRACKET));
+		// Generate the drools rules
+		checkResults(form, expression);
 	}
 
 	private Form initFormAndVariables() throws FieldTooLongException, CharacterNotAllowedException, NotValidChildException, InvalidAnswerFormatException,
@@ -189,7 +203,7 @@ public class GenericsTest extends KidsFormCreator {
 			DroolsRuleExecutionException, RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
 			BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException,
-			InvalidRuleException, ActionNotImplementedException {
+			InvalidRuleException, ActionNotImplementedException, InvalidExpressionException {
 		// Add the rule to the form
 		form.getExpressionChains().add(expression);
 		// Create the node rule

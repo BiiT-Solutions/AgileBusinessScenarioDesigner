@@ -26,6 +26,7 @@ import com.biit.abcd.core.drools.rules.exceptions.PluginInvocationException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.TreeObjectInstanceNotRecognizedException;
 import com.biit.abcd.core.drools.rules.exceptions.TreeObjectParentNotValidException;
+import com.biit.abcd.core.drools.rules.validators.InvalidExpressionException;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.AnswerFormat;
 import com.biit.abcd.persistence.entity.Category;
@@ -99,7 +100,7 @@ public class OperatorsTest extends KidsFormCreator {
 			RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
 			BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException,
-			InvalidRuleException, ActionNotImplementedException {
+			InvalidRuleException, ActionNotImplementedException, InvalidExpressionException {
 		try {
 			// Create a new form
 			Form form = createForm();
@@ -141,7 +142,7 @@ public class OperatorsTest extends KidsFormCreator {
 			RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
 			BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException,
-			InvalidRuleException, ActionNotImplementedException {
+			InvalidRuleException, ActionNotImplementedException, InvalidExpressionException {
 		// Create a new form
 		Form form = createForm();
 		// MIN expression
@@ -170,7 +171,7 @@ public class OperatorsTest extends KidsFormCreator {
 			RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
 			BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException,
-			InvalidRuleException, ActionNotImplementedException {
+			InvalidRuleException, ActionNotImplementedException, InvalidExpressionException {
 		// Create a new form
 		Form form = createForm();
 		// MAX expression
@@ -199,7 +200,7 @@ public class OperatorsTest extends KidsFormCreator {
 			ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
 			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException, QuestionDoesNotExistException,
 			CategoryDoesNotExistException, BetweenFunctionInvalidException, ElementIsReadOnly, DroolsRuleGenerationException, DroolsRuleExecutionException,
-			DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException {
+			DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException, InvalidExpressionException {
 		// Create a new form
 		Form form = createForm();
 		// AVG expression
@@ -227,7 +228,7 @@ public class OperatorsTest extends KidsFormCreator {
 			ElementIsReadOnly, RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
 			BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException,
-			InvalidRuleException, ActionNotImplementedException {
+			InvalidRuleException, ActionNotImplementedException, InvalidExpressionException {
 		// Create a new form
 		Form form = createForm();
 		// Concat expression
@@ -250,7 +251,7 @@ public class OperatorsTest extends KidsFormCreator {
 			ElementIsReadOnly, RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
 			BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException,
-			InvalidRuleException, ActionNotImplementedException {
+			InvalidRuleException, ActionNotImplementedException, InvalidExpressionException {
 		// Create a new form
 		Form form = createForm();
 		// Concat expression
@@ -273,7 +274,7 @@ public class OperatorsTest extends KidsFormCreator {
 			ElementIsReadOnly, RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
 			BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException,
-			InvalidRuleException, ActionNotImplementedException {
+			InvalidRuleException, ActionNotImplementedException, InvalidExpressionException {
 		// Create a new form
 		Form form = createForm();
 		// Concat expression
@@ -294,7 +295,7 @@ public class OperatorsTest extends KidsFormCreator {
 			ElementIsReadOnly, RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
 			BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException,
-			InvalidRuleException, ActionNotImplementedException {
+			InvalidRuleException, ActionNotImplementedException, InvalidExpressionException {
 		// Create a new form
 		Form form = createForm();
 		// Concat expression
@@ -320,7 +321,7 @@ public class OperatorsTest extends KidsFormCreator {
 			ElementIsReadOnly, RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
 			BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException,
-			InvalidRuleException, ActionNotImplementedException {
+			InvalidRuleException, ActionNotImplementedException, InvalidExpressionException {
 		// Create a new form
 		Form form = createForm();
 		
@@ -389,7 +390,7 @@ public class OperatorsTest extends KidsFormCreator {
 			DroolsRuleExecutionException, RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
 			BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException,
-			InvalidRuleException, ActionNotImplementedException {
+			InvalidRuleException, ActionNotImplementedException, InvalidExpressionException {
 		// Create a new form
 		Form form = createForm();
 		// If expression
@@ -413,7 +414,7 @@ public class OperatorsTest extends KidsFormCreator {
 			RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
 			BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException,
-			InvalidRuleException, ActionNotImplementedException {
+			InvalidRuleException, ActionNotImplementedException, InvalidExpressionException {
 		// Create a new form
 		Form form = createForm();
 		CustomVariable categoryCustomVariable = new CustomVariable(form, "catScore", CustomVariableType.NUMBER, CustomVariableScope.QUESTION);
@@ -435,7 +436,7 @@ public class OperatorsTest extends KidsFormCreator {
 			ElementIsReadOnly, RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
 			BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException,
-			InvalidRuleException, ActionNotImplementedException {
+			InvalidRuleException, ActionNotImplementedException, InvalidExpressionException {
 		// Create a new form
 		Form form = createForm();
 		// IN rule
@@ -469,7 +470,7 @@ public class OperatorsTest extends KidsFormCreator {
 			ElementIsReadOnly, RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
 			BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException,
-			InvalidRuleException, ActionNotImplementedException {
+			InvalidRuleException, ActionNotImplementedException, InvalidExpressionException {
 		// Create a new form
 		Form form = createForm();
 		// IN rule
@@ -525,6 +526,7 @@ public class OperatorsTest extends KidsFormCreator {
 	 * @throws ExpressionInvalidException
 	 * @throws NotCompatibleTypeException
 	 * @throws RuleNotImplementedException
+	 * @throws InvalidExpressionException 
 	 */
 	@Test(enabled = true, groups = { "droolsOperators" })
 	public void inOperatorCustomVariableFormTest() throws FieldTooLongException, CharacterNotAllowedException, NotValidChildException,
@@ -532,7 +534,7 @@ public class OperatorsTest extends KidsFormCreator {
 			DroolsRuleExecutionException, RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
 			BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException,
-			InvalidRuleException, ActionNotImplementedException {
+			InvalidRuleException, ActionNotImplementedException, InvalidExpressionException {
 		// Create a new form
 		Form form = createForm();
 		// Create a simple form custom variable
@@ -555,7 +557,7 @@ public class OperatorsTest extends KidsFormCreator {
 			ElementIsReadOnly, RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
 			BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException,
-			InvalidRuleException, ActionNotImplementedException {
+			InvalidRuleException, ActionNotImplementedException, InvalidExpressionException {
 		// Create a new form
 		Form form = createForm();
 		// Create a simple form custom variable
@@ -580,7 +582,7 @@ public class OperatorsTest extends KidsFormCreator {
 			DroolsRuleExecutionException, RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
 			BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException,
-			InvalidRuleException, ActionNotImplementedException {
+			InvalidRuleException, ActionNotImplementedException, InvalidExpressionException {
 		// Create a new form
 		Form form = createForm();
 		// Create a custom variable and the expression containing it
@@ -604,7 +606,7 @@ public class OperatorsTest extends KidsFormCreator {
 			DroolsRuleExecutionException, RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
 			BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException,
-			InvalidRuleException, ActionNotImplementedException {
+			InvalidRuleException, ActionNotImplementedException, InvalidExpressionException {
 		// Create a new form
 		Form form = createForm();
 		// Create a simple form custom variable
@@ -645,7 +647,7 @@ public class OperatorsTest extends KidsFormCreator {
 			DroolsRuleExecutionException, RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
 			BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException,
-			InvalidRuleException, ActionNotImplementedException {
+			InvalidRuleException, ActionNotImplementedException, InvalidExpressionException {
 		// Create a new form
 		Form form = createForm();
 		// BETWEEN rule
@@ -677,7 +679,7 @@ public class OperatorsTest extends KidsFormCreator {
 			DroolsRuleExecutionException, RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
 			BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException,
-			InvalidRuleException, ActionNotImplementedException {
+			InvalidRuleException, ActionNotImplementedException, InvalidExpressionException {
 		// Create a new form
 		Form form = createForm();
 		// Set a value to check
@@ -711,7 +713,7 @@ public class OperatorsTest extends KidsFormCreator {
 			DroolsRuleExecutionException, RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
 			BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException,
-			InvalidRuleException, ActionNotImplementedException {
+			InvalidRuleException, ActionNotImplementedException, InvalidExpressionException {
 		// Create a new form
 		Form form = createForm();
 		// Set a value to check
@@ -745,7 +747,7 @@ public class OperatorsTest extends KidsFormCreator {
 			ElementIsReadOnly, RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
 			BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException,
-			InvalidRuleException, ActionNotImplementedException {
+			InvalidRuleException, ActionNotImplementedException, InvalidExpressionException {
 		// Create a new form
 		Form form = createForm();
 		// BETWEEN rule
@@ -777,7 +779,7 @@ public class OperatorsTest extends KidsFormCreator {
 			DroolsRuleExecutionException, RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
 			BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException,
-			InvalidRuleException, ActionNotImplementedException {
+			InvalidRuleException, ActionNotImplementedException, InvalidExpressionException {
 		// Create a new form
 		Form form = createForm();
 		// BETWEEN rule
@@ -810,7 +812,7 @@ public class OperatorsTest extends KidsFormCreator {
 			DroolsRuleExecutionException, RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
 			BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException,
-			InvalidRuleException, ActionNotImplementedException {
+			InvalidRuleException, ActionNotImplementedException, InvalidExpressionException {
 		// TODO !!!
 		// System.out.println("\n\n\nAQUI ESTÁ:");
 		// Create a new form
@@ -849,7 +851,7 @@ public class OperatorsTest extends KidsFormCreator {
 			DroolsRuleExecutionException, RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
 			BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException,
-			InvalidRuleException, ActionNotImplementedException {
+			InvalidRuleException, ActionNotImplementedException, InvalidExpressionException {
 		// Create a new form
 		Form form = createForm();
 		// BETWEEN rule
@@ -882,7 +884,7 @@ public class OperatorsTest extends KidsFormCreator {
 			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException, FieldTooLongException, NotValidChildException,
 			InvalidAnswerFormatException, CharacterNotAllowedException, NotValidTypeInVariableData, BetweenFunctionInvalidException, ElementIsReadOnly,
 			DroolsRuleGenerationException, DroolsRuleExecutionException, DateComparisonNotPossibleException, PluginInvocationException,
-			DroolsRuleCreationException, PrattParserException {
+			DroolsRuleCreationException, PrattParserException, InvalidExpressionException {
 		// Create a new form
 		Form form = createForm();
 		// Expression one
@@ -923,7 +925,7 @@ public class OperatorsTest extends KidsFormCreator {
 			ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
 			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException, BetweenFunctionInvalidException, ElementIsReadOnly,
 			DroolsRuleGenerationException, DroolsRuleExecutionException, DateComparisonNotPossibleException, PluginInvocationException,
-			DroolsRuleCreationException, PrattParserException {
+			DroolsRuleCreationException, PrattParserException, InvalidExpressionException {
 		// Create a new form
 		Form form = createForm();
 
@@ -965,7 +967,7 @@ public class OperatorsTest extends KidsFormCreator {
 			RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
 			BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException,
-			InvalidRuleException, ActionNotImplementedException {
+			InvalidRuleException, ActionNotImplementedException, InvalidExpressionException {
 		// Create a new form
 		Form form = createForm();
 		// Expression one (false)
@@ -996,7 +998,7 @@ public class OperatorsTest extends KidsFormCreator {
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
 			BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException,
 			InvalidRuleException, ActionNotImplementedException, FieldTooLongException, CharacterNotAllowedException, NotValidChildException,
-			InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly {
+			InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly, InvalidExpressionException {
 		// Create a new form
 		Form form = createForm();
 		// Expression one (false)
@@ -1038,7 +1040,7 @@ public class OperatorsTest extends KidsFormCreator {
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
 			BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException,
 			InvalidRuleException, ActionNotImplementedException, FieldTooLongException, CharacterNotAllowedException, NotValidChildException,
-			InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly {
+			InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly, InvalidExpressionException {
 		// Create a new form
 		Form form = createForm();
 		// Expression one (false)
@@ -1084,7 +1086,7 @@ public class OperatorsTest extends KidsFormCreator {
 			RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
 			BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException,
-			InvalidRuleException, ActionNotImplementedException {
+			InvalidRuleException, ActionNotImplementedException, InvalidExpressionException {
 		try {
 			// Create a new form
 			Form form = createForm();
@@ -1266,7 +1268,7 @@ public class OperatorsTest extends KidsFormCreator {
 			RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
 			BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException,
-			InvalidRuleException, ActionNotImplementedException {
+			InvalidRuleException, ActionNotImplementedException, InvalidExpressionException {
 		// add the rule to the form
 		form.getRules().add(rule);
 		// Create the node rule

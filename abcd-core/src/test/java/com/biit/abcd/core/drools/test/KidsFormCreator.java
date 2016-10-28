@@ -35,6 +35,7 @@ import com.biit.abcd.core.drools.rules.exceptions.PluginInvocationException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.TreeObjectInstanceNotRecognizedException;
 import com.biit.abcd.core.drools.rules.exceptions.TreeObjectParentNotValidException;
+import com.biit.abcd.core.drools.rules.validators.InvalidExpressionException;
 import com.biit.abcd.core.drools.utils.RuleGenerationUtils;
 import com.biit.abcd.persistence.entity.Answer;
 import com.biit.abcd.persistence.entity.AnswerFormat;
@@ -115,7 +116,7 @@ public class KidsFormCreator {
 			ExpressionInvalidException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException,
 			NullCustomVariableException, NullExpressionValueException, BetweenFunctionInvalidException, DateComparisonNotPossibleException,
 			PluginInvocationException, DroolsRuleCreationException, PrattParserException, InvalidRuleException, ActionNotImplementedException,
-			DroolsRuleGenerationException {
+			DroolsRuleGenerationException, InvalidExpressionException {
 		FormToDroolsExporter formDrools = new FormToDroolsExporter();
 		DroolsRulesGenerator rulesGenerator = formDrools.generateDroolRules(form, getGlobalVariables());
 		readStaticSubmittedForm();
@@ -133,7 +134,7 @@ public class KidsFormCreator {
 			RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
 			BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException,
-			InvalidRuleException, ActionNotImplementedException {
+			InvalidRuleException, ActionNotImplementedException, InvalidExpressionException {
 		String droolsRules = createDroolsRules(form);
 		storeInFile(droolsRules);
 		return runDroolsRules(droolsRules);

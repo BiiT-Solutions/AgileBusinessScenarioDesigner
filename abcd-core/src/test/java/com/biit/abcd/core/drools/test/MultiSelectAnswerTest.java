@@ -22,6 +22,7 @@ import com.biit.abcd.core.drools.rules.exceptions.PluginInvocationException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.TreeObjectInstanceNotRecognizedException;
 import com.biit.abcd.core.drools.rules.exceptions.TreeObjectParentNotValidException;
+import com.biit.abcd.core.drools.rules.validators.InvalidExpressionException;
 import com.biit.abcd.persistence.entity.Answer;
 import com.biit.abcd.persistence.entity.AnswerType;
 import com.biit.abcd.persistence.entity.Category;
@@ -123,7 +124,7 @@ public class MultiSelectAnswerTest extends KidsFormCreator {
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
 			QuestionDoesNotExistException, GroupDoesNotExistException, CategoryDoesNotExistException, BetweenFunctionInvalidException, ElementIsReadOnly,
 			DroolsRuleGenerationException, DroolsRuleExecutionException, DateComparisonNotPossibleException, PluginInvocationException,
-			DroolsRuleCreationException, PrattParserException {
+			DroolsRuleCreationException, PrattParserException, InvalidExpressionException {
 		// Create a simple form
 		Form form = createFormOnlyOneAnswer();
 		// Create the table and diagram
@@ -143,7 +144,7 @@ public class MultiSelectAnswerTest extends KidsFormCreator {
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
 			QuestionDoesNotExistException, GroupDoesNotExistException, CategoryDoesNotExistException, BetweenFunctionInvalidException, ElementIsReadOnly,
 			DroolsRuleGenerationException, DroolsRuleExecutionException, DateComparisonNotPossibleException, PluginInvocationException,
-			DroolsRuleCreationException, PrattParserException {
+			DroolsRuleCreationException, PrattParserException, InvalidExpressionException {
 		// Create a simple form
 		Form form = createForm();
 		// Create the table and diagram

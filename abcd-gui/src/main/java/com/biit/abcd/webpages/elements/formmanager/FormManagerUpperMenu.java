@@ -27,6 +27,7 @@ import com.biit.abcd.core.drools.rules.exceptions.PluginInvocationException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.TreeObjectInstanceNotRecognizedException;
 import com.biit.abcd.core.drools.rules.exceptions.TreeObjectParentNotValidException;
+import com.biit.abcd.core.drools.rules.validators.InvalidExpressionException;
 import com.biit.abcd.core.security.AbcdActivity;
 import com.biit.abcd.core.testscenarios.TestScenarioDroolsSubmittedForm;
 import com.biit.abcd.language.LanguageCodes;
@@ -192,7 +193,7 @@ public class FormManagerUpperMenu extends UpperMenu {
 											| ExpressionInvalidException | NullTreeObjectException | TreeObjectInstanceNotRecognizedException
 											| TreeObjectParentNotValidException | NullCustomVariableException | NullExpressionValueException
 											| BetweenFunctionInvalidException | DateComparisonNotPossibleException | PluginInvocationException
-											| DroolsRuleCreationException | PrattParserException | ActionNotImplementedException e) {
+											| DroolsRuleCreationException | PrattParserException | ActionNotImplementedException | InvalidExpressionException e) {
 										AbcdLogger.errorMessage(SettingsWindow.class.getName(), e);
 										MessageManager.showError(LanguageCodes.ERROR_TITLE, LanguageCodes.DROOLS_RULES_GENERATION_EXCEPTION);
 									} catch (InvalidRuleException e) {
@@ -323,7 +324,7 @@ public class FormManagerUpperMenu extends UpperMenu {
 		} catch (DroolsRuleGenerationException | RuleNotImplementedException | NotCompatibleTypeException | ExpressionInvalidException
 				| NullTreeObjectException | TreeObjectInstanceNotRecognizedException | TreeObjectParentNotValidException | NullCustomVariableException
 				| NullExpressionValueException | BetweenFunctionInvalidException | DateComparisonNotPossibleException | PluginInvocationException
-				| DroolsRuleCreationException | PrattParserException | ActionNotImplementedException e) {
+				| DroolsRuleCreationException | PrattParserException | ActionNotImplementedException | InvalidExpressionException e) {
 			// This is a generic exception for everything related with the
 			// rules generation
 			// The exception that triggered the launch of this exception is
