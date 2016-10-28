@@ -26,4 +26,13 @@ public enum AnswerFormat {
 	public DroolsQuestionFormat getDroolsFormat() {
 		return droolsFormat;
 	}
+
+	/**
+	 * Used in drools to decide if a answerformat is treated as string.
+	 * 
+	 * @return
+	 */
+	public boolean isStringData() {
+		return this.equals(AnswerFormat.TEXT) || this.equals(AnswerFormat.MULTI_TEXT) || this.equals(AnswerFormat.POSTAL_CODE);
+	}
 }

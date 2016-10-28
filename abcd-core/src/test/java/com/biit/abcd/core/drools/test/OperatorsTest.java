@@ -2,7 +2,9 @@ package com.biit.abcd.core.drools.test;
 
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.dom4j.DocumentException;
 import org.testng.Assert;
@@ -25,6 +27,7 @@ import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.TreeObjectInstanceNotRecognizedException;
 import com.biit.abcd.core.drools.rules.exceptions.TreeObjectParentNotValidException;
 import com.biit.abcd.logger.AbcdLogger;
+import com.biit.abcd.persistence.entity.AnswerFormat;
 import com.biit.abcd.persistence.entity.Category;
 import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.CustomVariableScope;
@@ -51,6 +54,7 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueTimestamp;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.persistence.entity.expressions.QuestionDateUnit;
 import com.biit.abcd.persistence.entity.expressions.Rule;
+import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
 import com.biit.drools.exceptions.DroolsRuleExecutionException;
 import com.biit.drools.form.DroolsForm;
 import com.biit.drools.form.DroolsSubmittedCategory;
@@ -226,7 +230,7 @@ public class OperatorsTest extends KidsFormCreator {
 			InvalidRuleException, ActionNotImplementedException {
 		// Create a new form
 		Form form = createForm();
-		// AVG expression
+		// Concat expression
 		CustomVariable stringCustomVariable = new CustomVariable(form, CONCAT, CustomVariableType.STRING, CustomVariableScope.FORM);
 		ExpressionChain expression = new ExpressionChain("concatExpression", new ExpressionValueCustomVariable(form, stringCustomVariable),
 				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionFunction(AvailableFunction.CONCAT),
@@ -249,7 +253,7 @@ public class OperatorsTest extends KidsFormCreator {
 			InvalidRuleException, ActionNotImplementedException {
 		// Create a new form
 		Form form = createForm();
-		// AVG expression
+		// Concat expression
 		CustomVariable stringCustomVariable = new CustomVariable(form, CONCAT, CustomVariableType.STRING, CustomVariableScope.FORM);
 		ExpressionChain expression = new ExpressionChain("concatExpression", new ExpressionValueCustomVariable(form, stringCustomVariable),
 				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionFunction(AvailableFunction.CONCAT),
@@ -272,7 +276,7 @@ public class OperatorsTest extends KidsFormCreator {
 			InvalidRuleException, ActionNotImplementedException {
 		// Create a new form
 		Form form = createForm();
-		// AVG expression
+		// Concat expression
 		CustomVariable stringCustomVariable = new CustomVariable(form, CONCAT, CustomVariableType.STRING, CustomVariableScope.FORM);
 		ExpressionChain expression = new ExpressionChain("concatExpression", new ExpressionValueCustomVariable(form, stringCustomVariable),
 				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionFunction(AvailableFunction.CONCAT),
@@ -293,7 +297,7 @@ public class OperatorsTest extends KidsFormCreator {
 			InvalidRuleException, ActionNotImplementedException {
 		// Create a new form
 		Form form = createForm();
-		// AVG expression
+		// Concat expression
 		CustomVariable stringCustomVariable = new CustomVariable(form, CONCAT, CustomVariableType.STRING, CustomVariableScope.FORM);
 		CustomVariable firstCustomVariable = new CustomVariable(form, "first", CustomVariableType.STRING, CustomVariableScope.FORM, "abc");
 		CustomVariable secondCustomVariable = new CustomVariable(form, "second", CustomVariableType.STRING, CustomVariableScope.FORM, "def");
@@ -308,6 +312,49 @@ public class OperatorsTest extends KidsFormCreator {
 		DroolsForm droolsForm = createAndRunDroolsRules(form);
 		// Check new string
 		Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CONCAT), "abcdef");
+	}
+	
+	@Test(enabled = true, groups = { "droolsOperators" })
+	public void concatenateGlobalVariables() throws DroolsRuleGenerationException, DocumentException, IOException, DroolsRuleExecutionException,
+			FieldTooLongException, CharacterNotAllowedException, NotValidChildException, InvalidAnswerFormatException, NotValidTypeInVariableData,
+			ElementIsReadOnly, RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
+			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
+			BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException,
+			InvalidRuleException, ActionNotImplementedException {
+		// Create a new form
+		Form form = createForm();
+		
+		// Concat expression
+		CustomVariable stringCustomVariable = new CustomVariable(form, CONCAT, CustomVariableType.STRING, CustomVariableScope.FORM);
+		
+		Timestamp validToFuture = Timestamp.valueOf("2028-09-23 0:0:0.0");
+		Timestamp validFromFuture = Timestamp.valueOf("2016-09-23 0:0:0.0");
+		
+		List<GlobalVariable> variables = new ArrayList<>();
+		
+		GlobalVariable globalVariableText1 = new GlobalVariable(AnswerFormat.TEXT);
+		globalVariableText1.setName("Global1");
+		globalVariableText1.addVariableData("Hello", validFromFuture, validToFuture);
+		variables.add(globalVariableText1);
+		
+		GlobalVariable globalVariableText2 = new GlobalVariable(AnswerFormat.TEXT);
+		globalVariableText2.setName("Global2");
+		globalVariableText2.addVariableData("World!", validFromFuture, validToFuture);
+		variables.add(globalVariableText2);
+		
+		
+		setGlobalVariables(variables);
+		
+		ExpressionChain expression = new ExpressionChain("concatExpression", new ExpressionValueCustomVariable(form, stringCustomVariable),
+				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionFunction(AvailableFunction.CONCAT),
+				new ExpressionValueGlobalConstant(globalVariableText1), new ExpressionSymbol(AvailableSymbol.COMMA),
+				new ExpressionValueGlobalConstant(globalVariableText2), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
+		form.getExpressionChains().add(expression);
+		form.addDiagram(createExpressionsDiagram(form));
+		// Create the rules and launch the engine
+		DroolsForm droolsForm = createAndRunDroolsRules(form);
+		// Check new string
+		Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CONCAT), "HelloWorld!");
 	}
 
 	@Test(enabled = true, groups = { "droolsOperators" })

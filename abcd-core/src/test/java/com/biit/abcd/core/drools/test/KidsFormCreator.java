@@ -356,7 +356,7 @@ public class KidsFormCreator {
 		Timestamp validFrom = Timestamp.valueOf("2007-09-23 0:0:0.0");
 		Timestamp validFromFuture = Timestamp.valueOf("2016-09-23 0:0:0.0");
 		Timestamp validToPast = Timestamp.valueOf("2008-09-23 0:0:0.0");
-		Timestamp validToFuture = Timestamp.valueOf("2018-09-23 0:0:0.0");
+		Timestamp validToFuture = Timestamp.valueOf("2028-09-23 0:0:0.0");
 
 		// Should get the second value
 		globalVariableNumber = new GlobalVariable(AnswerFormat.NUMBER);

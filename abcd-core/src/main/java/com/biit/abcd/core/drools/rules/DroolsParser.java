@@ -906,7 +906,7 @@ public class DroolsParser {
 	}
 
 	private static String getVariablesListValuesForFunctions(ExpressionValueCustomVariable leftExpressionCustomVariable, List<Expression> variables) {
-		String ruleCore = "";
+		StringBuilder ruleCore = new StringBuilder();
 
 		if (variables == null || variables.isEmpty()) {
 			if (leftExpressionCustomVariable.getVariable().getType().equals(CustomVariableType.STRING)) {
@@ -917,39 +917,51 @@ public class DroolsParser {
 		}
 
 		// Concatenation uses strings. Other uses numbers.
-		// Is a variable parameter variables
-		if ((variables.get(0) instanceof ExpressionValueString ||
-		// It is using a custom variable that is a string.
-				(variables.get(0) instanceof ExpressionValueCustomVariable && ((ExpressionValueCustomVariable) variables.get(0)).getVariable().getType()
-						.equals(CustomVariableType.STRING)) ||
-		// It is a variable in a treeobject that is a string.
-		// is a question with string values.
-		((variables.get(0) instanceof ExpressionValueTreeObjectReference) && !(variables.get(0) instanceof ExpressionValueCustomVariable)
-				&& (((ExpressionValueTreeObjectReference) variables.get(0)).getReference() instanceof Question) && (
-		// Questions with text format.
-		((Question) (((ExpressionValueTreeObjectReference) variables.get(0)).getReference())).getAnswerType().equals(AnswerType.RADIO)
-				|| ((Question) (((ExpressionValueTreeObjectReference) variables.get(0)).getReference())).getAnswerType().equals(AnswerType.MULTI_CHECKBOX) ||
-		// Input value only if it is formatted as text
-		(((Question) (((ExpressionValueTreeObjectReference) variables.get(0)).getReference())).getAnswerType().equals(AnswerType.INPUT) && ((Question) (((ExpressionValueTreeObjectReference) variables
-				.get(0)).getReference())).getAnswerFormat().equals(AnswerFormat.TEXT)))))) {
-			ruleCore += "\tList<String> variablesList = new ArrayList<String>();\n";
+		// Simple string definition
+		if (variables.get(0) instanceof ExpressionValueString) {
+			ruleCore.append("\tList<String> variablesList = new ArrayList<String>();\n");
+			// Custom variable as string.
+		} else if (variables.get(0) instanceof ExpressionValueCustomVariable
+				&& ((ExpressionValueCustomVariable) variables.get(0)).getVariable().getType().equals(CustomVariableType.STRING)) {
+			ruleCore.append("\tList<String> variablesList = new ArrayList<String>();\n");
+			// Global variables
+		} else if (variables.get(0) instanceof ExpressionValueGlobalConstant
+				&& (((ExpressionValueGlobalConstant) variables.get(0)).getValue().getFormat().isStringData())) {
+			ruleCore.append("\tList<String> variablesList = new ArrayList<String>();\n");
+			// is a question with string values.
+		} else if ((variables.get(0) instanceof ExpressionValueTreeObjectReference)
+				&& !(variables.get(0) instanceof ExpressionValueCustomVariable)
+				&& (((ExpressionValueTreeObjectReference) variables.get(0)).getReference() instanceof Question)
+				&& (
+				// Questions with text format.
+				((Question) (((ExpressionValueTreeObjectReference) variables.get(0)).getReference())).getAnswerType().equals(AnswerType.RADIO)
+						|| ((Question) (((ExpressionValueTreeObjectReference) variables.get(0)).getReference())).getAnswerType().equals(
+								AnswerType.MULTI_CHECKBOX) ||
+				// Input value only if it is formatted as text
+				(((Question) (((ExpressionValueTreeObjectReference) variables.get(0)).getReference())).getAnswerType().equals(AnswerType.INPUT) && (((Question) (((ExpressionValueTreeObjectReference) variables
+						.get(0)).getReference())).getAnswerFormat().isStringData())))) {
+			ruleCore.append("\tList<String> variablesList = new ArrayList<String>();\n");
 		} else {
-			ruleCore += "\tList<Double> variablesList = new ArrayList<Double>();\n";
+			// Any kind of numeric value.
+			ruleCore.append("\tList<Double> variablesList = new ArrayList<Double>();\n");
 		}
 
 		for (Expression variable : variables) {
 			if (variable instanceof ExpressionValueCustomVariable) {
 				ExpressionValueCustomVariable expressionValueCustomVariable = (ExpressionValueCustomVariable) variable;
-				ruleCore += "\tif(" + getDroolsVariableIdentifier(variable) + ".isVariableDefined('" + expressionValueCustomVariable.getVariable().getName()
-						+ "')){";
-				ruleCore += "variablesList.add(" + getDroolsVariableValueFromExpressionValueTreeObject(expressionValueCustomVariable) + ");}\n";
+				ruleCore.append("\tif(").append(getDroolsVariableIdentifier(variable)).append(".isVariableDefined('")
+						.append(expressionValueCustomVariable.getVariable().getName()).append("')){");
+				ruleCore.append("variablesList.add(").append(getDroolsVariableValueFromExpressionValueTreeObject(expressionValueCustomVariable))
+						.append(");}\n");
 
 				if (isRepeatableGroup(expressionValueCustomVariable.getReference())) {
 					TreeObject parent = expressionValueCustomVariable.getReference().getParent();
 					if (parent != null) {
 						String parentId = "$" + parent.getUniqueNameReadable();
-						ruleCore += "\tif(" + parentId + ".isVariableDefined('" + leftExpressionCustomVariable.getVariable().getName() + "')){";
-						ruleCore += "\tvariablesList.add(" + getDroolsVariableValueFromExpressionValueTreeObject(leftExpressionCustomVariable) + ");}\n";
+						ruleCore.append("\tif(").append(parentId).append(".isVariableDefined('").append(leftExpressionCustomVariable.getVariable().getName())
+								.append("')){");
+						ruleCore.append("\tvariablesList.add(").append(getDroolsVariableValueFromExpressionValueTreeObject(leftExpressionCustomVariable))
+								.append(");}\n");
 					}
 				}
 
@@ -957,45 +969,49 @@ public class DroolsParser {
 				ExpressionValueTreeObjectReference expressionValueTreeObject = (ExpressionValueTreeObjectReference) variable;
 				if (expressionValueTreeObject instanceof ExpressionValueCustomVariable) {
 					if (((ExpressionValueCustomVariable) expressionValueTreeObject).getVariable().getType().equals(CustomVariableType.NUMBER)) {
-						ruleCore += "\tvariablesList.add((Double)" + getDroolsVariableValueFromExpressionValueTreeObject(expressionValueTreeObject) + ");\n";
+						ruleCore.append("\tvariablesList.add((Double)").append(getDroolsVariableValueFromExpressionValueTreeObject(expressionValueTreeObject))
+								.append(");\n");
 					} else {
-						ruleCore += "\tvariablesList.add((String)" + getDroolsVariableValueFromExpressionValueTreeObject(expressionValueTreeObject) + ");\n";
+						ruleCore.append("\tvariablesList.add((String)").append(getDroolsVariableValueFromExpressionValueTreeObject(expressionValueTreeObject))
+								.append(");\n");
 					}
 				} else {
 					if ((expressionValueTreeObject.getReference() instanceof Question)
 							&& ((Question) expressionValueTreeObject.getReference()).getAnswerType().equals(AnswerType.INPUT)
 							&& ((Question) expressionValueTreeObject.getReference()).getAnswerFormat().equals(AnswerFormat.NUMBER)) {
-						ruleCore += "\tvariablesList.add((Double)" + getDroolsVariableValueFromExpressionValueTreeObject(expressionValueTreeObject) + ");\n";
+						ruleCore.append("\tvariablesList.add((Double)").append(getDroolsVariableValueFromExpressionValueTreeObject(expressionValueTreeObject))
+								.append(");\n");
 					} else {
-						ruleCore += "\tvariablesList.add((String)" + getDroolsVariableValueFromExpressionValueTreeObject(expressionValueTreeObject) + ");\n";
+						ruleCore.append("\tvariablesList.add((String)").append(getDroolsVariableValueFromExpressionValueTreeObject(expressionValueTreeObject))
+								.append(");\n");
 					}
 				}
 			} else if (variable instanceof ExpressionValueGlobalConstant) {
 				GlobalVariable globalExpression = ((ExpressionValueGlobalConstant) variable).getValue();
 				switch (globalExpression.getFormat()) {
 				case NUMBER:
-					ruleCore += "\tvariablesList.add((Double)" + globalExpression.getName() + ");\n";
+					ruleCore.append("\tvariablesList.add((Double)").append(globalExpression.getName()).append(");\n");
 					break;
 				case POSTAL_CODE:
-					ruleCore += "\tvariablesList.add(((String)" + globalExpression.getName() + ").toUpperCase());\n";
+					ruleCore.append("\tvariablesList.add(((String)").append(globalExpression.getName()).append(").toUpperCase());\n");
 					break;
 				case MULTI_TEXT:
 				case TEXT:
-					ruleCore += "\tvariablesList.add((String)" + globalExpression.getName() + ");\n";
+					ruleCore.append("\tvariablesList.add((String)").append(globalExpression.getName()).append(");\n");
 					break;
 				case DATE:
-					ruleCore += "\tvariablesList.add(" + globalExpression.getName() + ");\n";
+					ruleCore.append("\tvariablesList.add(").append(globalExpression.getName()).append(");\n");
 					break;
 				}
 			} else if (variable instanceof ExpressionValue) {
 				if (variable instanceof ExpressionValueNumber) {
-					ruleCore += "\tvariablesList.add(" + ((ExpressionValueNumber) variable).getValue() + "d);\n";
+					ruleCore.append("\tvariablesList.add(").append(((ExpressionValueNumber) variable).getValue()).append("d);\n");
 				} else if (variable instanceof ExpressionValueString) {
-					ruleCore += "\tvariablesList.add('" + ((ExpressionValueString) variable).getValue() + "');\n";
+					ruleCore.append("\tvariablesList.add('").append(((ExpressionValueString) variable).getValue()).append("');\n");
 				}
 			}
 		}
-		return ruleCore;
+		return ruleCore.toString();
 	}
 
 	private static boolean isRepeatableGroup(TreeObject treeObject) {
