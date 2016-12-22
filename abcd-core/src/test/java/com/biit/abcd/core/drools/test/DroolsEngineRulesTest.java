@@ -12,10 +12,10 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import com.biit.abcd.logger.AbcdLogger;
-import com.biit.drools.KieManager;
+import com.biit.drools.engine.KieManager;
+import com.biit.drools.engine.importer.OrbeonSubmittedAnswerImporter;
 import com.biit.drools.form.DroolsForm;
 import com.biit.drools.form.DroolsSubmittedForm;
-import com.biit.drools.importer.OrbeonSubmittedAnswerImporter;
 import com.biit.form.submitted.ISubmittedForm;
 
 /**

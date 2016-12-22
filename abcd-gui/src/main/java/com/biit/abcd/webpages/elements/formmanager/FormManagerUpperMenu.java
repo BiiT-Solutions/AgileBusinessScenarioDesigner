@@ -54,7 +54,7 @@ import com.biit.abcd.webpages.elements.droolsresults.DroolsSubmittedFormResultWi
 import com.biit.abcd.webpages.elements.formdesigner.RootForm;
 import com.biit.abcd.webpages.elements.testscenario.ValidationReportWindow;
 import com.biit.abcd.webpages.elements.testscenario.WindowLaunchTestScenario;
-import com.biit.drools.exceptions.DroolsRuleExecutionException;
+import com.biit.drools.engine.exceptions.DroolsRuleExecutionException;
 import com.biit.drools.form.DroolsForm;
 import com.biit.form.submitted.ISubmittedForm;
 import com.biit.persistence.entity.StorableObject;

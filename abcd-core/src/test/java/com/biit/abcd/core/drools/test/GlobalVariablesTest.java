@@ -44,7 +44,7 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueGlobalConstan
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueNumber;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.persistence.utils.IdGenerator;
-import com.biit.drools.exceptions.DroolsRuleExecutionException;
+import com.biit.drools.engine.exceptions.DroolsRuleExecutionException;
 import com.biit.drools.form.DroolsForm;
 import com.biit.drools.form.DroolsSubmittedForm;
 import com.biit.drools.global.variables.exceptions.NotValidTypeInVariableData;

@@ -28,8 +28,8 @@ import com.biit.abcd.core.drools.utils.RuleGenerationUtils;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
-import com.biit.drools.DroolsRulesEngine;
-import com.biit.drools.exceptions.DroolsRuleExecutionException;
+import com.biit.drools.engine.DroolsRulesEngine;
+import com.biit.drools.engine.exceptions.DroolsRuleExecutionException;
 import com.biit.form.submitted.ISubmittedForm;
 
 public class FormToDroolsExporter {
