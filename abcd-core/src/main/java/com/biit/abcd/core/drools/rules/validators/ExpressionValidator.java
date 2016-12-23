@@ -34,7 +34,7 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueTimestamp;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
-import com.biit.drools.plugins.PluginController;
+import com.biit.drools.engine.plugins.PluginController;
 import com.biit.form.entity.TreeObject;
 import com.biit.plugins.interfaces.IPlugin;
 

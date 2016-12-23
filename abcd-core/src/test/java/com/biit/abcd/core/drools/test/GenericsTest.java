@@ -36,7 +36,7 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorMath;
 import com.biit.abcd.persistence.entity.expressions.ExpressionSymbol;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueGenericCustomVariable;
-import com.biit.drools.exceptions.DroolsRuleExecutionException;
+import com.biit.drools.engine.exceptions.DroolsRuleExecutionException;
 import com.biit.drools.global.variables.exceptions.NotValidTypeInVariableData;
 import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.ElementIsReadOnly;

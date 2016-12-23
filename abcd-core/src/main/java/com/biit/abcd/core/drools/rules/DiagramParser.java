@@ -44,7 +44,7 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorLogic;
 import com.biit.abcd.persistence.entity.expressions.ExpressionSymbol;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.persistence.entity.expressions.Rule;
-import com.biit.drools.DroolsHelper;
+import com.biit.drools.engine.DroolsHelper;
 import com.biit.form.entity.TreeObject;
 
 public class DiagramParser {

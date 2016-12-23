@@ -55,9 +55,9 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectRef
 import com.biit.abcd.persistence.entity.expressions.QuestionDateUnit;
 import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
-import com.biit.drools.DroolsHelper;
+import com.biit.drools.engine.DroolsHelper;
+import com.biit.drools.engine.plugins.PluginController;
 import com.biit.drools.form.DroolsQuestionFormat;
-import com.biit.drools.plugins.PluginController;
 import com.biit.form.entity.TreeObject;
 import com.biit.plugins.interfaces.IPlugin;
 

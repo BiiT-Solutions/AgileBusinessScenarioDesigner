@@ -11,7 +11,7 @@ import com.biit.abcd.webpages.components.ElementAddedListener;
 import com.biit.abcd.webpages.components.ElementUpdatedListener;
 import com.biit.abcd.webpages.components.ExpressionEditorTabComponent;
 import com.biit.abcd.webpages.components.ThemeIcon;
-import com.biit.drools.plugins.PluginController;
+import com.biit.drools.engine.plugins.PluginController;
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.event.ShortcutListener;
 import com.vaadin.server.VaadinServlet;
