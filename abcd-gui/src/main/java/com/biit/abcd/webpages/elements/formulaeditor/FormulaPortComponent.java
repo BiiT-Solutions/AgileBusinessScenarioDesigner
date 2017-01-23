@@ -26,8 +26,8 @@ public class FormulaPortComponent extends CustomComponent {
 	private List<FormulaPortClickListener> listeners;
 
 	public FormulaPortComponent(Type acceptedType) {
-		this.acceptedTypes = new HashSet<Type>();
-		this.acceptedTypes.add(acceptedType);
+		Set<Type> acceptedTypes = new HashSet<Type>();
+		acceptedTypes.add(acceptedType);
 		initializate(acceptedTypes);
 	}
 
@@ -114,10 +114,6 @@ public class FormulaPortComponent extends CustomComponent {
 			rootLayout.setWidth(emptyWidth);
 			rootLayout.setHeight(emptyHeight);
 		}
-	}
-
-	public Type getType() {
-		return getValue().getType();
 	}
 
 	public FormulaExpressionComponent getValue() {
