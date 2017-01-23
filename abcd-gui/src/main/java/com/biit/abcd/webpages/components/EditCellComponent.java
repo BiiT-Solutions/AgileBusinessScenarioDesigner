@@ -40,7 +40,10 @@ public class EditCellComponent extends CustomComponent implements Comparable<Edi
 		editButton = new IconButton(ThemeIcon.EDIT, IconSize.SMALL, LanguageCodes.EDIT_BUTTON_TOOLTIP);
 		removeButton = new IconButton(ThemeIcon.DELETE, IconSize.SMALL, LanguageCodes.DELETE_BUTTON_TOOLTIP);
 		textLabel = new Label(ServerTranslate.translate(LanguageCodes.CONDITION_TABLE_NULL_VALUE), ContentMode.HTML);
-		textLabel.setSizeUndefined();
+		//textLabel.setSizeUndefined();
+		textLabel.setWidth("100%");
+		textLabel.setHeight("19px");
+		textLabel.setStyleName("cellLabel");
 
 		rootLayout.addComponent(textLabel);
 		rootLayout.addLayoutClickListener(new LayoutClickListener() {

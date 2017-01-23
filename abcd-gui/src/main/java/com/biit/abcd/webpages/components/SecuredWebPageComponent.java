@@ -48,7 +48,7 @@ public abstract class SecuredWebPageComponent extends WebPageComponent {
 			IUser<Long> user = UserSessionHandler.getUser();
 			if (user == null) {
 				AbcdLogger.info(this.getClass().getName(),
-						"Unknown user has tried to enter a secured webpage. Navigated to Login page.");
+						"Unknown user has tried to enter a secured webpage. Redirected to Login page.");
 				ApplicationFrame.navigateTo(WebMap.getLoginPage());
 			} else {
 				try {

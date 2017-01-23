@@ -24,7 +24,7 @@ public class ActionTable extends Table {
 	private CellRowSelector cellRowSelector;
 	private List<EditActionListener> editActionListeners;
 	private List<ClearActionListener> clearActionListeners;
-	private int CHARACTER_LIMIT = 25;
+	private int CHARACTER_LIMIT = 200;
 
 	enum Columns {
 		ACTION

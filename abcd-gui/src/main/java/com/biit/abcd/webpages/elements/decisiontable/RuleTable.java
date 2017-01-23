@@ -7,23 +7,23 @@ import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.vaadin.ui.CustomComponent;
-import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.JavaScript;
 
 public class RuleTable extends CustomComponent {
 
 	private static final long serialVersionUID = -1214662437608420332L;
-	private HorizontalLayout rootLayout;
+	private HorizontalSplitPanel rootLayout;
 	private ConditionTable conditionTable;
 	private ActionTable actionTable;
 
 	public RuleTable() {
 		super();
 
-		rootLayout = new HorizontalLayout();
+		rootLayout = new HorizontalSplitPanel();
 		rootLayout.setSizeFull();
 		rootLayout.setImmediate(true);
-		rootLayout.setSpacing(true);
+		//rootLayout.setSpacing(true);
 
 		conditionTable = new ConditionTable();
 		conditionTable.setSizeFull();
@@ -52,10 +52,9 @@ public class RuleTable extends CustomComponent {
 				.execute(
 						"var t=document.getElementById('main-table').children[1]; var fp=document.getElementById('freeze-pane').children[1]; fp.addEventListener('scroll', function() {t.scrollTop=fp.scrollTop;}, false);");
 
-		rootLayout.addComponent(conditionTable);
-		rootLayout.addComponent(actionTable);
-		rootLayout.setExpandRatio(conditionTable, 0.75f);
-		rootLayout.setExpandRatio(actionTable, 0.25f);
+		rootLayout.setFirstComponent(conditionTable);
+		rootLayout.setSecondComponent(actionTable);
+		rootLayout.setSplitPosition(75, Unit.PERCENTAGE);
 
 		setSizeFull();
 		setImmediate(true);
