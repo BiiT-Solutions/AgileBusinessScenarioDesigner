@@ -1,6 +1,6 @@
 
     create table diagram (
-        ID bigint not null,
+        ID bigint not null auto_increment,
         comparationId varchar(190) not null,
         createdBy DOUBLE,
         creationTime datetime not null,
@@ -11,7 +11,7 @@
     );
 
     create table diagram_biit_text (
-        ID bigint not null,
+        ID bigint not null auto_increment,
         comparationId varchar(190) not null,
         createdBy DOUBLE,
         creationTime datetime not null,
@@ -116,7 +116,7 @@
     );
 
     create table diagram_nodes (
-        ID bigint not null,
+        ID bigint not null auto_increment,
         comparationId varchar(190) not null,
         createdBy DOUBLE,
         creationTime datetime not null,
@@ -129,7 +129,7 @@
     );
 
     create table diagram_points (
-        ID bigint not null,
+        ID bigint not null auto_increment,
         comparationId varchar(190) not null,
         createdBy DOUBLE,
         creationTime datetime not null,
@@ -203,7 +203,7 @@
     );
 
     create table diagram_sizes (
-        ID bigint not null,
+        ID bigint not null auto_increment,
         comparationId varchar(190) not null,
         createdBy DOUBLE,
         creationTime datetime not null,
@@ -477,7 +477,7 @@
     );
 
     create table form_custom_variables (
-        ID bigint not null,
+        ID bigint not null auto_increment,
         comparationId varchar(190) not null,
         createdBy DOUBLE,
         creationTime datetime not null,
@@ -549,7 +549,7 @@
     );
 
     create table global_variables (
-        ID bigint not null,
+        ID bigint not null auto_increment,
         comparationId varchar(190) not null,
         createdBy DOUBLE,
         creationTime datetime not null,
@@ -561,7 +561,7 @@
     );
 
     create table rule (
-        ID bigint not null,
+        ID bigint not null auto_increment,
         comparationId varchar(190) not null,
         createdBy DOUBLE,
         creationTime datetime not null,
@@ -574,7 +574,7 @@
     );
 
     create table rule_decision_table (
-        ID bigint not null,
+        ID bigint not null auto_increment,
         comparationId varchar(190) not null,
         createdBy DOUBLE,
         creationTime datetime not null,
@@ -585,7 +585,7 @@
     );
 
     create table rule_decision_table_row (
-        ID bigint not null,
+        ID bigint not null auto_increment,
         comparationId varchar(190) not null,
         createdBy DOUBLE,
         creationTime datetime not null,
@@ -672,7 +672,7 @@
     );
 
     create table test_scenario (
-        ID bigint not null,
+        ID bigint not null auto_increment,
         comparationId varchar(190) not null,
         createdBy DOUBLE,
         creationTime datetime not null,
@@ -859,13 +859,7 @@
     );
 
     alter table diagram 
-        add constraint UK_cqcepkojqmp1r8a42yb1hh1c4  unique (ID);
-
-    alter table diagram 
         add constraint UK_i991a76ub6cc04w67skutnlft  unique (comparationId);
-
-    alter table diagram_biit_text 
-        add constraint UK_jcm4u3t3e37kkjb5mltbs5mha  unique (ID);
 
     alter table diagram_biit_text 
         add constraint UK_26e5ksw8ie3l7k0gtpdghwxr8  unique (comparationId);
@@ -898,13 +892,7 @@
         add constraint UK_ph2m4o4wkkd1ls8xxffxf0q4  unique (comparationId);
 
     alter table diagram_nodes 
-        add constraint UK_8a8ejpu1o9334lnd8qaxmngtc  unique (ID);
-
-    alter table diagram_nodes 
         add constraint UK_r73mc67afakc2crvohrek8qk4  unique (comparationId);
-
-    alter table diagram_points 
-        add constraint UK_hlburchqkc9q4ahhvbtm8r9p9  unique (ID);
 
     alter table diagram_points 
         add constraint UK_nmcm8lwfgn9lwd2kg6e77mlpx  unique (comparationId);
@@ -926,9 +914,6 @@
 
     alter table diagram_sink 
         add constraint UK_bo43xa2d2veyl1w7o8xfjse1m  unique (comparationId);
-
-    alter table diagram_sizes 
-        add constraint UK_ipg7ga5eq6253uw0hwppg86ub  unique (ID);
 
     alter table diagram_sizes 
         add constraint UK_lpwfoljk42ognggvtk6m0w75j  unique (comparationId);
@@ -1054,9 +1039,6 @@
         add constraint UK_6n86noaf7rpgu2qagq951m5da  unique (expressions_ID);
 
     alter table form_custom_variables 
-        add constraint UK_891b13251e3pkyk1k5vccpmnh  unique (ID);
-
-    alter table form_custom_variables 
         add constraint UK_sq1dj9kjhkv951lr0o3pu42fc  unique (comparationId);
 
     alter table global_variable_data_date 
@@ -1087,28 +1069,16 @@
         add constraint UK_mowohsw3lf7j5hh676yr34en8  unique (comparationId);
 
     alter table global_variables 
-        add constraint UK_nggea8kl5cb894e5du3cwsrd0  unique (ID);
-
-    alter table global_variables 
         add constraint UK_kr7p6k3u1po5mbamq95rvh6gj  unique (comparationId);
 
     alter table global_variables 
         add constraint UK_ba2w3ms6v9agn6ac5ois703u2  unique (name);
 
     alter table rule 
-        add constraint UK_8rqluiaunf9galin639sd894c  unique (ID);
-
-    alter table rule 
         add constraint UK_bmfhvbjf4kaugtlg6wom9crg9  unique (comparationId);
 
     alter table rule_decision_table 
-        add constraint UK_bumgbl5omimxtvvhvthstr882  unique (ID);
-
-    alter table rule_decision_table 
         add constraint UK_20los6ndm6d9errmf4erx9f12  unique (comparationId);
-
-    alter table rule_decision_table_row 
-        add constraint UK_ondmt5ex56yathpd70q11lwgg  unique (ID);
 
     alter table rule_decision_table_row 
         add constraint UK_r7njhoe2s46aht07exgq5hp5f  unique (comparationId);
@@ -1154,9 +1124,6 @@
 
     alter table test_scenario 
         add constraint UK_49e2vwe0pem0fb31dxr3ed6b0  unique (name, formId);
-
-    alter table test_scenario 
-        add constraint UK_j17qvfqb5wcp4c3bgknvdii31  unique (ID);
 
     alter table test_scenario 
         add constraint UK_eh6es7t34ldoxns3sswdj6vku  unique (comparationId);

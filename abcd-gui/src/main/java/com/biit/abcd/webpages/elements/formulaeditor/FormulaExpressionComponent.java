@@ -92,11 +92,6 @@ public abstract class FormulaExpressionComponent extends CustomComponent {
 		}
 	}
 
-	public Type getType() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	public boolean isChildComponent(Component clickedComponent) {
 		Iterator<Component> layoutItr = rootLayout.iterator();
 		while (layoutItr.hasNext()) {

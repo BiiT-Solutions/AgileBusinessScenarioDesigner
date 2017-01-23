@@ -1,5 +1,6 @@
 package com.biit.abcd.webpages.elements.expressionviewer;
 
+import java.util.Collections;
 import java.util.List;
 
 import com.biit.abcd.authentication.UserSessionHandler;
@@ -91,8 +92,7 @@ public class SelectFormElementVariableWindow extends AcceptCancelWindow {
 
 	private void initializeVariableSelection() {
 		variableSelection = new ListSelect();
-		variableSelection
-				.setCaption(ServerTranslate.translate(LanguageCodes.EXPRESSION_FORM_VARIABLE_WINDOW_VARIABLES));
+		variableSelection.setCaption(ServerTranslate.translate(LanguageCodes.EXPRESSION_FORM_VARIABLE_WINDOW_VARIABLES));
 		variableSelection.setSizeFull();
 		variableSelection.setNullSelectionAllowed(false);
 		variableSelection.setImmediate(true);
@@ -102,8 +102,8 @@ public class SelectFormElementVariableWindow extends AcceptCancelWindow {
 		variableSelection.setValue(null);
 		variableSelection.removeAllItems();
 		if (treeObject != null) {
-			List<CustomVariable> customVariables = UserSessionHandler.getFormController().getForm()
-					.getCustomVariables(treeObject);
+			List<CustomVariable> customVariables = UserSessionHandler.getFormController().getForm().getCustomVariables(treeObject);
+			Collections.sort(customVariables);
 			if (customVariables != null && !customVariables.isEmpty()) {
 				for (CustomVariable customvariable : customVariables) {
 					variableSelection.addItem(customvariable);
@@ -118,8 +118,7 @@ public class SelectFormElementVariableWindow extends AcceptCancelWindow {
 		if (formQuestionTable.getValue() == null || variableSelection.getValue() == null) {
 			return null;
 		}
-		return new ExpressionValueCustomVariable((TreeObject) formQuestionTable.getValue(),
-				(CustomVariable) variableSelection.getValue());
+		return new ExpressionValueCustomVariable((TreeObject) formQuestionTable.getValue(), (CustomVariable) variableSelection.getValue());
 	}
 
 	public void setvalue(ExpressionValueCustomVariable expression) {

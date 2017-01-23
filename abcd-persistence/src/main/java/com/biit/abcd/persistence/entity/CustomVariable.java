@@ -18,15 +18,18 @@ import com.biit.persistence.entity.StorableObject;
 import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 
 /**
- * Sets all user defined custom variables that will be used in drools conditions and action.
+ * Sets all user defined custom variables that will be used in drools conditions
+ * and action.
  */
 @Entity
-// uniqueConstraints = { @UniqueConstraint(columnNames = { "form", "name", "scope" }) } removed due to an updating
-// customvariables name problem if a new custom variable has the same name that a previously deleted one.
+// uniqueConstraints = { @UniqueConstraint(columnNames = { "form", "name",
+// "scope" }) } removed due to an updating
+// customvariables name problem if a new custom variable has the same name that
+// a previously deleted one.
 @Table(name = "form_custom_variables")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @Cacheable(true)
-public class CustomVariable extends StorableObject {
+public class CustomVariable extends StorableObject implements Comparable<CustomVariable> {
 	private static final long serialVersionUID = 4678216833687584848L;
 
 	@ManyToOne(optional = false)
@@ -49,8 +52,7 @@ public class CustomVariable extends StorableObject {
 		super();
 	}
 
-	public CustomVariable(Form form, String name, CustomVariableType type, CustomVariableScope scope,
-			String defaultValue) {
+	public CustomVariable(Form form, String name, CustomVariableType type, CustomVariableScope scope, String defaultValue) {
 		super();
 		this.form = form;
 		this.name = name;
@@ -157,5 +159,10 @@ public class CustomVariable extends StorableObject {
 		if (form != null) {
 			form.remove(this);
 		}
+	}
+
+	@Override
+	public int compareTo(CustomVariable customVariable) {
+		return getName().compareTo(customVariable.getName());
 	}
 }
