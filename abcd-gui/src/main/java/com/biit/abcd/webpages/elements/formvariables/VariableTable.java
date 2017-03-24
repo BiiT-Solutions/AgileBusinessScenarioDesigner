@@ -119,6 +119,7 @@ public class VariableTable extends Table {
 		scopeComboBox.setEnabled(!protectedElements);
 		scopeComboBox.setImmediate(true);
 		item.getItemProperty(FormVariablesProperties.SCOPE).setValue(scopeComboBox);
+		sort();
 	}
 
 	public void removeSelectedRow() {
