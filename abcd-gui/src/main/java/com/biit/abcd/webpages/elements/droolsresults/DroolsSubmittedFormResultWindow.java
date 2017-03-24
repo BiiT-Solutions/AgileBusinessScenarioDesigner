@@ -3,6 +3,7 @@ package com.biit.abcd.webpages.elements.droolsresults;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -61,6 +62,8 @@ public class DroolsSubmittedFormResultWindow extends AcceptCancelWindow {
 		sortedCustomVariables.addAll(form.getCustomVariables(Group.class));
 		sortedCustomVariables.addAll(form.getCustomVariables(Category.class));
 		sortedCustomVariables.addAll(form.getCustomVariables(Form.class));
+		
+		Collections.sort(sortedCustomVariables);
 
 		if ((sortedCustomVariables != null) && (!sortedCustomVariables.isEmpty())) {
 			customVariablesScopeMap = new HashMap<CustomVariableScope, List<String>>();
