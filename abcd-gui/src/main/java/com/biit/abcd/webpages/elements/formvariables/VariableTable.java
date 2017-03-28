@@ -35,7 +35,7 @@ import com.vaadin.ui.TextField;
 
 public class VariableTable extends Table {
 	private static final long serialVersionUID = 3067131269771569684L;
-	private static final String VARIABLE_REGEX = "([a-zA-Z])([a-zA-Z0-9]){3,}";
+	private static final String VARIABLE_REGEX = "([a-zA-Z])([a-zA-Z0-9]){2,}";
 	private boolean protectedElements = false;
 
 	private IAbcdFormAuthorizationService securityService;
@@ -86,6 +86,7 @@ public class VariableTable extends Table {
 
 	@SuppressWarnings({ "unchecked" })
 	public void addRow(final CustomVariable customVariable) {
+		sort();
 		Item item = addItem(customVariable);
 		final ComparableTextField nameTextField = createTextField(customVariable);
 		nameTextField.addValidator(new RegexpValidator(VARIABLE_REGEX, LanguageCodes.FORM_VARIABLE_REGEX_ERROR.translate()));
