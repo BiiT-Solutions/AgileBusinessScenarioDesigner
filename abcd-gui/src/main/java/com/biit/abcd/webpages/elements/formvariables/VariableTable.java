@@ -86,6 +86,7 @@ public class VariableTable extends Table {
 
 	@SuppressWarnings({ "unchecked" })
 	public void addRow(final CustomVariable customVariable) {
+		sort();
 		Item item = addItem(customVariable);
 		final ComparableTextField nameTextField = createTextField(customVariable);
 		nameTextField.addValidator(new RegexpValidator(VARIABLE_REGEX, LanguageCodes.FORM_VARIABLE_REGEX_ERROR.translate()));
@@ -119,7 +120,6 @@ public class VariableTable extends Table {
 		scopeComboBox.setEnabled(!protectedElements);
 		scopeComboBox.setImmediate(true);
 		item.getItemProperty(FormVariablesProperties.SCOPE).setValue(scopeComboBox);
-		sort();
 	}
 
 	public void removeSelectedRow() {
