@@ -63,7 +63,6 @@ public class FormVariablesTests extends AbcdTester {
 		getFormManager().clickFormVariables();
 		Assert.assertTrue(getFormVariables().getTextField(0, 3).getValue().equals(DEF_VALUE_TEXT));
 		Assert.assertTrue(getFormVariables().getTextField(1, 3).getValue().equals(DEF_VALUE_NUMBER));
-		getFormVariables().takeScreenshot("ABCD_variables_test");
 		Assert.assertTrue(getFormVariables().getTextField(2, 3).getValue().equals(DEF_VALUE_DATE));
 
 		getFormVariables().goToFormManager();

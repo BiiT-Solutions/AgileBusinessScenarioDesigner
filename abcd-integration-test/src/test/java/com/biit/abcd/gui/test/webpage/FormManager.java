@@ -33,7 +33,6 @@ public class FormManager extends AbcdCommonWebpage {
 
 	public ButtonElement getNewForm() {
 		getNewMenu().click();
-		takeScreenshot("ABCD_getNewForm");
 		return getNewFormButton();
 	}
 
@@ -68,7 +67,6 @@ public class FormManager extends AbcdCommonWebpage {
 
 	@Override
 	public String getWebpageUrl() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

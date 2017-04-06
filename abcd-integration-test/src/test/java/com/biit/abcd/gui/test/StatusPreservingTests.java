@@ -129,10 +129,8 @@ public class StatusPreservingTests extends AbcdTester {
 
 		getFormManager().clickFormDesigner();
 		sleep(250);
-		getFormDesigner().takeScreenshot("formInUseIsSelectedWhenReturning_1");
 		clickFormManager();
 		sleep(250);
-		getFormDesigner().takeScreenshot("formInUseIsSelectedWhenReturning_2");
 		Assert.assertTrue(getFormManager().isRowSelected(FORM_2_ROW));
 		getFormManager().selectForm(FORM_1_ROW);
 		getFormManager().clickFormDesigner();
@@ -182,10 +180,8 @@ public class StatusPreservingTests extends AbcdTester {
 
 		getDiagramDesigner().clickFormDesigner();
 		sleep(250);
-		getFormDesigner().takeScreenshot("elementsSelectedAreMaintainedCorrectly_1");
 		getFormDesigner().clickDiagramDesigner();
 		sleep(250);
-		getFormDesigner().takeScreenshot("elementsSelectedAreMaintainedCorrectly_1");
 		getDiagramDesigner().isRowSelected(DIAGRAM_1_ROW);
 		getDiagramDesigner().selectRow(DIAGRAM_2_ROW);
 		getDiagramDesigner().clickFormDesigner();
@@ -247,7 +243,6 @@ public class StatusPreservingTests extends AbcdTester {
 		getFormManager().createNewForm(TEST_FORM_1);
 		getFormManager().clickFormDesigner();
 		sleep(250);
-		getFormDesigner().takeScreenshot("savePromptWhenChangedFormName");
 		getFormDesigner().setTechnicalName(TEST_FORM_1_CHANGED_NAME);
 		getFormDesigner().clickInTableRow(0);
 
@@ -274,7 +269,6 @@ public class StatusPreservingTests extends AbcdTester {
 		getFormManager().clickFormDesigner();
 		
 		sleep(250);
-		getFormDesigner().takeScreenshot("savePromptWhenNewFormElementsOrEditing");
 		getFormDesigner().clickInTableRow(0);
 		getFormDesigner().createCategory(0, CATEGORY_1);
 

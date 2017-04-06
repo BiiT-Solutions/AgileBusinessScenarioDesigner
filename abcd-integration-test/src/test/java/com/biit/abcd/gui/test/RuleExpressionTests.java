@@ -290,12 +290,9 @@ public class RuleExpressionTests extends AbcdTester {
 		getRuleExpression().clickButton(ASSIGN_CAPTION);
 		getRuleExpression().clickButton(MIN);
 
-		getRuleExpression().takeScreenshot("ABCD_ordered_expression_A");
 		getRuleExpression().changeToTab(TREE_ELEMENT_TAB);
 		getRuleExpression().toggleSelectElementRow(1);
-		getRuleExpression().takeScreenshot("ABCD_ordered_expression_A_2");
 		getRuleExpression().addElement(2);
-		getRuleExpression().takeScreenshot("ABCD_ordered_expression_B");
 
 		getRuleExpression().changeToTab(MATHEMATICAL_OPERATIONS_TAB);
 		getRuleExpression().clickButton(COMMA_CAPTION);
@@ -305,7 +302,6 @@ public class RuleExpressionTests extends AbcdTester {
 		getFormManager().clickRuleExpressionEditor();
 		getRuleExpression().toggleSelectElementRow(1);
 		getRuleExpression().addElement(3);
-		getRuleExpression().takeScreenshot("ABCD_ordered_expression_D");
 
 		getRuleExpression().changeToTab(MATHEMATICAL_OPERATIONS_TAB);
 		getRuleExpression().clickButton(RIGHTPAR_CAPTION);
@@ -318,7 +314,6 @@ public class RuleExpressionTests extends AbcdTester {
 		getFormManager().clickRuleExpressionEditor();
 
 		Assert.assertTrue(getRuleExpression().isValid());
-		getRuleExpression().takeScreenshot("ABCD_ordered_expression");
 		Assert.assertEquals(getRuleExpression().getToken(0).getText(), TEST_STRING_TOKEN_0);
 		Assert.assertEquals(getRuleExpression().getToken(1).getText(), TEST_STRING_TOKEN_1);
 		Assert.assertEquals(getRuleExpression().getToken(2).getText(), TEST_STRING_TOKEN_2);

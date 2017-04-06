@@ -16,7 +16,7 @@ import com.vaadin.testbench.elements.ButtonElement;
 
 public abstract class VaadinGuiWebpage extends TestBenchTestCase{
 	
-	private static final String SCREENSHOT_TYPE = ".jpeg";
+	private static final String SCREENSHOT_TYPE = ".png";
 	
 	private final List<VaadinGuiWindow> windows;
 	
@@ -53,8 +53,6 @@ public abstract class VaadinGuiWebpage extends TestBenchTestCase{
 			FileUtils.copyFile(scrFile, new File(System.getProperty("java.io.tmpdir") + File.separator + screenshotName
 					+ SCREENSHOT_TYPE), true);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 	}
 
