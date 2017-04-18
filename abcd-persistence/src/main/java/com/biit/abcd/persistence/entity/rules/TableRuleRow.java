@@ -150,13 +150,13 @@ public class TableRuleRow extends StorableObject implements Comparable<TableRule
 
 	@Override
 	public int compareTo(TableRuleRow otherRow) {
-		if (this.getConditions().getExpressions().size() > 0 && otherRow.getConditions().getExpressions().size() > 0) {
+		if (!getConditions().getExpressions().isEmpty() && !otherRow.getConditions().getExpressions().isEmpty()) {
 			Expression expression1 = this.getConditions().getExpressions().get(0);
 			Expression expression2 = otherRow.getConditions().getExpressions().get(0);
 			if (expression1 instanceof ExpressionValueTreeObjectReference) {
 				if (expression2 instanceof ExpressionValueTreeObjectReference) {
-					return ((ExpressionValueTreeObjectReference) expression1).getReference()
-							.compareTo(((ExpressionValueTreeObjectReference) expression2).getReference());
+					return ((ExpressionValueTreeObjectReference) expression1).getReference().compareTo(
+							((ExpressionValueTreeObjectReference) expression2).getReference());
 				}
 				// First null values.
 				return 1;
@@ -168,6 +168,24 @@ public class TableRuleRow extends StorableObject implements Comparable<TableRule
 				return 0;
 			}
 		} else {
+			if (!getAction().getExpressions().isEmpty() && !otherRow.getAction().getExpressions().isEmpty()) {
+				Expression expression1 = this.getAction().getExpressions().get(0);
+				Expression expression2 = otherRow.getAction().getExpressions().get(0);
+				if (expression1 instanceof ExpressionValueTreeObjectReference) {
+					if (expression2 instanceof ExpressionValueTreeObjectReference) {
+						return ((ExpressionValueTreeObjectReference) expression1).getReference().compareTo(
+								((ExpressionValueTreeObjectReference) expression2).getReference());
+					}
+					// First null values.
+					return 1;
+				} else {
+					if (expression2 instanceof ExpressionValueTreeObjectReference) {
+						// First null values.
+						return -1;
+					}
+					return 0;
+				}
+			}
 			// First empty expressions.
 			return this.getConditions().getExpressions().size() - otherRow.getConditions().getExpressions().size();
 		}
@@ -184,10 +202,10 @@ public class TableRuleRow extends StorableObject implements Comparable<TableRule
 
 			// Question not empty
 			if ((questionExpression instanceof ExpressionValueTreeObjectReference)
-					&& (((ExpressionValueTreeObjectReference) questionExpression).getReference() != null) &&
+					&& (((ExpressionValueTreeObjectReference) questionExpression).getReference() != null)
+					&&
 					// Answer not empty
-					(answerExpression instanceof ExpressionChain)
-					&& (((ExpressionChain) answerExpression).getExpressions() != null)
+					(answerExpression instanceof ExpressionChain) && (((ExpressionChain) answerExpression).getExpressions() != null)
 					&& (!((ExpressionChain) answerExpression).getExpressions().isEmpty())) {
 
 				if (index > 0) {
@@ -195,8 +213,7 @@ public class TableRuleRow extends StorableObject implements Comparable<TableRule
 				}
 				preParsedConditions.addExpression(questionExpression);
 
-				if (((ExpressionChain) answerExpression).getExpressions()
-						.get(0) instanceof ExpressionValueTreeObjectReference) {
+				if (((ExpressionChain) answerExpression).getExpressions().get(0) instanceof ExpressionValueTreeObjectReference) {
 					preParsedConditions.addExpression(new ExpressionOperatorLogic(AvailableOperator.EQUALS));
 				}
 				preParsedConditions.addExpression(answerExpression);
