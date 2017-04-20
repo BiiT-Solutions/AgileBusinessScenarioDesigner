@@ -1,6 +1,7 @@
 package com.biit.abcd.webpages.elements.decisiontable;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -243,5 +244,13 @@ public class ActionTable extends Table {
 			}
 			cellRowSelector.itemClick(new ItemClickEvent(conditionTable, item, itemId, Columns.ACTION, mouseEvent));
 		}
+	}
+	
+	public Collection<TableRuleRow> getSelectedRules() {
+		Set<TableRuleRow> rules = new HashSet<TableRuleRow>();
+		for (Cell cell : cellRowSelector.getSelectedCells()) {
+			rules.add((TableRuleRow) cell.getRow());
+		}
+		return rules;
 	}
 }

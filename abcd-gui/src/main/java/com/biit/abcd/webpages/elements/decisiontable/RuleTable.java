@@ -23,7 +23,7 @@ public class RuleTable extends CustomComponent {
 		rootLayout = new HorizontalSplitPanel();
 		rootLayout.setSizeFull();
 		rootLayout.setImmediate(true);
-		//rootLayout.setSpacing(true);
+		// rootLayout.setSpacing(true);
 
 		conditionTable = new ConditionTable();
 		conditionTable.setSizeFull();
@@ -78,10 +78,20 @@ public class RuleTable extends CustomComponent {
 	}
 
 	public void removeSelectedRows(TableRule selectedTableRule) {
-		for (TableRuleRow rule : conditionTable.getSelectedRules()) {
-			conditionTable.removeItem(rule);
-			actionTable.removeItem(rule);
-			selectedTableRule.removeRule(rule);
+		// Selected by conditions.
+		if (!conditionTable.getSelectedRules().isEmpty()) {
+			for (TableRuleRow rule : conditionTable.getSelectedRules()) {
+				conditionTable.removeItem(rule);
+				actionTable.removeItem(rule);
+				selectedTableRule.removeRule(rule);
+			}
+		} else {
+			// No conditions defined, only actions. Remove by selected action. 
+			for (TableRuleRow rule : actionTable.getSelectedRules()) {
+				conditionTable.removeItem(rule);
+				actionTable.removeItem(rule);
+				selectedTableRule.removeRule(rule);
+			}
 		}
 	}
 
