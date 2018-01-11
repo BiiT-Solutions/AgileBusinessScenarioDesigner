@@ -1,1526 +1,1526 @@
 
     create table diagram (
-        ID bigint not null auto_increment,
-        comparationId varchar(190) not null,
-        createdBy DOUBLE,
-        creationTime datetime not null,
-        updateTime datetime,
-        updatedBy DOUBLE,
+        id bigint not null auto_increment,
+        comparation_id varchar(190) not null,
+        created_by DOUBLE,
+        creation_time datetime not null,
+        update_time datetime,
+        updated_by DOUBLE,
         name varchar(255),
-        primary key (ID)
+        primary key (id)
     );
 
     create table diagram_biit_text (
-        ID bigint not null auto_increment,
-        comparationId varchar(190) not null,
-        createdBy DOUBLE,
-        creationTime datetime not null,
-        updateTime datetime,
-        updatedBy DOUBLE,
+        id bigint not null auto_increment,
+        comparation_id varchar(190) not null,
+        created_by DOUBLE,
+        creation_time datetime not null,
+        update_time datetime,
+        updated_by DOUBLE,
         fill varchar(255),
         fontSize varchar(255),
         stroke varchar(255),
         strokeWidth varchar(255),
         text varchar(255),
-        primary key (ID)
+        primary key (id)
     );
 
     create table diagram_calculation (
-        ID bigint not null,
-        comparationId varchar(190) not null,
-        createdBy DOUBLE,
-        creationTime datetime not null,
-        updateTime datetime,
-        updatedBy DOUBLE,
+        id bigint not null,
+        comparation_id varchar(190) not null,
+        created_by DOUBLE,
+        creation_time datetime not null,
+        update_time datetime,
+        updated_by DOUBLE,
         embeds varchar(255),
         jointjsId varchar(255),
         type varchar(255),
         z integer not null,
-        parent_ID bigint,
+        parent_id bigint,
         angle float not null,
         tooltip varchar(255),
-        biitText_ID bigint,
-        position_ID bigint,
-        size_ID bigint,
-        expression_ID bigint,
-        primary key (ID)
+        biitText_id bigint,
+        position_id bigint,
+        size_id bigint,
+        expression_id bigint,
+        primary key (id)
     );
 
     create table diagram_child (
-        ID bigint not null,
-        comparationId varchar(190) not null,
-        createdBy DOUBLE,
-        creationTime datetime not null,
-        updateTime datetime,
-        updatedBy DOUBLE,
+        id bigint not null,
+        comparation_id varchar(190) not null,
+        created_by DOUBLE,
+        creation_time datetime not null,
+        update_time datetime,
+        updated_by DOUBLE,
         embeds varchar(255),
         jointjsId varchar(255),
         type varchar(255),
         z integer not null,
-        parent_ID bigint,
+        parent_id bigint,
         angle float not null,
         tooltip varchar(255),
-        biitText_ID bigint,
-        position_ID bigint,
-        size_ID bigint,
-        diagram_ID bigint,
-        primary key (ID)
+        biitText_id bigint,
+        position_id bigint,
+        size_id bigint,
+        diagram_id bigint,
+        primary key (id)
     );
 
     create table diagram_fork (
-        ID bigint not null,
-        comparationId varchar(190) not null,
-        createdBy DOUBLE,
-        creationTime datetime not null,
-        updateTime datetime,
-        updatedBy DOUBLE,
+        id bigint not null,
+        comparation_id varchar(190) not null,
+        created_by DOUBLE,
+        creation_time datetime not null,
+        update_time datetime,
+        updated_by DOUBLE,
         embeds varchar(255),
         jointjsId varchar(255),
         type varchar(255),
         z integer not null,
-        parent_ID bigint,
+        parent_id bigint,
         angle float not null,
         tooltip varchar(255),
-        biitText_ID bigint,
-        position_ID bigint,
-        size_ID bigint,
-        primary key (ID)
+        biitText_id bigint,
+        position_id bigint,
+        size_id bigint,
+        primary key (id)
     );
 
     create table diagram_fork_expression_value_tree_object_reference (
-        diagram_fork_ID bigint not null,
-        references_ID bigint not null
+        diagram_fork_id bigint not null,
+        references_id bigint not null
     );
 
     create table diagram_links (
-        ID bigint not null,
-        comparationId varchar(190) not null,
-        createdBy DOUBLE,
-        creationTime datetime not null,
-        updateTime datetime,
-        updatedBy DOUBLE,
+        id bigint not null,
+        comparation_id varchar(190) not null,
+        created_by DOUBLE,
+        creation_time datetime not null,
+        update_time datetime,
+        updated_by DOUBLE,
         embeds varchar(255),
         jointjsId varchar(255),
         type varchar(255),
         z integer not null,
-        parent_ID bigint,
+        parent_id bigint,
         attrs longtext,
         manhattan bit not null,
         smooth bit not null,
         text varchar(255),
         vertices longtext,
-        expressionChain_ID bigint,
-        source_ID bigint,
-        target_ID bigint,
-        primary key (ID)
+        expressionChain_id bigint,
+        source_id bigint,
+        target_id bigint,
+        primary key (id)
     );
 
     create table diagram_nodes (
-        ID bigint not null auto_increment,
-        comparationId varchar(190) not null,
-        createdBy DOUBLE,
-        creationTime datetime not null,
-        updateTime datetime,
-        updatedBy DOUBLE,
+        id bigint not null auto_increment,
+        comparation_id varchar(190) not null,
+        created_by DOUBLE,
+        creation_time datetime not null,
+        update_time datetime,
+        updated_by DOUBLE,
         jointjsId varchar(255),
         port varchar(255),
         selector varchar(255),
-        primary key (ID)
+        primary key (id)
     );
 
     create table diagram_points (
-        ID bigint not null auto_increment,
-        comparationId varchar(190) not null,
-        createdBy DOUBLE,
-        creationTime datetime not null,
-        updateTime datetime,
-        updatedBy DOUBLE,
+        id bigint not null auto_increment,
+        comparation_id varchar(190) not null,
+        created_by DOUBLE,
+        creation_time datetime not null,
+        update_time datetime,
+        updated_by DOUBLE,
         x integer not null,
         y integer not null,
-        primary key (ID)
+        primary key (id)
     );
 
     create table diagram_repeat (
-        ID bigint not null,
-        comparationId varchar(190) not null,
-        createdBy DOUBLE,
-        creationTime datetime not null,
-        updateTime datetime,
-        updatedBy DOUBLE,
+        id bigint not null,
+        comparation_id varchar(190) not null,
+        created_by DOUBLE,
+        creation_time datetime not null,
+        update_time datetime,
+        updated_by DOUBLE,
         embeds varchar(255),
         jointjsId varchar(255),
         type varchar(255),
         z integer not null,
-        parent_ID bigint,
+        parent_id bigint,
         angle float not null,
         tooltip varchar(255),
-        biitText_ID bigint,
-        position_ID bigint,
-        size_ID bigint,
-        primary key (ID)
+        biitText_id bigint,
+        position_id bigint,
+        size_id bigint,
+        primary key (id)
     );
 
     create table diagram_rule (
-        ID bigint not null,
-        comparationId varchar(190) not null,
-        createdBy DOUBLE,
-        creationTime datetime not null,
-        updateTime datetime,
-        updatedBy DOUBLE,
+        id bigint not null,
+        comparation_id varchar(190) not null,
+        created_by DOUBLE,
+        creation_time datetime not null,
+        update_time datetime,
+        updated_by DOUBLE,
         embeds varchar(255),
         jointjsId varchar(255),
         type varchar(255),
         z integer not null,
-        parent_ID bigint,
+        parent_id bigint,
         angle float not null,
         tooltip varchar(255),
-        biitText_ID bigint,
-        position_ID bigint,
-        size_ID bigint,
-        rule_ID bigint,
-        primary key (ID)
+        biitText_id bigint,
+        position_id bigint,
+        size_id bigint,
+        rule_id bigint,
+        primary key (id)
     );
 
     create table diagram_sink (
-        ID bigint not null,
-        comparationId varchar(190) not null,
-        createdBy DOUBLE,
-        creationTime datetime not null,
-        updateTime datetime,
-        updatedBy DOUBLE,
+        id bigint not null,
+        comparation_id varchar(190) not null,
+        created_by DOUBLE,
+        creation_time datetime not null,
+        update_time datetime,
+        updated_by DOUBLE,
         embeds varchar(255),
         jointjsId varchar(255),
         type varchar(255),
         z integer not null,
-        parent_ID bigint,
+        parent_id bigint,
         angle float not null,
         tooltip varchar(255),
-        biitText_ID bigint,
-        position_ID bigint,
-        size_ID bigint,
-        expression_ID bigint,
-        primary key (ID)
+        biitText_id bigint,
+        position_id bigint,
+        size_id bigint,
+        expression_id bigint,
+        primary key (id)
     );
 
     create table diagram_sizes (
-        ID bigint not null auto_increment,
-        comparationId varchar(190) not null,
-        createdBy DOUBLE,
-        creationTime datetime not null,
-        updateTime datetime,
-        updatedBy DOUBLE,
+        id bigint not null auto_increment,
+        comparation_id varchar(190) not null,
+        created_by DOUBLE,
+        creation_time datetime not null,
+        update_time datetime,
+        updated_by DOUBLE,
         height integer not null,
         width integer not null,
-        primary key (ID)
+        primary key (id)
     );
 
     create table diagram_source (
-        ID bigint not null,
-        comparationId varchar(190) not null,
-        createdBy DOUBLE,
-        creationTime datetime not null,
-        updateTime datetime,
-        updatedBy DOUBLE,
+        id bigint not null,
+        comparation_id varchar(190) not null,
+        created_by DOUBLE,
+        creation_time datetime not null,
+        update_time datetime,
+        updated_by DOUBLE,
         embeds varchar(255),
         jointjsId varchar(255),
         type varchar(255),
         z integer not null,
-        parent_ID bigint,
+        parent_id bigint,
         angle float not null,
         tooltip varchar(255),
-        biitText_ID bigint,
-        position_ID bigint,
-        size_ID bigint,
-        primary key (ID)
+        biitText_id bigint,
+        position_id bigint,
+        size_id bigint,
+        primary key (id)
     );
 
     create table diagram_table (
-        ID bigint not null,
-        comparationId varchar(190) not null,
-        createdBy DOUBLE,
-        creationTime datetime not null,
-        updateTime datetime,
-        updatedBy DOUBLE,
+        id bigint not null,
+        comparation_id varchar(190) not null,
+        created_by DOUBLE,
+        creation_time datetime not null,
+        update_time datetime,
+        updated_by DOUBLE,
         embeds varchar(255),
         jointjsId varchar(255),
         type varchar(255),
         z integer not null,
-        parent_ID bigint,
+        parent_id bigint,
         angle float not null,
         tooltip varchar(255),
-        biitText_ID bigint,
-        position_ID bigint,
-        size_ID bigint,
-        table_ID bigint,
-        primary key (ID)
+        biitText_id bigint,
+        position_id bigint,
+        size_id bigint,
+        table_id bigint,
+        primary key (id)
     );
 
     create table elements_of_diagram (
-        diagram_ID bigint not null,
-        diagramObjects_ID bigint not null,
-        primary key (diagram_ID, diagramObjects_ID)
+        diagram_id bigint not null,
+        diagramObjects_id bigint not null,
+        primary key (diagram_id, diagramObjects_id)
     );
 
     create table expression_function (
-        ID bigint not null,
-        comparationId varchar(190) not null,
-        createdBy DOUBLE,
-        creationTime datetime not null,
-        updateTime datetime,
-        updatedBy DOUBLE,
+        id bigint not null,
+        comparation_id varchar(190) not null,
+        created_by DOUBLE,
+        creation_time datetime not null,
+        update_time datetime,
+        updated_by DOUBLE,
         sortSeq bigint not null,
         value varchar(255),
-        primary key (ID)
+        primary key (id)
     );
 
     create table expression_operator_logic (
-        ID bigint not null,
-        comparationId varchar(190) not null,
-        createdBy DOUBLE,
-        creationTime datetime not null,
-        updateTime datetime,
-        updatedBy DOUBLE,
+        id bigint not null,
+        comparation_id varchar(190) not null,
+        created_by DOUBLE,
+        creation_time datetime not null,
+        update_time datetime,
+        updated_by DOUBLE,
         sortSeq bigint not null,
         currentValue varchar(255),
-        primary key (ID)
+        primary key (id)
     );
 
     create table expression_operator_math (
-        ID bigint not null,
-        comparationId varchar(190) not null,
-        createdBy DOUBLE,
-        creationTime datetime not null,
-        updateTime datetime,
-        updatedBy DOUBLE,
+        id bigint not null,
+        comparation_id varchar(190) not null,
+        created_by DOUBLE,
+        creation_time datetime not null,
+        update_time datetime,
+        updated_by DOUBLE,
         sortSeq bigint not null,
         currentValue varchar(255),
-        primary key (ID)
+        primary key (id)
     );
 
     create table expression_plugin_method (
-        ID bigint not null,
-        comparationId varchar(190) not null,
-        createdBy DOUBLE,
-        creationTime datetime not null,
-        updateTime datetime,
-        updatedBy DOUBLE,
+        id bigint not null,
+        comparation_id varchar(190) not null,
+        created_by DOUBLE,
+        creation_time datetime not null,
+        update_time datetime,
+        updated_by DOUBLE,
         sortSeq bigint not null,
         pluginInterface varchar(255),
         pluginMethodName varchar(255),
         pluginName varchar(255),
-        primary key (ID)
+        primary key (id)
     );
 
     create table expression_symbol (
-        ID bigint not null,
-        comparationId varchar(190) not null,
-        createdBy DOUBLE,
-        creationTime datetime not null,
-        updateTime datetime,
-        updatedBy DOUBLE,
+        id bigint not null,
+        comparation_id varchar(190) not null,
+        created_by DOUBLE,
+        creation_time datetime not null,
+        update_time datetime,
+        updated_by DOUBLE,
         sortSeq bigint not null,
         value varchar(255),
-        primary key (ID)
+        primary key (id)
     );
 
     create table expression_value_boolean (
-        ID bigint not null,
-        comparationId varchar(190) not null,
-        createdBy DOUBLE,
-        creationTime datetime not null,
-        updateTime datetime,
-        updatedBy DOUBLE,
+        id bigint not null,
+        comparation_id varchar(190) not null,
+        created_by DOUBLE,
+        creation_time datetime not null,
+        update_time datetime,
+        updated_by DOUBLE,
         sortSeq bigint not null,
         value bit,
-        primary key (ID)
+        primary key (id)
     );
 
     create table expression_value_custom_variable (
-        ID bigint not null,
-        comparationId varchar(190) not null,
-        createdBy DOUBLE,
-        creationTime datetime not null,
-        updateTime datetime,
-        updatedBy DOUBLE,
+        id bigint not null,
+        comparation_id varchar(190) not null,
+        created_by DOUBLE,
+        creation_time datetime not null,
+        update_time datetime,
+        updated_by DOUBLE,
         sortSeq bigint not null,
         unit varchar(255),
-        reference_ID bigint,
-        variable_ID bigint,
-        primary key (ID)
+        reference_id bigint,
+        variable_id bigint,
+        primary key (id)
     );
 
     create table expression_value_generic_custom_variable (
-        ID bigint not null,
-        comparationId varchar(190) not null,
-        createdBy DOUBLE,
-        creationTime datetime not null,
-        updateTime datetime,
-        updatedBy DOUBLE,
+        id bigint not null,
+        comparation_id varchar(190) not null,
+        created_by DOUBLE,
+        creation_time datetime not null,
+        update_time datetime,
+        updated_by DOUBLE,
         sortSeq bigint not null,
         type varchar(255),
-        variable_ID bigint,
-        primary key (ID)
+        variable_id bigint,
+        primary key (id)
     );
 
     create table expression_value_generic_variable (
-        ID bigint not null,
-        comparationId varchar(190) not null,
-        createdBy DOUBLE,
-        creationTime datetime not null,
-        updateTime datetime,
-        updatedBy DOUBLE,
+        id bigint not null,
+        comparation_id varchar(190) not null,
+        created_by DOUBLE,
+        creation_time datetime not null,
+        update_time datetime,
+        updated_by DOUBLE,
         sortSeq bigint not null,
         type varchar(255),
-        primary key (ID)
+        primary key (id)
     );
 
     create table expression_value_global_variable (
-        ID bigint not null,
-        comparationId varchar(190) not null,
-        createdBy DOUBLE,
-        creationTime datetime not null,
-        updateTime datetime,
-        updatedBy DOUBLE,
+        id bigint not null,
+        comparation_id varchar(190) not null,
+        created_by DOUBLE,
+        creation_time datetime not null,
+        update_time datetime,
+        updated_by DOUBLE,
         sortSeq bigint not null,
-        globalVariable_ID bigint,
-        primary key (ID)
+        globalVariable_id bigint,
+        primary key (id)
     );
 
     create table expression_value_number (
-        ID bigint not null,
-        comparationId varchar(190) not null,
-        createdBy DOUBLE,
-        creationTime datetime not null,
-        updateTime datetime,
-        updatedBy DOUBLE,
+        id bigint not null,
+        comparation_id varchar(190) not null,
+        created_by DOUBLE,
+        creation_time datetime not null,
+        update_time datetime,
+        updated_by DOUBLE,
         sortSeq bigint not null,
         value double precision,
-        primary key (ID)
+        primary key (id)
     );
 
     create table expression_value_postal_code (
-        ID bigint not null,
-        comparationId varchar(190) not null,
-        createdBy DOUBLE,
-        creationTime datetime not null,
-        updateTime datetime,
-        updatedBy DOUBLE,
+        id bigint not null,
+        comparation_id varchar(190) not null,
+        created_by DOUBLE,
+        creation_time datetime not null,
+        update_time datetime,
+        updated_by DOUBLE,
         sortSeq bigint not null,
         text TEXT,
-        primary key (ID)
+        primary key (id)
     );
 
     create table expression_value_string (
-        ID bigint not null,
-        comparationId varchar(190) not null,
-        createdBy DOUBLE,
-        creationTime datetime not null,
-        updateTime datetime,
-        updatedBy DOUBLE,
+        id bigint not null,
+        comparation_id varchar(190) not null,
+        created_by DOUBLE,
+        creation_time datetime not null,
+        update_time datetime,
+        updated_by DOUBLE,
         sortSeq bigint not null,
         text TEXT,
-        primary key (ID)
+        primary key (id)
     );
 
     create table expression_value_systemdate (
-        ID bigint not null,
-        comparationId varchar(190) not null,
-        createdBy DOUBLE,
-        creationTime datetime not null,
-        updateTime datetime,
-        updatedBy DOUBLE,
+        id bigint not null,
+        comparation_id varchar(190) not null,
+        created_by DOUBLE,
+        creation_time datetime not null,
+        update_time datetime,
+        updated_by DOUBLE,
         sortSeq bigint not null,
         value datetime,
-        primary key (ID)
+        primary key (id)
     );
 
     create table expression_value_timestamp (
-        ID bigint not null,
-        comparationId varchar(190) not null,
-        createdBy DOUBLE,
-        creationTime datetime not null,
-        updateTime datetime,
-        updatedBy DOUBLE,
+        id bigint not null,
+        comparation_id varchar(190) not null,
+        created_by DOUBLE,
+        creation_time datetime not null,
+        update_time datetime,
+        updated_by DOUBLE,
         sortSeq bigint not null,
         value datetime,
-        primary key (ID)
+        primary key (id)
     );
 
     create table expression_value_tree_object_reference (
-        ID bigint not null,
-        comparationId varchar(190) not null,
-        createdBy DOUBLE,
-        creationTime datetime not null,
-        updateTime datetime,
-        updatedBy DOUBLE,
+        id bigint not null,
+        comparation_id varchar(190) not null,
+        created_by DOUBLE,
+        creation_time datetime not null,
+        update_time datetime,
+        updated_by DOUBLE,
         sortSeq bigint not null,
         unit varchar(255),
-        reference_ID bigint,
-        primary key (ID)
+        reference_id bigint,
+        primary key (id)
     );
 
     create table expressions_chain (
-        ID bigint not null,
-        comparationId varchar(190) not null,
-        createdBy DOUBLE,
-        creationTime datetime not null,
-        updateTime datetime,
-        updatedBy DOUBLE,
+        id bigint not null,
+        comparation_id varchar(190) not null,
+        created_by DOUBLE,
+        creation_time datetime not null,
+        update_time datetime,
+        updated_by DOUBLE,
         sortSeq bigint not null,
         name varchar(255),
-        primary key (ID)
+        primary key (id)
     );
 
     create table expressions_chain_expression_basic (
-        expressions_chain_ID bigint not null,
-        expressions_ID bigint not null
+        expressions_chain_id bigint not null,
+        expressions_id bigint not null
     );
 
     create table form_custom_variables (
-        ID bigint not null auto_increment,
-        comparationId varchar(190) not null,
-        createdBy DOUBLE,
-        creationTime datetime not null,
-        updateTime datetime,
-        updatedBy DOUBLE,
+        id bigint not null auto_increment,
+        comparation_id varchar(190) not null,
+        created_by DOUBLE,
+        creation_time datetime not null,
+        update_time datetime,
+        updated_by DOUBLE,
         defaultValue varchar(255),
         name varchar(190),
         scope varchar(190),
         type varchar(255),
         form bigint not null,
-        primary key (ID)
+        primary key (id)
     );
 
     create table global_variable_data_date (
-        ID bigint not null,
-        comparationId varchar(190) not null,
-        createdBy DOUBLE,
-        creationTime datetime not null,
-        updateTime datetime,
-        updatedBy DOUBLE,
+        id bigint not null,
+        comparation_id varchar(190) not null,
+        created_by DOUBLE,
+        creation_time datetime not null,
+        update_time datetime,
+        updated_by DOUBLE,
         validFrom datetime,
         validTo datetime,
         value datetime,
-        primary key (ID)
+        primary key (id)
     );
 
     create table global_variable_data_number (
-        ID bigint not null,
-        comparationId varchar(190) not null,
-        createdBy DOUBLE,
-        creationTime datetime not null,
-        updateTime datetime,
-        updatedBy DOUBLE,
+        id bigint not null,
+        comparation_id varchar(190) not null,
+        created_by DOUBLE,
+        creation_time datetime not null,
+        update_time datetime,
+        updated_by DOUBLE,
         validFrom datetime,
         validTo datetime,
         value double precision,
-        primary key (ID)
+        primary key (id)
     );
 
     create table global_variable_data_postalcode (
-        ID bigint not null,
-        comparationId varchar(190) not null,
-        createdBy DOUBLE,
-        creationTime datetime not null,
-        updateTime datetime,
-        updatedBy DOUBLE,
+        id bigint not null,
+        comparation_id varchar(190) not null,
+        created_by DOUBLE,
+        creation_time datetime not null,
+        update_time datetime,
+        updated_by DOUBLE,
         validFrom datetime,
         validTo datetime,
         postalCode varchar(255),
-        primary key (ID)
+        primary key (id)
     );
 
     create table global_variable_data_set (
-        global_variables_ID bigint not null,
-        variableData_ID bigint not null
+        global_variables_id bigint not null,
+        variableData_id bigint not null
     );
 
     create table global_variable_data_text (
-        ID bigint not null,
-        comparationId varchar(190) not null,
-        createdBy DOUBLE,
-        creationTime datetime not null,
-        updateTime datetime,
-        updatedBy DOUBLE,
+        id bigint not null,
+        comparation_id varchar(190) not null,
+        created_by DOUBLE,
+        creation_time datetime not null,
+        update_time datetime,
+        updated_by DOUBLE,
         validFrom datetime,
         validTo datetime,
         value varchar(255),
-        primary key (ID)
+        primary key (id)
     );
 
     create table global_variables (
-        ID bigint not null auto_increment,
-        comparationId varchar(190) not null,
-        createdBy DOUBLE,
-        creationTime datetime not null,
-        updateTime datetime,
-        updatedBy DOUBLE,
+        id bigint not null auto_increment,
+        comparation_id varchar(190) not null,
+        created_by DOUBLE,
+        creation_time datetime not null,
+        update_time datetime,
+        updated_by DOUBLE,
         format integer,
         name varchar(190),
-        primary key (ID)
+        primary key (id)
     );
 
     create table rule (
-        ID bigint not null auto_increment,
-        comparationId varchar(190) not null,
-        createdBy DOUBLE,
-        creationTime datetime not null,
-        updateTime datetime,
-        updatedBy DOUBLE,
+        id bigint not null auto_increment,
+        comparation_id varchar(190) not null,
+        created_by DOUBLE,
+        creation_time datetime not null,
+        update_time datetime,
+        updated_by DOUBLE,
         name varchar(255),
-        actions_ID bigint,
-        conditions_ID bigint,
-        primary key (ID)
+        actions_id bigint,
+        conditions_id bigint,
+        primary key (id)
     );
 
     create table rule_decision_table (
-        ID bigint not null auto_increment,
-        comparationId varchar(190) not null,
-        createdBy DOUBLE,
-        creationTime datetime not null,
-        updateTime datetime,
-        updatedBy DOUBLE,
+        id bigint not null auto_increment,
+        comparation_id varchar(190) not null,
+        created_by DOUBLE,
+        creation_time datetime not null,
+        update_time datetime,
+        updated_by DOUBLE,
         name varchar(255),
-        primary key (ID)
+        primary key (id)
     );
 
     create table rule_decision_table_row (
-        ID bigint not null auto_increment,
-        comparationId varchar(190) not null,
-        createdBy DOUBLE,
-        creationTime datetime not null,
-        updateTime datetime,
-        updatedBy DOUBLE,
-        action_ID bigint,
-        conditions_ID bigint,
-        primary key (ID)
+        id bigint not null auto_increment,
+        comparation_id varchar(190) not null,
+        created_by DOUBLE,
+        creation_time datetime not null,
+        update_time datetime,
+        updated_by DOUBLE,
+        action_id bigint,
+        conditions_id bigint,
+        primary key (id)
     );
 
     create table rule_decision_table_rule_decision_table_row (
-        rule_decision_table_ID bigint not null,
-        rules_ID bigint not null
+        rule_decision_table_id bigint not null,
+        rules_id bigint not null
     );
 
     create table test_answer_input_date (
-        ID bigint not null,
-        comparationId varchar(190) not null,
-        createdBy DOUBLE,
-        creationTime datetime not null,
-        updateTime datetime,
-        updatedBy DOUBLE,
+        id bigint not null,
+        comparation_id varchar(190) not null,
+        created_by DOUBLE,
+        creation_time datetime not null,
+        update_time datetime,
+        updated_by DOUBLE,
         dateValue datetime,
-        primary key (ID)
+        primary key (id)
     );
 
     create table test_answer_input_number (
-        ID bigint not null,
-        comparationId varchar(190) not null,
-        createdBy DOUBLE,
-        creationTime datetime not null,
-        updateTime datetime,
-        updatedBy DOUBLE,
+        id bigint not null,
+        comparation_id varchar(190) not null,
+        created_by DOUBLE,
+        creation_time datetime not null,
+        update_time datetime,
+        updated_by DOUBLE,
         inputValue double precision,
-        primary key (ID)
+        primary key (id)
     );
 
     create table test_answer_input_postalcode (
-        ID bigint not null,
-        comparationId varchar(190) not null,
-        createdBy DOUBLE,
-        creationTime datetime not null,
-        updateTime datetime,
-        updatedBy DOUBLE,
+        id bigint not null,
+        comparation_id varchar(190) not null,
+        created_by DOUBLE,
+        creation_time datetime not null,
+        update_time datetime,
+        updated_by DOUBLE,
         inputValue varchar(255),
-        primary key (ID)
+        primary key (id)
     );
 
     create table test_answer_input_text (
-        ID bigint not null,
-        comparationId varchar(190) not null,
-        createdBy DOUBLE,
-        creationTime datetime not null,
-        updateTime datetime,
-        updatedBy DOUBLE,
+        id bigint not null,
+        comparation_id varchar(190) not null,
+        created_by DOUBLE,
+        creation_time datetime not null,
+        update_time datetime,
+        updated_by DOUBLE,
         inputValue varchar(255),
-        primary key (ID)
+        primary key (id)
     );
 
     create table test_answer_multi_checkbox (
-        ID bigint not null,
-        comparationId varchar(190) not null,
-        createdBy DOUBLE,
-        creationTime datetime not null,
-        updateTime datetime,
-        updatedBy DOUBLE,
-        primary key (ID)
+        id bigint not null,
+        comparation_id varchar(190) not null,
+        created_by DOUBLE,
+        creation_time datetime not null,
+        update_time datetime,
+        updated_by DOUBLE,
+        primary key (id)
     );
 
     create table test_answer_multi_checkbox_values (
-        TestAnswerMultiCheckBox_ID bigint not null,
+        TestAnswerMultiCheckBox_id bigint not null,
         multiCheckBoxValue varchar(255)
     );
 
     create table test_answer_radio_button (
-        ID bigint not null,
-        comparationId varchar(190) not null,
-        createdBy DOUBLE,
-        creationTime datetime not null,
-        updateTime datetime,
-        updatedBy DOUBLE,
+        id bigint not null,
+        comparation_id varchar(190) not null,
+        created_by DOUBLE,
+        creation_time datetime not null,
+        update_time datetime,
+        updated_by DOUBLE,
         radioButtonValue varchar(255),
-        primary key (ID)
+        primary key (id)
     );
 
     create table test_scenario (
-        ID bigint not null auto_increment,
-        comparationId varchar(190) not null,
-        createdBy DOUBLE,
-        creationTime datetime not null,
-        updateTime datetime,
-        updatedBy DOUBLE,
+        id bigint not null auto_increment,
+        comparation_id varchar(190) not null,
+        created_by DOUBLE,
+        creation_time datetime not null,
+        update_time datetime,
+        updated_by DOUBLE,
         formId bigint not null,
         formLabel varchar(190) not null,
         formOrganization DOUBLE not null,
         name varchar(190),
-        testScenarioForm_ID bigint,
-        primary key (ID)
+        testScenarioForm_id bigint,
+        primary key (id)
     );
 
     create table test_scenario_category (
-        ID bigint not null,
-        comparationId varchar(190) not null,
-        createdBy DOUBLE,
-        creationTime datetime not null,
-        updateTime datetime,
-        updatedBy DOUBLE,
+        id bigint not null,
+        comparation_id varchar(190) not null,
+        created_by DOUBLE,
+        creation_time datetime not null,
+        update_time datetime,
+        updated_by DOUBLE,
         label varchar(1000),
         name varchar(190),
-        originalReference varchar(190) not null,
-        sortSeq bigint not null,
-        parent_ID bigint,
-        primary key (ID)
+        original_reference varchar(190) not null,
+        sort_sequence bigint not null,
+        parent bigint,
+        primary key (id)
     );
 
     create table test_scenario_form (
-        ID bigint not null,
-        comparationId varchar(190) not null,
-        createdBy DOUBLE,
-        creationTime datetime not null,
-        updateTime datetime,
-        updatedBy DOUBLE,
+        id bigint not null,
+        comparation_id varchar(190) not null,
+        created_by DOUBLE,
+        creation_time datetime not null,
+        update_time datetime,
+        updated_by DOUBLE,
         label varchar(1000),
         name varchar(190),
-        originalReference varchar(190) not null,
-        sortSeq bigint not null,
-        parent_ID bigint,
-        organizationId DOUBLE not null,
+        original_reference varchar(190) not null,
+        sort_sequence bigint not null,
+        parent bigint,
+        organization_id DOUBLE not null,
         version integer,
-        primary key (ID)
+        primary key (id)
     );
 
     create table test_scenario_group (
-        ID bigint not null,
-        comparationId varchar(190) not null,
-        createdBy DOUBLE,
-        creationTime datetime not null,
-        updateTime datetime,
-        updatedBy DOUBLE,
+        id bigint not null,
+        comparation_id varchar(190) not null,
+        created_by DOUBLE,
+        creation_time datetime not null,
+        update_time datetime,
+        updated_by DOUBLE,
         label varchar(1000),
         name varchar(190),
-        originalReference varchar(190) not null,
-        sortSeq bigint not null,
-        parent_ID bigint,
+        original_reference varchar(190) not null,
+        sort_sequence bigint not null,
+        parent bigint,
         repeatable bit not null,
         addEnabled bit not null,
-        primary key (ID)
+        primary key (id)
     );
 
     create table test_scenario_question (
-        ID bigint not null,
-        comparationId varchar(190) not null,
-        createdBy DOUBLE,
-        creationTime datetime not null,
-        updateTime datetime,
-        updatedBy DOUBLE,
+        id bigint not null,
+        comparation_id varchar(190) not null,
+        created_by DOUBLE,
+        creation_time datetime not null,
+        update_time datetime,
+        updated_by DOUBLE,
         label varchar(1000),
         name varchar(190),
-        originalReference varchar(190) not null,
-        sortSeq bigint not null,
-        parent_ID bigint,
-        testAnswer_ID bigint,
-        primary key (ID)
+        original_reference varchar(190) not null,
+        sort_sequence bigint not null,
+        parent bigint,
+        testAnswer_id bigint,
+        primary key (id)
     );
 
     create table tree_answers (
-        ID bigint not null,
-        comparationId varchar(190) not null,
-        createdBy DOUBLE,
-        creationTime datetime not null,
-        updateTime datetime,
-        updatedBy DOUBLE,
+        id bigint not null,
+        comparation_id varchar(190) not null,
+        created_by DOUBLE,
+        creation_time datetime not null,
+        update_time datetime,
+        updated_by DOUBLE,
         label varchar(1000),
         name varchar(190),
-        originalReference varchar(190) not null,
-        sortSeq bigint not null,
-        parent_ID bigint,
-        primary key (ID)
+        original_reference varchar(190) not null,
+        sort_sequence bigint not null,
+        parent bigint,
+        primary key (id)
     );
 
     create table tree_categories (
-        ID bigint not null,
-        comparationId varchar(190) not null,
-        createdBy DOUBLE,
-        creationTime datetime not null,
-        updateTime datetime,
-        updatedBy DOUBLE,
+        id bigint not null,
+        comparation_id varchar(190) not null,
+        created_by DOUBLE,
+        creation_time datetime not null,
+        update_time datetime,
+        updated_by DOUBLE,
         label varchar(1000),
         name varchar(190),
-        originalReference varchar(190) not null,
-        sortSeq bigint not null,
-        parent_ID bigint,
-        primary key (ID)
+        original_reference varchar(190) not null,
+        sort_sequence bigint not null,
+        parent bigint,
+        primary key (id)
     );
 
     create table tree_forms (
-        ID bigint not null,
-        comparationId varchar(190) not null,
-        createdBy DOUBLE,
-        creationTime datetime not null,
-        updateTime datetime,
-        updatedBy DOUBLE,
+        id bigint not null,
+        comparation_id varchar(190) not null,
+        created_by DOUBLE,
+        creation_time datetime not null,
+        update_time datetime,
+        updated_by DOUBLE,
         label varchar(190),
         name varchar(190),
-        originalReference varchar(190) not null,
-        sortSeq bigint not null,
-        parent_ID bigint,
-        organizationId DOUBLE not null,
+        original_reference varchar(190) not null,
+        sort_sequence bigint not null,
+        parent bigint,
+        organization_id DOUBLE not null,
         version integer,
         availableFrom datetime not null,
         availableTo datetime,
         status varchar(255),
-        primary key (ID)
+        primary key (id)
     );
 
     create table tree_forms_diagram (
-        tree_forms_ID bigint not null,
-        diagrams_ID bigint not null,
-        primary key (tree_forms_ID, diagrams_ID)
+        tree_forms_id bigint not null,
+        diagrams_id bigint not null,
+        primary key (tree_forms_id, diagrams_id)
     );
 
     create table tree_forms_expressions_chain (
-        tree_forms_ID bigint not null,
-        expressionChains_ID bigint not null,
-        primary key (tree_forms_ID, expressionChains_ID)
+        tree_forms_id bigint not null,
+        expressionChains_id bigint not null,
+        primary key (tree_forms_id, expressionChains_id)
     );
 
     create table tree_forms_rule (
-        tree_forms_ID bigint not null,
-        rules_ID bigint not null,
-        primary key (tree_forms_ID, rules_ID)
+        tree_forms_id bigint not null,
+        rules_id bigint not null,
+        primary key (tree_forms_id, rules_id)
     );
 
     create table tree_forms_rule_decision_table (
-        tree_forms_ID bigint not null,
-        tableRules_ID bigint not null,
-        primary key (tree_forms_ID, tableRules_ID)
+        tree_forms_id bigint not null,
+        tableRules_id bigint not null,
+        primary key (tree_forms_id, tableRules_id)
     );
 
     create table tree_groups (
-        ID bigint not null,
-        comparationId varchar(190) not null,
-        createdBy DOUBLE,
-        creationTime datetime not null,
-        updateTime datetime,
-        updatedBy DOUBLE,
+        id bigint not null,
+        comparation_id varchar(190) not null,
+        created_by DOUBLE,
+        creation_time datetime not null,
+        update_time datetime,
+        updated_by DOUBLE,
         label varchar(1000),
         name varchar(190),
-        originalReference varchar(190) not null,
-        sortSeq bigint not null,
-        parent_ID bigint,
+        original_reference varchar(190) not null,
+        sort_sequence bigint not null,
+        parent bigint,
         repeatable bit not null,
-        primary key (ID)
+        primary key (id)
     );
 
     create table tree_questions (
-        ID bigint not null,
-        comparationId varchar(190) not null,
-        createdBy DOUBLE,
-        creationTime datetime not null,
-        updateTime datetime,
-        updatedBy DOUBLE,
+        id bigint not null,
+        comparation_id varchar(190) not null,
+        created_by DOUBLE,
+        creation_time datetime not null,
+        update_time datetime,
+        updated_by DOUBLE,
         label varchar(1000),
         name varchar(190),
-        originalReference varchar(190) not null,
-        sortSeq bigint not null,
-        parent_ID bigint,
+        original_reference varchar(190) not null,
+        sort_sequence bigint not null,
+        parent bigint,
         answerFormat varchar(255),
         answerType varchar(255),
-        primary key (ID)
+        primary key (id)
     );
 
     alter table diagram 
-        add constraint UK_i991a76ub6cc04w67skutnlft  unique (comparationId);
+        add constraint UK_fw7vqsrf5p8j89vc6ivxw0x4l  unique (comparation_id);
 
     alter table diagram_biit_text 
-        add constraint UK_26e5ksw8ie3l7k0gtpdghwxr8  unique (comparationId);
+        add constraint UK_49t5md0mmh4pocfqnvy9ilnat  unique (comparation_id);
 
     alter table diagram_calculation 
-        add constraint UK_telsgfj7x5yb9vr3tyes22dfo  unique (ID);
+        add constraint UK_1j7d4tym3l6bbatilo3wb122v  unique (id);
 
     alter table diagram_calculation 
-        add constraint UK_skg33psaqtjwx1oevy1wp7tfa  unique (comparationId);
+        add constraint UK_gqwu3mfvrb58rdq8959neypo4  unique (comparation_id);
 
     alter table diagram_child 
-        add constraint UK_g7xdiesweik5op9e9onvswkbc  unique (ID);
+        add constraint UK_72flappx1vyc05wxvoaugnpbj  unique (id);
 
     alter table diagram_child 
-        add constraint UK_r7oc8jgmhkeagu3emxy90ttof  unique (comparationId);
+        add constraint UK_4hhdypcpnc80foag5dcpkes  unique (comparation_id);
 
     alter table diagram_fork 
-        add constraint UK_hsf0g6nuli7nv6ypx60d3n4dg  unique (ID);
+        add constraint UK_bxxdhr1ueq0hiw2ri4fyl7okt  unique (id);
 
     alter table diagram_fork 
-        add constraint UK_efh14aqc52m2bt7suefmq12qn  unique (comparationId);
+        add constraint UK_owctn38n79mnt1ujbow3qrj6a  unique (comparation_id);
 
     alter table diagram_fork_expression_value_tree_object_reference 
-        add constraint UK_41wpgkw0p4oj65dmnb34e4lqj  unique (references_ID);
+        add constraint UK_65ni4svjxtkp69xhtrpslw9fc  unique (references_id);
 
     alter table diagram_links 
-        add constraint UK_h604hokhqdqbq8jnjxeupxokf  unique (ID);
+        add constraint UK_ie9xqy3i3400jjj5iadjljigu  unique (id);
 
     alter table diagram_links 
-        add constraint UK_ph2m4o4wkkd1ls8xxffxf0q4  unique (comparationId);
+        add constraint UK_cwiej3pcj8wvjfxf3ova9i4eg  unique (comparation_id);
 
     alter table diagram_nodes 
-        add constraint UK_r73mc67afakc2crvohrek8qk4  unique (comparationId);
+        add constraint UK_9pj0bfa6d9ooo68wroe3112mo  unique (comparation_id);
 
     alter table diagram_points 
-        add constraint UK_nmcm8lwfgn9lwd2kg6e77mlpx  unique (comparationId);
+        add constraint UK_8iiwsxhg4dk96ebvielf6uqld  unique (comparation_id);
 
     alter table diagram_repeat 
-        add constraint UK_cmfc1l3o05vfhv0pt6mgqm3nd  unique (ID);
+        add constraint UK_klalqt3rsoso3104e89wqbumq  unique (id);
 
     alter table diagram_repeat 
-        add constraint UK_5jgfcctfdg2s0qbkuaekf6m0g  unique (comparationId);
+        add constraint UK_jfquyt4s511sanyi3ee83cyij  unique (comparation_id);
 
     alter table diagram_rule 
-        add constraint UK_o4hrkbic99uuo11mqks328fv9  unique (ID);
+        add constraint UK_gopil1dui1rbsxmk5q6vc65s3  unique (id);
 
     alter table diagram_rule 
-        add constraint UK_l4rl73pva0mblx0df1ntrb3m7  unique (comparationId);
+        add constraint UK_8h7dmg9qne2rtgslk2ka6lxpt  unique (comparation_id);
 
     alter table diagram_sink 
-        add constraint UK_cjl3d4py1hd5d5tvo23yd780y  unique (ID);
+        add constraint UK_749ch3ctvs3luil2q7qbs9l1s  unique (id);
 
     alter table diagram_sink 
-        add constraint UK_bo43xa2d2veyl1w7o8xfjse1m  unique (comparationId);
+        add constraint UK_3pu3yriyc4h5i23644h1eh5rl  unique (comparation_id);
 
     alter table diagram_sizes 
-        add constraint UK_lpwfoljk42ognggvtk6m0w75j  unique (comparationId);
+        add constraint UK_5mr2jxui5p9uddxkt21909ufm  unique (comparation_id);
 
     alter table diagram_source 
-        add constraint UK_ff46qqbboep27fpldjifb16ou  unique (ID);
+        add constraint UK_dyj2vgl165o2ifbqcyg19e525  unique (id);
 
     alter table diagram_source 
-        add constraint UK_2skl3aj5ivhq9i7j7vun9eak3  unique (comparationId);
+        add constraint UK_1hx8jx1f7bv1r0mi5yk1l0u1j  unique (comparation_id);
 
     alter table diagram_table 
-        add constraint UK_rdrkegb0jykxqg5jxtb2fbhc5  unique (ID);
+        add constraint UK_agvdl2gvo6c0v3tynk1787tp2  unique (id);
 
     alter table diagram_table 
-        add constraint UK_8f7iwv857341khhqhi12jharn  unique (comparationId);
+        add constraint UK_rw9myjse63o9xg9mb2otswpky  unique (comparation_id);
 
     alter table elements_of_diagram 
-        add constraint UK_40p43sjr90wg4lyo7gwcbybok  unique (diagramObjects_ID);
+        add constraint UK_t0p95y98xmoiwbwwjj4agjvv0  unique (diagramObjects_id);
 
     alter table expression_function 
-        add constraint UK_7hl0l4oq4hokig8i3g30hv3s4  unique (ID);
+        add constraint UK_mscuoauoec01ombvya4tvjkhu  unique (id);
 
     alter table expression_function 
-        add constraint UK_lbyra8yeo77q9okjte7yh5mck  unique (comparationId);
+        add constraint UK_8toyx6ij5060ogygcclb8i4hy  unique (comparation_id);
 
     alter table expression_operator_logic 
-        add constraint UK_5nv4rm0dcwpx72pidk99uqdcv  unique (ID);
+        add constraint UK_5461iwwa1ahnrl8ggvjrkwknd  unique (id);
 
     alter table expression_operator_logic 
-        add constraint UK_joflju3ccpgq1r4y7ro8egx3g  unique (comparationId);
+        add constraint UK_dcphv7j72tajhnwh1kegikwtw  unique (comparation_id);
 
     alter table expression_operator_math 
-        add constraint UK_blgg3hvajwkh0url70tu2l3nc  unique (ID);
+        add constraint UK_i9c5vsetkj1j0te6hwvhtcg91  unique (id);
 
     alter table expression_operator_math 
-        add constraint UK_8thp00x8evlgl3w2guass30ql  unique (comparationId);
+        add constraint UK_92wxs3ah2kayf1b9c9shr90yi  unique (comparation_id);
 
     alter table expression_plugin_method 
-        add constraint UK_6hn9bd5cyjqtohgaybvt22ujp  unique (ID);
+        add constraint UK_gi2q7w3u470u0ifgsfqsbk984  unique (id);
 
     alter table expression_plugin_method 
-        add constraint UK_tnq0p980rjfkyf5sal1oq6290  unique (comparationId);
+        add constraint UK_3fmtwuesyav37dot8gv0ko71u  unique (comparation_id);
 
     alter table expression_symbol 
-        add constraint UK_d5pgsndfldjl77mxwesg47oyy  unique (ID);
+        add constraint UK_my15yxokgqbuxpe9wmf3wquk9  unique (id);
 
     alter table expression_symbol 
-        add constraint UK_sw4rg5w1mhkjtuhmshj7jeh5w  unique (comparationId);
+        add constraint UK_r9e4peno4cx2wp1uvgtllwom6  unique (comparation_id);
 
     alter table expression_value_boolean 
-        add constraint UK_8ji8c5v2rtu64hu7fd6w16wds  unique (ID);
+        add constraint UK_qm0e2g6b1m31espuk8il01kjl  unique (id);
 
     alter table expression_value_boolean 
-        add constraint UK_9ji3f3ooll872c0bitchknl29  unique (comparationId);
+        add constraint UK_ctkfkgplxtpwou1686f2ynem2  unique (comparation_id);
 
     alter table expression_value_custom_variable 
-        add constraint UK_g4ftxu9duvw2yoonn0mjb5sku  unique (ID);
+        add constraint UK_7fymux6ua2d13a65jqgk9kud4  unique (id);
 
     alter table expression_value_custom_variable 
-        add constraint UK_6be9j8k8bp0uudvgtk61e4tu4  unique (comparationId);
+        add constraint UK_87m8f5n9hr4pnr1802mu2m642  unique (comparation_id);
 
     alter table expression_value_generic_custom_variable 
-        add constraint UK_1ilcykdnhd0ixr9iaomtrog3h  unique (ID);
+        add constraint UK_32mi467xj5pnire64ia600ntd  unique (id);
 
     alter table expression_value_generic_custom_variable 
-        add constraint UK_72ucvxvkp3dgy4ci55hda72p5  unique (comparationId);
+        add constraint UK_7apgbq1ytk3hfm8gpwlyucks5  unique (comparation_id);
 
     alter table expression_value_generic_variable 
-        add constraint UK_cqsa891g9cu7egmcxep74o4gh  unique (ID);
+        add constraint UK_7207b6tju5ili01ltsd02lw14  unique (id);
 
     alter table expression_value_generic_variable 
-        add constraint UK_1qdyf7b9pdbtg7ugajlcbuy99  unique (comparationId);
+        add constraint UK_3l564k5m9xvoe6iu1jn6ydhi5  unique (comparation_id);
 
     alter table expression_value_global_variable 
-        add constraint UK_gbcgljgnhew0ftkmyyjo9ef0k  unique (ID);
+        add constraint UK_do6e0tyohuxhvqk5yxqlx2xro  unique (id);
 
     alter table expression_value_global_variable 
-        add constraint UK_thug7lch6aqrx4iwq0dtwabrr  unique (comparationId);
+        add constraint UK_fe1mr92e7jkx5upcu1wcoybx0  unique (comparation_id);
 
     alter table expression_value_number 
-        add constraint UK_4iv29s41m049yhnm25ykovg2j  unique (ID);
+        add constraint UK_7ryi3secm30knk5egj9qi21qp  unique (id);
 
     alter table expression_value_number 
-        add constraint UK_5pr6kfc8ssvjg8bcoxs7iaxo6  unique (comparationId);
+        add constraint UK_dlovh9kyhhypjulupfnck0c9p  unique (comparation_id);
 
     alter table expression_value_postal_code 
-        add constraint UK_jnl1ff1sox87eqvsa3w1nugx9  unique (ID);
+        add constraint UK_gdykqwgewfnsybb4fm2awrkjt  unique (id);
 
     alter table expression_value_postal_code 
-        add constraint UK_65y7nqlko6hgjo6b3go7lwa82  unique (comparationId);
+        add constraint UK_fm19ywy0qh753x71om8pg01dk  unique (comparation_id);
 
     alter table expression_value_string 
-        add constraint UK_ssjam0lpu4ptut6q7uiyinb46  unique (ID);
+        add constraint UK_etccy65hkgu38c7rbs4pcwdsy  unique (id);
 
     alter table expression_value_string 
-        add constraint UK_imteh9r9im4ctld1b9b5kkacw  unique (comparationId);
+        add constraint UK_2fnjjbbastbptodx28hoiv083  unique (comparation_id);
 
     alter table expression_value_systemdate 
-        add constraint UK_mj1pnbvm8gv3gngq2yh15502f  unique (ID);
+        add constraint UK_knwd66yl8khks9n2ifr4gqunv  unique (id);
 
     alter table expression_value_systemdate 
-        add constraint UK_co43pbqqg7civhr3g8p752mt8  unique (comparationId);
+        add constraint UK_2e79190fql3tc4t0ruwx0wvw3  unique (comparation_id);
 
     alter table expression_value_timestamp 
-        add constraint UK_kju72l70wu9w63min4j3y59jw  unique (ID);
+        add constraint UK_8fbaeameopwc01d48p77etip1  unique (id);
 
     alter table expression_value_timestamp 
-        add constraint UK_ser5ax80v1g2co9dbdqstv81l  unique (comparationId);
+        add constraint UK_9mqlu8vq1vwpmqsnoewoh5y4a  unique (comparation_id);
 
     alter table expression_value_tree_object_reference 
-        add constraint UK_57lm65prgqk32q1w0rd3jptux  unique (ID);
+        add constraint UK_73aosv17a4nig5pr4kex85y1w  unique (id);
 
     alter table expression_value_tree_object_reference 
-        add constraint UK_an3mu4deq3muvltuwdawkfbhc  unique (comparationId);
+        add constraint UK_px1xks2ug1enl6dvmgkiotadq  unique (comparation_id);
 
     alter table expressions_chain 
-        add constraint UK_l2k0vcoohq76m4cl2k8g3y9hc  unique (ID);
+        add constraint UK_p5okqcbctfvi2ndwxqjw6o8c6  unique (id);
 
     alter table expressions_chain 
-        add constraint UK_qageeu0ehecelhxmn5qdv93am  unique (comparationId);
+        add constraint UK_by4epobjwm4ye7l11tql8uqsg  unique (comparation_id);
 
     alter table expressions_chain_expression_basic 
-        add constraint UK_6n86noaf7rpgu2qagq951m5da  unique (expressions_ID);
+        add constraint UK_41n882737ioltrw54yk3b7p64  unique (expressions_id);
 
     alter table form_custom_variables 
-        add constraint UK_sq1dj9kjhkv951lr0o3pu42fc  unique (comparationId);
+        add constraint UK_4gau1o2x6o63kn4impw9cihqc  unique (comparation_id);
 
     alter table global_variable_data_date 
-        add constraint UK_mylp5k1001col2n4rpdshrea7  unique (ID);
+        add constraint UK_jjcyaeadrlsle9w6ui03fxyts  unique (id);
 
     alter table global_variable_data_date 
-        add constraint UK_sptr6kn7psib0u6dqt8r7stkq  unique (comparationId);
+        add constraint UK_msqrr3xst8ku9g7kokb6rb7en  unique (comparation_id);
 
     alter table global_variable_data_number 
-        add constraint UK_ksal0k0qkvv2v95wvysufcap3  unique (ID);
+        add constraint UK_bj7tyc2ha6qe0116cq9vp1noi  unique (id);
 
     alter table global_variable_data_number 
-        add constraint UK_jbkxahvrsxikil188orj2bion  unique (comparationId);
+        add constraint UK_74ua5ydhfxowubdgkjv9vqfj0  unique (comparation_id);
 
     alter table global_variable_data_postalcode 
-        add constraint UK_o8e2he19y5wsa4bxopiih4ewp  unique (ID);
+        add constraint UK_im5todr6m202sjon36n213mxo  unique (id);
 
     alter table global_variable_data_postalcode 
-        add constraint UK_1g8ysiehft4rrd3aiheq1cktx  unique (comparationId);
+        add constraint UK_a0mcoc1isf9pufl9p5dighu8f  unique (comparation_id);
 
     alter table global_variable_data_set 
-        add constraint UK_2o1wa9axcmlhv1c8knoh3b7bw  unique (variableData_ID);
+        add constraint UK_sxrvly4ppc6mq4wpdblvxbo11  unique (variableData_id);
 
     alter table global_variable_data_text 
-        add constraint UK_t91aqfdhy6wnrrg749k2een9u  unique (ID);
+        add constraint UK_8eoxdjy9bqti61l6bklvwg21g  unique (id);
 
     alter table global_variable_data_text 
-        add constraint UK_mowohsw3lf7j5hh676yr34en8  unique (comparationId);
+        add constraint UK_jr5t4hfjxv9e4465ngdsl8x7f  unique (comparation_id);
 
     alter table global_variables 
-        add constraint UK_kr7p6k3u1po5mbamq95rvh6gj  unique (comparationId);
+        add constraint UK_8hxc6j1i2cfa44g7wypkkjxvo  unique (comparation_id);
 
     alter table global_variables 
         add constraint UK_ba2w3ms6v9agn6ac5ois703u2  unique (name);
 
     alter table rule 
-        add constraint UK_bmfhvbjf4kaugtlg6wom9crg9  unique (comparationId);
+        add constraint UK_kynfmryi32dudhf5d4ff1d248  unique (comparation_id);
 
     alter table rule_decision_table 
-        add constraint UK_20los6ndm6d9errmf4erx9f12  unique (comparationId);
+        add constraint UK_n9wggwt5vxd0c181iar53br72  unique (comparation_id);
 
     alter table rule_decision_table_row 
-        add constraint UK_r7njhoe2s46aht07exgq5hp5f  unique (comparationId);
+        add constraint UK_k9s0wi274elpijmqjof3avgy2  unique (comparation_id);
 
     alter table rule_decision_table_rule_decision_table_row 
-        add constraint UK_9357dg3c4e5y9gkaggcdxrfnb  unique (rules_ID);
+        add constraint UK_j9j9wq9fnivf6m5exoi9fwfj2  unique (rules_id);
 
     alter table test_answer_input_date 
-        add constraint UK_cctx6br59kggymqx6ltv65iv9  unique (ID);
+        add constraint UK_cphw2941utrn4uyhgdph14s40  unique (id);
 
     alter table test_answer_input_date 
-        add constraint UK_8r0jv8nwetnhcx3mwixg6uhn6  unique (comparationId);
+        add constraint UK_d2p884tmai0cnqk95q3ltinqh  unique (comparation_id);
 
     alter table test_answer_input_number 
-        add constraint UK_rrf27v5jka8vvm7pvp3846qac  unique (ID);
+        add constraint UK_4ofxlpel2ni73niiaxccvlxvt  unique (id);
 
     alter table test_answer_input_number 
-        add constraint UK_aljs5lkmjtgb0ys9oxac2jo5m  unique (comparationId);
+        add constraint UK_6fs71o9i7xtrmyajxaj80lr8a  unique (comparation_id);
 
     alter table test_answer_input_postalcode 
-        add constraint UK_9n169jx3xa3jv40g097bb6k4g  unique (ID);
+        add constraint UK_drkl5pqjuprararsrjm2lqbcv  unique (id);
 
     alter table test_answer_input_postalcode 
-        add constraint UK_gmbj48islivqbak8uhqn4acra  unique (comparationId);
+        add constraint UK_c834o3x0nvgen6hfkghysq74g  unique (comparation_id);
 
     alter table test_answer_input_text 
-        add constraint UK_hdccu2j9fjpphcxxt6wsuqo1v  unique (ID);
+        add constraint UK_bsj5308s1ar59oiu7bwom0ti6  unique (id);
 
     alter table test_answer_input_text 
-        add constraint UK_fm38doewevroqbh9w9yl6uy45  unique (comparationId);
+        add constraint UK_oqjrd81kc9i6kdufrk20so96y  unique (comparation_id);
 
     alter table test_answer_multi_checkbox 
-        add constraint UK_u2axqvpcnrfbj8tflcs5v8qu  unique (ID);
+        add constraint UK_h2tok76e6tgdgr1ee9x5ubha1  unique (id);
 
     alter table test_answer_multi_checkbox 
-        add constraint UK_neljyd1uorqx4rh8nwh89pofm  unique (comparationId);
+        add constraint UK_nreg34q5x6fe5ydrmdeadx8wd  unique (comparation_id);
 
     alter table test_answer_radio_button 
-        add constraint UK_eakcce3ybd0073kdajy217yju  unique (ID);
+        add constraint UK_hnf9v1jayrt252x6e3nvtt35m  unique (id);
 
     alter table test_answer_radio_button 
-        add constraint UK_rrv3rw7jasepphc1943fqgis5  unique (comparationId);
+        add constraint UK_8tusgqyww1kn79kq4nfq817lu  unique (comparation_id);
 
     alter table test_scenario 
         add constraint UK_49e2vwe0pem0fb31dxr3ed6b0  unique (name, formId);
 
     alter table test_scenario 
-        add constraint UK_eh6es7t34ldoxns3sswdj6vku  unique (comparationId);
+        add constraint UK_amdun27lw5uwuo7bg48ehvu1h  unique (comparation_id);
 
     alter table test_scenario_category 
-        add constraint UK_sxenkuftpjjmjl0x3ivk62wix  unique (ID);
+        add constraint UK_b8ms1d56c8qcaldu7s4si7rw9  unique (id);
 
     alter table test_scenario_category 
-        add constraint UK_1ln5mm1bq3hr60pot8sy0n1aq  unique (comparationId);
+        add constraint UK_82ukiq0ro6ba04fsaor0oq5bi  unique (comparation_id);
 
     alter table test_scenario_form 
-        add constraint UK_9r8dmwthkqgo9m88ojlm64v2q  unique (ID);
+        add constraint UK_9sq5ml2sp3rpcu3nybqhbpa3x  unique (id);
 
     alter table test_scenario_form 
-        add constraint UK_evdf8bumu8vh0fbr289dn3q2d  unique (comparationId);
+        add constraint UK_83jqkelp07q0wtmggqmi96j3o  unique (comparation_id);
 
     alter table test_scenario_group 
-        add constraint UK_rrp9g1ti6yd73kgp0mf1gtyol  unique (ID);
+        add constraint UK_14f7skh7n0utwpmqqq2fpq2q8  unique (id);
 
     alter table test_scenario_group 
-        add constraint UK_hoi1e3fa5bm2kj18od8m9r6x6  unique (comparationId);
+        add constraint UK_p7j9r4tahrxlkq1yyfi68af4l  unique (comparation_id);
 
     alter table test_scenario_question 
-        add constraint UK_fdol3obofu4t5i6nh6flvwado  unique (ID);
+        add constraint UK_5bbbb419f91pnm261shci71dw  unique (id);
 
     alter table test_scenario_question 
-        add constraint UK_rbe8hkt0j1069ml9qxt8324hw  unique (comparationId);
+        add constraint UK_7bmmeh5wqxore150ue340ry2b  unique (comparation_id);
 
     alter table tree_answers 
-        add constraint UK_413vxa542h86uqy4uvcnv6y2x  unique (ID);
+        add constraint UK_dktggosx7ohcksfob4k94bfmb  unique (id);
 
     alter table tree_answers 
-        add constraint UK_5xuj3de6ide6evpo4sijpqa4o  unique (comparationId);
+        add constraint UK_novq229qj7ibt96gyqw251biu  unique (comparation_id);
 
     alter table tree_categories 
-        add constraint UK_ec3bvy7lletc6jmyvyfwuroqv  unique (ID);
+        add constraint UK_t6nmk0eqg7yvg78lxqlrtdr66  unique (id);
 
     alter table tree_categories 
-        add constraint UK_gtcyh8mle277igwtb5dvhjkr1  unique (comparationId);
+        add constraint UK_1xpeifv5qxo29x7yhpfmjtbyo  unique (comparation_id);
 
     alter table tree_forms 
-        add constraint UK_gyfbqpo5jwnsoftogc0bs77k0  unique (label, version, organizationId);
+        add constraint UK_89ul4cb5nvq3aaiyni9w6dqaq  unique (label, version, organization_id);
 
     alter table tree_forms 
-        add constraint UK_plkq2e2pj19uak2ncrgf1ft6v  unique (ID);
+        add constraint UK_765yjtcx0oa8unb588ngimaml  unique (id);
 
     alter table tree_forms 
-        add constraint UK_k9mhkly9g8lqwf1m9esm50y6m  unique (comparationId);
+        add constraint UK_t05hap53xy8005w0etx1tm0yx  unique (comparation_id);
 
     alter table tree_forms_diagram 
-        add constraint UK_otbxhecixo9rbriamr8v44nik  unique (diagrams_ID);
+        add constraint UK_kupriscdg8vbaueghjbub50wn  unique (diagrams_id);
 
     alter table tree_forms_expressions_chain 
-        add constraint UK_melu1cfpayuydi8fv6gxnoufq  unique (expressionChains_ID);
+        add constraint UK_odixr0cg2sffi97kgn1twedbq  unique (expressionChains_id);
 
     alter table tree_forms_rule 
-        add constraint UK_t8v6e3oyk0k56toxk97afkpvc  unique (rules_ID);
+        add constraint UK_qywcba5hk1dbarg1hdttwxef6  unique (rules_id);
 
     alter table tree_forms_rule_decision_table 
-        add constraint UK_b274bmp72bu1n40rl4k5kvhas  unique (tableRules_ID);
+        add constraint UK_e0ilwwjcfr73m08kid8l8vqth  unique (tableRules_id);
 
     alter table tree_groups 
-        add constraint UK_sfdvxxi1k3p9pqsjl5nhmgdp  unique (ID);
+        add constraint UK_lkx000598o8fu6o45gc6j8j6h  unique (id);
 
     alter table tree_groups 
-        add constraint UK_sno2xl7o9nxmt3xh48ywus36u  unique (comparationId);
+        add constraint UK_544k9wyac47tkk3mh7itf8h9f  unique (comparation_id);
 
     alter table tree_questions 
-        add constraint UK_9lkt55st6up2vyh38lrmu0dc5  unique (ID);
+        add constraint UK_qmnu5ia8n490ok4d7obj7khk6  unique (id);
 
     alter table tree_questions 
-        add constraint UK_nu1epukynjltak450rhyp6eu0  unique (comparationId);
+        add constraint UK_589h63s3jthrsckwd8a4dn3xq  unique (comparation_id);
 
     alter table diagram_calculation 
-        add constraint FK_psofb7hd6w4ofxlvoas1fae45 
-        foreign key (expression_ID) 
-        references expressions_chain (ID);
+        add constraint FK_o48kw0ris957rafejrjdb9qhf 
+        foreign key (expression_id) 
+        references expressions_chain (id);
 
     alter table diagram_calculation 
-        add constraint FK_1uyl1hy99cv9fsblw0vty8nva 
-        foreign key (biitText_ID) 
-        references diagram_biit_text (ID);
+        add constraint FK_852gnfq8vxmn9hkywoecobtn6 
+        foreign key (biitText_id) 
+        references diagram_biit_text (id);
 
     alter table diagram_calculation 
-        add constraint FK_g827oda16qin30e31hhplvhyl 
-        foreign key (position_ID) 
-        references diagram_points (ID);
+        add constraint FK_6gvwnekjmacsy0i4hduqxn8o8 
+        foreign key (position_id) 
+        references diagram_points (id);
 
     alter table diagram_calculation 
-        add constraint FK_5km22on0tjdp4ni437u0cqvx1 
-        foreign key (size_ID) 
-        references diagram_sizes (ID);
+        add constraint FK_c864ws12t8a39qaeklw89wf6e 
+        foreign key (size_id) 
+        references diagram_sizes (id);
 
     alter table diagram_calculation 
-        add constraint FK_4hddxi4jsy1lyvul13uh1im7i 
-        foreign key (parent_ID) 
-        references diagram (ID);
+        add constraint FK_fx7aiytei31snfykw9391hk5v 
+        foreign key (parent_id) 
+        references diagram (id);
 
     alter table diagram_child 
-        add constraint FK_6ox0s0pktxy9rvcdmdcju248e 
-        foreign key (diagram_ID) 
-        references diagram (ID);
+        add constraint FK_372y4rvd7o3v11eeqx1taswsb 
+        foreign key (diagram_id) 
+        references diagram (id);
 
     alter table diagram_child 
-        add constraint FK_s4ju47278gra0mv0udmlfm30p 
-        foreign key (biitText_ID) 
-        references diagram_biit_text (ID);
+        add constraint FK_brc1vc1rak0u4aqy01lt4ak1g 
+        foreign key (biitText_id) 
+        references diagram_biit_text (id);
 
     alter table diagram_child 
-        add constraint FK_5eniu52wmx99g8daejx2ea7wy 
-        foreign key (position_ID) 
-        references diagram_points (ID);
+        add constraint FK_7mwsew8svdmmv56m8w0rhn36c 
+        foreign key (position_id) 
+        references diagram_points (id);
 
     alter table diagram_child 
-        add constraint FK_mk7mxfcjnf05307b1wgoj9tbr 
-        foreign key (size_ID) 
-        references diagram_sizes (ID);
+        add constraint FK_bijy2w9fvk0pxdy5hqxjn2q92 
+        foreign key (size_id) 
+        references diagram_sizes (id);
 
     alter table diagram_child 
-        add constraint FK_qs6gusu4xfg3ntskiiw6i8nlk 
-        foreign key (parent_ID) 
-        references diagram (ID);
+        add constraint FK_36hx1c0tt2a1dvm87u39dil34 
+        foreign key (parent_id) 
+        references diagram (id);
 
     alter table diagram_fork 
-        add constraint FK_7yh670hkt93t0pcttv0bq1uuc 
-        foreign key (biitText_ID) 
-        references diagram_biit_text (ID);
+        add constraint FK_kolfllp3dvo0jyqc2tynvlno8 
+        foreign key (biitText_id) 
+        references diagram_biit_text (id);
 
     alter table diagram_fork 
-        add constraint FK_eii7oliuam2g30sl5dtq1pjle 
-        foreign key (position_ID) 
-        references diagram_points (ID);
+        add constraint FK_sleka7dxx5x1wkqeca7wh4xuk 
+        foreign key (position_id) 
+        references diagram_points (id);
 
     alter table diagram_fork 
-        add constraint FK_hsgneuh3yuqhqv4kogkhp91u8 
-        foreign key (size_ID) 
-        references diagram_sizes (ID);
+        add constraint FK_2jst1ltfa2vfa91xcjnv6s5wc 
+        foreign key (size_id) 
+        references diagram_sizes (id);
 
     alter table diagram_fork 
-        add constraint FK_635sdu3m0ivan4vb6f86e6ws0 
-        foreign key (parent_ID) 
-        references diagram (ID);
+        add constraint FK_cpqi3gpbf4aa77bk3hfyyetgx 
+        foreign key (parent_id) 
+        references diagram (id);
 
     alter table diagram_fork_expression_value_tree_object_reference 
-        add constraint FK_k4ysmnavvafierl7bdith4l1j 
-        foreign key (diagram_fork_ID) 
-        references diagram_fork (ID);
+        add constraint FK_qispgfcvla8gk8fyhefj0vjoa 
+        foreign key (diagram_fork_id) 
+        references diagram_fork (id);
 
     alter table diagram_links 
-        add constraint FK_f9u34y5vofhcg8gcr88wm8ox1 
-        foreign key (expressionChain_ID) 
-        references expressions_chain (ID);
+        add constraint FK_stuif50dkuu0aofgdw5osbr60 
+        foreign key (expressionChain_id) 
+        references expressions_chain (id);
 
     alter table diagram_links 
-        add constraint FK_4uc5itybcysh76lvtc9ty3469 
-        foreign key (source_ID) 
-        references diagram_nodes (ID);
+        add constraint FK_lpworf73vveqyeb1woyewpedp 
+        foreign key (source_id) 
+        references diagram_nodes (id);
 
     alter table diagram_links 
-        add constraint FK_7jd18fn2cgk256ih0iyoorfti 
-        foreign key (target_ID) 
-        references diagram_nodes (ID);
+        add constraint FK_fttc9baj2wxqq9oyfg15rb9vy 
+        foreign key (target_id) 
+        references diagram_nodes (id);
 
     alter table diagram_links 
-        add constraint FK_82fd22e255jkopdyoep9xmk2y 
-        foreign key (parent_ID) 
-        references diagram (ID);
+        add constraint FK_fhcs0ockhkhnaigj4se2kmx4e 
+        foreign key (parent_id) 
+        references diagram (id);
 
     alter table diagram_repeat 
-        add constraint FK_aqu17m49nfn0yojvr0wndem3j 
-        foreign key (biitText_ID) 
-        references diagram_biit_text (ID);
+        add constraint FK_i5qfwfwrqif1a6ervtx7k3b23 
+        foreign key (biitText_id) 
+        references diagram_biit_text (id);
 
     alter table diagram_repeat 
-        add constraint FK_f4cg4oy7tlbbcheb3ec7045yo 
-        foreign key (position_ID) 
-        references diagram_points (ID);
+        add constraint FK_byn6g8r9a09o9td4ulip61p3e 
+        foreign key (position_id) 
+        references diagram_points (id);
 
     alter table diagram_repeat 
-        add constraint FK_qu2ktgi18pqa3t86hk44xksfx 
-        foreign key (size_ID) 
-        references diagram_sizes (ID);
+        add constraint FK_qm92epa6njuvf47fptx2baqh3 
+        foreign key (size_id) 
+        references diagram_sizes (id);
 
     alter table diagram_repeat 
-        add constraint FK_erdsxlq0j84okd36bay5dt6q9 
-        foreign key (parent_ID) 
-        references diagram (ID);
+        add constraint FK_ju6obbtq8wfws3iot5iepforr 
+        foreign key (parent_id) 
+        references diagram (id);
 
     alter table diagram_rule 
-        add constraint FK_fxsyldssewd7iifwrr4f985d5 
-        foreign key (rule_ID) 
-        references rule (ID);
+        add constraint FK_k832erg1q7skten4dnhgc6plu 
+        foreign key (rule_id) 
+        references rule (id);
 
     alter table diagram_rule 
-        add constraint FK_nbxgk4j5653j1qa0bw4y70w65 
-        foreign key (biitText_ID) 
-        references diagram_biit_text (ID);
+        add constraint FK_byd7j1dmqdj6an0efh37n7ptg 
+        foreign key (biitText_id) 
+        references diagram_biit_text (id);
 
     alter table diagram_rule 
-        add constraint FK_aglllff4oo9xy4r8knqyu8v3k 
-        foreign key (position_ID) 
-        references diagram_points (ID);
+        add constraint FK_6lskcjmbl9xlj3fp0rh2qdvag 
+        foreign key (position_id) 
+        references diagram_points (id);
 
     alter table diagram_rule 
-        add constraint FK_7dwjxlkwog3pq4dvcmhx9sssw 
-        foreign key (size_ID) 
-        references diagram_sizes (ID);
+        add constraint FK_6u2ay4hkyl9covhsw5h5pe8bg 
+        foreign key (size_id) 
+        references diagram_sizes (id);
 
     alter table diagram_rule 
-        add constraint FK_h1iqc4v2ldablgwfng2000fcv 
-        foreign key (parent_ID) 
-        references diagram (ID);
+        add constraint FK_k2gl63ut6n0phy7vjgc24ax4a 
+        foreign key (parent_id) 
+        references diagram (id);
 
     alter table diagram_sink 
-        add constraint FK_mq3iht3l8ij5iuild1l44ejeu 
-        foreign key (expression_ID) 
-        references expressions_chain (ID);
+        add constraint FK_d6i3eu1y3dhg1aqi297gl5hc7 
+        foreign key (expression_id) 
+        references expressions_chain (id);
 
     alter table diagram_sink 
-        add constraint FK_rektcafnj1qj3khm8w8sxyx8i 
-        foreign key (biitText_ID) 
-        references diagram_biit_text (ID);
+        add constraint FK_j1bq9cxe96nes01g1sj8uu6yu 
+        foreign key (biitText_id) 
+        references diagram_biit_text (id);
 
     alter table diagram_sink 
-        add constraint FK_abyk770ndq91g7yecoi8h3pjt 
-        foreign key (position_ID) 
-        references diagram_points (ID);
+        add constraint FK_ccaxk6bfmwcfpms10yxx8yalb 
+        foreign key (position_id) 
+        references diagram_points (id);
 
     alter table diagram_sink 
-        add constraint FK_ff3w8r2n4ux3vmd2tr1lc00sd 
-        foreign key (size_ID) 
-        references diagram_sizes (ID);
+        add constraint FK_h92qa8de78mabk8p936leo54i 
+        foreign key (size_id) 
+        references diagram_sizes (id);
 
     alter table diagram_sink 
-        add constraint FK_g13n7i3embg63j1pkswrlhvbb 
-        foreign key (parent_ID) 
-        references diagram (ID);
+        add constraint FK_2rr39y7p3a4r5es1ij4rbcf8d 
+        foreign key (parent_id) 
+        references diagram (id);
 
     alter table diagram_source 
-        add constraint FK_d1l2nioib46nwd01bhbofv6ny 
-        foreign key (biitText_ID) 
-        references diagram_biit_text (ID);
+        add constraint FK_6pfm1s0mv6lrckpl8kir908eg 
+        foreign key (biitText_id) 
+        references diagram_biit_text (id);
 
     alter table diagram_source 
-        add constraint FK_17lhs8umd0536jewa7ht9hbs2 
-        foreign key (position_ID) 
-        references diagram_points (ID);
+        add constraint FK_nkdq9q9sbfty5ha444iileysg 
+        foreign key (position_id) 
+        references diagram_points (id);
 
     alter table diagram_source 
-        add constraint FK_3h8kcg1497rr1y30r9kb4b90m 
-        foreign key (size_ID) 
-        references diagram_sizes (ID);
+        add constraint FK_qalf6e6t0nqdvpqysu7j6aytd 
+        foreign key (size_id) 
+        references diagram_sizes (id);
 
     alter table diagram_source 
-        add constraint FK_a2hmqaospl98o7hmxdvuh093f 
-        foreign key (parent_ID) 
-        references diagram (ID);
+        add constraint FK_8vf49yove0fn6euhu6aj0eiok 
+        foreign key (parent_id) 
+        references diagram (id);
 
     alter table diagram_table 
-        add constraint FK_m64qi6jykhdxghdvv760geh30 
-        foreign key (table_ID) 
-        references rule_decision_table (ID);
+        add constraint FK_ews6b37yjyobhivu09sacwcou 
+        foreign key (table_id) 
+        references rule_decision_table (id);
 
     alter table diagram_table 
-        add constraint FK_7iejtd4odckryjuy5lu68ebm5 
-        foreign key (biitText_ID) 
-        references diagram_biit_text (ID);
+        add constraint FK_9ih9i9jga6lnggldt4qwdf6ml 
+        foreign key (biitText_id) 
+        references diagram_biit_text (id);
 
     alter table diagram_table 
-        add constraint FK_m0co9nwuhqbwjf59ha3ltisma 
-        foreign key (position_ID) 
-        references diagram_points (ID);
+        add constraint FK_cfqkxwg3fqpy4dx1fi3kj4o49 
+        foreign key (position_id) 
+        references diagram_points (id);
 
     alter table diagram_table 
-        add constraint FK_odmfi3t11xmwe0hnevh2ymxek 
-        foreign key (size_ID) 
-        references diagram_sizes (ID);
+        add constraint FK_77ecqjnrkysvsoo2xgre6xuoi 
+        foreign key (size_id) 
+        references diagram_sizes (id);
 
     alter table diagram_table 
-        add constraint FK_n4ug9duflxy9px6g0fb8uoq6w 
-        foreign key (parent_ID) 
-        references diagram (ID);
+        add constraint FK_905u3f5d0rat7253s8dwuq5hw 
+        foreign key (parent_id) 
+        references diagram (id);
 
     alter table elements_of_diagram 
-        add constraint FK_i75jp9q1ac01gmqrc3ur49f0g 
-        foreign key (diagram_ID) 
-        references diagram (ID);
+        add constraint FK_nkcto9r1kt3lshu9xu3lvvew2 
+        foreign key (diagram_id) 
+        references diagram (id);
 
     alter table expression_value_custom_variable 
-        add constraint FK_nfs9s2t4plx74r3n105o09sjx 
-        foreign key (variable_ID) 
-        references form_custom_variables (ID);
+        add constraint FK_6t3dlq7qrjolbhuio0eya8rqq 
+        foreign key (variable_id) 
+        references form_custom_variables (id);
 
     alter table expression_value_generic_custom_variable 
-        add constraint FK_4u49ngxh67i7rqxx3xb7379yi 
-        foreign key (variable_ID) 
-        references form_custom_variables (ID);
+        add constraint FK_mxxy1tfwjpa53ej8a578gl6s1 
+        foreign key (variable_id) 
+        references form_custom_variables (id);
 
     alter table expression_value_global_variable 
-        add constraint FK_nycuefmhokoiteo0n5b257gmo 
-        foreign key (globalVariable_ID) 
-        references global_variables (ID);
+        add constraint FK_3qe2k1hlyg75b5xuwlwt8rhx4 
+        foreign key (globalVariable_id) 
+        references global_variables (id);
 
     alter table expressions_chain_expression_basic 
-        add constraint FK_5u04lt24nd5qdcqdc9s5htsy8 
-        foreign key (expressions_chain_ID) 
-        references expressions_chain (ID);
+        add constraint FK_qhk31snb756cd02e1wykshmbg 
+        foreign key (expressions_chain_id) 
+        references expressions_chain (id);
 
     alter table form_custom_variables 
         add constraint FK_ev3h2dj07tfxm6xw6d5v03fb 
         foreign key (form) 
-        references tree_forms (ID);
+        references tree_forms (id);
 
     alter table global_variable_data_set 
-        add constraint FK_lwed03o1lmh4t449lt1lk8k3b 
-        foreign key (global_variables_ID) 
-        references global_variables (ID);
+        add constraint FK_3a6w2ktwy9ppq1ftw2cprnq7u 
+        foreign key (global_variables_id) 
+        references global_variables (id);
 
     alter table rule 
-        add constraint FK_3327iu3vsaiyi6xxv47du4nte 
-        foreign key (actions_ID) 
-        references expressions_chain (ID);
+        add constraint FK_ly8wgmgy3428yj8l4s95p6jv9 
+        foreign key (actions_id) 
+        references expressions_chain (id);
 
     alter table rule 
-        add constraint FK_d3x0ml61bkukmrngffyh2coko 
-        foreign key (conditions_ID) 
-        references expressions_chain (ID);
+        add constraint FK_3794ko8ce1i5of4vysh7pkj0o 
+        foreign key (conditions_id) 
+        references expressions_chain (id);
 
     alter table rule_decision_table_row 
-        add constraint FK_mqhpiw889x6dvrni1kbdr6n8u 
-        foreign key (action_ID) 
-        references expressions_chain (ID);
+        add constraint FK_jy4vg5whyrriu3k8wc156a6xi 
+        foreign key (action_id) 
+        references expressions_chain (id);
 
     alter table rule_decision_table_row 
-        add constraint FK_85ewg5m9454k3316wo7ypnxq3 
-        foreign key (conditions_ID) 
-        references expressions_chain (ID);
+        add constraint FK_ctfbyk16e845mqjmmyramewu2 
+        foreign key (conditions_id) 
+        references expressions_chain (id);
 
     alter table rule_decision_table_rule_decision_table_row 
-        add constraint FK_9357dg3c4e5y9gkaggcdxrfnb 
-        foreign key (rules_ID) 
-        references rule_decision_table_row (ID);
+        add constraint FK_j9j9wq9fnivf6m5exoi9fwfj2 
+        foreign key (rules_id) 
+        references rule_decision_table_row (id);
 
     alter table rule_decision_table_rule_decision_table_row 
-        add constraint FK_dk0yu4ajw581l5dpebmouwuce 
-        foreign key (rule_decision_table_ID) 
-        references rule_decision_table (ID);
+        add constraint FK_3b21bread2lyauj75i58tehxi 
+        foreign key (rule_decision_table_id) 
+        references rule_decision_table (id);
 
     alter table test_answer_multi_checkbox_values 
-        add constraint FK_dqlmq4p4xn8qhy5g41f5kuvxb 
-        foreign key (TestAnswerMultiCheckBox_ID) 
-        references test_answer_multi_checkbox (ID);
+        add constraint FK_pwr2c4mmyjta3qcj4i3a831wc 
+        foreign key (TestAnswerMultiCheckBox_id) 
+        references test_answer_multi_checkbox (id);
 
     alter table test_scenario 
-        add constraint FK_thnxvj85s3nk6u7k6f91dfbr6 
-        foreign key (testScenarioForm_ID) 
-        references test_scenario_form (ID);
+        add constraint FK_ifr684ejunas5qla9q691iigh 
+        foreign key (testScenarioForm_id) 
+        references test_scenario_form (id);
 
     alter table tree_forms_diagram 
-        add constraint FK_otbxhecixo9rbriamr8v44nik 
-        foreign key (diagrams_ID) 
-        references diagram (ID);
+        add constraint FK_kupriscdg8vbaueghjbub50wn 
+        foreign key (diagrams_id) 
+        references diagram (id);
 
     alter table tree_forms_diagram 
-        add constraint FK_h95kubmo9q1w4k54fxnk74kyb 
-        foreign key (tree_forms_ID) 
-        references tree_forms (ID);
+        add constraint FK_5q539qvus88s3p9tfpj8b1clh 
+        foreign key (tree_forms_id) 
+        references tree_forms (id);
 
     alter table tree_forms_expressions_chain 
-        add constraint FK_melu1cfpayuydi8fv6gxnoufq 
-        foreign key (expressionChains_ID) 
-        references expressions_chain (ID);
+        add constraint FK_odixr0cg2sffi97kgn1twedbq 
+        foreign key (expressionChains_id) 
+        references expressions_chain (id);
 
     alter table tree_forms_expressions_chain 
-        add constraint FK_5wekloqjwnu88bfqpn292su2w 
-        foreign key (tree_forms_ID) 
-        references tree_forms (ID);
+        add constraint FK_gk1nyr8acjbvubqut6coox9nq 
+        foreign key (tree_forms_id) 
+        references tree_forms (id);
 
     alter table tree_forms_rule 
-        add constraint FK_t8v6e3oyk0k56toxk97afkpvc 
-        foreign key (rules_ID) 
-        references rule (ID);
+        add constraint FK_qywcba5hk1dbarg1hdttwxef6 
+        foreign key (rules_id) 
+        references rule (id);
 
     alter table tree_forms_rule 
-        add constraint FK_o7o97qsjclwv4fu4n6dajk1on 
-        foreign key (tree_forms_ID) 
-        references tree_forms (ID);
+        add constraint FK_s5ey41ep7k9cp45hr16fv2eoc 
+        foreign key (tree_forms_id) 
+        references tree_forms (id);
 
     alter table tree_forms_rule_decision_table 
-        add constraint FK_b274bmp72bu1n40rl4k5kvhas 
-        foreign key (tableRules_ID) 
-        references rule_decision_table (ID);
+        add constraint FK_e0ilwwjcfr73m08kid8l8vqth 
+        foreign key (tableRules_id) 
+        references rule_decision_table (id);
 
     alter table tree_forms_rule_decision_table 
-        add constraint FK_mb6o16g0xsjlo3nx5xoc0i0g9 
-        foreign key (tree_forms_ID) 
-        references tree_forms (ID);
+        add constraint FK_66thky5y9pgts1o4rmohiq8sh 
+        foreign key (tree_forms_id) 
+        references tree_forms (id);
 
 	CREATE TABLE `hibernate_sequence` (
 		`next_val` bigint(20) DEFAULT NULL
