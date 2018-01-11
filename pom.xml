@@ -5,7 +5,7 @@
 	<groupId>com.biit</groupId>
 	<artifactId>abcd-tool</artifactId>
 	<packaging>pom</packaging>
-	<version>1.6.21-SNAPSHOT</version>
+	<version>1.7.1-SNAPSHOT</version>
 	<name>Agile Business sCenario Designer Tool</name>
 	<description>Rules Designer</description>
 
@@ -86,13 +86,13 @@
 		<xmlgraphics-commons.version>2.1</xmlgraphics-commons.version>
 		<!-- BiiT dependencies -->
 		<biit-common-utils.version>[0.4,0.5)</biit-common-utils.version>
-		<liferay-service-common.version>[0.7,0.8)</liferay-service-common.version>
-		<liferay-authentication-client.version>[0.8,0.9)</liferay-authentication-client.version>
+		<liferay-service-common.version>[0.8,0.9)</liferay-service-common.version>
+		<liferay-authentication-client.version>[0.9,0.10)</liferay-authentication-client.version>
 		<drools-engine.version>[0.3,0.4)</drools-engine.version>
 		<form-structure-drools.version>[0.1,0.2)</form-structure-drools.version>
 		<form-structure.version>[1.0,1.1)</form-structure.version>
 		<jpa-schema-exporter.version>[0.3,0.4)</jpa-schema-exporter.version>
-		<rest-services-security.version>[0.1,0.2)</rest-services-security.version>
+		<rest-services-security.version>[0.2,0.3)</rest-services-security.version>
 	</properties>
 
 	<dependencies>
