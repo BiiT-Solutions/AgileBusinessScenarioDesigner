@@ -52,10 +52,10 @@ public class SimpleFormViewDao implements ISimpleFormViewDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<SimpleFormView> getAll() {
-		Query query = entityManager.createNativeQuery("SELECT tf.ID, tf.name, tf.label, tf.version, tf.creationTime, tf.createdBy, tf.updateTime, tf.updatedBy, tf.comparationId, tf.availableFrom, tf.availableTo, tf.organizationId, max.maxversion, tf.status "
+		Query query = entityManager.createNativeQuery("SELECT tf.ID, tf.name, tf.label, tf.version, tf.creationTime, tf.createdBy, tf.updateTime, tf.updatedBy, tf.comparationId, tf.availableFrom, tf.availableTo, tf.organization_id, max.maxversion, tf.status "
 				+ "FROM tree_forms tf INNER JOIN "
-				+ "(SELECT MAX(version) AS maxversion, label, organizationId FROM tree_forms "
-				+ "GROUP BY label, organizationId) AS max  ON max.label = tf.label and max.organizationId = tf.organizationId "
+				+ "(SELECT MAX(version) AS maxversion, label, organization_id FROM tree_forms "
+				+ "GROUP BY label, organization_id) AS max  ON max.label = tf.label and max.organization_id = tf.organization_id "
 				+ "ORDER BY label, tf.version DESC");
 		
 		
@@ -92,13 +92,13 @@ public class SimpleFormViewDao implements ISimpleFormViewDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<SimpleFormView> getSimpleFormViewByLabelAndOrganization(String label, Long organizationId) {
-		Query query = entityManager.createNativeQuery("SELECT tf.ID, tf.name, tf.label, tf.version, tf.creationTime, tf.createdBy, tf.updateTime, tf.updatedBy, tf.comparationId, tf.availableFrom, tf.availableTo, tf.organizationId, max.maxversion, tf.status "
+		Query query = entityManager.createNativeQuery("SELECT tf.ID, tf.name, tf.label, tf.version, tf.creationTime, tf.createdBy, tf.updateTime, tf.updatedBy, tf.comparationId, tf.availableFrom, tf.availableTo, tf.organization_id, max.maxversion, tf.status "
 				+ "FROM tree_forms tf INNER JOIN "
-				+ "(SELECT MAX(version) AS maxversion, label, organizationId FROM tree_forms "
-				+ "GROUP BY label, organizationId) AS max  ON max.label = tf.label and max.organizationId = tf.organizationId "
+				+ "(SELECT MAX(version) AS maxversion, label, organization_id FROM tree_forms "
+				+ "GROUP BY label, organization_id) AS max  ON max.label = tf.label and max.organization_id = tf.organization_id "
 				+ "WHERE tf.label='"
 				+ label
-				+ "' AND tf.organizationId='"
+				+ "' AND tf.organization_id='"
 				+ organizationId
 				+ "' ORDER BY label, tf.version DESC");
 		
@@ -135,11 +135,11 @@ public class SimpleFormViewDao implements ISimpleFormViewDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<SimpleFormView> getSimpleFormViewByOrganization(Long organizationId) {
-		Query query = entityManager.createNativeQuery("SELECT tf.ID, tf.name, tf.label, tf.version, tf.creationTime, tf.createdBy, tf.updateTime, tf.updatedBy, tf.comparationId, tf.availableFrom, tf.availableTo, tf.organizationId, max.maxversion, tf.status "
+		Query query = entityManager.createNativeQuery("SELECT tf.ID, tf.name, tf.label, tf.version, tf.creationTime, tf.createdBy, tf.updateTime, tf.updatedBy, tf.comparationId, tf.availableFrom, tf.availableTo, tf.organization_id, max.maxversion, tf.status "
 				+ "FROM tree_forms tf INNER JOIN "
-				+ "(SELECT MAX(version) AS maxversion, label, organizationId FROM tree_forms "
-				+ "GROUP BY label, organizationId) AS max  ON max.label = tf.label and max.organizationId = tf.organizationId "
-				+ "WHERE tf.organizationId='"
+				+ "(SELECT MAX(version) AS maxversion, label, organization_id FROM tree_forms "
+				+ "GROUP BY label, organization_id) AS max  ON max.label = tf.label and max.organization_id = tf.organization_id "
+				+ "WHERE tf.organization_id='"
 				+ organizationId
 				+ "' ORDER BY label, tf.version DESC");
 		
