@@ -1,5 +1,6 @@
 package com.biit.abcd.webpages.elements.testscenario;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -66,7 +67,7 @@ public class CustomCategoryEditor extends CustomComponent {
 	}
 
 	public void setContent(TreeObject testScenarioObject) {
-		List<TreeObject> questions = testScenarioObject.getChildren(TestScenarioQuestion.class);
+		List<TreeObject> questions = new ArrayList<TreeObject>(testScenarioObject.getChildren(TestScenarioQuestion.class));
 		if ((questions != null) && !questions.isEmpty()) {
 			// Add the questions of the category
 			CustomQuestionEditor customQuestion = new CustomQuestionEditor(originalReferenceTreeObjectMap, questions);
@@ -81,7 +82,7 @@ public class CustomCategoryEditor extends CustomComponent {
 			addEditor(customQuestion);
 		}
 		// Add the groups of the category
-		List<TreeObject> testScenarioGroups = testScenarioObject.getChildren(TestScenarioGroup.class);
+		List<TreeObject> testScenarioGroups = new ArrayList<TreeObject>(testScenarioObject.getChildren(TestScenarioGroup.class));
 		if ((testScenarioGroups != null) && !testScenarioGroups.isEmpty()) {
 			for (TreeObject testScenarioGroup : testScenarioGroups) {
 				CustomGroupEditor customGroupEditor = new CustomGroupEditor(originalReferenceTreeObjectMap,

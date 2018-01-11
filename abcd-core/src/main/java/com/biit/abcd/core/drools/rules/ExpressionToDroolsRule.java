@@ -376,7 +376,7 @@ public class ExpressionToDroolsRule {
 				treeObjects = leftTreeObject.getAll(Group.class);
 
 			} else if ((leftTreeObject instanceof Category) || (leftTreeObject instanceof Group)) {
-				treeObjects = leftTreeObject.getChildren(Group.class);
+				treeObjects = new ArrayList<TreeObject>(leftTreeObject.getChildren(Group.class));
 
 			} else if (leftTreeObject instanceof Question) {
 				TreeObject group = lefTreeObjectLimit.get(TreeObjectType.GROUP);
@@ -394,7 +394,7 @@ public class ExpressionToDroolsRule {
 					}
 				}
 			} else if (leftTreeObject instanceof Category) {
-				treeObjects = leftTreeObject.getChildren(Question.class);
+				treeObjects = new ArrayList<TreeObject>(leftTreeObject.getChildren(Question.class));
 
 			} else if (leftTreeObject instanceof Question) {
 				treeObjects = Arrays.asList(leftTreeObject);
@@ -410,7 +410,7 @@ public class ExpressionToDroolsRule {
 					}
 				}
 			} else if (leftTreeObject instanceof Group) {
-				treeObjects = leftTreeObject.getChildren(Question.class);
+				treeObjects = new ArrayList<TreeObject>(leftTreeObject.getChildren(Question.class));
 
 			} else if (leftTreeObject instanceof Question) {
 				treeObjects = Arrays.asList(leftTreeObject);

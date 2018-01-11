@@ -1,5 +1,6 @@
 package com.biit.abcd.webpages.elements.testscenario;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -73,7 +74,7 @@ public class CustomGroupEditor extends CustomComponent {
 	public void setContent(TreeObject testScenarioObject) {
 		createGroupHeader(testScenarioObject);
 
-		List<TreeObject> questions = testScenarioObject.getChildren(TestScenarioQuestion.class);
+		List<TreeObject> questions = new ArrayList<TreeObject>(testScenarioObject.getChildren(TestScenarioQuestion.class));
 		if ((questions != null) && !questions.isEmpty()) {
 			// Add the questions of the group
 			CustomQuestionEditor customQuestion = new CustomQuestionEditor(originalReferenceTreeObjectMap, questions);
@@ -88,11 +89,10 @@ public class CustomGroupEditor extends CustomComponent {
 			addEditor(customQuestion);
 		}
 		// Add the groups of the group (if any)
-		List<TreeObject> testScenarioGroups = testScenarioObject.getChildren(TestScenarioGroup.class);
+		List<TreeObject> testScenarioGroups = new ArrayList<TreeObject>(testScenarioObject.getChildren(TestScenarioGroup.class));
 		if ((testScenarioGroups != null) && !testScenarioGroups.isEmpty()) {
 			for (TreeObject testScenarioGroup : testScenarioGroups) {
-				CustomGroupEditor customGroupEditor = new CustomGroupEditor(originalReferenceTreeObjectMap,
-						testScenarioGroup);
+				CustomGroupEditor customGroupEditor = new CustomGroupEditor(originalReferenceTreeObjectMap, testScenarioGroup);
 				customGroupEditor.addFieldValueChangeListener(new FieldValueChangedListener() {
 					@Override
 					public void valueChanged(Field<?> field) {
@@ -188,21 +188,18 @@ public class CustomGroupEditor extends CustomComponent {
 			@Override
 			public void buttonClick(ClickEvent event) {
 				try {
-					TestScenarioGroup newTestScenarioGroup = customGroupEditor.getTestScenarioGroup()
-							.copyTestScenarioGroup(false);
+					TestScenarioGroup newTestScenarioGroup = customGroupEditor.getTestScenarioGroup().copyTestScenarioGroup(false);
 
 					Integer childIndex = getTestScenarioGroup().getIndex(customGroupEditor.getTestScenarioGroup());
 					getTestScenarioGroup().addChild(childIndex + 1, newTestScenarioGroup);
 
-					CustomGroupEditor newCustomGroupEditor = new CustomGroupEditor(originalReferenceTreeObjectMap,
-							newTestScenarioGroup);
+					CustomGroupEditor newCustomGroupEditor = new CustomGroupEditor(originalReferenceTreeObjectMap, newTestScenarioGroup);
 					addEditor(newCustomGroupEditor, childIndex + 1);
 					setGroupButtonsListeners(newCustomGroupEditor);
 					customGroupEditor.setAddGroupButtonEnable(false);
 					customGroupEditor.getTestScenarioGroup().setAddEnabled(false);
 					customGroupEditor.setRemoveGroupButtonEnable(true);
-				} catch (NotValidChildException | FieldTooLongException | CharacterNotAllowedException
-						| ElementIsReadOnly e) {
+				} catch (NotValidChildException | FieldTooLongException | CharacterNotAllowedException | ElementIsReadOnly e) {
 					AbcdLogger.errorMessage(this.getClass().getName(), e);
 				}
 			}
@@ -243,9 +240,9 @@ public class CustomGroupEditor extends CustomComponent {
 		if ((treeObject instanceof Group) && ((Group) treeObject).isRepeatable()) {
 			TreeObject parent = testScenarioGroup.getParent();
 			List<TreeObject> elementsToDelete = parent.getElementsToDelete();
-			List<TreeObject> groups = parent.getChildren(TestScenarioGroup.class);
+			List<TestScenarioGroup> groups = parent.getChildren(TestScenarioGroup.class);
 			int repeatedGroups = 0;
-			for (TreeObject group : groups) {
+			for (TestScenarioGroup group : groups) {
 				// Repeated groups have the same name at the same level
 				// The group shouldn't be in the list to delete
 				if (group.getName().equals(testScenarioGroup.getName()) && !elementsToDelete.contains(group)) {
