@@ -19,7 +19,7 @@
 		as Spring beans. For example @Component, @Controller and @Service. Make sure 
 		to set the correct base-package -->
 	<context:component-scan
-		base-package="com.biit.abcd.persistence, com.biit.liferay.security, com.biit.abcd.security" />
+		base-package="com.biit.abcd.persistence, com.biit.liferay.security, com.biit.abcd.security, com.biit.liferay.access" />
 
 	<!-- Read any *.properties file -->
 	<context:property-placeholder location="classpath*:*.properties" />
@@ -33,7 +33,7 @@
 		<qualifier value="abcdTransactionManager"/>
 	</bean>
 	
-		<!-- Default Entity Manager defined in @Qualifier(value = "abcdManagerFactory") 
+	<!-- Default Entity Manager defined in @Qualifier(value = "abcdManagerFactory")  
 		of GenericDao -->
 	<bean id="abcdManagerFactory"
 		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">

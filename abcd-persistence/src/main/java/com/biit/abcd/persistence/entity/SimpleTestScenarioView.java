@@ -1,6 +1,7 @@
 package com.biit.abcd.persistence.entity;
 
 import javax.persistence.Cacheable;
+import javax.persistence.Column;
 
 
 /**
@@ -11,8 +12,13 @@ import javax.persistence.Cacheable;
 public class SimpleTestScenarioView {
 
 	private Long id;
+	
 	private String name;
+	
+	@Column(name = "form_id")
 	private Long formId;
+	
+	@Column(name = "form_version")
 	private Integer formVersion;
 
 	public SimpleTestScenarioView() {
