@@ -5,11 +5,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.springframework.stereotype.Repository;
+
 import com.biit.usermanager.entity.IRole;
 import com.biit.usermanager.security.IActivity;
 import com.biit.usermanager.security.IRoleActivities;
 import com.biit.webservice.rest.RestServiceActivity;
 
+@Repository
 public class RoleActivities implements IRoleActivities {
 
 	/**
@@ -41,7 +44,8 @@ public class RoleActivities implements IRoleActivities {
 	};
 
 	/**
-	 * Can do administration task for forms. Also has by default all ABCD manager permissions.
+	 * Can do administration task for forms. Also has by default all ABCD
+	 * manager permissions.
 	 */
 	private static final AbcdActivity[] FORM_ADMINISTRATOR_EXTRA_PERMISSIONS = {
 
