@@ -24,15 +24,15 @@ DROP TABLE IF EXISTS `diagram`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `diagram` (
   `ID` bigint(20) NOT NULL,
-  `comparationId` varchar(190) NOT NULL,
-  `createdBy` double DEFAULT NULL,
-  `creationTime` datetime NOT NULL,
-  `updateTime` datetime DEFAULT NULL,
-  `updatedBy` double DEFAULT NULL,
+  `comparation_id` varchar(190) NOT NULL,
+  `created_by` double DEFAULT NULL,
+  `creation_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `updated_by` double DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `UK_cqcepkojqmp1r8a42yb1hh1c4` (`ID`),
-  UNIQUE KEY `UK_i991a76ub6cc04w67skutnlft` (`comparationId`)
+  UNIQUE KEY `UK_i991a76ub6cc04w67skutnlft` (`comparation_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -55,11 +55,11 @@ DROP TABLE IF EXISTS `diagram_biit_text`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `diagram_biit_text` (
   `ID` bigint(20) NOT NULL,
-  `comparationId` varchar(190) NOT NULL,
-  `createdBy` double DEFAULT NULL,
-  `creationTime` datetime NOT NULL,
-  `updateTime` datetime DEFAULT NULL,
-  `updatedBy` double DEFAULT NULL,
+  `comparation_id` varchar(190) NOT NULL,
+  `created_by` double DEFAULT NULL,
+  `creation_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `updated_by` double DEFAULT NULL,
   `fill` varchar(255) DEFAULT NULL,
   `fontSize` varchar(255) DEFAULT NULL,
   `stroke` varchar(255) DEFAULT NULL,
@@ -67,7 +67,7 @@ CREATE TABLE `diagram_biit_text` (
   `text` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `UK_jcm4u3t3e37kkjb5mltbs5mha` (`ID`),
-  UNIQUE KEY `UK_26e5ksw8ie3l7k0gtpdghwxr8` (`comparationId`)
+  UNIQUE KEY `UK_26e5ksw8ie3l7k0gtpdghwxr8` (`comparation_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -90,11 +90,11 @@ DROP TABLE IF EXISTS `diagram_calculation`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `diagram_calculation` (
   `ID` bigint(20) NOT NULL,
-  `comparationId` varchar(190) NOT NULL,
-  `createdBy` double DEFAULT NULL,
-  `creationTime` datetime NOT NULL,
-  `updateTime` datetime DEFAULT NULL,
-  `updatedBy` double DEFAULT NULL,
+  `comparation_id` varchar(190) NOT NULL,
+  `created_by` double DEFAULT NULL,
+  `creation_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `updated_by` double DEFAULT NULL,
   `embeds` varchar(255) DEFAULT NULL,
   `jointjsId` varchar(255) DEFAULT NULL,
   `type` varchar(255) DEFAULT NULL,
@@ -108,7 +108,7 @@ CREATE TABLE `diagram_calculation` (
   `expression_ID` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `UK_telsgfj7x5yb9vr3tyes22dfo` (`ID`),
-  UNIQUE KEY `UK_skg33psaqtjwx1oevy1wp7tfa` (`comparationId`),
+  UNIQUE KEY `UK_skg33psaqtjwx1oevy1wp7tfa` (`comparation_id`),
   KEY `FK_psofb7hd6w4ofxlvoas1fae45` (`expression_ID`),
   KEY `FK_1uyl1hy99cv9fsblw0vty8nva` (`biitText_ID`),
   KEY `FK_g827oda16qin30e31hhplvhyl` (`position_ID`),
@@ -141,11 +141,11 @@ DROP TABLE IF EXISTS `diagram_child`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `diagram_child` (
   `ID` bigint(20) NOT NULL,
-  `comparationId` varchar(190) NOT NULL,
-  `createdBy` double DEFAULT NULL,
-  `creationTime` datetime NOT NULL,
-  `updateTime` datetime DEFAULT NULL,
-  `updatedBy` double DEFAULT NULL,
+  `comparation_id` varchar(190) NOT NULL,
+  `created_by` double DEFAULT NULL,
+  `creation_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `updated_by` double DEFAULT NULL,
   `embeds` varchar(255) DEFAULT NULL,
   `jointjsId` varchar(255) DEFAULT NULL,
   `type` varchar(255) DEFAULT NULL,
@@ -159,7 +159,7 @@ CREATE TABLE `diagram_child` (
   `diagram_ID` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `UK_g7xdiesweik5op9e9onvswkbc` (`ID`),
-  UNIQUE KEY `UK_r7oc8jgmhkeagu3emxy90ttof` (`comparationId`),
+  UNIQUE KEY `UK_r7oc8jgmhkeagu3emxy90ttof` (`comparation_id`),
   KEY `FK_6ox0s0pktxy9rvcdmdcju248e` (`diagram_ID`),
   KEY `FK_s4ju47278gra0mv0udmlfm30p` (`biitText_ID`),
   KEY `FK_5eniu52wmx99g8daejx2ea7wy` (`position_ID`),
@@ -192,11 +192,11 @@ DROP TABLE IF EXISTS `diagram_fork`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `diagram_fork` (
   `ID` bigint(20) NOT NULL,
-  `comparationId` varchar(190) NOT NULL,
-  `createdBy` double DEFAULT NULL,
-  `creationTime` datetime NOT NULL,
-  `updateTime` datetime DEFAULT NULL,
-  `updatedBy` double DEFAULT NULL,
+  `comparation_id` varchar(190) NOT NULL,
+  `created_by` double DEFAULT NULL,
+  `creation_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `updated_by` double DEFAULT NULL,
   `embeds` varchar(255) DEFAULT NULL,
   `jointjsId` varchar(255) DEFAULT NULL,
   `type` varchar(255) DEFAULT NULL,
@@ -209,7 +209,7 @@ CREATE TABLE `diagram_fork` (
   `size_ID` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `UK_hsf0g6nuli7nv6ypx60d3n4dg` (`ID`),
-  UNIQUE KEY `UK_efh14aqc52m2bt7suefmq12qn` (`comparationId`),
+  UNIQUE KEY `UK_efh14aqc52m2bt7suefmq12qn` (`comparation_id`),
   KEY `FK_7yh670hkt93t0pcttv0bq1uuc` (`biitText_ID`),
   KEY `FK_eii7oliuam2g30sl5dtq1pjle` (`position_ID`),
   KEY `FK_hsgneuh3yuqhqv4kogkhp91u8` (`size_ID`),
@@ -264,11 +264,11 @@ DROP TABLE IF EXISTS `diagram_links`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `diagram_links` (
   `ID` bigint(20) NOT NULL,
-  `comparationId` varchar(190) NOT NULL,
-  `createdBy` double DEFAULT NULL,
-  `creationTime` datetime NOT NULL,
-  `updateTime` datetime DEFAULT NULL,
-  `updatedBy` double DEFAULT NULL,
+  `comparation_id` varchar(190) NOT NULL,
+  `created_by` double DEFAULT NULL,
+  `creation_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `updated_by` double DEFAULT NULL,
   `embeds` varchar(255) DEFAULT NULL,
   `jointjsId` varchar(255) DEFAULT NULL,
   `type` varchar(255) DEFAULT NULL,
@@ -284,7 +284,7 @@ CREATE TABLE `diagram_links` (
   `target_ID` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `UK_h604hokhqdqbq8jnjxeupxokf` (`ID`),
-  UNIQUE KEY `UK_ph2m4o4wkkd1ls8xxffxf0q4` (`comparationId`),
+  UNIQUE KEY `UK_ph2m4o4wkkd1ls8xxffxf0q4` (`comparation_id`),
   KEY `FK_f9u34y5vofhcg8gcr88wm8ox1` (`expressionChain_ID`),
   KEY `FK_4uc5itybcysh76lvtc9ty3469` (`source_ID`),
   KEY `FK_7jd18fn2cgk256ih0iyoorfti` (`target_ID`),
@@ -315,17 +315,17 @@ DROP TABLE IF EXISTS `diagram_nodes`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `diagram_nodes` (
   `ID` bigint(20) NOT NULL,
-  `comparationId` varchar(190) NOT NULL,
-  `createdBy` double DEFAULT NULL,
-  `creationTime` datetime NOT NULL,
-  `updateTime` datetime DEFAULT NULL,
-  `updatedBy` double DEFAULT NULL,
+  `comparation_id` varchar(190) NOT NULL,
+  `created_by` double DEFAULT NULL,
+  `creation_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `updated_by` double DEFAULT NULL,
   `jointjsId` varchar(255) DEFAULT NULL,
   `port` varchar(255) DEFAULT NULL,
   `selector` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `UK_8a8ejpu1o9334lnd8qaxmngtc` (`ID`),
-  UNIQUE KEY `UK_r73mc67afakc2crvohrek8qk4` (`comparationId`)
+  UNIQUE KEY `UK_r73mc67afakc2crvohrek8qk4` (`comparation_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -348,16 +348,16 @@ DROP TABLE IF EXISTS `diagram_points`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `diagram_points` (
   `ID` bigint(20) NOT NULL,
-  `comparationId` varchar(190) NOT NULL,
-  `createdBy` double DEFAULT NULL,
-  `creationTime` datetime NOT NULL,
-  `updateTime` datetime DEFAULT NULL,
-  `updatedBy` double DEFAULT NULL,
+  `comparation_id` varchar(190) NOT NULL,
+  `created_by` double DEFAULT NULL,
+  `creation_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `updated_by` double DEFAULT NULL,
   `x` int(11) NOT NULL,
   `y` int(11) NOT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `UK_hlburchqkc9q4ahhvbtm8r9p9` (`ID`),
-  UNIQUE KEY `UK_nmcm8lwfgn9lwd2kg6e77mlpx` (`comparationId`)
+  UNIQUE KEY `UK_nmcm8lwfgn9lwd2kg6e77mlpx` (`comparation_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -380,11 +380,11 @@ DROP TABLE IF EXISTS `diagram_repeat`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `diagram_repeat` (
   `ID` bigint(20) NOT NULL,
-  `comparationId` varchar(190) NOT NULL,
-  `createdBy` double DEFAULT NULL,
-  `creationTime` datetime NOT NULL,
-  `updateTime` datetime DEFAULT NULL,
-  `updatedBy` double DEFAULT NULL,
+  `comparation_id` varchar(190) NOT NULL,
+  `created_by` double DEFAULT NULL,
+  `creation_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `updated_by` double DEFAULT NULL,
   `embeds` varchar(255) DEFAULT NULL,
   `jointjsId` varchar(255) DEFAULT NULL,
   `type` varchar(255) DEFAULT NULL,
@@ -397,7 +397,7 @@ CREATE TABLE `diagram_repeat` (
   `size_ID` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `UK_cmfc1l3o05vfhv0pt6mgqm3nd` (`ID`),
-  UNIQUE KEY `UK_5jgfcctfdg2s0qbkuaekf6m0g` (`comparationId`),
+  UNIQUE KEY `UK_5jgfcctfdg2s0qbkuaekf6m0g` (`comparation_id`),
   KEY `FK_aqu17m49nfn0yojvr0wndem3j` (`biitText_ID`),
   KEY `FK_f4cg4oy7tlbbcheb3ec7045yo` (`position_ID`),
   KEY `FK_qu2ktgi18pqa3t86hk44xksfx` (`size_ID`),
@@ -427,11 +427,11 @@ DROP TABLE IF EXISTS `diagram_rule`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `diagram_rule` (
   `ID` bigint(20) NOT NULL,
-  `comparationId` varchar(190) NOT NULL,
-  `createdBy` double DEFAULT NULL,
-  `creationTime` datetime NOT NULL,
-  `updateTime` datetime DEFAULT NULL,
-  `updatedBy` double DEFAULT NULL,
+  `comparation_id` varchar(190) NOT NULL,
+  `created_by` double DEFAULT NULL,
+  `creation_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `updated_by` double DEFAULT NULL,
   `embeds` varchar(255) DEFAULT NULL,
   `jointjsId` varchar(255) DEFAULT NULL,
   `type` varchar(255) DEFAULT NULL,
@@ -445,7 +445,7 @@ CREATE TABLE `diagram_rule` (
   `rule_ID` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `UK_o4hrkbic99uuo11mqks328fv9` (`ID`),
-  UNIQUE KEY `UK_l4rl73pva0mblx0df1ntrb3m7` (`comparationId`),
+  UNIQUE KEY `UK_l4rl73pva0mblx0df1ntrb3m7` (`comparation_id`),
   KEY `FK_fxsyldssewd7iifwrr4f985d5` (`rule_ID`),
   KEY `FK_nbxgk4j5653j1qa0bw4y70w65` (`biitText_ID`),
   KEY `FK_aglllff4oo9xy4r8knqyu8v3k` (`position_ID`),
@@ -478,11 +478,11 @@ DROP TABLE IF EXISTS `diagram_sink`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `diagram_sink` (
   `ID` bigint(20) NOT NULL,
-  `comparationId` varchar(190) NOT NULL,
-  `createdBy` double DEFAULT NULL,
-  `creationTime` datetime NOT NULL,
-  `updateTime` datetime DEFAULT NULL,
-  `updatedBy` double DEFAULT NULL,
+  `comparation_id` varchar(190) NOT NULL,
+  `created_by` double DEFAULT NULL,
+  `creation_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `updated_by` double DEFAULT NULL,
   `embeds` varchar(255) DEFAULT NULL,
   `jointjsId` varchar(255) DEFAULT NULL,
   `type` varchar(255) DEFAULT NULL,
@@ -496,7 +496,7 @@ CREATE TABLE `diagram_sink` (
   `expression_ID` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `UK_cjl3d4py1hd5d5tvo23yd780y` (`ID`),
-  UNIQUE KEY `UK_bo43xa2d2veyl1w7o8xfjse1m` (`comparationId`),
+  UNIQUE KEY `UK_bo43xa2d2veyl1w7o8xfjse1m` (`comparation_id`),
   KEY `FK_mq3iht3l8ij5iuild1l44ejeu` (`expression_ID`),
   KEY `FK_rektcafnj1qj3khm8w8sxyx8i` (`biitText_ID`),
   KEY `FK_abyk770ndq91g7yecoi8h3pjt` (`position_ID`),
@@ -529,16 +529,16 @@ DROP TABLE IF EXISTS `diagram_sizes`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `diagram_sizes` (
   `ID` bigint(20) NOT NULL,
-  `comparationId` varchar(190) NOT NULL,
-  `createdBy` double DEFAULT NULL,
-  `creationTime` datetime NOT NULL,
-  `updateTime` datetime DEFAULT NULL,
-  `updatedBy` double DEFAULT NULL,
+  `comparation_id` varchar(190) NOT NULL,
+  `created_by` double DEFAULT NULL,
+  `creation_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `updated_by` double DEFAULT NULL,
   `height` int(11) NOT NULL,
   `width` int(11) NOT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `UK_ipg7ga5eq6253uw0hwppg86ub` (`ID`),
-  UNIQUE KEY `UK_lpwfoljk42ognggvtk6m0w75j` (`comparationId`)
+  UNIQUE KEY `UK_lpwfoljk42ognggvtk6m0w75j` (`comparation_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -561,11 +561,11 @@ DROP TABLE IF EXISTS `diagram_source`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `diagram_source` (
   `ID` bigint(20) NOT NULL,
-  `comparationId` varchar(190) NOT NULL,
-  `createdBy` double DEFAULT NULL,
-  `creationTime` datetime NOT NULL,
-  `updateTime` datetime DEFAULT NULL,
-  `updatedBy` double DEFAULT NULL,
+  `comparation_id` varchar(190) NOT NULL,
+  `created_by` double DEFAULT NULL,
+  `creation_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `updated_by` double DEFAULT NULL,
   `embeds` varchar(255) DEFAULT NULL,
   `jointjsId` varchar(255) DEFAULT NULL,
   `type` varchar(255) DEFAULT NULL,
@@ -578,7 +578,7 @@ CREATE TABLE `diagram_source` (
   `size_ID` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `UK_ff46qqbboep27fpldjifb16ou` (`ID`),
-  UNIQUE KEY `UK_2skl3aj5ivhq9i7j7vun9eak3` (`comparationId`),
+  UNIQUE KEY `UK_2skl3aj5ivhq9i7j7vun9eak3` (`comparation_id`),
   KEY `FK_d1l2nioib46nwd01bhbofv6ny` (`biitText_ID`),
   KEY `FK_17lhs8umd0536jewa7ht9hbs2` (`position_ID`),
   KEY `FK_3h8kcg1497rr1y30r9kb4b90m` (`size_ID`),
@@ -609,11 +609,11 @@ DROP TABLE IF EXISTS `diagram_table`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `diagram_table` (
   `ID` bigint(20) NOT NULL,
-  `comparationId` varchar(190) NOT NULL,
-  `createdBy` double DEFAULT NULL,
-  `creationTime` datetime NOT NULL,
-  `updateTime` datetime DEFAULT NULL,
-  `updatedBy` double DEFAULT NULL,
+  `comparation_id` varchar(190) NOT NULL,
+  `created_by` double DEFAULT NULL,
+  `creation_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `updated_by` double DEFAULT NULL,
   `embeds` varchar(255) DEFAULT NULL,
   `jointjsId` varchar(255) DEFAULT NULL,
   `type` varchar(255) DEFAULT NULL,
@@ -627,7 +627,7 @@ CREATE TABLE `diagram_table` (
   `table_ID` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `UK_rdrkegb0jykxqg5jxtb2fbhc5` (`ID`),
-  UNIQUE KEY `UK_8f7iwv857341khhqhi12jharn` (`comparationId`),
+  UNIQUE KEY `UK_8f7iwv857341khhqhi12jharn` (`comparation_id`),
   KEY `FK_m64qi6jykhdxghdvv760geh30` (`table_ID`),
   KEY `FK_7iejtd4odckryjuy5lu68ebm5` (`biitText_ID`),
   KEY `FK_m0co9nwuhqbwjf59ha3ltisma` (`position_ID`),
@@ -686,16 +686,16 @@ DROP TABLE IF EXISTS `expression_function`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `expression_function` (
   `ID` bigint(20) NOT NULL,
-  `comparationId` varchar(190) NOT NULL,
-  `createdBy` double DEFAULT NULL,
-  `creationTime` datetime NOT NULL,
-  `updateTime` datetime DEFAULT NULL,
-  `updatedBy` double DEFAULT NULL,
+  `comparation_id` varchar(190) NOT NULL,
+  `created_by` double DEFAULT NULL,
+  `creation_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `updated_by` double DEFAULT NULL,
   `sortSeq` bigint(20) NOT NULL,
   `value` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `UK_7hl0l4oq4hokig8i3g30hv3s4` (`ID`),
-  UNIQUE KEY `UK_lbyra8yeo77q9okjte7yh5mck` (`comparationId`)
+  UNIQUE KEY `UK_lbyra8yeo77q9okjte7yh5mck` (`comparation_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -718,16 +718,16 @@ DROP TABLE IF EXISTS `expression_operator_logic`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `expression_operator_logic` (
   `ID` bigint(20) NOT NULL,
-  `comparationId` varchar(190) NOT NULL,
-  `createdBy` double DEFAULT NULL,
-  `creationTime` datetime NOT NULL,
-  `updateTime` datetime DEFAULT NULL,
-  `updatedBy` double DEFAULT NULL,
+  `comparation_id` varchar(190) NOT NULL,
+  `created_by` double DEFAULT NULL,
+  `creation_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `updated_by` double DEFAULT NULL,
   `sortSeq` bigint(20) NOT NULL,
   `currentValue` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `UK_5nv4rm0dcwpx72pidk99uqdcv` (`ID`),
-  UNIQUE KEY `UK_joflju3ccpgq1r4y7ro8egx3g` (`comparationId`)
+  UNIQUE KEY `UK_joflju3ccpgq1r4y7ro8egx3g` (`comparation_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -750,16 +750,16 @@ DROP TABLE IF EXISTS `expression_operator_math`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `expression_operator_math` (
   `ID` bigint(20) NOT NULL,
-  `comparationId` varchar(190) NOT NULL,
-  `createdBy` double DEFAULT NULL,
-  `creationTime` datetime NOT NULL,
-  `updateTime` datetime DEFAULT NULL,
-  `updatedBy` double DEFAULT NULL,
+  `comparation_id` varchar(190) NOT NULL,
+  `created_by` double DEFAULT NULL,
+  `creation_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `updated_by` double DEFAULT NULL,
   `sortSeq` bigint(20) NOT NULL,
   `currentValue` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `UK_blgg3hvajwkh0url70tu2l3nc` (`ID`),
-  UNIQUE KEY `UK_8thp00x8evlgl3w2guass30ql` (`comparationId`)
+  UNIQUE KEY `UK_8thp00x8evlgl3w2guass30ql` (`comparation_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -782,18 +782,18 @@ DROP TABLE IF EXISTS `expression_plugin_method`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `expression_plugin_method` (
   `ID` bigint(20) NOT NULL,
-  `comparationId` varchar(190) NOT NULL,
-  `createdBy` double DEFAULT NULL,
-  `creationTime` datetime NOT NULL,
-  `updateTime` datetime DEFAULT NULL,
-  `updatedBy` double DEFAULT NULL,
+  `comparation_id` varchar(190) NOT NULL,
+  `created_by` double DEFAULT NULL,
+  `creation_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `updated_by` double DEFAULT NULL,
   `sortSeq` bigint(20) NOT NULL,
   `pluginInterface` varchar(255) DEFAULT NULL,
   `pluginMethodName` varchar(255) DEFAULT NULL,
   `pluginName` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `UK_6hn9bd5cyjqtohgaybvt22ujp` (`ID`),
-  UNIQUE KEY `UK_tnq0p980rjfkyf5sal1oq6290` (`comparationId`)
+  UNIQUE KEY `UK_tnq0p980rjfkyf5sal1oq6290` (`comparation_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -815,16 +815,16 @@ DROP TABLE IF EXISTS `expression_symbol`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `expression_symbol` (
   `ID` bigint(20) NOT NULL,
-  `comparationId` varchar(190) NOT NULL,
-  `createdBy` double DEFAULT NULL,
-  `creationTime` datetime NOT NULL,
-  `updateTime` datetime DEFAULT NULL,
-  `updatedBy` double DEFAULT NULL,
+  `comparation_id` varchar(190) NOT NULL,
+  `created_by` double DEFAULT NULL,
+  `creation_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `updated_by` double DEFAULT NULL,
   `sortSeq` bigint(20) NOT NULL,
   `value` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `UK_d5pgsndfldjl77mxwesg47oyy` (`ID`),
-  UNIQUE KEY `UK_sw4rg5w1mhkjtuhmshj7jeh5w` (`comparationId`)
+  UNIQUE KEY `UK_sw4rg5w1mhkjtuhmshj7jeh5w` (`comparation_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -847,16 +847,16 @@ DROP TABLE IF EXISTS `expression_value_boolean`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `expression_value_boolean` (
   `ID` bigint(20) NOT NULL,
-  `comparationId` varchar(190) NOT NULL,
-  `createdBy` double DEFAULT NULL,
-  `creationTime` datetime NOT NULL,
-  `updateTime` datetime DEFAULT NULL,
-  `updatedBy` double DEFAULT NULL,
+  `comparation_id` varchar(190) NOT NULL,
+  `created_by` double DEFAULT NULL,
+  `creation_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `updated_by` double DEFAULT NULL,
   `sortSeq` bigint(20) NOT NULL,
   `value` bit(1) NOT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `UK_8ji8c5v2rtu64hu7fd6w16wds` (`ID`),
-  UNIQUE KEY `UK_9ji3f3ooll872c0bitchknl29` (`comparationId`)
+  UNIQUE KEY `UK_9ji3f3ooll872c0bitchknl29` (`comparation_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -878,18 +878,18 @@ DROP TABLE IF EXISTS `expression_value_custom_variable`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `expression_value_custom_variable` (
   `ID` bigint(20) NOT NULL,
-  `comparationId` varchar(190) NOT NULL,
-  `createdBy` double DEFAULT NULL,
-  `creationTime` datetime NOT NULL,
-  `updateTime` datetime DEFAULT NULL,
-  `updatedBy` double DEFAULT NULL,
+  `comparation_id` varchar(190) NOT NULL,
+  `created_by` double DEFAULT NULL,
+  `creation_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `updated_by` double DEFAULT NULL,
   `sortSeq` bigint(20) NOT NULL,
   `unit` varchar(255) DEFAULT NULL,
   `reference_ID` bigint(20) DEFAULT NULL,
   `variable_ID` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `UK_g4ftxu9duvw2yoonn0mjb5sku` (`ID`),
-  UNIQUE KEY `UK_6be9j8k8bp0uudvgtk61e4tu4` (`comparationId`),
+  UNIQUE KEY `UK_6be9j8k8bp0uudvgtk61e4tu4` (`comparation_id`),
   KEY `FK_nfs9s2t4plx74r3n105o09sjx` (`variable_ID`),
   CONSTRAINT `FK_nfs9s2t4plx74r3n105o09sjx` FOREIGN KEY (`variable_ID`) REFERENCES `form_custom_variables` (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -914,17 +914,17 @@ DROP TABLE IF EXISTS `expression_value_generic_custom_variable`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `expression_value_generic_custom_variable` (
   `ID` bigint(20) NOT NULL,
-  `comparationId` varchar(190) NOT NULL,
-  `createdBy` double DEFAULT NULL,
-  `creationTime` datetime NOT NULL,
-  `updateTime` datetime DEFAULT NULL,
-  `updatedBy` double DEFAULT NULL,
+  `comparation_id` varchar(190) NOT NULL,
+  `created_by` double DEFAULT NULL,
+  `creation_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `updated_by` double DEFAULT NULL,
   `sortSeq` bigint(20) NOT NULL,
   `type` varchar(255) DEFAULT NULL,
   `variable_ID` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `UK_1ilcykdnhd0ixr9iaomtrog3h` (`ID`),
-  UNIQUE KEY `UK_72ucvxvkp3dgy4ci55hda72p5` (`comparationId`),
+  UNIQUE KEY `UK_72ucvxvkp3dgy4ci55hda72p5` (`comparation_id`),
   KEY `FK_4u49ngxh67i7rqxx3xb7379yi` (`variable_ID`),
   CONSTRAINT `FK_4u49ngxh67i7rqxx3xb7379yi` FOREIGN KEY (`variable_ID`) REFERENCES `form_custom_variables` (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -949,16 +949,16 @@ DROP TABLE IF EXISTS `expression_value_generic_variable`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `expression_value_generic_variable` (
   `ID` bigint(20) NOT NULL,
-  `comparationId` varchar(190) NOT NULL,
-  `createdBy` double DEFAULT NULL,
-  `creationTime` datetime NOT NULL,
-  `updateTime` datetime DEFAULT NULL,
-  `updatedBy` double DEFAULT NULL,
+  `comparation_id` varchar(190) NOT NULL,
+  `created_by` double DEFAULT NULL,
+  `creation_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `updated_by` double DEFAULT NULL,
   `sortSeq` bigint(20) NOT NULL,
   `type` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `UK_cqsa891g9cu7egmcxep74o4gh` (`ID`),
-  UNIQUE KEY `UK_1qdyf7b9pdbtg7ugajlcbuy99` (`comparationId`)
+  UNIQUE KEY `UK_1qdyf7b9pdbtg7ugajlcbuy99` (`comparation_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -980,16 +980,16 @@ DROP TABLE IF EXISTS `expression_value_global_variable`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `expression_value_global_variable` (
   `ID` bigint(20) NOT NULL,
-  `comparationId` varchar(190) NOT NULL,
-  `createdBy` double DEFAULT NULL,
-  `creationTime` datetime NOT NULL,
-  `updateTime` datetime DEFAULT NULL,
-  `updatedBy` double DEFAULT NULL,
+  `comparation_id` varchar(190) NOT NULL,
+  `created_by` double DEFAULT NULL,
+  `creation_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `updated_by` double DEFAULT NULL,
   `sortSeq` bigint(20) NOT NULL,
   `globalVariable_ID` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `UK_gbcgljgnhew0ftkmyyjo9ef0k` (`ID`),
-  UNIQUE KEY `UK_thug7lch6aqrx4iwq0dtwabrr` (`comparationId`),
+  UNIQUE KEY `UK_thug7lch6aqrx4iwq0dtwabrr` (`comparation_id`),
   KEY `FK_42woqe4atagm0r4oxgcnk6qwo` (`globalVariable_ID`),
   CONSTRAINT `FK_42woqe4atagm0r4oxgcnk6qwo` FOREIGN KEY (`globalVariable_ID`) REFERENCES `global_variables` (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -1013,16 +1013,16 @@ DROP TABLE IF EXISTS `expression_value_number`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `expression_value_number` (
   `ID` bigint(20) NOT NULL,
-  `comparationId` varchar(190) NOT NULL,
-  `createdBy` double DEFAULT NULL,
-  `creationTime` datetime NOT NULL,
-  `updateTime` datetime DEFAULT NULL,
-  `updatedBy` double DEFAULT NULL,
+  `comparation_id` varchar(190) NOT NULL,
+  `created_by` double DEFAULT NULL,
+  `creation_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `updated_by` double DEFAULT NULL,
   `sortSeq` bigint(20) NOT NULL,
   `value` double NOT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `UK_4iv29s41m049yhnm25ykovg2j` (`ID`),
-  UNIQUE KEY `UK_5pr6kfc8ssvjg8bcoxs7iaxo6` (`comparationId`)
+  UNIQUE KEY `UK_5pr6kfc8ssvjg8bcoxs7iaxo6` (`comparation_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1045,16 +1045,16 @@ DROP TABLE IF EXISTS `expression_value_postal_code`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `expression_value_postal_code` (
   `ID` bigint(20) NOT NULL,
-  `comparationId` varchar(190) NOT NULL,
-  `createdBy` double DEFAULT NULL,
-  `creationTime` datetime NOT NULL,
-  `updateTime` datetime DEFAULT NULL,
-  `updatedBy` double DEFAULT NULL,
+  `comparation_id` varchar(190) NOT NULL,
+  `created_by` double DEFAULT NULL,
+  `creation_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `updated_by` double DEFAULT NULL,
   `sortSeq` bigint(20) NOT NULL,
   `text` text,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `UK_jnl1ff1sox87eqvsa3w1nugx9` (`ID`),
-  UNIQUE KEY `UK_65y7nqlko6hgjo6b3go7lwa82` (`comparationId`)
+  UNIQUE KEY `UK_65y7nqlko6hgjo6b3go7lwa82` (`comparation_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1076,16 +1076,16 @@ DROP TABLE IF EXISTS `expression_value_string`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `expression_value_string` (
   `ID` bigint(20) NOT NULL,
-  `comparationId` varchar(190) NOT NULL,
-  `createdBy` double DEFAULT NULL,
-  `creationTime` datetime NOT NULL,
-  `updateTime` datetime DEFAULT NULL,
-  `updatedBy` double DEFAULT NULL,
+  `comparation_id` varchar(190) NOT NULL,
+  `created_by` double DEFAULT NULL,
+  `creation_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `updated_by` double DEFAULT NULL,
   `sortSeq` bigint(20) NOT NULL,
   `text` text,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `UK_ssjam0lpu4ptut6q7uiyinb46` (`ID`),
-  UNIQUE KEY `UK_imteh9r9im4ctld1b9b5kkacw` (`comparationId`)
+  UNIQUE KEY `UK_imteh9r9im4ctld1b9b5kkacw` (`comparation_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1108,16 +1108,16 @@ DROP TABLE IF EXISTS `expression_value_systemdate`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `expression_value_systemdate` (
   `ID` bigint(20) NOT NULL,
-  `comparationId` varchar(190) NOT NULL,
-  `createdBy` double DEFAULT NULL,
-  `creationTime` datetime NOT NULL,
-  `updateTime` datetime DEFAULT NULL,
-  `updatedBy` double DEFAULT NULL,
+  `comparation_id` varchar(190) NOT NULL,
+  `created_by` double DEFAULT NULL,
+  `creation_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `updated_by` double DEFAULT NULL,
   `sortSeq` bigint(20) NOT NULL,
   `value` datetime DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `UK_mj1pnbvm8gv3gngq2yh15502f` (`ID`),
-  UNIQUE KEY `UK_co43pbqqg7civhr3g8p752mt8` (`comparationId`)
+  UNIQUE KEY `UK_co43pbqqg7civhr3g8p752mt8` (`comparation_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1139,16 +1139,16 @@ DROP TABLE IF EXISTS `expression_value_timestamp`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `expression_value_timestamp` (
   `ID` bigint(20) NOT NULL,
-  `comparationId` varchar(190) NOT NULL,
-  `createdBy` double DEFAULT NULL,
-  `creationTime` datetime NOT NULL,
-  `updateTime` datetime DEFAULT NULL,
-  `updatedBy` double DEFAULT NULL,
+  `comparation_id` varchar(190) NOT NULL,
+  `created_by` double DEFAULT NULL,
+  `creation_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `updated_by` double DEFAULT NULL,
   `sortSeq` bigint(20) NOT NULL,
   `value` datetime DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `UK_kju72l70wu9w63min4j3y59jw` (`ID`),
-  UNIQUE KEY `UK_ser5ax80v1g2co9dbdqstv81l` (`comparationId`)
+  UNIQUE KEY `UK_ser5ax80v1g2co9dbdqstv81l` (`comparation_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1170,17 +1170,17 @@ DROP TABLE IF EXISTS `expression_value_tree_object_reference`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `expression_value_tree_object_reference` (
   `ID` bigint(20) NOT NULL,
-  `comparationId` varchar(190) NOT NULL,
-  `createdBy` double DEFAULT NULL,
-  `creationTime` datetime NOT NULL,
-  `updateTime` datetime DEFAULT NULL,
-  `updatedBy` double DEFAULT NULL,
+  `comparation_id` varchar(190) NOT NULL,
+  `created_by` double DEFAULT NULL,
+  `creation_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `updated_by` double DEFAULT NULL,
   `sortSeq` bigint(20) NOT NULL,
   `unit` varchar(255) DEFAULT NULL,
   `reference_ID` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `UK_57lm65prgqk32q1w0rd3jptux` (`ID`),
-  UNIQUE KEY `UK_an3mu4deq3muvltuwdawkfbhc` (`comparationId`)
+  UNIQUE KEY `UK_an3mu4deq3muvltuwdawkfbhc` (`comparation_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1203,16 +1203,16 @@ DROP TABLE IF EXISTS `expressions_chain`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `expressions_chain` (
   `ID` bigint(20) NOT NULL,
-  `comparationId` varchar(190) NOT NULL,
-  `createdBy` double DEFAULT NULL,
-  `creationTime` datetime NOT NULL,
-  `updateTime` datetime DEFAULT NULL,
-  `updatedBy` double DEFAULT NULL,
+  `comparation_id` varchar(190) NOT NULL,
+  `created_by` double DEFAULT NULL,
+  `creation_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `updated_by` double DEFAULT NULL,
   `sortSeq` bigint(20) NOT NULL,
   `name` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `UK_l2k0vcoohq76m4cl2k8g3y9hc` (`ID`),
-  UNIQUE KEY `UK_qageeu0ehecelhxmn5qdv93am` (`comparationId`)
+  UNIQUE KEY `UK_qageeu0ehecelhxmn5qdv93am` (`comparation_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1261,11 +1261,11 @@ DROP TABLE IF EXISTS `form_custom_variables`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `form_custom_variables` (
   `ID` bigint(20) NOT NULL,
-  `comparationId` varchar(190) NOT NULL,
-  `createdBy` double DEFAULT NULL,
-  `creationTime` datetime NOT NULL,
-  `updateTime` datetime DEFAULT NULL,
-  `updatedBy` double DEFAULT NULL,
+  `comparation_id` varchar(190) NOT NULL,
+  `created_by` double DEFAULT NULL,
+  `creation_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `updated_by` double DEFAULT NULL,
   `name` varchar(190) DEFAULT NULL,
   `scope` varchar(190) DEFAULT NULL,
   `type` varchar(255) DEFAULT NULL,
@@ -1273,7 +1273,7 @@ CREATE TABLE `form_custom_variables` (
   `defaultValue` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `UK_891b13251e3pkyk1k5vccpmnh` (`ID`),
-  UNIQUE KEY `UK_sq1dj9kjhkv951lr0o3pu42fc` (`comparationId`),
+  UNIQUE KEY `UK_sq1dj9kjhkv951lr0o3pu42fc` (`comparation_id`),
   KEY `NU_custom_variable_form` (`form`),
   CONSTRAINT `FK_ev3h2dj07tfxm6xw6d5v03fb` FOREIGN KEY (`form`) REFERENCES `tree_forms` (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -1298,17 +1298,17 @@ DROP TABLE IF EXISTS `global_variable_data_date`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `global_variable_data_date` (
   `ID` bigint(20) NOT NULL,
-  `comparationId` varchar(190) NOT NULL,
-  `createdBy` double DEFAULT NULL,
-  `creationTime` datetime NOT NULL,
-  `updateTime` datetime DEFAULT NULL,
-  `updatedBy` double DEFAULT NULL,
+  `comparation_id` varchar(190) NOT NULL,
+  `created_by` double DEFAULT NULL,
+  `creation_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `updated_by` double DEFAULT NULL,
   `validFrom` datetime DEFAULT NULL,
   `validTo` datetime DEFAULT NULL,
   `value` datetime DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `UK_mylp5k1001col2n4rpdshrea7` (`ID`),
-  UNIQUE KEY `UK_sptr6kn7psib0u6dqt8r7stkq` (`comparationId`)
+  UNIQUE KEY `UK_sptr6kn7psib0u6dqt8r7stkq` (`comparation_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1330,17 +1330,17 @@ DROP TABLE IF EXISTS `global_variable_data_number`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `global_variable_data_number` (
   `ID` bigint(20) NOT NULL,
-  `comparationId` varchar(190) NOT NULL,
-  `createdBy` double DEFAULT NULL,
-  `creationTime` datetime NOT NULL,
-  `updateTime` datetime DEFAULT NULL,
-  `updatedBy` double DEFAULT NULL,
+  `comparation_id` varchar(190) NOT NULL,
+  `created_by` double DEFAULT NULL,
+  `creation_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `updated_by` double DEFAULT NULL,
   `validFrom` datetime DEFAULT NULL,
   `validTo` datetime DEFAULT NULL,
   `value` double DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `UK_ksal0k0qkvv2v95wvysufcap3` (`ID`),
-  UNIQUE KEY `UK_jbkxahvrsxikil188orj2bion` (`comparationId`)
+  UNIQUE KEY `UK_jbkxahvrsxikil188orj2bion` (`comparation_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1363,17 +1363,17 @@ DROP TABLE IF EXISTS `global_variable_data_postalcode`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `global_variable_data_postalcode` (
   `ID` bigint(20) NOT NULL,
-  `comparationId` varchar(190) NOT NULL,
-  `createdBy` double DEFAULT NULL,
-  `creationTime` datetime NOT NULL,
-  `updateTime` datetime DEFAULT NULL,
-  `updatedBy` double DEFAULT NULL,
+  `comparation_id` varchar(190) NOT NULL,
+  `created_by` double DEFAULT NULL,
+  `creation_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `updated_by` double DEFAULT NULL,
   `validFrom` datetime DEFAULT NULL,
   `validTo` datetime DEFAULT NULL,
   `postalCode` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `UK_o8e2he19y5wsa4bxopiih4ewp` (`ID`),
-  UNIQUE KEY `UK_1g8ysiehft4rrd3aiheq1cktx` (`comparationId`)
+  UNIQUE KEY `UK_1g8ysiehft4rrd3aiheq1cktx` (`comparation_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1421,17 +1421,17 @@ DROP TABLE IF EXISTS `global_variable_data_text`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `global_variable_data_text` (
   `ID` bigint(20) NOT NULL,
-  `comparationId` varchar(190) NOT NULL,
-  `createdBy` double DEFAULT NULL,
-  `creationTime` datetime NOT NULL,
-  `updateTime` datetime DEFAULT NULL,
-  `updatedBy` double DEFAULT NULL,
+  `comparation_id` varchar(190) NOT NULL,
+  `created_by` double DEFAULT NULL,
+  `creation_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `updated_by` double DEFAULT NULL,
   `validFrom` datetime DEFAULT NULL,
   `validTo` datetime DEFAULT NULL,
   `value` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `UK_t91aqfdhy6wnrrg749k2een9u` (`ID`),
-  UNIQUE KEY `UK_mowohsw3lf7j5hh676yr34en8` (`comparationId`)
+  UNIQUE KEY `UK_mowohsw3lf7j5hh676yr34en8` (`comparation_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1453,16 +1453,16 @@ DROP TABLE IF EXISTS `global_variables`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `global_variables` (
   `ID` bigint(20) NOT NULL,
-  `comparationId` varchar(190) NOT NULL,
-  `createdBy` double DEFAULT NULL,
-  `creationTime` datetime NOT NULL,
-  `updateTime` datetime DEFAULT NULL,
-  `updatedBy` double DEFAULT NULL,
+  `comparation_id` varchar(190) NOT NULL,
+  `created_by` double DEFAULT NULL,
+  `creation_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `updated_by` double DEFAULT NULL,
   `format` int(11) DEFAULT NULL,
   `name` varchar(190) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `UK_nggea8kl5cb894e5du3cwsrd0` (`ID`),
-  UNIQUE KEY `UK_kr7p6k3u1po5mbamq95rvh6gj` (`comparationId`),
+  UNIQUE KEY `UK_kr7p6k3u1po5mbamq95rvh6gj` (`comparation_id`),
   UNIQUE KEY `UK_ba2w3ms6v9agn6ac5ois703u2` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -1508,17 +1508,17 @@ DROP TABLE IF EXISTS `rule`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `rule` (
   `ID` bigint(20) NOT NULL,
-  `comparationId` varchar(190) NOT NULL,
-  `createdBy` double DEFAULT NULL,
-  `creationTime` datetime NOT NULL,
-  `updateTime` datetime DEFAULT NULL,
-  `updatedBy` double DEFAULT NULL,
+  `comparation_id` varchar(190) NOT NULL,
+  `created_by` double DEFAULT NULL,
+  `creation_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `updated_by` double DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
   `actions_ID` bigint(20) DEFAULT NULL,
   `conditions_ID` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `UK_8rqluiaunf9galin639sd894c` (`ID`),
-  UNIQUE KEY `UK_bmfhvbjf4kaugtlg6wom9crg9` (`comparationId`),
+  UNIQUE KEY `UK_bmfhvbjf4kaugtlg6wom9crg9` (`comparation_id`),
   KEY `FK_3327iu3vsaiyi6xxv47du4nte` (`actions_ID`),
   KEY `FK_d3x0ml61bkukmrngffyh2coko` (`conditions_ID`),
   CONSTRAINT `FK_3327iu3vsaiyi6xxv47du4nte` FOREIGN KEY (`actions_ID`) REFERENCES `expressions_chain` (`ID`),
@@ -1545,15 +1545,15 @@ DROP TABLE IF EXISTS `rule_decision_table`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `rule_decision_table` (
   `ID` bigint(20) NOT NULL,
-  `comparationId` varchar(190) NOT NULL,
-  `createdBy` double DEFAULT NULL,
-  `creationTime` datetime NOT NULL,
-  `updateTime` datetime DEFAULT NULL,
-  `updatedBy` double DEFAULT NULL,
+  `comparation_id` varchar(190) NOT NULL,
+  `created_by` double DEFAULT NULL,
+  `creation_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `updated_by` double DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `UK_bumgbl5omimxtvvhvthstr882` (`ID`),
-  UNIQUE KEY `UK_20los6ndm6d9errmf4erx9f12` (`comparationId`)
+  UNIQUE KEY `UK_20los6ndm6d9errmf4erx9f12` (`comparation_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1576,16 +1576,16 @@ DROP TABLE IF EXISTS `rule_decision_table_row`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `rule_decision_table_row` (
   `ID` bigint(20) NOT NULL,
-  `comparationId` varchar(190) NOT NULL,
-  `createdBy` double DEFAULT NULL,
-  `creationTime` datetime NOT NULL,
-  `updateTime` datetime DEFAULT NULL,
-  `updatedBy` double DEFAULT NULL,
+  `comparation_id` varchar(190) NOT NULL,
+  `created_by` double DEFAULT NULL,
+  `creation_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `updated_by` double DEFAULT NULL,
   `action_ID` bigint(20) DEFAULT NULL,
   `conditions_ID` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `UK_ondmt5ex56yathpd70q11lwgg` (`ID`),
-  UNIQUE KEY `UK_r7njhoe2s46aht07exgq5hp5f` (`comparationId`),
+  UNIQUE KEY `UK_r7njhoe2s46aht07exgq5hp5f` (`comparation_id`),
   KEY `FK_mqhpiw889x6dvrni1kbdr6n8u` (`action_ID`),
   KEY `FK_85ewg5m9454k3316wo7ypnxq3` (`conditions_ID`),
   CONSTRAINT `FK_85ewg5m9454k3316wo7ypnxq3` FOREIGN KEY (`conditions_ID`) REFERENCES `expressions_chain` (`ID`),
@@ -1639,15 +1639,15 @@ DROP TABLE IF EXISTS `test_answer_input_date`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `test_answer_input_date` (
   `ID` bigint(20) NOT NULL,
-  `comparationId` varchar(190) NOT NULL,
-  `createdBy` double DEFAULT NULL,
-  `creationTime` datetime NOT NULL,
-  `updateTime` datetime DEFAULT NULL,
-  `updatedBy` double DEFAULT NULL,
+  `comparation_id` varchar(190) NOT NULL,
+  `created_by` double DEFAULT NULL,
+  `creation_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `updated_by` double DEFAULT NULL,
   `dateValue` datetime DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `UK_cctx6br59kggymqx6ltv65iv9` (`ID`),
-  UNIQUE KEY `UK_8r0jv8nwetnhcx3mwixg6uhn6` (`comparationId`)
+  UNIQUE KEY `UK_8r0jv8nwetnhcx3mwixg6uhn6` (`comparation_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1670,15 +1670,15 @@ DROP TABLE IF EXISTS `test_answer_input_number`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `test_answer_input_number` (
   `ID` bigint(20) NOT NULL,
-  `comparationId` varchar(190) NOT NULL,
-  `createdBy` double DEFAULT NULL,
-  `creationTime` datetime NOT NULL,
-  `updateTime` datetime DEFAULT NULL,
-  `updatedBy` double DEFAULT NULL,
+  `comparation_id` varchar(190) NOT NULL,
+  `created_by` double DEFAULT NULL,
+  `creation_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `updated_by` double DEFAULT NULL,
   `inputValue` double DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `UK_rrf27v5jka8vvm7pvp3846qac` (`ID`),
-  UNIQUE KEY `UK_aljs5lkmjtgb0ys9oxac2jo5m` (`comparationId`)
+  UNIQUE KEY `UK_aljs5lkmjtgb0ys9oxac2jo5m` (`comparation_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1700,15 +1700,15 @@ DROP TABLE IF EXISTS `test_answer_input_postalcode`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `test_answer_input_postalcode` (
   `ID` bigint(20) NOT NULL,
-  `comparationId` varchar(190) NOT NULL,
-  `createdBy` double DEFAULT NULL,
-  `creationTime` datetime NOT NULL,
-  `updateTime` datetime DEFAULT NULL,
-  `updatedBy` double DEFAULT NULL,
+  `comparation_id` varchar(190) NOT NULL,
+  `created_by` double DEFAULT NULL,
+  `creation_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `updated_by` double DEFAULT NULL,
   `inputValue` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `UK_9n169jx3xa3jv40g097bb6k4g` (`ID`),
-  UNIQUE KEY `UK_gmbj48islivqbak8uhqn4acra` (`comparationId`)
+  UNIQUE KEY `UK_gmbj48islivqbak8uhqn4acra` (`comparation_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1730,15 +1730,15 @@ DROP TABLE IF EXISTS `test_answer_input_text`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `test_answer_input_text` (
   `ID` bigint(20) NOT NULL,
-  `comparationId` varchar(190) NOT NULL,
-  `createdBy` double DEFAULT NULL,
-  `creationTime` datetime NOT NULL,
-  `updateTime` datetime DEFAULT NULL,
-  `updatedBy` double DEFAULT NULL,
+  `comparation_id` varchar(190) NOT NULL,
+  `created_by` double DEFAULT NULL,
+  `creation_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `updated_by` double DEFAULT NULL,
   `inputValue` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `UK_hdccu2j9fjpphcxxt6wsuqo1v` (`ID`),
-  UNIQUE KEY `UK_fm38doewevroqbh9w9yl6uy45` (`comparationId`)
+  UNIQUE KEY `UK_fm38doewevroqbh9w9yl6uy45` (`comparation_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1760,14 +1760,14 @@ DROP TABLE IF EXISTS `test_answer_list`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `test_answer_list` (
   `ID` bigint(20) NOT NULL,
-  `comparationId` varchar(190) NOT NULL,
-  `createdBy` double DEFAULT NULL,
-  `creationTime` datetime NOT NULL,
-  `updateTime` datetime DEFAULT NULL,
-  `updatedBy` double DEFAULT NULL,
+  `comparation_id` varchar(190) NOT NULL,
+  `created_by` double DEFAULT NULL,
+  `creation_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `updated_by` double DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `UK_4rh2n0h8kut89dnrp1p6yxqao` (`ID`),
-  UNIQUE KEY `UK_1h1jnby3gascn5q6ahgkelilq` (`comparationId`)
+  UNIQUE KEY `UK_1h1jnby3gascn5q6ahgkelilq` (`comparation_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1814,14 +1814,14 @@ DROP TABLE IF EXISTS `test_answer_multi_checkbox`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `test_answer_multi_checkbox` (
   `ID` bigint(20) NOT NULL,
-  `comparationId` varchar(190) NOT NULL,
-  `createdBy` double DEFAULT NULL,
-  `creationTime` datetime NOT NULL,
-  `updateTime` datetime DEFAULT NULL,
-  `updatedBy` double DEFAULT NULL,
+  `comparation_id` varchar(190) NOT NULL,
+  `created_by` double DEFAULT NULL,
+  `creation_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `updated_by` double DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `UK_u2axqvpcnrfbj8tflcs5v8qu` (`ID`),
-  UNIQUE KEY `UK_neljyd1uorqx4rh8nwh89pofm` (`comparationId`)
+  UNIQUE KEY `UK_neljyd1uorqx4rh8nwh89pofm` (`comparation_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1867,15 +1867,15 @@ DROP TABLE IF EXISTS `test_answer_radio_button`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `test_answer_radio_button` (
   `ID` bigint(20) NOT NULL,
-  `comparationId` varchar(190) NOT NULL,
-  `createdBy` double DEFAULT NULL,
-  `creationTime` datetime NOT NULL,
-  `updateTime` datetime DEFAULT NULL,
-  `updatedBy` double DEFAULT NULL,
+  `comparation_id` varchar(190) NOT NULL,
+  `created_by` double DEFAULT NULL,
+  `creation_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `updated_by` double DEFAULT NULL,
   `radioButtonValue` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `UK_eakcce3ybd0073kdajy217yju` (`ID`),
-  UNIQUE KEY `UK_rrv3rw7jasepphc1943fqgis5` (`comparationId`)
+  UNIQUE KEY `UK_rrv3rw7jasepphc1943fqgis5` (`comparation_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1898,11 +1898,11 @@ DROP TABLE IF EXISTS `test_scenario`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `test_scenario` (
   `ID` bigint(20) NOT NULL,
-  `comparationId` varchar(190) NOT NULL,
-  `createdBy` double DEFAULT NULL,
-  `creationTime` datetime NOT NULL,
-  `updateTime` datetime DEFAULT NULL,
-  `updatedBy` double DEFAULT NULL,
+  `comparation_id` varchar(190) NOT NULL,
+  `created_by` double DEFAULT NULL,
+  `creation_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `updated_by` double DEFAULT NULL,
   `name` varchar(190) DEFAULT NULL,
   `testScenarioForm_ID` bigint(20) DEFAULT NULL,
   `formId` bigint(20) DEFAULT NULL,
@@ -1910,7 +1910,7 @@ CREATE TABLE `test_scenario` (
   `formOrganization` double NOT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `UK_j17qvfqb5wcp4c3bgknvdii31` (`ID`),
-  UNIQUE KEY `UK_eh6es7t34ldoxns3sswdj6vku` (`comparationId`),
+  UNIQUE KEY `UK_eh6es7t34ldoxns3sswdj6vku` (`comparation_id`),
   KEY `FK_thnxvj85s3nk6u7k6f91dfbr6` (`testScenarioForm_ID`),
   CONSTRAINT `FK_thnxvj85s3nk6u7k6f91dfbr6` FOREIGN KEY (`testScenarioForm_ID`) REFERENCES `test_scenario_form` (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -1935,11 +1935,11 @@ DROP TABLE IF EXISTS `test_scenario_category`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `test_scenario_category` (
   `ID` bigint(20) NOT NULL,
-  `comparationId` varchar(190) NOT NULL,
-  `createdBy` double DEFAULT NULL,
-  `creationTime` datetime NOT NULL,
-  `updateTime` datetime DEFAULT NULL,
-  `updatedBy` double DEFAULT NULL,
+  `comparation_id` varchar(190) NOT NULL,
+  `created_by` double DEFAULT NULL,
+  `creation_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `updated_by` double DEFAULT NULL,
   `label` varchar(1000) DEFAULT NULL,
   `name` varchar(190) DEFAULT NULL,
   `originalReference` varchar(190) NOT NULL,
@@ -1947,7 +1947,7 @@ CREATE TABLE `test_scenario_category` (
   `parent_ID` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `UK_sxenkuftpjjmjl0x3ivk62wix` (`ID`),
-  UNIQUE KEY `UK_1ln5mm1bq3hr60pot8sy0n1aq` (`comparationId`)
+  UNIQUE KEY `UK_1ln5mm1bq3hr60pot8sy0n1aq` (`comparation_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1970,21 +1970,21 @@ DROP TABLE IF EXISTS `test_scenario_form`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `test_scenario_form` (
   `ID` bigint(20) NOT NULL,
-  `comparationId` varchar(190) NOT NULL,
-  `createdBy` double DEFAULT NULL,
-  `creationTime` datetime NOT NULL,
-  `updateTime` datetime DEFAULT NULL,
-  `updatedBy` double DEFAULT NULL,
+  `comparation_id` varchar(190) NOT NULL,
+  `created_by` double DEFAULT NULL,
+  `creation_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `updated_by` double DEFAULT NULL,
   `label` varchar(1000) DEFAULT NULL,
   `name` varchar(190) DEFAULT NULL,
   `originalReference` varchar(190) NOT NULL,
   `sortSeq` bigint(20) NOT NULL,
   `parent_ID` bigint(20) DEFAULT NULL,
-  `organizationId` double NOT NULL,
+  `organization_id` double NOT NULL,
   `version` int(11) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `UK_9r8dmwthkqgo9m88ojlm64v2q` (`ID`),
-  UNIQUE KEY `UK_evdf8bumu8vh0fbr289dn3q2d` (`comparationId`)
+  UNIQUE KEY `UK_evdf8bumu8vh0fbr289dn3q2d` (`comparation_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -2007,11 +2007,11 @@ DROP TABLE IF EXISTS `test_scenario_group`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `test_scenario_group` (
   `ID` bigint(20) NOT NULL,
-  `comparationId` varchar(190) NOT NULL,
-  `createdBy` double DEFAULT NULL,
-  `creationTime` datetime NOT NULL,
-  `updateTime` datetime DEFAULT NULL,
-  `updatedBy` double DEFAULT NULL,
+  `comparation_id` varchar(190) NOT NULL,
+  `created_by` double DEFAULT NULL,
+  `creation_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `updated_by` double DEFAULT NULL,
   `label` varchar(1000) DEFAULT NULL,
   `name` varchar(190) DEFAULT NULL,
   `originalReference` varchar(190) NOT NULL,
@@ -2021,7 +2021,7 @@ CREATE TABLE `test_scenario_group` (
   `addEnabled` bit(1) NOT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `UK_rrp9g1ti6yd73kgp0mf1gtyol` (`ID`),
-  UNIQUE KEY `UK_hoi1e3fa5bm2kj18od8m9r6x6` (`comparationId`)
+  UNIQUE KEY `UK_hoi1e3fa5bm2kj18od8m9r6x6` (`comparation_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -2044,11 +2044,11 @@ DROP TABLE IF EXISTS `test_scenario_question`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `test_scenario_question` (
   `ID` bigint(20) NOT NULL,
-  `comparationId` varchar(190) NOT NULL,
-  `createdBy` double DEFAULT NULL,
-  `creationTime` datetime NOT NULL,
-  `updateTime` datetime DEFAULT NULL,
-  `updatedBy` double DEFAULT NULL,
+  `comparation_id` varchar(190) NOT NULL,
+  `created_by` double DEFAULT NULL,
+  `creation_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `updated_by` double DEFAULT NULL,
   `label` varchar(1000) DEFAULT NULL,
   `name` varchar(190) DEFAULT NULL,
   `originalReference` varchar(190) NOT NULL,
@@ -2057,7 +2057,7 @@ CREATE TABLE `test_scenario_question` (
   `testAnswer_ID` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `UK_fdol3obofu4t5i6nh6flvwado` (`ID`),
-  UNIQUE KEY `UK_rbe8hkt0j1069ml9qxt8324hw` (`comparationId`)
+  UNIQUE KEY `UK_rbe8hkt0j1069ml9qxt8324hw` (`comparation_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -2080,11 +2080,11 @@ DROP TABLE IF EXISTS `tree_answers`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tree_answers` (
   `ID` bigint(20) NOT NULL,
-  `comparationId` varchar(190) NOT NULL,
-  `createdBy` double DEFAULT NULL,
-  `creationTime` datetime NOT NULL,
-  `updateTime` datetime DEFAULT NULL,
-  `updatedBy` double DEFAULT NULL,
+  `comparation_id` varchar(190) NOT NULL,
+  `created_by` double DEFAULT NULL,
+  `creation_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `updated_by` double DEFAULT NULL,
   `label` varchar(1000) DEFAULT NULL,
   `name` varchar(190) DEFAULT NULL,
   `originalReference` varchar(190) NOT NULL,
@@ -2092,7 +2092,7 @@ CREATE TABLE `tree_answers` (
   `parent_ID` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `UK_413vxa542h86uqy4uvcnv6y2x` (`ID`),
-  UNIQUE KEY `UK_5xuj3de6ide6evpo4sijpqa4o` (`comparationId`)
+  UNIQUE KEY `UK_5xuj3de6ide6evpo4sijpqa4o` (`comparation_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -2115,11 +2115,11 @@ DROP TABLE IF EXISTS `tree_categories`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tree_categories` (
   `ID` bigint(20) NOT NULL,
-  `comparationId` varchar(190) NOT NULL,
-  `createdBy` double DEFAULT NULL,
-  `creationTime` datetime NOT NULL,
-  `updateTime` datetime DEFAULT NULL,
-  `updatedBy` double DEFAULT NULL,
+  `comparation_id` varchar(190) NOT NULL,
+  `created_by` double DEFAULT NULL,
+  `creation_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `updated_by` double DEFAULT NULL,
   `label` varchar(1000) DEFAULT NULL,
   `name` varchar(190) DEFAULT NULL,
   `originalReference` varchar(190) NOT NULL,
@@ -2127,7 +2127,7 @@ CREATE TABLE `tree_categories` (
   `parent_ID` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `UK_ec3bvy7lletc6jmyvyfwuroqv` (`ID`),
-  UNIQUE KEY `UK_gtcyh8mle277igwtb5dvhjkr1` (`comparationId`)
+  UNIQUE KEY `UK_gtcyh8mle277igwtb5dvhjkr1` (`comparation_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -2182,24 +2182,24 @@ DROP TABLE IF EXISTS `tree_forms`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tree_forms` (
   `ID` bigint(20) NOT NULL,
-  `comparationId` varchar(190) NOT NULL,
-  `createdBy` double DEFAULT NULL,
-  `creationTime` datetime NOT NULL,
-  `updateTime` datetime DEFAULT NULL,
-  `updatedBy` double DEFAULT NULL,
+  `comparation_id` varchar(190) NOT NULL,
+  `created_by` double DEFAULT NULL,
+  `creation_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `updated_by` double DEFAULT NULL,
   `label` varchar(1000) DEFAULT NULL,
   `name` varchar(190) DEFAULT NULL,
   `originalReference` varchar(190) NOT NULL,
   `sortSeq` bigint(20) NOT NULL,
   `parent_ID` bigint(20) DEFAULT NULL,
-  `organizationId` double NOT NULL,
+  `organization_id` double NOT NULL,
   `version` int(11) DEFAULT NULL,
   `availableFrom` datetime NOT NULL,
   `availableTo` datetime DEFAULT NULL,
   `status` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `UK_plkq2e2pj19uak2ncrgf1ft6v` (`ID`),
-  UNIQUE KEY `UK_k9mhkly9g8lqwf1m9esm50y6m` (`comparationId`)
+  UNIQUE KEY `UK_k9mhkly9g8lqwf1m9esm50y6m` (`comparation_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -2330,11 +2330,11 @@ DROP TABLE IF EXISTS `tree_groups`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tree_groups` (
   `ID` bigint(20) NOT NULL,
-  `comparationId` varchar(190) NOT NULL,
-  `createdBy` double DEFAULT NULL,
-  `creationTime` datetime NOT NULL,
-  `updateTime` datetime DEFAULT NULL,
-  `updatedBy` double DEFAULT NULL,
+  `comparation_id` varchar(190) NOT NULL,
+  `created_by` double DEFAULT NULL,
+  `creation_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `updated_by` double DEFAULT NULL,
   `label` varchar(1000) DEFAULT NULL,
   `name` varchar(190) DEFAULT NULL,
   `originalReference` varchar(190) NOT NULL,
@@ -2343,7 +2343,7 @@ CREATE TABLE `tree_groups` (
   `repeatable` bit(1) NOT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `UK_sfdvxxi1k3p9pqsjl5nhmgdp` (`ID`),
-  UNIQUE KEY `UK_sno2xl7o9nxmt3xh48ywus36u` (`comparationId`)
+  UNIQUE KEY `UK_sno2xl7o9nxmt3xh48ywus36u` (`comparation_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -2395,11 +2395,11 @@ DROP TABLE IF EXISTS `tree_questions`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tree_questions` (
   `ID` bigint(20) NOT NULL,
-  `comparationId` varchar(190) NOT NULL,
-  `createdBy` double DEFAULT NULL,
-  `creationTime` datetime NOT NULL,
-  `updateTime` datetime DEFAULT NULL,
-  `updatedBy` double DEFAULT NULL,
+  `comparation_id` varchar(190) NOT NULL,
+  `created_by` double DEFAULT NULL,
+  `creation_time` datetime NOT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `updated_by` double DEFAULT NULL,
   `label` varchar(1000) DEFAULT NULL,
   `name` varchar(190) DEFAULT NULL,
   `originalReference` varchar(190) NOT NULL,
@@ -2409,7 +2409,7 @@ CREATE TABLE `tree_questions` (
   `answerType` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `UK_9lkt55st6up2vyh38lrmu0dc5` (`ID`),
-  UNIQUE KEY `UK_nu1epukynjltak450rhyp6eu0` (`comparationId`)
+  UNIQUE KEY `UK_nu1epukynjltak450rhyp6eu0` (`comparation_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
