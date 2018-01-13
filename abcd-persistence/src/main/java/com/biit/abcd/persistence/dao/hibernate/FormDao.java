@@ -109,7 +109,7 @@ public class FormDao extends AnnotatedGenericDao<Form, Long> implements IFormDao
 
 		cq.where(cb.and(cb.equal(form.get(formMetamodel.getSingularAttribute("label", String.class)), label),
 				cb.equal(form.get(formMetamodel.getSingularAttribute("version", Integer.class)), version),
-				cb.equal(form.get(formMetamodel.getSingularAttribute("organization_id", Long.class)), organizationId)));
+				cb.equal(form.get(formMetamodel.getSingularAttribute("organizationId", Long.class)), organizationId)));
 
 		try {
 			Form formResult = getEntityManager().createQuery(cq).getSingleResult();
@@ -135,7 +135,7 @@ public class FormDao extends AnnotatedGenericDao<Form, Long> implements IFormDao
 		cq.select(cb.count(form));
 		cq.where(cb.and(cb.equal(form.get(formMetamodel.getSingularAttribute("label", String.class)), label),
 				cb.equal(form.get(formMetamodel.getSingularAttribute("version", Integer.class)), version),
-				cb.equal(form.get(formMetamodel.getSingularAttribute("organization_id", Long.class)), organizationId),
+				cb.equal(form.get(formMetamodel.getSingularAttribute("organizationId", Long.class)), organizationId),
 				cb.notEqual(form.get(formMetamodel.getSingularAttribute("id", Long.class)), id)));
 
 		return getEntityManager().createQuery(cq).getSingleResult() > 0;
@@ -153,7 +153,7 @@ public class FormDao extends AnnotatedGenericDao<Form, Long> implements IFormDao
 
 		cq.select(cb.count(form));
 		cq.where(cb.and(cb.equal(form.get(formMetamodel.getSingularAttribute("label", String.class)), label),
-				cb.equal(form.get(formMetamodel.getSingularAttribute("organization_id", Long.class)), organizationId)));
+				cb.equal(form.get(formMetamodel.getSingularAttribute("organizationId", Long.class)), organizationId)));
 		return getEntityManager().createQuery(cq).getSingleResult() > 0;
 	}
 
@@ -189,7 +189,7 @@ public class FormDao extends AnnotatedGenericDao<Form, Long> implements IFormDao
 		EntityType<Form> formMetamodel = m.entity(Form.class);
 		Root<Form> form = cq.from(Form.class);
 
-		cq.where(cb.equal(form.get(formMetamodel.getSingularAttribute("organization_id", Long.class)), organizationId));
+		cq.where(cb.equal(form.get(formMetamodel.getSingularAttribute("organizationId", Long.class)), organizationId));
 
 		List<Form> formResults = getEntityManager().createQuery(cq).getResultList();
 		if (formResults != null) {
