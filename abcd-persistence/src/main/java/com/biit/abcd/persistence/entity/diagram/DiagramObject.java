@@ -4,12 +4,14 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Cacheable;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -50,15 +52,20 @@ public abstract class DiagramObject extends StorableObject {
 	private static final long serialVersionUID = -6312500925414596116L;
 
 	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "parent")
 	private Diagram parent;
 
 	@Expose
 	@Enumerated(EnumType.STRING)
 	private DiagramObjectType type;
+
 	@Expose
+	@Column(name = "jointjs_id")
 	private String jointjsId;
+
 	@Expose
 	private String embeds;
+
 	@Expose
 	private int z;
 

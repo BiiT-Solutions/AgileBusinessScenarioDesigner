@@ -33,10 +33,10 @@
         update_time datetime,
         updated_by DOUBLE,
         embeds varchar(255),
-        jointjsId varchar(255),
+        jointjs_id varchar(255),
         type varchar(255),
         z integer not null,
-        parent_id bigint,
+        parent bigint,
         angle float not null,
         tooltip varchar(255),
         biitText_id bigint,
@@ -54,10 +54,10 @@
         update_time datetime,
         updated_by DOUBLE,
         embeds varchar(255),
-        jointjsId varchar(255),
+        jointjs_id varchar(255),
         type varchar(255),
         z integer not null,
-        parent_id bigint,
+        parent bigint,
         angle float not null,
         tooltip varchar(255),
         biitText_id bigint,
@@ -75,10 +75,10 @@
         update_time datetime,
         updated_by DOUBLE,
         embeds varchar(255),
-        jointjsId varchar(255),
+        jointjs_id varchar(255),
         type varchar(255),
         z integer not null,
-        parent_id bigint,
+        parent bigint,
         angle float not null,
         tooltip varchar(255),
         biitText_id bigint,
@@ -100,10 +100,10 @@
         update_time datetime,
         updated_by DOUBLE,
         embeds varchar(255),
-        jointjsId varchar(255),
+        jointjs_id varchar(255),
         type varchar(255),
         z integer not null,
-        parent_id bigint,
+        parent bigint,
         attrs longtext,
         manhattan bit not null,
         smooth bit not null,
@@ -148,10 +148,10 @@
         update_time datetime,
         updated_by DOUBLE,
         embeds varchar(255),
-        jointjsId varchar(255),
+        jointjs_id varchar(255),
         type varchar(255),
         z integer not null,
-        parent_id bigint,
+        parent bigint,
         angle float not null,
         tooltip varchar(255),
         biitText_id bigint,
@@ -168,10 +168,10 @@
         update_time datetime,
         updated_by DOUBLE,
         embeds varchar(255),
-        jointjsId varchar(255),
+        jointjs_id varchar(255),
         type varchar(255),
         z integer not null,
-        parent_id bigint,
+        parent bigint,
         angle float not null,
         tooltip varchar(255),
         biitText_id bigint,
@@ -189,10 +189,10 @@
         update_time datetime,
         updated_by DOUBLE,
         embeds varchar(255),
-        jointjsId varchar(255),
+        jointjs_id varchar(255),
         type varchar(255),
         z integer not null,
-        parent_id bigint,
+        parent bigint,
         angle float not null,
         tooltip varchar(255),
         biitText_id bigint,
@@ -222,10 +222,10 @@
         update_time datetime,
         updated_by DOUBLE,
         embeds varchar(255),
-        jointjsId varchar(255),
+        jointjs_id varchar(255),
         type varchar(255),
         z integer not null,
-        parent_id bigint,
+        parent bigint,
         angle float not null,
         tooltip varchar(255),
         biitText_id bigint,
@@ -242,10 +242,10 @@
         update_time datetime,
         updated_by DOUBLE,
         embeds varchar(255),
-        jointjsId varchar(255),
+        jointjs_id varchar(255),
         type varchar(255),
         z integer not null,
-        parent_id bigint,
+        parent bigint,
         angle float not null,
         tooltip varchar(255),
         biitText_id bigint,
@@ -1218,8 +1218,8 @@
         references diagram_sizes (id);
 
     alter table diagram_calculation 
-        add constraint FK_fx7aiytei31snfykw9391hk5v 
-        foreign key (parent_id) 
+        add constraint FK_e18740pms15g0xatw1vs88wuv 
+        foreign key (parent) 
         references diagram (id);
 
     alter table diagram_child 
@@ -1243,8 +1243,8 @@
         references diagram_sizes (id);
 
     alter table diagram_child 
-        add constraint FK_36hx1c0tt2a1dvm87u39dil34 
-        foreign key (parent_id) 
+        add constraint FK_95r5dam5y3ox7eij844g9b9fw 
+        foreign key (parent) 
         references diagram (id);
 
     alter table diagram_fork 
@@ -1263,8 +1263,8 @@
         references diagram_sizes (id);
 
     alter table diagram_fork 
-        add constraint FK_cpqi3gpbf4aa77bk3hfyyetgx 
-        foreign key (parent_id) 
+        add constraint FK_5ma5sm4ekcu4nnsm9kgybi6cu 
+        foreign key (parent) 
         references diagram (id);
 
     alter table diagram_fork_expression_value_tree_object_reference 
@@ -1288,8 +1288,8 @@
         references diagram_nodes (id);
 
     alter table diagram_links 
-        add constraint FK_fhcs0ockhkhnaigj4se2kmx4e 
-        foreign key (parent_id) 
+        add constraint FK_tcs4xaphicr6lvh57b1pvfu8u 
+        foreign key (parent) 
         references diagram (id);
 
     alter table diagram_repeat 
@@ -1308,8 +1308,8 @@
         references diagram_sizes (id);
 
     alter table diagram_repeat 
-        add constraint FK_ju6obbtq8wfws3iot5iepforr 
-        foreign key (parent_id) 
+        add constraint FK_3j5tdbdtvvmigv6fmxc3myd0f 
+        foreign key (parent) 
         references diagram (id);
 
     alter table diagram_rule 
@@ -1333,8 +1333,8 @@
         references diagram_sizes (id);
 
     alter table diagram_rule 
-        add constraint FK_k2gl63ut6n0phy7vjgc24ax4a 
-        foreign key (parent_id) 
+        add constraint FK_7hrh2jygbpgha4ifygjelmjso 
+        foreign key (parent) 
         references diagram (id);
 
     alter table diagram_sink 
@@ -1358,8 +1358,8 @@
         references diagram_sizes (id);
 
     alter table diagram_sink 
-        add constraint FK_2rr39y7p3a4r5es1ij4rbcf8d 
-        foreign key (parent_id) 
+        add constraint FK_42tevycbgnk1db7dcp3pdbie4 
+        foreign key (parent) 
         references diagram (id);
 
     alter table diagram_source 
@@ -1378,8 +1378,8 @@
         references diagram_sizes (id);
 
     alter table diagram_source 
-        add constraint FK_8vf49yove0fn6euhu6aj0eiok 
-        foreign key (parent_id) 
+        add constraint FK_n32ufbyplqnyssc8oxtef7y4 
+        foreign key (parent) 
         references diagram (id);
 
     alter table diagram_table 
@@ -1403,8 +1403,8 @@
         references diagram_sizes (id);
 
     alter table diagram_table 
-        add constraint FK_905u3f5d0rat7253s8dwuq5hw 
-        foreign key (parent_id) 
+        add constraint FK_2xlmgbabun5yxio8y4ph3caay 
+        foreign key (parent) 
         references diagram (id);
 
     alter table elements_of_diagram 
