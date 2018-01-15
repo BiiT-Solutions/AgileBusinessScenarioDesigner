@@ -29,7 +29,7 @@ public abstract class Expression extends StorableObject {
 	// For solving Hibernate bug https://hibernate.atlassian.net/browse/HHH-1268
 	// we cannot use the list of children with
 	// @Orderby or @OrderColumn we use our own order manager.
-	@Column(name="sort_seq", nullable = false)
+	@Column(name="sort_sequence", nullable = false)
 	private long sortSeq = 0;
 
 	public Expression() {
