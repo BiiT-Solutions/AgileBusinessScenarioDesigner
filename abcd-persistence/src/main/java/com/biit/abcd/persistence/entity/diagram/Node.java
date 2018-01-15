@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Cacheable;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -19,6 +20,7 @@ public class Node extends StorableObject {
 	private static final long serialVersionUID = -5481806008119969483L;
 	@Expose
 	@SerializedName("id")
+	@Column(name = "jointjs_id")
 	private String jointjsId;
 	@Expose
 	private String selector;
