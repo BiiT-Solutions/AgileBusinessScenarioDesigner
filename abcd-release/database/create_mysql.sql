@@ -122,7 +122,7 @@
         creation_time datetime not null,
         update_time datetime,
         updated_by DOUBLE,
-        jointjsId varchar(255),
+        jointjs_id varchar(255),
         port varchar(255),
         selector varchar(255),
         primary key (id)
@@ -268,7 +268,7 @@
         creation_time datetime not null,
         update_time datetime,
         updated_by DOUBLE,
-        sort_seq bigint not null,
+        sort_sequence bigint not null,
         value varchar(255),
         primary key (id)
     );
@@ -280,7 +280,7 @@
         creation_time datetime not null,
         update_time datetime,
         updated_by DOUBLE,
-        sort_seq bigint not null,
+        sort_sequence bigint not null,
         currentValue varchar(255),
         primary key (id)
     );
@@ -292,7 +292,7 @@
         creation_time datetime not null,
         update_time datetime,
         updated_by DOUBLE,
-        sort_seq bigint not null,
+        sort_sequence bigint not null,
         currentValue varchar(255),
         primary key (id)
     );
@@ -304,7 +304,7 @@
         creation_time datetime not null,
         update_time datetime,
         updated_by DOUBLE,
-        sort_seq bigint not null,
+        sort_sequence bigint not null,
         pluginInterface varchar(255),
         pluginMethodName varchar(255),
         pluginName varchar(255),
@@ -318,7 +318,7 @@
         creation_time datetime not null,
         update_time datetime,
         updated_by DOUBLE,
-        sort_seq bigint not null,
+        sort_sequence bigint not null,
         value varchar(255),
         primary key (id)
     );
@@ -330,7 +330,7 @@
         creation_time datetime not null,
         update_time datetime,
         updated_by DOUBLE,
-        sort_seq bigint not null,
+        sort_sequence bigint not null,
         value bit,
         primary key (id)
     );
@@ -342,7 +342,7 @@
         creation_time datetime not null,
         update_time datetime,
         updated_by DOUBLE,
-        sort_seq bigint not null,
+        sort_sequence bigint not null,
         unit varchar(255),
         reference_id bigint,
         variable_id bigint,
@@ -356,7 +356,7 @@
         creation_time datetime not null,
         update_time datetime,
         updated_by DOUBLE,
-        sort_seq bigint not null,
+        sort_sequence bigint not null,
         type varchar(255),
         variable_id bigint,
         primary key (id)
@@ -369,7 +369,7 @@
         creation_time datetime not null,
         update_time datetime,
         updated_by DOUBLE,
-        sort_seq bigint not null,
+        sort_sequence bigint not null,
         type varchar(255),
         primary key (id)
     );
@@ -381,7 +381,7 @@
         creation_time datetime not null,
         update_time datetime,
         updated_by DOUBLE,
-        sort_seq bigint not null,
+        sort_sequence bigint not null,
         globalVariable_id bigint,
         primary key (id)
     );
@@ -393,7 +393,7 @@
         creation_time datetime not null,
         update_time datetime,
         updated_by DOUBLE,
-        sort_seq bigint not null,
+        sort_sequence bigint not null,
         value double precision,
         primary key (id)
     );
@@ -405,7 +405,7 @@
         creation_time datetime not null,
         update_time datetime,
         updated_by DOUBLE,
-        sort_seq bigint not null,
+        sort_sequence bigint not null,
         text TEXT,
         primary key (id)
     );
@@ -417,7 +417,7 @@
         creation_time datetime not null,
         update_time datetime,
         updated_by DOUBLE,
-        sort_seq bigint not null,
+        sort_sequence bigint not null,
         text TEXT,
         primary key (id)
     );
@@ -429,7 +429,7 @@
         creation_time datetime not null,
         update_time datetime,
         updated_by DOUBLE,
-        sort_seq bigint not null,
+        sort_sequence bigint not null,
         value datetime,
         primary key (id)
     );
@@ -441,7 +441,7 @@
         creation_time datetime not null,
         update_time datetime,
         updated_by DOUBLE,
-        sort_seq bigint not null,
+        sort_sequence bigint not null,
         value datetime,
         primary key (id)
     );
@@ -453,7 +453,7 @@
         creation_time datetime not null,
         update_time datetime,
         updated_by DOUBLE,
-        sort_seq bigint not null,
+        sort_sequence bigint not null,
         unit varchar(255),
         reference_id bigint,
         primary key (id)
@@ -466,7 +466,7 @@
         creation_time datetime not null,
         update_time datetime,
         updated_by DOUBLE,
-        sort_seq bigint not null,
+        sort_sequence bigint not null,
         name varchar(255),
         primary key (id)
     );
