@@ -4,11 +4,26 @@
 	<artifactId>abcd-core</artifactId>
 	<packaging>jar</packaging>
 	<name>Agile Business sCenario Designer Tool (Core)</name>
+
 	<parent>
 		<groupId>com.biit</groupId>
 		<artifactId>abcd-tool</artifactId>
-		<version>1.7.2-SNAPSHOT</version> 
+		<version>1.7.3-SNAPSHOT</version> 
 	</parent>
+
+	<!-- JBOSS repository -->
+	<repositories>
+		<repository>
+			<id>jboss-public-repository-group</id>
+			<name>JBoss Public Repository Group</name>
+			<url>http://repository.jboss.org/nexus/content/groups/public/</url>
+			<layout>default</layout>
+			<releases>
+				<enabled>true</enabled>
+				<updatePolicy>never</updatePolicy>
+			</releases>
+		</repository>
+	</repositories>
 	
 	<dependencies>
 		<dependency>
