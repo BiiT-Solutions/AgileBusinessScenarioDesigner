@@ -22,6 +22,7 @@ import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.SimpleFormView;
 import com.biit.usermanager.entity.IGroup;
 import com.biit.usermanager.entity.IUser;
+import com.biit.usermanager.security.exceptions.UserDoesNotExistException;
 import com.biit.usermanager.security.exceptions.UserManagementException;
 import com.google.gson.Gson;
 
@@ -215,7 +216,7 @@ public class AbcdFormRestService {
 		IUser<Long> user = null;
 		try {
 			user = securityService.getUserByEmail(userEmail);
-		} catch (UserManagementException e) {
+		} catch (UserManagementException | UserDoesNotExistException e) {
 			AbcdLogger.errorMessage(this.getClass().getName(), e);
 			return null;
 		}

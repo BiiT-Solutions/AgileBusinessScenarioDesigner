@@ -7,6 +7,7 @@ import com.biit.abcd.webpages.WebMap;
 import com.biit.usermanager.entity.IUser;
 import com.biit.usermanager.security.exceptions.AuthenticationRequired;
 import com.biit.usermanager.security.exceptions.InvalidCredentialsException;
+import com.biit.usermanager.security.exceptions.UserDoesNotExistException;
 import com.biit.usermanager.security.exceptions.UserManagementException;
 import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.annotations.Theme;
@@ -78,7 +79,7 @@ public class ApplicationFrame extends UI {
 						navigateTo(WebMap.getMainPage());
 					}
 				}
-			} catch (InvalidCredentialsException | AuthenticationRequired | UserManagementException e) {
+			} catch (InvalidCredentialsException | AuthenticationRequired | UserManagementException | UserDoesNotExistException e) {
 				AbcdLogger.info(this.getClass().getName(), "Autologin with user '" + userEmail + "' failed! Wrong user or password.");
 			}
 		} else {

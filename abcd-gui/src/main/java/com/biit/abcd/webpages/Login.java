@@ -16,6 +16,7 @@ import com.biit.abcd.webpages.components.WebPageComponent;
 import com.biit.usermanager.entity.IUser;
 import com.biit.usermanager.security.exceptions.AuthenticationRequired;
 import com.biit.usermanager.security.exceptions.InvalidCredentialsException;
+import com.biit.usermanager.security.exceptions.UserDoesNotExistException;
 import com.biit.usermanager.security.exceptions.UserManagementException;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.event.ShortcutListener;
@@ -95,14 +96,13 @@ public class Login extends WebPageComponent {
 				// form
 				if (target == passwordField) {
 					try {
-						IUser<Long> user = UserSessionHandler.getUser(usernameField.getValue(),
-								passwordField.getValue());
+						IUser<Long> user = UserSessionHandler.getUser(usernameField.getValue(), passwordField.getValue());
 						if (user != null) {
 							ApplicationFrame.navigateTo(WebMap.getMainPage());
 						}
-					} catch (InvalidCredentialsException e) {
-						passwordField.setComponentError(new UserError(ServerTranslate.translate(
-								LanguageCodes.LOGIN_ERROR_USER, new Object[] { usernameField.getValue() })));
+					} catch (InvalidCredentialsException | UserDoesNotExistException e) {
+						passwordField.setComponentError(new UserError(ServerTranslate.translate(LanguageCodes.LOGIN_ERROR_USER,
+								new Object[] { usernameField.getValue() })));
 						MessageManager.showError(LanguageCodes.ERROR_BADUSERPSWD, LanguageCodes.ERROR_TRYAGAIN);
 					} catch (UserManagementException | AuthenticationRequired e) {
 						AbcdLogger.errorMessage(this.getClass().getName(), e);
@@ -117,30 +117,28 @@ public class Login extends WebPageComponent {
 		});
 
 		// Add the login button
-		Button loginButton = new Button(ServerTranslate.translate(LanguageCodes.LOGIN_CAPTION_SIGN_IN),
-				new ClickListener() {
-					private static final long serialVersionUID = 1239035599265918788L;
+		Button loginButton = new Button(ServerTranslate.translate(LanguageCodes.LOGIN_CAPTION_SIGN_IN), new ClickListener() {
+			private static final long serialVersionUID = 1239035599265918788L;
 
-					@Override
-					public void buttonClick(ClickEvent event) {
-						usernameField.setRequiredError(ServerTranslate.translate(LanguageCodes.LOGIN_ERROR_EMAIL));
-						passwordField.setRequiredError(ServerTranslate.translate(LanguageCodes.LOGIN_ERROR_PASSWORD));
-						try {
-							IUser<Long> user = UserSessionHandler.getUser(usernameField.getValue(),
-									passwordField.getValue());
-							if (user != null) {
-								ApplicationFrame.navigateTo(WebMap.getMainPage());
-							}
-						} catch (InvalidCredentialsException e) {
-							passwordField.setComponentError(new UserError(ServerTranslate.translate(
-									LanguageCodes.LOGIN_ERROR_USER, new Object[] { usernameField.getValue() })));
-							MessageManager.showError(LanguageCodes.ERROR_BADUSERPSWD, LanguageCodes.ERROR_TRYAGAIN);
-						} catch (UserManagementException | AuthenticationRequired e) {
-							AbcdLogger.errorMessage(this.getClass().getName(), e);
-							MessageManager.showError(LanguageCodes.ERROR_USER_SERVICE, LanguageCodes.ERROR_CONTACT);
-						}
+			@Override
+			public void buttonClick(ClickEvent event) {
+				usernameField.setRequiredError(ServerTranslate.translate(LanguageCodes.LOGIN_ERROR_EMAIL));
+				passwordField.setRequiredError(ServerTranslate.translate(LanguageCodes.LOGIN_ERROR_PASSWORD));
+				try {
+					IUser<Long> user = UserSessionHandler.getUser(usernameField.getValue(), passwordField.getValue());
+					if (user != null) {
+						ApplicationFrame.navigateTo(WebMap.getMainPage());
 					}
-				});
+				} catch (InvalidCredentialsException | UserDoesNotExistException e) {
+					passwordField.setComponentError(new UserError(ServerTranslate.translate(LanguageCodes.LOGIN_ERROR_USER,
+							new Object[] { usernameField.getValue() })));
+					MessageManager.showError(LanguageCodes.ERROR_BADUSERPSWD, LanguageCodes.ERROR_TRYAGAIN);
+				} catch (UserManagementException | AuthenticationRequired e) {
+					AbcdLogger.errorMessage(this.getClass().getName(), e);
+					MessageManager.showError(LanguageCodes.ERROR_USER_SERVICE, LanguageCodes.ERROR_CONTACT);
+				}
+			}
+		});
 		loginButton.setWidth(FIELD_SIZE);
 		loginButton.setId("loginButton");
 

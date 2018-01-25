@@ -19,6 +19,7 @@ import com.biit.usermanager.entity.IUser;
 import com.biit.usermanager.security.IAuthenticationService;
 import com.biit.usermanager.security.exceptions.AuthenticationRequired;
 import com.biit.usermanager.security.exceptions.InvalidCredentialsException;
+import com.biit.usermanager.security.exceptions.UserDoesNotExistException;
 import com.biit.usermanager.security.exceptions.UserManagementException;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.server.WebBrowser;
@@ -230,7 +231,8 @@ public class UserSessionHandler {
 	}
 
 	public static IUser<Long> getUser(String userMail, String password) throws UserManagementException,
-			InvalidCredentialsException, AuthenticationRequired {
+ InvalidCredentialsException, AuthenticationRequired,
+			UserDoesNotExistException {
 		// Try to log in the user when the button is clicked
 		IUser<Long> user = getAuthenticationService().authenticate(userMail, password);
 

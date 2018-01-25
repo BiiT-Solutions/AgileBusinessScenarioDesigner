@@ -16,6 +16,7 @@ import com.biit.usermanager.entity.IUser;
 import com.biit.usermanager.security.IActivity;
 import com.biit.usermanager.security.IAuthenticationService;
 import com.biit.usermanager.security.IAuthorizationService;
+import com.biit.usermanager.security.exceptions.UserDoesNotExistException;
 import com.biit.usermanager.security.exceptions.UserManagementException;
 
 @Component
@@ -49,8 +50,7 @@ public class SecurityService implements ISecurityService {
 	}
 
 	@Override
-	public boolean isUserAuthorizedInAnyOrganization(IUser<Long> user, IActivity activity)
-			throws UserManagementException {
+	public boolean isUserAuthorizedInAnyOrganization(IUser<Long> user, IActivity activity) throws UserManagementException {
 
 		// Check isUserAuthorizedActivity (own permissions)
 		if (getAuthorizationService().isAuthorizedActivity(user, activity)) {
@@ -154,13 +154,12 @@ public class SecurityService implements ISecurityService {
 	}
 
 	@Override
-	public boolean isAuthorizedActivity(IUser<Long> user, IGroup<Long> organization, IActivity activity)
-			throws UserManagementException {
+	public boolean isAuthorizedActivity(IUser<Long> user, IGroup<Long> organization, IActivity activity) throws UserManagementException {
 		return getAuthorizationService().isAuthorizedActivity(user, organization, activity);
 	}
 
 	@Override
-	public IUser<Long> getUserByEmail(String userEmail) throws UserManagementException {
+	public IUser<Long> getUserByEmail(String userEmail) throws UserManagementException, UserDoesNotExistException {
 		return getAuthenticationService().getUserByEmail(userEmail);
 	}
 

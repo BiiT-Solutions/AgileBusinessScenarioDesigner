@@ -7,6 +7,7 @@ import com.biit.usermanager.entity.IUser;
 import com.biit.usermanager.security.IActivity;
 import com.biit.usermanager.security.IAuthenticationService;
 import com.biit.usermanager.security.IAuthorizationService;
+import com.biit.usermanager.security.exceptions.UserDoesNotExistException;
 import com.biit.usermanager.security.exceptions.UserManagementException;
 
 public interface ISecurityService {
@@ -24,7 +25,7 @@ public interface ISecurityService {
 
 	boolean isAuthorizedToForm(Long formOrganizationId, IUser<Long> user);
 
-	IUser<Long> getUserByEmail(String userEmail) throws UserManagementException;
+	IUser<Long> getUserByEmail(String userEmail) throws UserManagementException, UserDoesNotExistException;
 
 	IUser<Long> getUserById(Long userId) throws UserManagementException;
 
