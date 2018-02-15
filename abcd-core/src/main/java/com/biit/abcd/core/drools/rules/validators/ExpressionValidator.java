@@ -66,9 +66,8 @@ public class ExpressionValidator {
 				throw new InvalidExpressionException();
 			} else {
 				// Check the number of elements returned by the Pratt parser
-				// (sometimes,
-				// the parser doesn't fail, it only skips the invalid
-				// characters)
+				// (sometimes, the parser doesn't fail, it only skips the
+				// invalid characters)
 				int parsedElements = countElementsInExpressionChain(prattExpressionChain);
 				if (cleanedExpression.getExpressions().size() != parsedElements) {
 					throw new InvalidExpressionException();
