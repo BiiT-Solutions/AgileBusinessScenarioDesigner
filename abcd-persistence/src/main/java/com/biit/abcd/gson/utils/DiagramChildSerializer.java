@@ -16,9 +16,9 @@ public class DiagramChildSerializer extends DiagramObjectSerializerCommon<Diagra
 		final JsonObject jsonObject = new JsonObject();
 		// Set the current name of the question.
 		if (element.getDiagram() != null) {
-			element.getBiitText().setText(element.getDiagram().getName());
+			element.getText().setText(element.getDiagram().getName());
 		} else {
-			element.getBiitText().setText("Diagram");
+			element.getText().setText("Diagram");
 		}
 		return serialize(element, jsonObject, context);
 	}

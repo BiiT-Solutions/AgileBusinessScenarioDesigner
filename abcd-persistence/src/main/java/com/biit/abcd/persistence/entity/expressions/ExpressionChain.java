@@ -137,7 +137,7 @@ public class ExpressionChain extends Expression implements INameAttribute {
 		for (int i = 0; i < expressions.size(); i++) {
 			// Dots are not allowed in the Evaluator Expression.
 			if ((expressions.get(i) instanceof ExpressionValueString) || (expressions.get(i) instanceof ExpressionValueTreeObjectReference)
-					|| (expressions.get(i) instanceof ExpressionValueCustomVariable) || (expressions.get(i) instanceof ExpressionValueGlobalConstant)) {
+					|| (expressions.get(i) instanceof ExpressionValueCustomVariable) || (expressions.get(i) instanceof ExpressionValueGlobalVariable)) {
 				result += filterVariables(expressions.get(i)) + " ";
 			} else {
 				result += expressions.get(i).getExpression() + " ";

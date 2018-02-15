@@ -13,7 +13,7 @@ import com.biit.abcd.persistence.entity.AnswerFormat;
 import com.biit.abcd.persistence.entity.AnswerType;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
-import com.biit.abcd.persistence.entity.expressions.ExpressionValueGlobalConstant;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueGlobalVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueNumber;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
@@ -113,8 +113,8 @@ public class TreeElementMathExpressionVisitor implements ITreeElementVisitor {
 		else if (name.getExpressionChain().getExpressions().get(0) instanceof ExpressionValueNumber) {
 			builder.append(Double.parseDouble(name.getName()));
 		}// In case is a global constant
-		else if (name.getExpressionChain().getExpressions().get(0) instanceof ExpressionValueGlobalConstant) {
-			GlobalVariable globalExpression = ((ExpressionValueGlobalConstant) name.getExpressionChain().getExpressions().get(0)).getValue();
+		else if (name.getExpressionChain().getExpressions().get(0) instanceof ExpressionValueGlobalVariable) {
+			GlobalVariable globalExpression = ((ExpressionValueGlobalVariable) name.getExpressionChain().getExpressions().get(0)).getValue();
 
 			switch (globalExpression.getFormat()) {
 			case NUMBER:
@@ -124,7 +124,7 @@ public class TreeElementMathExpressionVisitor implements ITreeElementVisitor {
 			case MULTI_TEXT:
 			case POSTAL_CODE:
 				throw new NotCompatibleTypeException("Using the text constant: " + name.getName() + " inside a mathematical operation",
-						(ExpressionValueGlobalConstant) name.getExpressionChain().getExpressions().get(0));
+						(ExpressionValueGlobalVariable) name.getExpressionChain().getExpressions().get(0));
 			case DATE:
 				builder.append("(Date)" + name.getName());
 				break;

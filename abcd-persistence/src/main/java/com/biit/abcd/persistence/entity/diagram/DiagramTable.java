@@ -21,9 +21,9 @@ public class DiagramTable extends DiagramElement {
 
 	public DiagramTable() {
 		super();
-		DiagramBiitText biitText = new DiagramBiitText();
+		DiagramText biitText = new DiagramText();
 		biitText.setText("Table");
-		setBiitText(biitText);
+		setText(biitText);
 	}
 
 	public TableRule getTable() {

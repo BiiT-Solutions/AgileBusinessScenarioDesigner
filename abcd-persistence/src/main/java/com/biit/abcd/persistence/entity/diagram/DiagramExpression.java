@@ -5,6 +5,7 @@ import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -13,17 +14,18 @@ import com.biit.persistence.entity.StorableObject;
 import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 
 @Entity
-@Table(name = "diagram_calculation")
+@Table(name = "diagram_expression")
 public class DiagramExpression extends DiagramElement {
 	private static final long serialVersionUID = 406552071357685928L;
 	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name="expression")
 	private ExpressionChain expression;
 
 	public DiagramExpression() {
 		super();
-		DiagramBiitText biitText = new DiagramBiitText();
+		DiagramText biitText = new DiagramText();
 		biitText.setText("Calculation");
-		setBiitText(biitText);
+		setText(biitText);
 	}
 
 	public ExpressionChain getExpression() {

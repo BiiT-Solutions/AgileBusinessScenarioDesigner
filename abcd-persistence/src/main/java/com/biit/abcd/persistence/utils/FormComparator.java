@@ -15,7 +15,7 @@ import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Group;
 import com.biit.abcd.persistence.entity.Question;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
-import com.biit.abcd.persistence.entity.diagram.DiagramBiitText;
+import com.biit.abcd.persistence.entity.diagram.DiagramText;
 import com.biit.abcd.persistence.entity.diagram.DiagramChild;
 import com.biit.abcd.persistence.entity.diagram.DiagramElement;
 import com.biit.abcd.persistence.entity.diagram.DiagramExpression;
@@ -519,7 +519,7 @@ public class FormComparator {
 		}
 	}
 
-	private void compare(DiagramBiitText object1, DiagramBiitText object2) throws StorableObjectNotEqualsException,
+	private void compare(DiagramText object1, DiagramText object2) throws StorableObjectNotEqualsException,
 			SizeNotEqualsException, PointNotEqualsException, BiitTextNotEqualsException {
 
 		if (object1 == null && object2 == null) {
@@ -600,12 +600,12 @@ public class FormComparator {
 		}
 		compare(object1.getPosition(), object2.getPosition());
 
-		if ((object1.getBiitText() != null && object2.getBiitText() == null)
-				|| (object1.getBiitText() == null && object2.getBiitText() != null)) {
+		if ((object1.getText() != null && object2.getText() == null)
+				|| (object1.getText() == null && object2.getText() != null)) {
 			throw new DiagramObjectNotEqualsException("BiitTexts are different between DiagramElements '" + object1
 					+ "' and '" + object2 + "'.");
 		}
-		compare(object1.getBiitText(), object2.getBiitText());
+		compare(object1.getText(), object2.getText());
 	}
 
 	private void compare(DiagramChild object1, DiagramChild object2) throws StorableObjectNotEqualsException,

@@ -5,7 +5,7 @@ import java.lang.reflect.Type;
 import com.biit.abcd.persistence.entity.globalvariables.VariableData;
 import com.biit.abcd.persistence.entity.globalvariables.VariableDataDate;
 import com.biit.abcd.persistence.entity.globalvariables.VariableDataNumber;
-import com.biit.abcd.persistence.entity.globalvariables.VariableDataPostalCode;
+import com.biit.abcd.persistence.entity.globalvariables.VariableDataPostalcode;
 import com.biit.abcd.persistence.entity.globalvariables.VariableDataText;
 import com.biit.drools.global.variables.DroolsVariableDataDate;
 import com.biit.drools.global.variables.DroolsVariableDataNumber;
@@ -37,7 +37,7 @@ public class AbcdVariableDataSerializer<T extends VariableData> implements JsonS
 			return DroolsVariableDataText.class.getName();
 		} else if(classType instanceof VariableDataDate){
 			return DroolsVariableDataDate.class.getName();
-		} else if(classType instanceof VariableDataPostalCode){
+		} else if(classType instanceof VariableDataPostalcode){
 			return DroolsVariableDataPostalCode.class.getName();
 		} 
 		return "";

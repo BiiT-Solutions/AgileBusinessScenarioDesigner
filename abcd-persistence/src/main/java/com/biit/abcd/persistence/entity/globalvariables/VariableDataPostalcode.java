@@ -3,6 +3,7 @@ package com.biit.abcd.persistence.entity.globalvariables;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -12,22 +13,24 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 
 @Entity
 @Table(name = "global_variable_data_postalcode")
-public class VariableDataPostalCode extends VariableData {
+public class VariableDataPostalcode extends VariableData {
 	private static final long serialVersionUID = 5350677749105057832L;
-	private String postalCode;
+	
+	@Column(name="postalcode")
+	private String postalcode;
 
-	public VariableDataPostalCode() {
+	public VariableDataPostalcode() {
 	}
 
 	@Override
 	public String getValue() {
-		return postalCode;
+		return postalcode;
 	}
 
 	@Override
 	public void setValue(Object value) throws NotValidTypeInVariableData {
 		if (checkType(value)) {
-			postalCode = (String) value;
+			postalcode = (String) value;
 		} else {
 			throw new NotValidTypeInVariableData("The type '" + value.getClass() + "' is not allowed in this variable.");
 		}
@@ -50,10 +53,10 @@ public class VariableDataPostalCode extends VariableData {
 	
 	@Override
 	public void copyData(StorableObject object) throws NotValidStorableObjectException {
-		if (object instanceof VariableDataPostalCode) {
+		if (object instanceof VariableDataPostalcode) {
 			super.copyData(object);
-			VariableDataPostalCode variableDataPostalCode = (VariableDataPostalCode) object;
-			postalCode = variableDataPostalCode.getValue();
+			VariableDataPostalcode variableDataPostalCode = (VariableDataPostalcode) object;
+			postalcode = variableDataPostalCode.getValue();
 		} else {
 			throw new NotValidStorableObjectException("Object '" + object + "' is not an instance of VariableDataPostalCode.");
 		}

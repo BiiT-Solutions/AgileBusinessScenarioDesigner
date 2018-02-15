@@ -20,9 +20,9 @@ public class DiagramChild extends DiagramElement {
 
 	public DiagramChild() {
 		super();
-		DiagramBiitText biitText = new DiagramBiitText();
+		DiagramText biitText = new DiagramText();
 		biitText.setText("Diagram");
-		setBiitText(biitText);
+		setText(biitText);
 	}
 
 	@Override

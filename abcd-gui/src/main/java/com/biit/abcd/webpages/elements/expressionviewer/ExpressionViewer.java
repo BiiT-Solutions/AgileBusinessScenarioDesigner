@@ -24,7 +24,7 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionSymbol;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValue;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueGenericCustomVariable;
-import com.biit.abcd.persistence.entity.expressions.ExpressionValueGlobalConstant;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueGlobalVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueNumber;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValuePostalCode;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueString;
@@ -288,16 +288,16 @@ public class ExpressionViewer extends CssLayout {
 							});
 							stringInputWindow.showCentered();
 							// For Global
-						} else if (expression instanceof ExpressionValueGlobalConstant) {
+						} else if (expression instanceof ExpressionValueGlobalVariable) {
 							SelectGlobalConstantsWindow globalWindow = new SelectGlobalConstantsWindow();
 							globalWindow.showCentered();
-							globalWindow.setValue(((ExpressionValueGlobalConstant) expression).getValue());
+							globalWindow.setValue(((ExpressionValueGlobalVariable) expression).getValue());
 							globalWindow.addAcceptActionListener(new AcceptActionListener() {
 								@Override
 								public void acceptAction(AcceptCancelWindow window) {
 									GlobalVariable globalVariable = ((SelectGlobalConstantsWindow) window).getValue();
 									if (globalVariable != null) {
-										((ExpressionValueGlobalConstant) expression).setVariable(globalVariable);
+										((ExpressionValueGlobalVariable) expression).setVariable(globalVariable);
 										window.close();
 										updateExpression();
 										setSelectedExpression(expression);

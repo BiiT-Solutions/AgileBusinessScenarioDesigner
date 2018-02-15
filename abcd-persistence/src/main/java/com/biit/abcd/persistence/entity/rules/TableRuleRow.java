@@ -7,6 +7,7 @@ import javax.persistence.Cacheable;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -29,24 +30,26 @@ public class TableRuleRow extends StorableObject implements Comparable<TableRule
 	private static final long serialVersionUID = 1887517541278941394L;
 
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+	@JoinColumn(name = "conditions")
 	private ExpressionChain conditions;
 
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
-	private ExpressionChain action;
+	@JoinColumn(name = "actions")
+	private ExpressionChain actions;
 
 	public TableRuleRow() {
 		conditions = new ExpressionChain();
 		conditions.setName("TableRuleRowCondition");
-		action = new ExpressionChain();
-		action.setName("TableRuleRowAction");
+		actions = new ExpressionChain();
+		actions.setName("TableRuleRowAction");
 	}
 
 	// Simple (Question : Answer => Action) builder
 	public TableRuleRow(Expression question, Expression answer, ExpressionChain action) {
 		conditions = new ExpressionChain();
 		conditions.setName("TableRuleRowCondition");
-		this.action = new ExpressionChain();
-		this.action.setName("TableRuleRowAction");
+		actions = new ExpressionChain();
+		actions.setName("TableRuleRowAction");
 		getConditions().addExpression(question);
 		getConditions().addExpression(answer);
 		getAction().setExpressions(action.getExpressions());
@@ -58,8 +61,8 @@ public class TableRuleRow extends StorableObject implements Comparable<TableRule
 		if (conditions != null) {
 			conditions.resetIds();
 		}
-		if (action != null) {
-			action.resetIds();
+		if (actions != null) {
+			actions.resetIds();
 		}
 	}
 
@@ -84,16 +87,16 @@ public class TableRuleRow extends StorableObject implements Comparable<TableRule
 	}
 
 	public void setAction(ExpressionChain action) {
-		this.action = action;
+		this.actions = action;
 	}
 
 	public ExpressionChain getAction() {
-		return action;
+		return actions;
 	}
 
 	@Override
 	public String toString() {
-		return conditions.toString() + " -> " + action.toString();
+		return conditions.toString() + " -> " + actions.toString();
 	}
 
 	public int getConditionNumber() {
@@ -125,8 +128,8 @@ public class TableRuleRow extends StorableObject implements Comparable<TableRule
 		Set<StorableObject> innerStorableObjects = new HashSet<>();
 		innerStorableObjects.add(conditions);
 		innerStorableObjects.addAll(conditions.getAllInnerStorableObjects());
-		innerStorableObjects.add(action);
-		innerStorableObjects.addAll(action.getAllInnerStorableObjects());
+		innerStorableObjects.add(actions);
+		innerStorableObjects.addAll(actions.getAllInnerStorableObjects());
 		return innerStorableObjects;
 	}
 

@@ -3,6 +3,7 @@ package com.biit.abcd.persistence.entity.testscenarios;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -18,6 +19,8 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 @Table(name = "test_answer_radio_button")
 public class TestAnswerRadioButton extends TestAnswer {
 	private static final long serialVersionUID = 6414765646541131563L;
+	
+	@Column(name = "radio_button_value")
 	private String radioButtonValue = null;
 
 	public TestAnswerRadioButton() {

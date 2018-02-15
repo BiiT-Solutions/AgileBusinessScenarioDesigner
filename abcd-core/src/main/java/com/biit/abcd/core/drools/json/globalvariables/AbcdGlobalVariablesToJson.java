@@ -5,7 +5,7 @@ import java.util.List;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
 import com.biit.abcd.persistence.entity.globalvariables.VariableDataDate;
 import com.biit.abcd.persistence.entity.globalvariables.VariableDataNumber;
-import com.biit.abcd.persistence.entity.globalvariables.VariableDataPostalCode;
+import com.biit.abcd.persistence.entity.globalvariables.VariableDataPostalcode;
 import com.biit.abcd.persistence.entity.globalvariables.VariableDataText;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -24,7 +24,7 @@ public class AbcdGlobalVariablesToJson {
 			gsonBuilder.setPrettyPrinting();
 			gsonBuilder.registerTypeAdapter(GlobalVariable.class, new AbcdGlobalVariableSerializer());
 			gsonBuilder.registerTypeAdapter(VariableDataText.class, new AbcdVariableDataTextSerializer());
-			gsonBuilder.registerTypeAdapter(VariableDataPostalCode.class, new AbcdVariableDataPostalCodeSerializer());
+			gsonBuilder.registerTypeAdapter(VariableDataPostalcode.class, new AbcdVariableDataPostalCodeSerializer());
 			gsonBuilder.registerTypeAdapter(VariableDataNumber.class, new AbcdVariableDataNumberSerializer());
 			gsonBuilder.registerTypeAdapter(VariableDataDate.class, new AbcdVariableDataDateSerializer());
 			Gson gson = gsonBuilder.create();

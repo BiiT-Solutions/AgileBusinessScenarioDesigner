@@ -9,6 +9,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
@@ -34,33 +35,35 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
  * 
  */
 @Entity
-@Table(name = "test_scenario", uniqueConstraints = { @UniqueConstraint(columnNames = { "name", "formId" }) })
+@Table(name = "test_scenario", uniqueConstraints = { @UniqueConstraint(columnNames = { "name", "form_id" }) })
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @Cacheable(true)
 public class TestScenario extends StorableObject implements INameAttribute {
 	private static final long serialVersionUID = 858977816018764108L;
+
 	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
 	@LazyCollection(LazyCollectionOption.FALSE)
+	@JoinColumn(name = "test_scenario_form")
 	private TestScenarioForm testScenarioForm;
+
 	@Column(length = MAX_UNIQUE_COLUMN_LENGTH)
 	private String name;
 
 	// Form information
-	@Column(nullable = false)
+	@Column(name = "form_id", nullable = false)
 	private Long formId;
-	@Column(nullable = false, length = TreeObject.MAX_LABEL_LENGTH, columnDefinition = "varchar("
-			+ TreeObject.MAX_LABEL_LENGTH + ")")
+	@Column(name = "form_label", nullable = false, length = TreeObject.MAX_LABEL_LENGTH, columnDefinition = "varchar(" + TreeObject.MAX_LABEL_LENGTH + ")")
 	private String formLabel;
 
-	@Column(nullable = false, columnDefinition = "DOUBLE")
+	@Column(name = "form_organization", nullable = false, columnDefinition = "DOUBLE")
 	private Long formOrganization;
 
 	public TestScenario() {
 		super();
 	}
 
-	public TestScenario(String scenarioName, Form form) throws NotValidStorableObjectException, NotValidChildException,
-			FieldTooLongException, CharacterNotAllowedException, ElementIsReadOnly {
+	public TestScenario(String scenarioName, Form form) throws NotValidStorableObjectException, NotValidChildException, FieldTooLongException,
+			CharacterNotAllowedException, ElementIsReadOnly {
 		super();
 		setName(scenarioName);
 		setFormId(form.getId());
@@ -86,8 +89,7 @@ public class TestScenario extends StorableObject implements INameAttribute {
 	@Override
 	public void setName(String name) throws FieldTooLongException {
 		if (name.length() > MAX_UNIQUE_COLUMN_LENGTH) {
-			throw new FieldTooLongException("Name is limited to " + MAX_UNIQUE_COLUMN_LENGTH
-					+ " characters due to database restrictions. ");
+			throw new FieldTooLongException("Name is limited to " + MAX_UNIQUE_COLUMN_LENGTH + " characters due to database restrictions. ");
 		}
 		this.name = name;
 	}
@@ -120,8 +122,8 @@ public class TestScenario extends StorableObject implements INameAttribute {
 		// Not necessary
 	}
 
-	private void createTestScenarioForm(TreeObject formTreeObject, TreeObject testScenarioTreeObjectParent)
-			throws NotValidChildException, FieldTooLongException, CharacterNotAllowedException, ElementIsReadOnly {
+	private void createTestScenarioForm(TreeObject formTreeObject, TreeObject testScenarioTreeObjectParent) throws NotValidChildException,
+			FieldTooLongException, CharacterNotAllowedException, ElementIsReadOnly {
 		if (formTreeObject instanceof Form) {
 			testScenarioForm = new TestScenarioForm();
 			testScenarioForm.setOriginalReference(formTreeObject.getOriginalReference());
@@ -132,29 +134,26 @@ public class TestScenario extends StorableObject implements INameAttribute {
 				createTestScenarioForm(child, testScenarioForm);
 			}
 		} else if (formTreeObject instanceof Category) {
-			TreeObject testScenarioCategory = addChild(formTreeObject, testScenarioTreeObjectParent,
-					new TestScenarioCategory());
+			TreeObject testScenarioCategory = addChild(formTreeObject, testScenarioTreeObjectParent, new TestScenarioCategory());
 			// Copy children
 			for (TreeObject treeObject : formTreeObject.getChildren()) {
 				createTestScenarioForm(treeObject, testScenarioCategory);
 			}
 		} else if (formTreeObject instanceof Group) {
-			TreeObject testScenarioGroup = addChild(formTreeObject, testScenarioTreeObjectParent,
-					new TestScenarioGroup());
+			TreeObject testScenarioGroup = addChild(formTreeObject, testScenarioTreeObjectParent, new TestScenarioGroup());
 			((TestScenarioGroup) testScenarioGroup).setRepeatable(((Group) formTreeObject).isRepeatable());
 			// Copy children
 			for (TreeObject treeObject : formTreeObject.getChildren()) {
 				createTestScenarioForm(treeObject, testScenarioGroup);
 			}
 		} else if (formTreeObject instanceof Question) {
-			TreeObject testScenarioQuestion = addChild(formTreeObject, testScenarioTreeObjectParent,
-					new TestScenarioQuestion());
+			TreeObject testScenarioQuestion = addChild(formTreeObject, testScenarioTreeObjectParent, new TestScenarioQuestion());
 			createTestScenatioAnswer((Question) formTreeObject, (TestScenarioQuestion) testScenarioQuestion);
 		}
 	}
 
-	private TreeObject addChild(TreeObject formTreeObject, TreeObject testScenarioParent, TreeObject testScenarioChild)
-			throws FieldTooLongException, CharacterNotAllowedException, NotValidChildException, ElementIsReadOnly {
+	private TreeObject addChild(TreeObject formTreeObject, TreeObject testScenarioParent, TreeObject testScenarioChild) throws FieldTooLongException,
+			CharacterNotAllowedException, NotValidChildException, ElementIsReadOnly {
 		testScenarioChild.setOriginalReference(formTreeObject.getOriginalReference());
 		testScenarioChild.setName(formTreeObject.getName());
 		testScenarioParent.addChild(testScenarioChild);

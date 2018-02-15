@@ -27,9 +27,9 @@ public class DiagramFork extends DiagramElement {
 
 	public DiagramFork() {
 		super();
-		DiagramBiitText biitText = new DiagramBiitText();
+		DiagramText biitText = new DiagramText();
 		biitText.setText("Fork");
-		setBiitText(biitText);
+		setText(biitText);
 	}
 
 	@Override

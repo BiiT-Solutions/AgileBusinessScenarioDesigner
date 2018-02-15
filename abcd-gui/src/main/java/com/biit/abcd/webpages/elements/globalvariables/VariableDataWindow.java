@@ -12,7 +12,7 @@ import com.biit.abcd.persistence.entity.AnswerFormat;
 import com.biit.abcd.persistence.entity.globalvariables.VariableData;
 import com.biit.abcd.persistence.entity.globalvariables.VariableDataDate;
 import com.biit.abcd.persistence.entity.globalvariables.VariableDataNumber;
-import com.biit.abcd.persistence.entity.globalvariables.VariableDataPostalCode;
+import com.biit.abcd.persistence.entity.globalvariables.VariableDataPostalcode;
 import com.biit.abcd.persistence.entity.globalvariables.VariableDataText;
 import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.drools.global.variables.exceptions.NotValidTypeInVariableData;
@@ -151,7 +151,7 @@ public class VariableDataWindow extends AcceptCancelWindow {
 			} else if (variable instanceof VariableDataNumber) {
 				ObjectProperty<Double> property = new ObjectProperty<Double>((Double) variable.getValue());
 				((TextField) valueField).setPropertyDataSource(property);
-			} else if (variable instanceof VariableDataPostalCode) {
+			} else if (variable instanceof VariableDataPostalcode) {
 				((TextField) valueField).setValue(variable.toString());
 			} else if (variable instanceof VariableDataDate) {
 				((DateField) valueField).setValue(((VariableDataDate) variable).getValue());
@@ -168,7 +168,7 @@ public class VariableDataWindow extends AcceptCancelWindow {
 		case NUMBER:
 			return new VariableDataNumber();
 		case POSTAL_CODE:
-			return new VariableDataPostalCode();
+			return new VariableDataPostalcode();
 		default:
 			return new VariableDataDate();
 		}

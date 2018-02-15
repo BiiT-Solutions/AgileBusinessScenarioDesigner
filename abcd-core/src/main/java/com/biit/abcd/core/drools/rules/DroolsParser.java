@@ -46,7 +46,7 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionPluginMethod;
 import com.biit.abcd.persistence.entity.expressions.ExpressionSymbol;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValue;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
-import com.biit.abcd.persistence.entity.expressions.ExpressionValueGlobalConstant;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueGlobalVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueNumber;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValuePostalCode;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueString;
@@ -687,8 +687,8 @@ public class DroolsParser {
 		} else if (expressionValue instanceof ExpressionValueString) {
 			return AnswerFormat.TEXT;
 
-		} else if (expressionValue instanceof ExpressionValueGlobalConstant) {
-			return ((ExpressionValueGlobalConstant) expressionValue).getValue().getFormat();
+		} else if (expressionValue instanceof ExpressionValueGlobalVariable) {
+			return ((ExpressionValueGlobalVariable) expressionValue).getValue().getFormat();
 		}
 		// ExpressionValueTreeObjectReference or ExpressionValueCustomVariable
 		else if (expressionValue instanceof ExpressionValueTreeObjectReference) {
@@ -925,8 +925,8 @@ public class DroolsParser {
 				&& ((ExpressionValueCustomVariable) variables.get(0)).getVariable().getType().equals(CustomVariableType.STRING)) {
 			ruleCore.append("\tList<String> variablesList = new ArrayList<String>();\n");
 			// Global variables
-		} else if (variables.get(0) instanceof ExpressionValueGlobalConstant
-				&& (((ExpressionValueGlobalConstant) variables.get(0)).getValue().getFormat().isStringData())) {
+		} else if (variables.get(0) instanceof ExpressionValueGlobalVariable
+				&& (((ExpressionValueGlobalVariable) variables.get(0)).getValue().getFormat().isStringData())) {
 			ruleCore.append("\tList<String> variablesList = new ArrayList<String>();\n");
 			// is a question with string values.
 		} else if ((variables.get(0) instanceof ExpressionValueTreeObjectReference)
@@ -986,8 +986,8 @@ public class DroolsParser {
 								.append(");\n");
 					}
 				}
-			} else if (variable instanceof ExpressionValueGlobalConstant) {
-				GlobalVariable globalExpression = ((ExpressionValueGlobalConstant) variable).getValue();
+			} else if (variable instanceof ExpressionValueGlobalVariable) {
+				GlobalVariable globalExpression = ((ExpressionValueGlobalVariable) variable).getValue();
 				switch (globalExpression.getFormat()) {
 				case NUMBER:
 					ruleCore.append("\tvariablesList.add((Double)").append(globalExpression.getName()).append(");\n");

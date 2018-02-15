@@ -115,7 +115,7 @@ public class GlobalVariable extends StorableObject implements IGlobalVariable {
 		case NUMBER:
 			return new VariableDataNumber();
 		case POSTAL_CODE:
-			return new VariableDataPostalCode();
+			return new VariableDataPostalcode();
 		case TEXT:
 		case MULTI_TEXT:
 			return new VariableDataText();

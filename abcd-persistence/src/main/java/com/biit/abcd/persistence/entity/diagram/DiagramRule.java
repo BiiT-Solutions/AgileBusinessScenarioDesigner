@@ -29,9 +29,9 @@ public class DiagramRule extends DiagramElement {
 
 	public DiagramRule() {
 		super();
-		DiagramBiitText biitText = new DiagramBiitText();
+		DiagramText biitText = new DiagramText();
 		biitText.setText("Rule");
-		setBiitText(biitText);
+		setText(biitText);
 	}
 
 	@Override

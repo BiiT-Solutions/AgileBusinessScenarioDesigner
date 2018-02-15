@@ -5,6 +5,7 @@ import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -21,7 +22,9 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 @Table(name = "expression_value_generic_custom_variable")
 public class ExpressionValueGenericCustomVariable extends ExpressionValueGenericVariable {
 	private static final long serialVersionUID = -5189487388656499107L;
+
 	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "variable")
 	private CustomVariable variable;
 
 	public ExpressionValueGenericCustomVariable() {
@@ -92,8 +95,7 @@ public class ExpressionValueGenericCustomVariable extends ExpressionValueGeneric
 			ExpressionValueGenericCustomVariable expressionValueGenericCustomVariable = (ExpressionValueGenericCustomVariable) object;
 			this.setVariable(expressionValueGenericCustomVariable.getVariable());
 		} else {
-			throw new NotValidStorableObjectException("Object '" + object
-					+ "' is not an instance of ExpressionValueGenericCustomVariable.");
+			throw new NotValidStorableObjectException("Object '" + object + "' is not an instance of ExpressionValueGenericCustomVariable.");
 		}
 	}
 

@@ -2,6 +2,7 @@ package com.biit.abcd.persistence.entity.expressions;
 
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -23,7 +24,9 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class ExpressionOperator extends Expression implements IExpressionType<AvailableOperator> { 
 	private static final long serialVersionUID = 122060488311950177L;
+	
 	@Enumerated(EnumType.STRING)
+	@Column(name="current_value")
 	private AvailableOperator currentValue;
 
 	public ExpressionOperator() {

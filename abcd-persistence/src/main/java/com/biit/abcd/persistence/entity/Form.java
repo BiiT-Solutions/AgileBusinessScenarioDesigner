@@ -69,8 +69,10 @@ import com.google.gson.GsonBuilder;
 @Cacheable(true)
 public class Form extends BaseForm {
 	private static final long serialVersionUID = 185712950929311653L;
-	@Column(nullable = false)
+	@Column(name = "available_from", nullable = false)
 	private Timestamp availableFrom;
+
+	@Column(name = "available_to")
 	private Timestamp availableTo;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)

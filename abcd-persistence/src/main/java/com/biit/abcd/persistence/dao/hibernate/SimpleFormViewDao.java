@@ -52,7 +52,7 @@ public class SimpleFormViewDao implements ISimpleFormViewDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<SimpleFormView> getAll() {
-		Query query = entityManager.createNativeQuery("SELECT tf.ID, tf.name, tf.label, tf.version, tf.creation_time, tf.created_by, tf.update_time, tf.updated_by, tf.comparation_id, tf.availableFrom, tf.availableTo, tf.organization_id, max.maxversion, tf.status "
+		Query query = entityManager.createNativeQuery("SELECT tf.id, tf.name, tf.label, tf.version, tf.creation_time, tf.created_by, tf.update_time, tf.updated_by, tf.comparation_id, tf.available_from, tf.available_to, tf.organization_id, max.maxversion, tf.status "
 				+ "FROM tree_forms tf INNER JOIN "
 				+ "(SELECT MAX(version) AS maxversion, label, organization_id FROM tree_forms "
 				+ "GROUP BY label, organization_id) AS max  ON max.label = tf.label and max.organization_id = tf.organization_id "
@@ -68,11 +68,11 @@ public class SimpleFormViewDao implements ISimpleFormViewDao {
 			formView.setLabel((String) row[2]);
 			formView.setVersion((Integer) row[3]);
 			formView.setCreationTime((Timestamp) row[4]);
-			if (row[4] != null) {
+			if (row[5] != null) {
 				formView.setCreatedBy(((Double) row[5]).longValue());
 			}
 			formView.setUpdateTime((Timestamp) row[6]);
-			if (row[6] != null) {
+			if (row[7] != null) {
 				formView.setUpdatedBy(((Double) row[7]).longValue());
 			}
 			formView.setComparationId((String) row[8]);
@@ -92,7 +92,7 @@ public class SimpleFormViewDao implements ISimpleFormViewDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<SimpleFormView> getSimpleFormViewByLabelAndOrganization(String label, Long organizationId) {
-		Query query = entityManager.createNativeQuery("SELECT tf.ID, tf.name, tf.label, tf.version, tf.creation_time, tf.created_by, tf.update_time, tf.updated_by, tf.comparation_id, tf.availableFrom, tf.availableTo, tf.organization_id, max.maxversion, tf.status "
+		Query query = entityManager.createNativeQuery("SELECT tf.id, tf.name, tf.label, tf.version, tf.creation_time, tf.created_by, tf.update_time, tf.updated_by, tf.comparation_id, tf.available_from, tf.available_to, tf.organization_id, max.maxversion, tf.status "
 				+ "FROM tree_forms tf INNER JOIN "
 				+ "(SELECT MAX(version) AS maxversion, label, organization_id FROM tree_forms "
 				+ "GROUP BY label, organization_id) AS max  ON max.label = tf.label and max.organization_id = tf.organization_id "
@@ -112,11 +112,11 @@ public class SimpleFormViewDao implements ISimpleFormViewDao {
 			formView.setLabel((String) row[2]);
 			formView.setVersion((Integer) row[3]);
 			formView.setCreationTime((Timestamp) row[4]);
-			if (row[4] != null) {
+			if (row[5] != null) {
 				formView.setCreatedBy(((Double) row[5]).longValue());
 			}
 			formView.setUpdateTime((Timestamp) row[6]);
-			if (row[6] != null) {
+			if (row[7] != null) {
 				formView.setUpdatedBy(((Double) row[7]).longValue());
 			}
 			formView.setComparationId((String) row[8]);
@@ -135,7 +135,7 @@ public class SimpleFormViewDao implements ISimpleFormViewDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<SimpleFormView> getSimpleFormViewByOrganization(Long organizationId) {
-		Query query = entityManager.createNativeQuery("SELECT tf.ID, tf.name, tf.label, tf.version, tf.creation_time, tf.created_by, tf.update_time, tf.updated_by, tf.comparation_id, tf.availableFrom, tf.availableTo, tf.organization_id, max.maxversion, tf.status "
+		Query query = entityManager.createNativeQuery("SELECT tf.id, tf.name, tf.label, tf.version, tf.creation_time, tf.created_by, tf.update_time, tf.updated_by, tf.comparation_id, tf.available_from, tf.available_to, tf.organization_id, max.maxversion, tf.status "
 				+ "FROM tree_forms tf INNER JOIN "
 				+ "(SELECT MAX(version) AS maxversion, label, organization_id FROM tree_forms "
 				+ "GROUP BY label, organization_id) AS max  ON max.label = tf.label and max.organization_id = tf.organization_id "
@@ -153,11 +153,11 @@ public class SimpleFormViewDao implements ISimpleFormViewDao {
 			formView.setLabel((String) row[2]);
 			formView.setVersion((Integer) row[3]);
 			formView.setCreationTime((Timestamp) row[4]);
-			if (row[4] != null) {
+			if (row[5] != null) {
 				formView.setCreatedBy(((Double) row[5]).longValue());
 			}
 			formView.setUpdateTime((Timestamp) row[6]);
-			if (row[6] != null) {
+			if (row[7] != null) {
 				formView.setUpdatedBy(((Double) row[7]).longValue());
 			}
 			formView.setComparationId((String) row[8]);

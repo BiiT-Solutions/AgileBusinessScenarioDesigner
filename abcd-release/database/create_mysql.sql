@@ -1,4 +1,19 @@
 
+    create table custom_variables (
+        id bigint not null auto_increment,
+        comparation_id varchar(190) not null,
+        created_by DOUBLE,
+        creation_time datetime not null,
+        update_time datetime,
+        updated_by DOUBLE,
+        default_value varchar(255),
+        name varchar(190),
+        scope varchar(190),
+        type varchar(255),
+        form bigint not null,
+        primary key (id)
+    );
+
     create table diagram (
         id bigint not null auto_increment,
         comparation_id varchar(190) not null,
@@ -7,42 +22,6 @@
         update_time datetime,
         updated_by DOUBLE,
         name varchar(255),
-        primary key (id)
-    );
-
-    create table diagram_biit_text (
-        id bigint not null auto_increment,
-        comparation_id varchar(190) not null,
-        created_by DOUBLE,
-        creation_time datetime not null,
-        update_time datetime,
-        updated_by DOUBLE,
-        fill varchar(255),
-        fontSize varchar(255),
-        stroke varchar(255),
-        strokeWidth varchar(255),
-        text varchar(255),
-        primary key (id)
-    );
-
-    create table diagram_calculation (
-        id bigint not null,
-        comparation_id varchar(190) not null,
-        created_by DOUBLE,
-        creation_time datetime not null,
-        update_time datetime,
-        updated_by DOUBLE,
-        embeds varchar(255),
-        jointjs_id varchar(255),
-        type varchar(255),
-        z integer not null,
-        parent bigint,
-        angle float not null,
-        tooltip varchar(255),
-        biitText_id bigint,
-        position_id bigint,
-        size_id bigint,
-        expression_id bigint,
         primary key (id)
     );
 
@@ -60,10 +39,31 @@
         parent bigint,
         angle float not null,
         tooltip varchar(255),
-        biitText_id bigint,
-        position_id bigint,
-        size_id bigint,
+        position bigint,
+        size bigint,
+        text bigint,
         diagram_id bigint,
+        primary key (id)
+    );
+
+    create table diagram_expression (
+        id bigint not null,
+        comparation_id varchar(190) not null,
+        created_by DOUBLE,
+        creation_time datetime not null,
+        update_time datetime,
+        updated_by DOUBLE,
+        embeds varchar(255),
+        jointjs_id varchar(255),
+        type varchar(255),
+        z integer not null,
+        parent bigint,
+        angle float not null,
+        tooltip varchar(255),
+        position bigint,
+        size bigint,
+        text bigint,
+        expression bigint,
         primary key (id)
     );
 
@@ -81,9 +81,9 @@
         parent bigint,
         angle float not null,
         tooltip varchar(255),
-        biitText_id bigint,
-        position_id bigint,
-        size_id bigint,
+        position bigint,
+        size bigint,
+        text bigint,
         primary key (id)
     );
 
@@ -109,7 +109,7 @@
         smooth bit not null,
         text varchar(255),
         vertices longtext,
-        expressionChain_id bigint,
+        expression_chain bigint,
         source_id bigint,
         target_id bigint,
         primary key (id)
@@ -154,9 +154,9 @@
         parent bigint,
         angle float not null,
         tooltip varchar(255),
-        biitText_id bigint,
-        position_id bigint,
-        size_id bigint,
+        position bigint,
+        size bigint,
+        text bigint,
         primary key (id)
     );
 
@@ -174,9 +174,9 @@
         parent bigint,
         angle float not null,
         tooltip varchar(255),
-        biitText_id bigint,
-        position_id bigint,
-        size_id bigint,
+        position bigint,
+        size bigint,
+        text bigint,
         rule_id bigint,
         primary key (id)
     );
@@ -195,10 +195,10 @@
         parent bigint,
         angle float not null,
         tooltip varchar(255),
-        biitText_id bigint,
-        position_id bigint,
-        size_id bigint,
-        expression_id bigint,
+        position bigint,
+        size bigint,
+        text bigint,
+        expression bigint,
         primary key (id)
     );
 
@@ -228,9 +228,9 @@
         parent bigint,
         angle float not null,
         tooltip varchar(255),
-        biitText_id bigint,
-        position_id bigint,
-        size_id bigint,
+        position bigint,
+        size bigint,
+        text bigint,
         primary key (id)
     );
 
@@ -248,10 +248,25 @@
         parent bigint,
         angle float not null,
         tooltip varchar(255),
-        biitText_id bigint,
-        position_id bigint,
-        size_id bigint,
+        position bigint,
+        size bigint,
+        text bigint,
         table_id bigint,
+        primary key (id)
+    );
+
+    create table diagram_text (
+        id bigint not null auto_increment,
+        comparation_id varchar(190) not null,
+        created_by DOUBLE,
+        creation_time datetime not null,
+        update_time datetime,
+        updated_by DOUBLE,
+        fill varchar(255),
+        font_size varchar(255),
+        stroke varchar(255),
+        stroke_width varchar(255),
+        text varchar(255),
         primary key (id)
     );
 
@@ -281,7 +296,7 @@
         update_time datetime,
         updated_by DOUBLE,
         sort_sequence bigint not null,
-        currentValue varchar(255),
+        current_value varchar(255),
         primary key (id)
     );
 
@@ -293,7 +308,7 @@
         update_time datetime,
         updated_by DOUBLE,
         sort_sequence bigint not null,
-        currentValue varchar(255),
+        current_value varchar(255),
         primary key (id)
     );
 
@@ -305,9 +320,9 @@
         update_time datetime,
         updated_by DOUBLE,
         sort_sequence bigint not null,
-        pluginInterface varchar(255),
-        pluginMethodName varchar(255),
-        pluginName varchar(255),
+        plugin_interface varchar(255),
+        plugin_method_name varchar(255),
+        plugin_name varchar(255),
         primary key (id)
     );
 
@@ -344,8 +359,8 @@
         updated_by DOUBLE,
         sort_sequence bigint not null,
         unit varchar(255),
-        reference_id bigint,
-        variable_id bigint,
+        reference bigint,
+        variable bigint,
         primary key (id)
     );
 
@@ -358,7 +373,7 @@
         updated_by DOUBLE,
         sort_sequence bigint not null,
         type varchar(255),
-        variable_id bigint,
+        variable bigint,
         primary key (id)
     );
 
@@ -382,7 +397,7 @@
         update_time datetime,
         updated_by DOUBLE,
         sort_sequence bigint not null,
-        globalVariable_id bigint,
+        global_variable bigint,
         primary key (id)
     );
 
@@ -455,7 +470,7 @@
         updated_by DOUBLE,
         sort_sequence bigint not null,
         unit varchar(255),
-        reference_id bigint,
+        reference bigint,
         primary key (id)
     );
 
@@ -476,21 +491,6 @@
         expressions_id bigint not null
     );
 
-    create table form_custom_variables (
-        id bigint not null auto_increment,
-        comparation_id varchar(190) not null,
-        created_by DOUBLE,
-        creation_time datetime not null,
-        update_time datetime,
-        updated_by DOUBLE,
-        defaultValue varchar(255),
-        name varchar(190),
-        scope varchar(190),
-        type varchar(255),
-        form bigint not null,
-        primary key (id)
-    );
-
     create table global_variable_data_date (
         id bigint not null,
         comparation_id varchar(190) not null,
@@ -498,8 +498,8 @@
         creation_time datetime not null,
         update_time datetime,
         updated_by DOUBLE,
-        validFrom datetime,
-        validTo datetime,
+        valid_from datetime,
+        valid_to datetime,
         value datetime,
         primary key (id)
     );
@@ -511,8 +511,8 @@
         creation_time datetime not null,
         update_time datetime,
         updated_by DOUBLE,
-        validFrom datetime,
-        validTo datetime,
+        valid_from datetime,
+        valid_to datetime,
         value double precision,
         primary key (id)
     );
@@ -524,9 +524,9 @@
         creation_time datetime not null,
         update_time datetime,
         updated_by DOUBLE,
-        validFrom datetime,
-        validTo datetime,
-        postalCode varchar(255),
+        valid_from datetime,
+        valid_to datetime,
+        postalcode varchar(255),
         primary key (id)
     );
 
@@ -542,8 +542,8 @@
         creation_time datetime not null,
         update_time datetime,
         updated_by DOUBLE,
-        validFrom datetime,
-        validTo datetime,
+        valid_from datetime,
+        valid_to datetime,
         value varchar(255),
         primary key (id)
     );
@@ -568,8 +568,8 @@
         update_time datetime,
         updated_by DOUBLE,
         name varchar(255),
-        actions_id bigint,
-        conditions_id bigint,
+        actions bigint,
+        conditions bigint,
         primary key (id)
     );
 
@@ -591,8 +591,8 @@
         creation_time datetime not null,
         update_time datetime,
         updated_by DOUBLE,
-        action_id bigint,
-        conditions_id bigint,
+        actions bigint,
+        conditions bigint,
         primary key (id)
     );
 
@@ -608,7 +608,7 @@
         creation_time datetime not null,
         update_time datetime,
         updated_by DOUBLE,
-        dateValue datetime,
+        date_value datetime,
         primary key (id)
     );
 
@@ -619,7 +619,7 @@
         creation_time datetime not null,
         update_time datetime,
         updated_by DOUBLE,
-        inputValue double precision,
+        input_value double precision,
         primary key (id)
     );
 
@@ -630,7 +630,7 @@
         creation_time datetime not null,
         update_time datetime,
         updated_by DOUBLE,
-        inputValue varchar(255),
+        input_value varchar(255),
         primary key (id)
     );
 
@@ -641,7 +641,7 @@
         creation_time datetime not null,
         update_time datetime,
         updated_by DOUBLE,
-        inputValue varchar(255),
+        input_value varchar(255),
         primary key (id)
     );
 
@@ -667,7 +667,7 @@
         creation_time datetime not null,
         update_time datetime,
         updated_by DOUBLE,
-        radioButtonValue varchar(255),
+        radio_button_value varchar(255),
         primary key (id)
     );
 
@@ -678,11 +678,11 @@
         creation_time datetime not null,
         update_time datetime,
         updated_by DOUBLE,
-        formId bigint not null,
-        formLabel varchar(190) not null,
-        formOrganization DOUBLE not null,
+        form_id bigint not null,
+        form_label varchar(190) not null,
+        form_organization DOUBLE not null,
         name varchar(190),
-        testScenarioForm_id bigint,
+        test_scenario_form bigint,
         primary key (id)
     );
 
@@ -731,7 +731,7 @@
         sort_sequence bigint not null,
         parent bigint,
         repeatable bit not null,
-        addEnabled bit not null,
+        add_enabled bit,
         primary key (id)
     );
 
@@ -747,7 +747,7 @@
         original_reference varchar(190) not null,
         sort_sequence bigint not null,
         parent bigint,
-        testAnswer_id bigint,
+        test_answer bigint,
         primary key (id)
     );
 
@@ -795,8 +795,8 @@
         parent bigint,
         organization_id DOUBLE not null,
         version integer,
-        availableFrom datetime not null,
-        availableTo datetime,
+        available_from datetime not null,
+        available_to datetime,
         status varchar(255),
         primary key (id)
     );
@@ -858,23 +858,23 @@
         primary key (id)
     );
 
+    alter table custom_variables 
+        add constraint UK_m5lcv2lfe2ndoj4jbynogd5wh  unique (comparation_id);
+
     alter table diagram 
         add constraint UK_fw7vqsrf5p8j89vc6ivxw0x4l  unique (comparation_id);
-
-    alter table diagram_biit_text 
-        add constraint UK_49t5md0mmh4pocfqnvy9ilnat  unique (comparation_id);
-
-    alter table diagram_calculation 
-        add constraint UK_1j7d4tym3l6bbatilo3wb122v  unique (id);
-
-    alter table diagram_calculation 
-        add constraint UK_gqwu3mfvrb58rdq8959neypo4  unique (comparation_id);
 
     alter table diagram_child 
         add constraint UK_72flappx1vyc05wxvoaugnpbj  unique (id);
 
     alter table diagram_child 
         add constraint UK_4hhdypcpnc80foag5dcpkes  unique (comparation_id);
+
+    alter table diagram_expression 
+        add constraint UK_foovwuuqivj3kw3k1kxcnv3oy  unique (id);
+
+    alter table diagram_expression 
+        add constraint UK_3jc1yfkq09pwapfu2s93unfqf  unique (comparation_id);
 
     alter table diagram_fork 
         add constraint UK_bxxdhr1ueq0hiw2ri4fyl7okt  unique (id);
@@ -929,6 +929,9 @@
 
     alter table diagram_table 
         add constraint UK_rw9myjse63o9xg9mb2otswpky  unique (comparation_id);
+
+    alter table diagram_text 
+        add constraint UK_irny259eb8d9k80q5wf7ng6dy  unique (comparation_id);
 
     alter table elements_of_diagram 
         add constraint UK_t0p95y98xmoiwbwwjj4agjvv0  unique (diagramObjects_id);
@@ -1038,9 +1041,6 @@
     alter table expressions_chain_expression_basic 
         add constraint UK_41n882737ioltrw54yk3b7p64  unique (expressions_id);
 
-    alter table form_custom_variables 
-        add constraint UK_4gau1o2x6o63kn4impw9cihqc  unique (comparation_id);
-
     alter table global_variable_data_date 
         add constraint UK_jjcyaeadrlsle9w6ui03fxyts  unique (id);
 
@@ -1123,7 +1123,7 @@
         add constraint UK_8tusgqyww1kn79kq4nfq817lu  unique (comparation_id);
 
     alter table test_scenario 
-        add constraint UK_49e2vwe0pem0fb31dxr3ed6b0  unique (name, formId);
+        add constraint UK_r9xm5nx5hucs0inuegkqf6v5e  unique (name, form_id);
 
     alter table test_scenario 
         add constraint UK_amdun27lw5uwuo7bg48ehvu1h  unique (comparation_id);
@@ -1197,30 +1197,10 @@
     alter table tree_questions 
         add constraint UK_589h63s3jthrsckwd8a4dn3xq  unique (comparation_id);
 
-    alter table diagram_calculation 
-        add constraint FK_o48kw0ris957rafejrjdb9qhf 
-        foreign key (expression_id) 
-        references expressions_chain (id);
-
-    alter table diagram_calculation 
-        add constraint FK_852gnfq8vxmn9hkywoecobtn6 
-        foreign key (biitText_id) 
-        references diagram_biit_text (id);
-
-    alter table diagram_calculation 
-        add constraint FK_6gvwnekjmacsy0i4hduqxn8o8 
-        foreign key (position_id) 
-        references diagram_points (id);
-
-    alter table diagram_calculation 
-        add constraint FK_c864ws12t8a39qaeklw89wf6e 
-        foreign key (size_id) 
-        references diagram_sizes (id);
-
-    alter table diagram_calculation 
-        add constraint FK_e18740pms15g0xatw1vs88wuv 
-        foreign key (parent) 
-        references diagram (id);
+    alter table custom_variables 
+        add constraint FK_nbvp3rs0mkj01q3u3y7d1smam 
+        foreign key (form) 
+        references tree_forms (id);
 
     alter table diagram_child 
         add constraint FK_372y4rvd7o3v11eeqx1taswsb 
@@ -1228,39 +1208,64 @@
         references diagram (id);
 
     alter table diagram_child 
-        add constraint FK_brc1vc1rak0u4aqy01lt4ak1g 
-        foreign key (biitText_id) 
-        references diagram_biit_text (id);
-
-    alter table diagram_child 
-        add constraint FK_7mwsew8svdmmv56m8w0rhn36c 
-        foreign key (position_id) 
+        add constraint FK_4cf674wpibbe0qu7b5aqqce66 
+        foreign key (position) 
         references diagram_points (id);
 
     alter table diagram_child 
-        add constraint FK_bijy2w9fvk0pxdy5hqxjn2q92 
-        foreign key (size_id) 
+        add constraint FK_qs6x2dafrt5yv63srkvtwnamk 
+        foreign key (size) 
         references diagram_sizes (id);
+
+    alter table diagram_child 
+        add constraint FK_skm8tgo9scls3xtuk2axws6np 
+        foreign key (text) 
+        references diagram_text (id);
 
     alter table diagram_child 
         add constraint FK_95r5dam5y3ox7eij844g9b9fw 
         foreign key (parent) 
         references diagram (id);
 
-    alter table diagram_fork 
-        add constraint FK_kolfllp3dvo0jyqc2tynvlno8 
-        foreign key (biitText_id) 
-        references diagram_biit_text (id);
+    alter table diagram_expression 
+        add constraint FK_9dv9j4umqakxay1f33wnn4cya 
+        foreign key (expression) 
+        references expressions_chain (id);
+
+    alter table diagram_expression 
+        add constraint FK_lm4fpjlcpv4wwq59u3se1a5su 
+        foreign key (position) 
+        references diagram_points (id);
+
+    alter table diagram_expression 
+        add constraint FK_hlwupp5q0996noony4cvl8ur9 
+        foreign key (size) 
+        references diagram_sizes (id);
+
+    alter table diagram_expression 
+        add constraint FK_5dlx0utrhid02c2xqh042mah0 
+        foreign key (text) 
+        references diagram_text (id);
+
+    alter table diagram_expression 
+        add constraint FK_p6s1bxgi0gj5j291tuu3uycw5 
+        foreign key (parent) 
+        references diagram (id);
 
     alter table diagram_fork 
-        add constraint FK_sleka7dxx5x1wkqeca7wh4xuk 
-        foreign key (position_id) 
+        add constraint FK_6yel8f5hil7li38f282q74ux6 
+        foreign key (position) 
         references diagram_points (id);
 
     alter table diagram_fork 
-        add constraint FK_2jst1ltfa2vfa91xcjnv6s5wc 
-        foreign key (size_id) 
+        add constraint FK_69dorhc0t6fwodxxi3c7knqi0 
+        foreign key (size) 
         references diagram_sizes (id);
+
+    alter table diagram_fork 
+        add constraint FK_a85qld4o8y27mwwnh1s4yj8j3 
+        foreign key (text) 
+        references diagram_text (id);
 
     alter table diagram_fork 
         add constraint FK_5ma5sm4ekcu4nnsm9kgybi6cu 
@@ -1273,8 +1278,8 @@
         references diagram_fork (id);
 
     alter table diagram_links 
-        add constraint FK_stuif50dkuu0aofgdw5osbr60 
-        foreign key (expressionChain_id) 
+        add constraint FK_i6e0lumbe85ontcmb1cqkxkam 
+        foreign key (expression_chain) 
         references expressions_chain (id);
 
     alter table diagram_links 
@@ -1293,19 +1298,19 @@
         references diagram (id);
 
     alter table diagram_repeat 
-        add constraint FK_i5qfwfwrqif1a6ervtx7k3b23 
-        foreign key (biitText_id) 
-        references diagram_biit_text (id);
-
-    alter table diagram_repeat 
-        add constraint FK_byn6g8r9a09o9td4ulip61p3e 
-        foreign key (position_id) 
+        add constraint FK_fnf79gbmkjall8waihy9mae54 
+        foreign key (position) 
         references diagram_points (id);
 
     alter table diagram_repeat 
-        add constraint FK_qm92epa6njuvf47fptx2baqh3 
-        foreign key (size_id) 
+        add constraint FK_9yimxc3m7tsn4gucch86y5v40 
+        foreign key (size) 
         references diagram_sizes (id);
+
+    alter table diagram_repeat 
+        add constraint FK_hscgju2pqwi8nfjqtr1amk353 
+        foreign key (text) 
+        references diagram_text (id);
 
     alter table diagram_repeat 
         add constraint FK_3j5tdbdtvvmigv6fmxc3myd0f 
@@ -1318,19 +1323,19 @@
         references rule (id);
 
     alter table diagram_rule 
-        add constraint FK_byd7j1dmqdj6an0efh37n7ptg 
-        foreign key (biitText_id) 
-        references diagram_biit_text (id);
-
-    alter table diagram_rule 
-        add constraint FK_6lskcjmbl9xlj3fp0rh2qdvag 
-        foreign key (position_id) 
+        add constraint FK_6w9f3lrcc88ingbnowsj1lbje 
+        foreign key (position) 
         references diagram_points (id);
 
     alter table diagram_rule 
-        add constraint FK_6u2ay4hkyl9covhsw5h5pe8bg 
-        foreign key (size_id) 
+        add constraint FK_8d6ptx2e4p0urr7mu55xbw58g 
+        foreign key (size) 
         references diagram_sizes (id);
+
+    alter table diagram_rule 
+        add constraint FK_j7x9iisgdh2gpt91petq39yah 
+        foreign key (text) 
+        references diagram_text (id);
 
     alter table diagram_rule 
         add constraint FK_7hrh2jygbpgha4ifygjelmjso 
@@ -1338,24 +1343,24 @@
         references diagram (id);
 
     alter table diagram_sink 
-        add constraint FK_d6i3eu1y3dhg1aqi297gl5hc7 
-        foreign key (expression_id) 
+        add constraint FK_kcm35bx2c41ge2d732lj23dkh 
+        foreign key (expression) 
         references expressions_chain (id);
 
     alter table diagram_sink 
-        add constraint FK_j1bq9cxe96nes01g1sj8uu6yu 
-        foreign key (biitText_id) 
-        references diagram_biit_text (id);
-
-    alter table diagram_sink 
-        add constraint FK_ccaxk6bfmwcfpms10yxx8yalb 
-        foreign key (position_id) 
+        add constraint FK_tirw3mqnn4jwq7xstei8lnno2 
+        foreign key (position) 
         references diagram_points (id);
 
     alter table diagram_sink 
-        add constraint FK_h92qa8de78mabk8p936leo54i 
-        foreign key (size_id) 
+        add constraint FK_mnax2jig9jg5qpisjqn6yk9ho 
+        foreign key (size) 
         references diagram_sizes (id);
+
+    alter table diagram_sink 
+        add constraint FK_5oxjhkxs4egr30q75h8p4ugnh 
+        foreign key (text) 
+        references diagram_text (id);
 
     alter table diagram_sink 
         add constraint FK_42tevycbgnk1db7dcp3pdbie4 
@@ -1363,19 +1368,19 @@
         references diagram (id);
 
     alter table diagram_source 
-        add constraint FK_6pfm1s0mv6lrckpl8kir908eg 
-        foreign key (biitText_id) 
-        references diagram_biit_text (id);
-
-    alter table diagram_source 
-        add constraint FK_nkdq9q9sbfty5ha444iileysg 
-        foreign key (position_id) 
+        add constraint FK_7axo1txo4e85jyv3sfaurgxot 
+        foreign key (position) 
         references diagram_points (id);
 
     alter table diagram_source 
-        add constraint FK_qalf6e6t0nqdvpqysu7j6aytd 
-        foreign key (size_id) 
+        add constraint FK_ayjqsgwofi5v9by4y7y62lkd 
+        foreign key (size) 
         references diagram_sizes (id);
+
+    alter table diagram_source 
+        add constraint FK_tkfmffmi58urjickhy2g34wai 
+        foreign key (text) 
+        references diagram_text (id);
 
     alter table diagram_source 
         add constraint FK_n32ufbyplqnyssc8oxtef7y4 
@@ -1388,19 +1393,19 @@
         references rule_decision_table (id);
 
     alter table diagram_table 
-        add constraint FK_9ih9i9jga6lnggldt4qwdf6ml 
-        foreign key (biitText_id) 
-        references diagram_biit_text (id);
-
-    alter table diagram_table 
-        add constraint FK_cfqkxwg3fqpy4dx1fi3kj4o49 
-        foreign key (position_id) 
+        add constraint FK_dk9dv2v3cq6qk08xisr46ct15 
+        foreign key (position) 
         references diagram_points (id);
 
     alter table diagram_table 
-        add constraint FK_77ecqjnrkysvsoo2xgre6xuoi 
-        foreign key (size_id) 
+        add constraint FK_lsdigutf9mdou7sj3sh06hvsf 
+        foreign key (size) 
         references diagram_sizes (id);
+
+    alter table diagram_table 
+        add constraint FK_p47g5xgk2o3qs416rt4ic1i61 
+        foreign key (text) 
+        references diagram_text (id);
 
     alter table diagram_table 
         add constraint FK_2xlmgbabun5yxio8y4ph3caay 
@@ -1413,18 +1418,18 @@
         references diagram (id);
 
     alter table expression_value_custom_variable 
-        add constraint FK_6t3dlq7qrjolbhuio0eya8rqq 
-        foreign key (variable_id) 
-        references form_custom_variables (id);
+        add constraint FK_2nswd0obxh9dycb44n2uynrji 
+        foreign key (variable) 
+        references custom_variables (id);
 
     alter table expression_value_generic_custom_variable 
-        add constraint FK_mxxy1tfwjpa53ej8a578gl6s1 
-        foreign key (variable_id) 
-        references form_custom_variables (id);
+        add constraint FK_8n70184rsj92524498jmsgq84 
+        foreign key (variable) 
+        references custom_variables (id);
 
     alter table expression_value_global_variable 
-        add constraint FK_3qe2k1hlyg75b5xuwlwt8rhx4 
-        foreign key (globalVariable_id) 
+        add constraint FK_oteo9jes2oxo2ylaqmia00gb 
+        foreign key (global_variable) 
         references global_variables (id);
 
     alter table expressions_chain_expression_basic 
@@ -1432,34 +1437,29 @@
         foreign key (expressions_chain_id) 
         references expressions_chain (id);
 
-    alter table form_custom_variables 
-        add constraint FK_ev3h2dj07tfxm6xw6d5v03fb 
-        foreign key (form) 
-        references tree_forms (id);
-
     alter table global_variable_data_set 
         add constraint FK_3a6w2ktwy9ppq1ftw2cprnq7u 
         foreign key (global_variables_id) 
         references global_variables (id);
 
     alter table rule 
-        add constraint FK_ly8wgmgy3428yj8l4s95p6jv9 
-        foreign key (actions_id) 
+        add constraint FK_4drb97blr8qkukiypobjl5kxt 
+        foreign key (actions) 
         references expressions_chain (id);
 
     alter table rule 
-        add constraint FK_3794ko8ce1i5of4vysh7pkj0o 
-        foreign key (conditions_id) 
+        add constraint FK_oy2233as9agrnkpf9eken12xd 
+        foreign key (conditions) 
         references expressions_chain (id);
 
     alter table rule_decision_table_row 
-        add constraint FK_jy4vg5whyrriu3k8wc156a6xi 
-        foreign key (action_id) 
+        add constraint FK_ai05fqtcj4rykt9erhpx6ka8x 
+        foreign key (actions) 
         references expressions_chain (id);
 
     alter table rule_decision_table_row 
-        add constraint FK_ctfbyk16e845mqjmmyramewu2 
-        foreign key (conditions_id) 
+        add constraint FK_2fbqms309rxw6y3qnq570dybm 
+        foreign key (conditions) 
         references expressions_chain (id);
 
     alter table rule_decision_table_rule_decision_table_row 
@@ -1478,8 +1478,8 @@
         references test_answer_multi_checkbox (id);
 
     alter table test_scenario 
-        add constraint FK_ifr684ejunas5qla9q691iigh 
-        foreign key (testScenarioForm_id) 
+        add constraint FK_j6113fnb4bvtl953ym924i0w4 
+        foreign key (test_scenario_form) 
         references test_scenario_form (id);
 
     alter table tree_forms_diagram 

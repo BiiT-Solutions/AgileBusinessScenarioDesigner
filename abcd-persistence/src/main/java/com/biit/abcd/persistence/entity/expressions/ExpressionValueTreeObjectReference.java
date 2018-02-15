@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -20,6 +21,7 @@ public class ExpressionValueTreeObjectReference extends ExpressionValue<TreeObje
 	private static final long serialVersionUID = 3933694492937877414L;
 
 	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name="reference")
 	private TreeObject reference;
 
 	@Enumerated(EnumType.STRING)

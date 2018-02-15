@@ -26,7 +26,7 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 // "scope" }) } removed due to an updating
 // customvariables name problem if a new custom variable has the same name that
 // a previously deleted one.
-@Table(name = "form_custom_variables")
+@Table(name = "custom_variables")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @Cacheable(true)
 public class CustomVariable extends StorableObject implements Comparable<CustomVariable> {
@@ -46,6 +46,7 @@ public class CustomVariable extends StorableObject implements Comparable<CustomV
 	@Enumerated(EnumType.STRING)
 	private CustomVariableType type;
 
+	@Column(name="default_value")
 	private String defaultValue;
 
 	public CustomVariable() {

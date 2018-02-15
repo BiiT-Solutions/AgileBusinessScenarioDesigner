@@ -24,7 +24,7 @@ public class DiagramObjectSerializerCommon<T extends DiagramElement> {
 			jsonObject.addProperty("angle", diagramElement.getAngle());
 
 			// Create biitText JsonNode
-			JsonElement jsonBiitText = context.serialize(diagramElement.getBiitText());
+			JsonElement jsonBiitText = context.serialize(diagramElement.getText());
 			// Create Attrs node and insert biitText
 			JsonObject jsonAttrs = new JsonObject();
 			jsonAttrs.add(".biitText", jsonBiitText);

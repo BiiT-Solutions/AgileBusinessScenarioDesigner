@@ -47,7 +47,7 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorMath;
 import com.biit.abcd.persistence.entity.expressions.ExpressionSymbol;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueGenericCustomVariable;
-import com.biit.abcd.persistence.entity.expressions.ExpressionValueGlobalConstant;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueGlobalVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueNumber;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueString;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueSystemDate;
@@ -148,7 +148,7 @@ public class OperatorsTest extends KidsFormCreator {
 		// MIN expression
 		CustomVariable pmtResultCustomVariable = new CustomVariable(form, MIN, CustomVariableType.NUMBER, CustomVariableScope.FORM);
 		ExpressionChain expression = new ExpressionChain("minExpression", new ExpressionValueCustomVariable(form, pmtResultCustomVariable),
-				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionFunction(AvailableFunction.MIN), new ExpressionValueGlobalConstant(
+				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionFunction(AvailableFunction.MIN), new ExpressionValueGlobalVariable(
 						getGlobalVariableNumber()), new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueTreeObjectReference(getTreeObject(form,
 						"heightFather")), new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueNumber(new Double(1000)), new ExpressionSymbol(
 						AvailableSymbol.RIGHT_BRACKET));
@@ -177,7 +177,7 @@ public class OperatorsTest extends KidsFormCreator {
 		// MAX expression
 		CustomVariable pmtResultCustomVariable = new CustomVariable(form, MAX, CustomVariableType.NUMBER, CustomVariableScope.FORM);
 		ExpressionChain expression = new ExpressionChain("maxExpression", new ExpressionValueCustomVariable(form, pmtResultCustomVariable),
-				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionFunction(AvailableFunction.MAX), new ExpressionValueGlobalConstant(
+				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionFunction(AvailableFunction.MAX), new ExpressionValueGlobalVariable(
 						getGlobalVariableNumber()), new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueTreeObjectReference(getTreeObject(form,
 						"heightFather")), new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueNumber(new Double(1000)), new ExpressionSymbol(
 						AvailableSymbol.RIGHT_BRACKET));
@@ -206,7 +206,7 @@ public class OperatorsTest extends KidsFormCreator {
 		// AVG expression
 		CustomVariable pmtResultCustomVariable = new CustomVariable(form, AVG, CustomVariableType.NUMBER, CustomVariableScope.FORM);
 		ExpressionChain expression = new ExpressionChain("avgExpression", new ExpressionValueCustomVariable(form, pmtResultCustomVariable),
-				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionFunction(AvailableFunction.AVG), new ExpressionValueGlobalConstant(
+				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionFunction(AvailableFunction.AVG), new ExpressionValueGlobalVariable(
 						getGlobalVariableNumber()), new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueTreeObjectReference(getTreeObject(form,
 						"heightFather")), new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueNumber(new Double(1000)), new ExpressionSymbol(
 						AvailableSymbol.RIGHT_BRACKET));
@@ -346,8 +346,8 @@ public class OperatorsTest extends KidsFormCreator {
 		setGlobalVariables(variables);
 
 		ExpressionChain expression = new ExpressionChain("concatExpression", new ExpressionValueCustomVariable(form, stringCustomVariable),
-				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionFunction(AvailableFunction.CONCAT), new ExpressionValueGlobalConstant(
-						globalVariableText1), new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueGlobalConstant(globalVariableText2),
+				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionFunction(AvailableFunction.CONCAT), new ExpressionValueGlobalVariable(
+						globalVariableText1), new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueGlobalVariable(globalVariableText2),
 				new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
 		form.getExpressionChains().add(expression);
 		form.addDiagram(createExpressionsDiagram(form));
@@ -386,7 +386,7 @@ public class OperatorsTest extends KidsFormCreator {
 		CustomVariable firstCustomVariable = new CustomVariable(form, "first", CustomVariableType.STRING, CustomVariableScope.FORM, "abc");
 
 		ExpressionChain expression = new ExpressionChain("concatExpression", new ExpressionValueCustomVariable(form, stringCustomVariable),
-				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionFunction(AvailableFunction.CONCAT), new ExpressionValueGlobalConstant(
+				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionFunction(AvailableFunction.CONCAT), new ExpressionValueGlobalVariable(
 						globalVariableText1), new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueCustomVariable(form, firstCustomVariable),
 				new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueTreeObjectReference(getTreeObject(form, "name")), new ExpressionSymbol(
 						AvailableSymbol.COMMA), new ExpressionValueString("Marco"), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
@@ -408,7 +408,7 @@ public class OperatorsTest extends KidsFormCreator {
 		// PMT expression
 		CustomVariable pmtResultCustomVariable = new CustomVariable(form, PMT, CustomVariableType.NUMBER, CustomVariableScope.FORM);
 		ExpressionChain expression = new ExpressionChain("pmtExpression", new ExpressionValueCustomVariable(form, pmtResultCustomVariable),
-				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionFunction(AvailableFunction.PMT), new ExpressionValueGlobalConstant(
+				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionFunction(AvailableFunction.PMT), new ExpressionValueGlobalVariable(
 						getGlobalVariableNumber()), new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueTreeObjectReference(getTreeObject(form,
 						"heightFather")), new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueNumber(new Double(1000)), new ExpressionSymbol(
 						AvailableSymbol.RIGHT_BRACKET));

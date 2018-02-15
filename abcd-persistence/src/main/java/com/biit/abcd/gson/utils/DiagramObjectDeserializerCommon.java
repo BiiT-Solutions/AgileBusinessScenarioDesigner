@@ -1,7 +1,7 @@
 package com.biit.abcd.gson.utils;
 
 import com.biit.abcd.logger.AbcdLogger;
-import com.biit.abcd.persistence.entity.diagram.DiagramBiitText;
+import com.biit.abcd.persistence.entity.diagram.DiagramText;
 import com.biit.abcd.persistence.entity.diagram.DiagramElement;
 import com.biit.abcd.persistence.entity.diagram.DiagramObjectType;
 import com.biit.abcd.persistence.entity.diagram.Point;
@@ -51,8 +51,8 @@ public class DiagramObjectDeserializerCommon<T extends DiagramElement> {
 			JsonObject attrsObject = attrs.getAsJsonObject();
 			JsonElement biitTextElement = attrsObject.get(".biitText");
 			if(biitTextElement!=null){
-				DiagramBiitText biitText = context.deserialize(biitTextElement, DiagramBiitText.class);
-				diagramElement.setBiitText(biitText);
+				DiagramText biitText = context.deserialize(biitTextElement, DiagramText.class);
+				diagramElement.setText(biitText);
 			}
 		}
 

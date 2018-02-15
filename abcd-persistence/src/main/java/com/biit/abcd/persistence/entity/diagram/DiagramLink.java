@@ -10,6 +10,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -29,6 +30,7 @@ public class DiagramLink extends DiagramObject {
 	private static final long serialVersionUID = 5533529349122059755L;
 
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+	@JoinColumn(name = "expression_chain")
 	private ExpressionChain expressionChain;
 
 	@Expose
@@ -43,11 +45,13 @@ public class DiagramLink extends DiagramObject {
 
 	@Expose
 	private boolean smooth;
+	
 	@Expose
 	private boolean manhattan;
 
 	@Column(length = 1000000)
 	private String attrs;
+	
 	@Column(length = 1000000)
 	private String vertices;
 
@@ -305,8 +309,9 @@ public class DiagramLink extends DiagramObject {
 	}
 
 	/**
-	 * Avoid this method. Expression chain is a OneToOne relationship and currently Hibernate doesn't handle correctly
-	 * the Orphan removal. Use setExpressions of ExpressionChain.
+	 * Avoid this method. Expression chain is a OneToOne relationship and
+	 * currently Hibernate doesn't handle correctly the Orphan removal. Use
+	 * setExpressions of ExpressionChain.
 	 * 
 	 * @param expressionChain
 	 */

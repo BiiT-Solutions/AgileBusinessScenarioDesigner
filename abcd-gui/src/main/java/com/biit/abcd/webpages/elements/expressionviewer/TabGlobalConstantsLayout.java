@@ -5,7 +5,7 @@ import java.util.List;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
-import com.biit.abcd.persistence.entity.expressions.ExpressionValueGlobalConstant;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueGlobalVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueSystemDate;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
 import com.vaadin.ui.Alignment;
@@ -38,7 +38,7 @@ public class TabGlobalConstantsLayout extends TabLayout {
 
 			@Override
 			public void buttonClick(ClickEvent event) {
-				ExpressionValueGlobalConstant exprValue = new ExpressionValueGlobalConstant(globalVariable);
+				ExpressionValueGlobalVariable exprValue = new ExpressionValueGlobalVariable(globalVariable);
 				addExpression(exprValue);
 			}
 		});

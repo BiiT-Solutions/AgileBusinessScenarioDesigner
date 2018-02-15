@@ -46,13 +46,13 @@ public class ExporterDotDiagramObject extends ExporterDot<DiagramObject> {
 	 */
 	private String getDotName(DiagramElement diagramElement) {
 		if (diagramElement.getType().equals(DiagramObjectType.SOURCE)) {
-			return "subgraph cluster_" + getDotId(diagramElement) + " {label=\"" + filterDotLanguage(diagramElement.getBiitText().getText()) + "\"; "
+			return "subgraph cluster_" + getDotId(diagramElement) + " {label=\"" + filterDotLanguage(diagramElement.getText().getText()) + "\"; "
 					+ getDotId(diagramElement) + " [image=\"" + getIconsFolder() + File.separator + diagramElement.getType().getGraphvizIcon() + "\"];}";
 		} else if (diagramElement.getType().equals(DiagramObjectType.SINK)) {
-			return "subgraph cluster_" + getDotId(diagramElement) + " {label=\"" + filterDotLanguage(diagramElement.getBiitText().getText()) + "\"; "
+			return "subgraph cluster_" + getDotId(diagramElement) + " {label=\"" + filterDotLanguage(diagramElement.getText().getText()) + "\"; "
 					+ getDotId(diagramElement) + " [image=\"" + getIconsFolder() + File.separator + diagramElement.getType().getGraphvizIcon() + "\"];}";
 		} else if (diagramElement.getType().equals(DiagramObjectType.FORK)) {
-			return "subgraph cluster_" + getDotId(diagramElement) + " {label=\"" + filterDotLanguage(diagramElement.getBiitText().getText()) + "\"; "
+			return "subgraph cluster_" + getDotId(diagramElement) + " {label=\"" + filterDotLanguage(diagramElement.getText().getText()) + "\"; "
 					+ getDotId(diagramElement) + " [image=\"" + getIconsFolder() + File.separator + diagramElement.getType().getGraphvizIcon() + "\"];}";
 		} else if (diagramElement.getType().equals(DiagramObjectType.DIAGRAM_CHILD)) {
 			if (((DiagramChild) diagramElement).getDiagram() != null) {

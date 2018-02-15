@@ -3,6 +3,7 @@ package com.biit.abcd.persistence.entity.testscenarios;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -18,6 +19,8 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 @Table(name = "test_answer_input_number")
 public class TestAnswerInputNumber extends TestAnswer {
 	private static final long serialVersionUID = -7516410984463406831L;
+
+	@Column(name = "input_value")
 	private Double inputValue = null;
 
 	public TestAnswerInputNumber() {
@@ -63,8 +66,7 @@ public class TestAnswerInputNumber extends TestAnswer {
 			TestAnswerInputNumber testAnswerInputNumber = (TestAnswerInputNumber) object;
 			inputValue = testAnswerInputNumber.getValue();
 		} else {
-			throw new NotValidStorableObjectException("Object '" + object
-					+ "' is not an instance of TestAnswerInputNumber.");
+			throw new NotValidStorableObjectException("Object '" + object + "' is not an instance of TestAnswerInputNumber.");
 		}
 	}
 }

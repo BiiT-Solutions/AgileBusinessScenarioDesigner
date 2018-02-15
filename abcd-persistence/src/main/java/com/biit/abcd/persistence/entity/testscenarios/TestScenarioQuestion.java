@@ -3,6 +3,7 @@ package com.biit.abcd.persistence.entity.testscenarios;
 import javax.persistence.Cacheable;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -20,11 +21,12 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 @Cacheable(true)
 public class TestScenarioQuestion extends BaseQuestion {
 	private static final long serialVersionUID = -3285383319148456954L;
-	
+
 	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
 	@LazyCollection(LazyCollectionOption.FALSE)
+	@JoinColumn(name = "test_answer")
 	private TestAnswer testAnswer;
-	
+
 	private static final String DEFAULT_QUESTION_NAME = "TestScenarioQuestion";
 
 	public TestScenarioQuestion() {

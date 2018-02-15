@@ -84,7 +84,7 @@ public class FormDao extends AnnotatedGenericDao<Form, Long> implements IFormDao
 	@Transactional(value = "abcdTransactionManager", propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
 	@Caching(evict = { @CacheEvict(value = "springFormCache", key = "#id") })
 	public int updateFormStatus(Long id, FormWorkStatus formStatus) throws UnexpectedDatabaseException {
-		Query query = getEntityManager().createQuery("UPDATE Form set status = :formStatus WHERE ID = :id");
+		Query query = getEntityManager().createQuery("UPDATE Form set status = :formStatus WHERE id = :id");
 		query.setParameter("id", id);
 		query.setParameter("formStatus", formStatus);
 

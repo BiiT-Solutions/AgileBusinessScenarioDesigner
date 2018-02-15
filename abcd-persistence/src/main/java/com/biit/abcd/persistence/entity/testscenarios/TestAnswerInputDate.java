@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -20,6 +21,8 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 @Table(name = "test_answer_input_date")
 public class TestAnswerInputDate extends TestAnswer {
 	private static final long serialVersionUID = 4067658245634637534L;
+
+	@Column(name = "date_value")
 	private Timestamp dateValue = null;
 
 	public TestAnswerInputDate() {
@@ -66,8 +69,7 @@ public class TestAnswerInputDate extends TestAnswer {
 			TestAnswerInputDate testAnswerInputDate = (TestAnswerInputDate) object;
 			dateValue = testAnswerInputDate.getValue();
 		} else {
-			throw new NotValidStorableObjectException("Object '" + object
-					+ "' is not an instance of TestAnswerInputDate.");
+			throw new NotValidStorableObjectException("Object '" + object + "' is not an instance of TestAnswerInputDate.");
 		}
 	}
 }

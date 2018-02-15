@@ -25,7 +25,7 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValue;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueBoolean;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueGenericCustomVariable;
-import com.biit.abcd.persistence.entity.expressions.ExpressionValueGlobalConstant;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueGlobalVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueNumber;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValuePostalCode;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueString;
@@ -260,8 +260,8 @@ public class ExpressionValidator {
 			return ValueType.TEXT;
 		} else if ((expression instanceof ExpressionValueTimestamp) || (expression instanceof ExpressionValueSystemDate)) {
 			return ValueType.DATE;
-		} else if (expression instanceof ExpressionValueGlobalConstant) {
-			GlobalVariable globalVariable = ((ExpressionValueGlobalConstant) expression).getValue();
+		} else if (expression instanceof ExpressionValueGlobalVariable) {
+			GlobalVariable globalVariable = ((ExpressionValueGlobalVariable) expression).getValue();
 			switch (globalVariable.getFormat()) {
 			case MULTI_TEXT:
 			case TEXT:

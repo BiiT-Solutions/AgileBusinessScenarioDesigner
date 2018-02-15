@@ -3,6 +3,7 @@ package com.biit.abcd.persistence.entity.globalvariables;
 import java.sql.Timestamp;
 
 import javax.persistence.Cacheable;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
@@ -21,8 +22,10 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 public abstract class VariableData extends StorableObject implements IVariableData{
 	private static final long serialVersionUID = 6356292873575007675L;
 
+	@Column(name="valid_from")
 	private Timestamp validFrom;
 
+	@Column(name="valid_to")
 	private Timestamp validTo;
 
 	// Attribute used for json deserialization due to parent abstract class

@@ -2,8 +2,8 @@ package com.biit.abcd.webpages.elements.diagrambuilder;
 
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
-import com.biit.abcd.persistence.entity.diagram.DiagramBiitText;
 import com.biit.abcd.persistence.entity.diagram.DiagramElement;
+import com.biit.abcd.persistence.entity.diagram.DiagramText;
 import com.biit.abcd.webpages.components.PropertiesForClassComponent;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.TextField;
@@ -23,10 +23,10 @@ public class DiagramElementProperties extends PropertiesForClassComponent<Diagra
 		instance = element;
 
 		diagramElementLabel = new TextField(ServerTranslate.translate(LanguageCodes.PROPERTIES_TECHNICAL_NAME));
-		if (instance.getBiitText() == null) {
-			instance.setBiitText(new DiagramBiitText());
+		if (instance.getText() == null) {
+			instance.setText(new DiagramText());
 		}
-		diagramElementLabel.setValue(instance.getBiitText().getText());
+		diagramElementLabel.setValue(instance.getText().getText());
 
 		FormLayout categoryForm = new FormLayout();
 		categoryForm.setWidth(null);
@@ -37,7 +37,7 @@ public class DiagramElementProperties extends PropertiesForClassComponent<Diagra
 
 	@Override
 	public void updateElement() {
-		instance.getBiitText().setText(diagramElementLabel.getValue());
+		instance.getText().setText(diagramElementLabel.getValue());
 	}
 
 	@Override

@@ -8,6 +8,7 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -48,9 +49,12 @@ public abstract class DiagramElement extends DiagramObject {
 	private String tooltip;
 	@Expose
 	@OneToOne(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
+	@JoinColumn(name="size")
 	private Size size;
+	
 	@Expose
 	@OneToOne(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
+	@JoinColumn(name="position")
 	private Point position;
 
 	@Expose
@@ -58,7 +62,8 @@ public abstract class DiagramElement extends DiagramObject {
 
 	@Expose
 	@OneToOne(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
-	private DiagramBiitText biitText;
+	@JoinColumn(name="text")
+	private DiagramText text;
 
 	public String getTooltip() {
 		return tooltip;
@@ -77,8 +82,8 @@ public abstract class DiagramElement extends DiagramObject {
 		if (position != null) {
 			position.resetIds();
 		}
-		if (biitText != null) {
-			biitText.resetIds();
+		if (text != null) {
+			text.resetIds();
 		}
 	}
 
@@ -106,12 +111,12 @@ public abstract class DiagramElement extends DiagramObject {
 		this.size = size;
 	}
 
-	public DiagramBiitText getBiitText() {
-		return biitText;
+	public DiagramText getText() {
+		return text;
 	}
 
-	public void setBiitText(DiagramBiitText biitText) {
-		this.biitText = biitText;
+	public void setText(DiagramText biitText) {
+		this.text = biitText;
 	}
 
 	public static DiagramElement fromJson(String jsonString) {
@@ -168,23 +173,23 @@ public abstract class DiagramElement extends DiagramObject {
 			position.setY(element.getPosition().getY());
 			angle = element.getAngle();
 
-			if ((biitText == null) && (element.getBiitText() != null)) {
-				biitText = element.getBiitText();
+			if ((text == null) && (element.getText() != null)) {
+				text = element.getText();
 			} else {
-				if (element.getBiitText().getText() != null) {
-					biitText.setText(element.getBiitText().getText());
+				if (element.getText().getText() != null) {
+					text.setText(element.getText().getText());
 				}
-				if (element.getBiitText().getFill() != null) {
-					biitText.setFill(element.getBiitText().getFill());
+				if (element.getText().getFill() != null) {
+					text.setFill(element.getText().getFill());
 				}
-				if (element.getBiitText().getFontSize() != null) {
-					biitText.setFontSize(element.getBiitText().getFontSize());
+				if (element.getText().getFontSize() != null) {
+					text.setFontSize(element.getText().getFontSize());
 				}
-				if (element.getBiitText().getStroke() != null) {
-					biitText.setStroke(element.getBiitText().getStroke());
+				if (element.getText().getStroke() != null) {
+					text.setStroke(element.getText().getStroke());
 				}
-				if (element.getBiitText().getStrokeWidth() != null) {
-					biitText.setStrokeWidth(element.getBiitText().getStrokeWidth());
+				if (element.getText().getStrokeWidth() != null) {
+					text.setStrokeWidth(element.getText().getStrokeWidth());
 				}
 			}
 		}
@@ -201,19 +206,19 @@ public abstract class DiagramElement extends DiagramObject {
 	@Override
 	public void setCreatedBy(IUser<Long> user) {
 		super.setCreatedBy(user);
-		biitText.setCreatedBy(user);
+		text.setCreatedBy(user);
 	}
 
 	@Override
 	public void setUpdatedBy(IUser<Long> user) {
 		super.setUpdatedBy(user);
-		biitText.setUpdatedBy(user);
+		text.setUpdatedBy(user);
 	}
 
 	@Override
 	public void setUpdateTime(Timestamp dateUpdated) {
 		super.setUpdateTime(dateUpdated);
-		biitText.setUpdateTime(dateUpdated);
+		text.setUpdateTime(dateUpdated);
 	}
 
 	/**
@@ -230,9 +235,9 @@ public abstract class DiagramElement extends DiagramObject {
 			innerStorableObjects.add(position);
 			innerStorableObjects.addAll(position.getAllInnerStorableObjects());
 		}
-		if (biitText != null) {
-			innerStorableObjects.add(biitText);
-			innerStorableObjects.addAll(biitText.getAllInnerStorableObjects());
+		if (text != null) {
+			innerStorableObjects.add(text);
+			innerStorableObjects.addAll(text.getAllInnerStorableObjects());
 		}
 		return innerStorableObjects;
 	}
@@ -245,8 +250,8 @@ public abstract class DiagramElement extends DiagramObject {
 			DiagramElement diagramSource = (DiagramElement) object;
 			tooltip = diagramSource.getTooltip();
 			angle = diagramSource.getAngle();
-			biitText = new DiagramBiitText();
-			biitText.copyData(diagramSource.getBiitText());
+			text = new DiagramText();
+			text.copyData(diagramSource.getText());
 
 			Size size = new Size();
 			size.copyData(diagramSource.getSize());

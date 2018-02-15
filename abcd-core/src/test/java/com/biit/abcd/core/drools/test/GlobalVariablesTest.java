@@ -40,7 +40,7 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorMath;
 import com.biit.abcd.persistence.entity.expressions.ExpressionSymbol;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
-import com.biit.abcd.persistence.entity.expressions.ExpressionValueGlobalConstant;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueGlobalVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueNumber;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.persistence.utils.IdGenerator;
@@ -93,7 +93,7 @@ public class GlobalVariablesTest extends KidsFormCreator {
 				new ExpressionValueTreeObjectReference(getTreeObject(form, "weight")),
 				new ExpressionOperatorMath(AvailableOperator.DIVISION),
 				new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET),
-				new ExpressionValueGlobalConstant(getGlobalVariableNumber()),
+				new ExpressionValueGlobalVariable(getGlobalVariableNumber()),
 				new ExpressionOperatorMath(AvailableOperator.DIVISION), new ExpressionValueNumber(100.),
 				new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
 		form.getExpressionChains().add(expression);

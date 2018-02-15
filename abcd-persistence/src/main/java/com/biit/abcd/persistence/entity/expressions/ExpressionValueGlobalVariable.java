@@ -5,6 +5,7 @@ import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -18,16 +19,18 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
  */
 @Entity
 @Table(name = "expression_value_global_variable")
-public class ExpressionValueGlobalConstant extends ExpressionValue<GlobalVariable> {
+public class ExpressionValueGlobalVariable extends ExpressionValue<GlobalVariable> {
 	private static final long serialVersionUID = 3063006330916018596L;
+	
 	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name="global_variable")
 	private GlobalVariable globalVariable;
 
-	protected ExpressionValueGlobalConstant() {
+	protected ExpressionValueGlobalVariable() {
 		super();
 	}
 
-	public ExpressionValueGlobalConstant(GlobalVariable globalVariable) {
+	public ExpressionValueGlobalVariable(GlobalVariable globalVariable) {
 		super();
 		this.globalVariable = globalVariable;
 	}
@@ -72,9 +75,9 @@ public class ExpressionValueGlobalConstant extends ExpressionValue<GlobalVariabl
 
 	@Override
 	public void copyData(StorableObject object) throws NotValidStorableObjectException {
-		if (object instanceof ExpressionValueGlobalConstant) {
+		if (object instanceof ExpressionValueGlobalVariable) {
 			super.copyData(object);
-			ExpressionValueGlobalConstant expressionValueGlobalConstant = (ExpressionValueGlobalConstant) object;
+			ExpressionValueGlobalVariable expressionValueGlobalConstant = (ExpressionValueGlobalVariable) object;
 			this.setValue(expressionValueGlobalConstant.getValue());
 		} else {
 			throw new NotValidStorableObjectException("Object '" + object

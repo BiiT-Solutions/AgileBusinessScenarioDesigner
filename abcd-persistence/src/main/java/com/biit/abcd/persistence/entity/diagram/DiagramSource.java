@@ -10,8 +10,8 @@ public class DiagramSource extends DiagramElement {
 
 	public DiagramSource() {
 		super();
-		DiagramBiitText biitText = new DiagramBiitText();
+		DiagramText biitText = new DiagramText();
 		biitText.setText("Start");
-		setBiitText(biitText);
+		setText(biitText);
 	}
 }

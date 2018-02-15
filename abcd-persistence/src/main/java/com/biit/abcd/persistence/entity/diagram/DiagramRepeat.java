@@ -10,8 +10,8 @@ public class DiagramRepeat extends DiagramElement {
 
 	public DiagramRepeat() {
 		super();
-		DiagramBiitText biitText = new DiagramBiitText();
+		DiagramText biitText = new DiagramText();
 		biitText.setText("Repeat");
-		setBiitText(biitText);
+		setText(biitText);
 	}
 }

@@ -15,9 +15,9 @@ JsonSerializer<DiagramSink> {
 	public JsonElement serialize(DiagramSink element, Type type, JsonSerializationContext context) {
 
 		if(element.getExpression()!=null){
-			element.getBiitText().setText(element.getExpression().getName());
+			element.getText().setText(element.getExpression().getName());
 		}else{
-			element.getBiitText().setText("End");
+			element.getText().setText("End");
 		}
 
 		final JsonObject jsonObject = new JsonObject();

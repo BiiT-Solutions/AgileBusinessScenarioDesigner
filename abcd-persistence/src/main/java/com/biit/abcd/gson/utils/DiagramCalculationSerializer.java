@@ -16,9 +16,9 @@ public class DiagramCalculationSerializer extends DiagramObjectSerializerCommon<
 		final JsonObject jsonObject = new JsonObject();
 		// Set the current name of the question.
 		if (element.getExpression() != null) {
-			element.getBiitText().setText(element.getExpression().getName());
+			element.getText().setText(element.getExpression().getName());
 		}else{
-			element.getBiitText().setText("Calculation");
+			element.getText().setText("Calculation");
 		}
 		return serialize(element, jsonObject, context);
 	}

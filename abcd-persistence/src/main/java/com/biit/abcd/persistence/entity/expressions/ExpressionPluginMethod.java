@@ -3,6 +3,7 @@ package com.biit.abcd.persistence.entity.expressions;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -13,8 +14,14 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 @Table(name = "expression_plugin_method")
 public class ExpressionPluginMethod extends Expression {
 	private static final long serialVersionUID = -1357787104083039897L;
+	
+	@Column(name="plugin_interface")
 	private Class<?> pluginInterface = null;
+	
+	@Column(name="plugin_name")
 	private String pluginName = null;
+	
+	@Column(name="plugin_method_name")
 	private String pluginMethodName = null;
 
 	public ExpressionPluginMethod() {

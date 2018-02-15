@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Cacheable;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -13,9 +14,9 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 @Entity
-@Table(name = "diagram_biit_text")
+@Table(name = "diagram_text")
 @Cacheable(true)
-public class DiagramBiitText extends StorableObject {
+public class DiagramText extends StorableObject {
 	private static final long serialVersionUID = 1533578154303621298L;
 	@Expose
 	private String text;
@@ -23,17 +24,19 @@ public class DiagramBiitText extends StorableObject {
 	private String fill;
 
 	@Expose
-	@SerializedName("font-size")
+	@SerializedName("font_size")
+	@Column(name="font_size")
 	private String fontSize;
 
 	@Expose
 	private String stroke;
 
 	@Expose
-	@SerializedName("stroke-width")
+	@SerializedName("stroke_width")
+	@Column(name="stroke_width")
 	private String strokeWidth;
 
-	public DiagramBiitText() {
+	public DiagramText() {
 		// text = "";
 		fill = "#000000";
 		fontSize = "16";
@@ -98,9 +101,9 @@ public class DiagramBiitText extends StorableObject {
 
 	@Override
 	public void copyData(StorableObject object) throws NotValidStorableObjectException {
-		if (object instanceof DiagramBiitText) {
+		if (object instanceof DiagramText) {
 			super.copyBasicInfo(object);
-			DiagramBiitText diagramBiitText = (DiagramBiitText) object;
+			DiagramText diagramBiitText = (DiagramText) object;
 			text = diagramBiitText.getText();
 			fill = diagramBiitText.getFill();
 			fontSize = diagramBiitText.getFontSize();
