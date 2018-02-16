@@ -17,3 +17,4 @@ pom.xml.versionsBackup
 pom.xml.releaseBackup
 release.properties
 /abcd-release/database/updates/
+/abcd-integration-test/src/test/resources/database/abcd_base.sql
