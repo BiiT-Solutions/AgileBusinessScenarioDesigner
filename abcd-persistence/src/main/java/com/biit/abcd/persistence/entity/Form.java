@@ -18,6 +18,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -69,6 +71,7 @@ import com.google.gson.GsonBuilder;
 @Cacheable(true)
 public class Form extends BaseForm {
 	private static final long serialVersionUID = 185712950929311653L;
+
 	@Column(name = "available_from", nullable = false)
 	private Timestamp availableFrom;
 
@@ -76,18 +79,22 @@ public class Form extends BaseForm {
 	private Timestamp availableTo;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinTable(name = "tree_forms_diagram", joinColumns = @JoinColumn(name = "form", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "diagram", referencedColumnName = "id"))
 	private Set<Diagram> diagrams;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinTable(name = "tree_forms_rule_decision_table", joinColumns = @JoinColumn(name = "form", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "table", referencedColumnName = "id"))
 	private Set<TableRule> tableRules;
 
 	@OneToMany(mappedBy = "form", cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<CustomVariable> customVariables;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinTable(name = "tree_forms_expressions_chain", joinColumns = @JoinColumn(name = "form", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "expression_chain", referencedColumnName = "id"))
 	private Set<ExpressionChain> expressionChains;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinTable(name = "tree_forms_rule", joinColumns = @JoinColumn(name = "form", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "rule", referencedColumnName = "id"))
 	private Set<Rule> rules;
 
 	// For avoiding

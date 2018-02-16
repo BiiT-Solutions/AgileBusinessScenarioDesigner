@@ -9,6 +9,8 @@ import javax.persistence.Cacheable;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
@@ -38,6 +40,7 @@ public class ExpressionChain extends Expression implements INameAttribute {
 	@OrderBy(value = "sortSeq ASC")
 	@BatchSize(size = 500)
 	// @SortComparator(value = ExpressionSort.class)
+	@JoinTable(name = "expressions_chain_expressions", joinColumns = @JoinColumn(name = "expressions_chain", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "expressions", referencedColumnName = "id"))
 	private List<Expression> expressions;
 
 	public ExpressionChain() {
@@ -190,10 +193,10 @@ public class ExpressionChain extends Expression implements INameAttribute {
 		for (Expression expression : expressions) {
 			result += expression.getRepresentation(showWhiteCharacter) + " ";
 		}
-		if(showWhiteCharacter){
+		if (showWhiteCharacter) {
 			return result.trim();
-		}else{
-			return result.trim().replace(" ,", ",").replace("( ", "(").replace(" )",")");
+		} else {
+			return result.trim().replace(" ,", ",").replace("( ", "(").replace(" )", ")");
 		}
 	}
 

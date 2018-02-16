@@ -1,6 +1,7 @@
 package com.biit.abcd.persistence.entity;
 
 import javax.persistence.Cacheable;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -23,9 +24,13 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 @Cacheable(true)
 public class Question extends BaseQuestion {
 	private static final long serialVersionUID = 6352523681890504871L;
+
 	@Enumerated(EnumType.STRING)
+	@Column(name = "answer_type")
 	private AnswerType answerType;
+
 	@Enumerated(EnumType.STRING)
+	@Column(name = "answer_format")
 	private AnswerFormat answerFormat;
 
 	public Question() {
@@ -40,7 +45,8 @@ public class Question extends BaseQuestion {
 	}
 
 	/**
-	 * This setter sets AnswerType and sets the answer format to the default answer format for a type.
+	 * This setter sets AnswerType and sets the answer format to the default
+	 * answer format for a type.
 	 * 
 	 * @param answerType
 	 */

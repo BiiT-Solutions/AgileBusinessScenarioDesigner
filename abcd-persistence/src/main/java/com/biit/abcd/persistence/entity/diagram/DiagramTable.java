@@ -5,6 +5,7 @@ import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -16,7 +17,9 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 @Table(name = "diagram_table")
 public class DiagramTable extends DiagramElement {
 	private static final long serialVersionUID = 8876603849399308548L;
+	
 	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "table")
 	private TableRule table;
 
 	public DiagramTable() {

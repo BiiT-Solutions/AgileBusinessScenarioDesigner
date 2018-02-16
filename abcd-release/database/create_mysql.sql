@@ -42,7 +42,7 @@
         position bigint,
         size bigint,
         text bigint,
-        diagram_id bigint,
+        diagram bigint,
         primary key (id)
     );
 
@@ -87,9 +87,9 @@
         primary key (id)
     );
 
-    create table diagram_fork_expression_value_tree_object_reference (
-        diagram_fork_id bigint not null,
-        references_id bigint not null
+    create table diagram_fork_references (
+        diagram_fork bigint not null,
+        reference bigint not null
     );
 
     create table diagram_links (
@@ -110,8 +110,8 @@
         text varchar(255),
         vertices longtext,
         expression_chain bigint,
-        source_id bigint,
-        target_id bigint,
+        source bigint,
+        target bigint,
         primary key (id)
     );
 
@@ -177,7 +177,7 @@
         position bigint,
         size bigint,
         text bigint,
-        rule_id bigint,
+        rule bigint,
         primary key (id)
     );
 
@@ -251,7 +251,7 @@
         position bigint,
         size bigint,
         text bigint,
-        table_id bigint,
+        table bigint,
         primary key (id)
     );
 
@@ -271,9 +271,9 @@
     );
 
     create table elements_of_diagram (
-        diagram_id bigint not null,
-        diagramObjects_id bigint not null,
-        primary key (diagram_id, diagramObjects_id)
+        diagram bigint not null,
+        diagram_object bigint not null,
+        primary key (diagram, diagram_object)
     );
 
     create table expression_function (
@@ -486,9 +486,23 @@
         primary key (id)
     );
 
-    create table expressions_chain_expression_basic (
-        expressions_chain_id bigint not null,
-        expressions_id bigint not null
+    create table expressions_chain_expressions (
+        expressions_chain bigint not null,
+        expressions bigint not null
+    );
+
+    create table global_variable_data (
+        id bigint not null auto_increment,
+        comparation_id varchar(190) not null,
+        created_by DOUBLE,
+        creation_time datetime not null,
+        update_time datetime,
+        updated_by DOUBLE,
+        valid_from datetime,
+        valid_to datetime,
+        global_variable bigint not null,
+        variable_data bigint not null,
+        primary key (id)
     );
 
     create table global_variable_data_date (
@@ -500,6 +514,8 @@
         updated_by DOUBLE,
         valid_from datetime,
         valid_to datetime,
+        global_variable bigint not null,
+        variable_data bigint not null,
         value datetime,
         primary key (id)
     );
@@ -513,6 +529,8 @@
         updated_by DOUBLE,
         valid_from datetime,
         valid_to datetime,
+        global_variable bigint not null,
+        variable_data bigint not null,
         value double precision,
         primary key (id)
     );
@@ -526,13 +544,10 @@
         updated_by DOUBLE,
         valid_from datetime,
         valid_to datetime,
+        global_variable bigint not null,
+        variable_data bigint not null,
         postalcode varchar(255),
         primary key (id)
-    );
-
-    create table global_variable_data_set (
-        global_variables_id bigint not null,
-        variableData_id bigint not null
     );
 
     create table global_variable_data_text (
@@ -544,6 +559,8 @@
         updated_by DOUBLE,
         valid_from datetime,
         valid_to datetime,
+        global_variable bigint not null,
+        variable_data bigint not null,
         value varchar(255),
         primary key (id)
     );
@@ -596,9 +613,9 @@
         primary key (id)
     );
 
-    create table rule_decision_table_rule_decision_table_row (
-        rule_decision_table_id bigint not null,
-        rules_id bigint not null
+    create table rule_decision_table_row_rules (
+        rule_decision_table bigint not null,
+        rule bigint not null
     );
 
     create table test_answer_input_date (
@@ -656,8 +673,8 @@
     );
 
     create table test_answer_multi_checkbox_values (
-        TestAnswerMultiCheckBox_id bigint not null,
-        multiCheckBoxValue varchar(255)
+        test_answer_multi_checkbox bigint not null,
+        multi_check_box_value varchar(255)
     );
 
     create table test_answer_radio_button (
@@ -802,27 +819,27 @@
     );
 
     create table tree_forms_diagram (
-        tree_forms_id bigint not null,
-        diagrams_id bigint not null,
-        primary key (tree_forms_id, diagrams_id)
+        form bigint not null,
+        diagram bigint not null,
+        primary key (form, diagram)
     );
 
     create table tree_forms_expressions_chain (
-        tree_forms_id bigint not null,
-        expressionChains_id bigint not null,
-        primary key (tree_forms_id, expressionChains_id)
+        form bigint not null,
+        expression_chain bigint not null,
+        primary key (form, expression_chain)
     );
 
     create table tree_forms_rule (
-        tree_forms_id bigint not null,
-        rules_id bigint not null,
-        primary key (tree_forms_id, rules_id)
+        form bigint not null,
+        rule bigint not null,
+        primary key (form, rule)
     );
 
     create table tree_forms_rule_decision_table (
-        tree_forms_id bigint not null,
-        tableRules_id bigint not null,
-        primary key (tree_forms_id, tableRules_id)
+        form bigint not null,
+        table bigint not null,
+        primary key (form, table)
     );
 
     create table tree_groups (
@@ -853,8 +870,8 @@
         original_reference varchar(190) not null,
         sort_sequence bigint not null,
         parent bigint,
-        answerFormat varchar(255),
-        answerType varchar(255),
+        answer_format varchar(255),
+        answer_type varchar(255),
         primary key (id)
     );
 
@@ -882,8 +899,8 @@
     alter table diagram_fork 
         add constraint UK_owctn38n79mnt1ujbow3qrj6a  unique (comparation_id);
 
-    alter table diagram_fork_expression_value_tree_object_reference 
-        add constraint UK_65ni4svjxtkp69xhtrpslw9fc  unique (references_id);
+    alter table diagram_fork_references 
+        add constraint UK_fbxwothu21m4to5t92cxr15c8  unique (reference);
 
     alter table diagram_links 
         add constraint UK_ie9xqy3i3400jjj5iadjljigu  unique (id);
@@ -934,7 +951,7 @@
         add constraint UK_irny259eb8d9k80q5wf7ng6dy  unique (comparation_id);
 
     alter table elements_of_diagram 
-        add constraint UK_t0p95y98xmoiwbwwjj4agjvv0  unique (diagramObjects_id);
+        add constraint UK_96p4qycb4aqbkmv8vwhhal4vq  unique (diagram_object);
 
     alter table expression_function 
         add constraint UK_mscuoauoec01ombvya4tvjkhu  unique (id);
@@ -1038,8 +1055,14 @@
     alter table expressions_chain 
         add constraint UK_by4epobjwm4ye7l11tql8uqsg  unique (comparation_id);
 
-    alter table expressions_chain_expression_basic 
-        add constraint UK_41n882737ioltrw54yk3b7p64  unique (expressions_id);
+    alter table expressions_chain_expressions 
+        add constraint UK_gfkvidp1dtdj24nbdx49uhhd7  unique (expressions);
+
+    alter table global_variable_data 
+        add constraint UK_1le77m582rbg6e5wk78afl4wa  unique (variable_data);
+
+    alter table global_variable_data 
+        add constraint UK_luredwpd20xmdaydg1qumfagy  unique (comparation_id);
 
     alter table global_variable_data_date 
         add constraint UK_jjcyaeadrlsle9w6ui03fxyts  unique (id);
@@ -1047,11 +1070,17 @@
     alter table global_variable_data_date 
         add constraint UK_msqrr3xst8ku9g7kokb6rb7en  unique (comparation_id);
 
+    alter table global_variable_data_date 
+        add constraint UK_nn39fxh98vq4seoichi3m1l06  unique (variable_data);
+
     alter table global_variable_data_number 
         add constraint UK_bj7tyc2ha6qe0116cq9vp1noi  unique (id);
 
     alter table global_variable_data_number 
         add constraint UK_74ua5ydhfxowubdgkjv9vqfj0  unique (comparation_id);
+
+    alter table global_variable_data_number 
+        add constraint UK_is0pe3nglkynecqelxo7q6dvr  unique (variable_data);
 
     alter table global_variable_data_postalcode 
         add constraint UK_im5todr6m202sjon36n213mxo  unique (id);
@@ -1059,14 +1088,17 @@
     alter table global_variable_data_postalcode 
         add constraint UK_a0mcoc1isf9pufl9p5dighu8f  unique (comparation_id);
 
-    alter table global_variable_data_set 
-        add constraint UK_sxrvly4ppc6mq4wpdblvxbo11  unique (variableData_id);
+    alter table global_variable_data_postalcode 
+        add constraint UK_743oh2vilalyp9l0j3eni9k07  unique (variable_data);
 
     alter table global_variable_data_text 
         add constraint UK_8eoxdjy9bqti61l6bklvwg21g  unique (id);
 
     alter table global_variable_data_text 
         add constraint UK_jr5t4hfjxv9e4465ngdsl8x7f  unique (comparation_id);
+
+    alter table global_variable_data_text 
+        add constraint UK_ay7jlpu029pgjun743lv4501t  unique (variable_data);
 
     alter table global_variables 
         add constraint UK_8hxc6j1i2cfa44g7wypkkjxvo  unique (comparation_id);
@@ -1083,8 +1115,8 @@
     alter table rule_decision_table_row 
         add constraint UK_k9s0wi274elpijmqjof3avgy2  unique (comparation_id);
 
-    alter table rule_decision_table_rule_decision_table_row 
-        add constraint UK_j9j9wq9fnivf6m5exoi9fwfj2  unique (rules_id);
+    alter table rule_decision_table_row_rules 
+        add constraint UK_a74s342wqaat8f3d02tcs5fbo  unique (rule);
 
     alter table test_answer_input_date 
         add constraint UK_cphw2941utrn4uyhgdph14s40  unique (id);
@@ -1174,16 +1206,16 @@
         add constraint UK_t05hap53xy8005w0etx1tm0yx  unique (comparation_id);
 
     alter table tree_forms_diagram 
-        add constraint UK_kupriscdg8vbaueghjbub50wn  unique (diagrams_id);
+        add constraint UK_goqe055h5r63fj0txmtyqlww7  unique (diagram);
 
     alter table tree_forms_expressions_chain 
-        add constraint UK_odixr0cg2sffi97kgn1twedbq  unique (expressionChains_id);
+        add constraint UK_9ci7n44y8tluqrc4pikjcitr0  unique (expression_chain);
 
     alter table tree_forms_rule 
-        add constraint UK_qywcba5hk1dbarg1hdttwxef6  unique (rules_id);
+        add constraint UK_gyqbf18go6la4iwmtq5leojl9  unique (rule);
 
     alter table tree_forms_rule_decision_table 
-        add constraint UK_e0ilwwjcfr73m08kid8l8vqth  unique (tableRules_id);
+        add constraint UK_71aka1g9inevmbk5cqyk9l490  unique (table);
 
     alter table tree_groups 
         add constraint UK_lkx000598o8fu6o45gc6j8j6h  unique (id);
@@ -1203,8 +1235,8 @@
         references tree_forms (id);
 
     alter table diagram_child 
-        add constraint FK_372y4rvd7o3v11eeqx1taswsb 
-        foreign key (diagram_id) 
+        add constraint FK_ncuhyfx5qmiftgbj9s5cjx9d5 
+        foreign key (diagram) 
         references diagram (id);
 
     alter table diagram_child 
@@ -1272,9 +1304,9 @@
         foreign key (parent) 
         references diagram (id);
 
-    alter table diagram_fork_expression_value_tree_object_reference 
-        add constraint FK_qispgfcvla8gk8fyhefj0vjoa 
-        foreign key (diagram_fork_id) 
+    alter table diagram_fork_references 
+        add constraint FK_71e1x030rjp93nhsgou9anq7g 
+        foreign key (diagram_fork) 
         references diagram_fork (id);
 
     alter table diagram_links 
@@ -1283,13 +1315,13 @@
         references expressions_chain (id);
 
     alter table diagram_links 
-        add constraint FK_lpworf73vveqyeb1woyewpedp 
-        foreign key (source_id) 
+        add constraint FK_2r961ciiuuj63mhql6o2ctaxs 
+        foreign key (source) 
         references diagram_nodes (id);
 
     alter table diagram_links 
-        add constraint FK_fttc9baj2wxqq9oyfg15rb9vy 
-        foreign key (target_id) 
+        add constraint FK_kuc1tjl52tgboyjr3djrk98k5 
+        foreign key (target) 
         references diagram_nodes (id);
 
     alter table diagram_links 
@@ -1318,8 +1350,8 @@
         references diagram (id);
 
     alter table diagram_rule 
-        add constraint FK_k832erg1q7skten4dnhgc6plu 
-        foreign key (rule_id) 
+        add constraint FK_dw83eb92r6ro4fs6whcf5ofsr 
+        foreign key (rule) 
         references rule (id);
 
     alter table diagram_rule 
@@ -1388,8 +1420,8 @@
         references diagram (id);
 
     alter table diagram_table 
-        add constraint FK_ews6b37yjyobhivu09sacwcou 
-        foreign key (table_id) 
+        add constraint FK_kgl1jnopf8xtnvq6d137o30ad 
+        foreign key (table) 
         references rule_decision_table (id);
 
     alter table diagram_table 
@@ -1413,8 +1445,8 @@
         references diagram (id);
 
     alter table elements_of_diagram 
-        add constraint FK_nkcto9r1kt3lshu9xu3lvvew2 
-        foreign key (diagram_id) 
+        add constraint FK_srdhwrnjmtakxrktmdn6qs5r9 
+        foreign key (diagram) 
         references diagram (id);
 
     alter table expression_value_custom_variable 
@@ -1432,14 +1464,34 @@
         foreign key (global_variable) 
         references global_variables (id);
 
-    alter table expressions_chain_expression_basic 
-        add constraint FK_qhk31snb756cd02e1wykshmbg 
-        foreign key (expressions_chain_id) 
+    alter table expressions_chain_expressions 
+        add constraint FK_8s9codiage9cy7foa0s37oyge 
+        foreign key (expressions_chain) 
         references expressions_chain (id);
 
-    alter table global_variable_data_set 
-        add constraint FK_3a6w2ktwy9ppq1ftw2cprnq7u 
-        foreign key (global_variables_id) 
+    alter table global_variable_data 
+        add constraint FK_cnweumcj5da8xw7q8eclbr3dr 
+        foreign key (global_variable) 
+        references global_variables (id);
+
+    alter table global_variable_data_date 
+        add constraint FK_ijdp1pi4xq9yp75wvfv2m1pim 
+        foreign key (global_variable) 
+        references global_variables (id);
+
+    alter table global_variable_data_number 
+        add constraint FK_1bkolgnd3paoaocibpqjg714t 
+        foreign key (global_variable) 
+        references global_variables (id);
+
+    alter table global_variable_data_postalcode 
+        add constraint FK_2kn07e7r6lydwmxxoghxhniv4 
+        foreign key (global_variable) 
+        references global_variables (id);
+
+    alter table global_variable_data_text 
+        add constraint FK_21dyxtyov8ejah2o7586acgha 
+        foreign key (global_variable) 
         references global_variables (id);
 
     alter table rule 
@@ -1462,19 +1514,19 @@
         foreign key (conditions) 
         references expressions_chain (id);
 
-    alter table rule_decision_table_rule_decision_table_row 
-        add constraint FK_j9j9wq9fnivf6m5exoi9fwfj2 
-        foreign key (rules_id) 
+    alter table rule_decision_table_row_rules 
+        add constraint FK_a74s342wqaat8f3d02tcs5fbo 
+        foreign key (rule) 
         references rule_decision_table_row (id);
 
-    alter table rule_decision_table_rule_decision_table_row 
-        add constraint FK_3b21bread2lyauj75i58tehxi 
-        foreign key (rule_decision_table_id) 
+    alter table rule_decision_table_row_rules 
+        add constraint FK_lq0unaa7qahk87qi3mtb6dlo8 
+        foreign key (rule_decision_table) 
         references rule_decision_table (id);
 
     alter table test_answer_multi_checkbox_values 
-        add constraint FK_pwr2c4mmyjta3qcj4i3a831wc 
-        foreign key (TestAnswerMultiCheckBox_id) 
+        add constraint FK_t537k9ec1xkdxxscrte6kdcpv 
+        foreign key (test_answer_multi_checkbox) 
         references test_answer_multi_checkbox (id);
 
     alter table test_scenario 
@@ -1483,43 +1535,43 @@
         references test_scenario_form (id);
 
     alter table tree_forms_diagram 
-        add constraint FK_kupriscdg8vbaueghjbub50wn 
-        foreign key (diagrams_id) 
+        add constraint FK_goqe055h5r63fj0txmtyqlww7 
+        foreign key (diagram) 
         references diagram (id);
 
     alter table tree_forms_diagram 
-        add constraint FK_5q539qvus88s3p9tfpj8b1clh 
-        foreign key (tree_forms_id) 
+        add constraint FK_evycbl1p33a1cm7et4hkb83q6 
+        foreign key (form) 
         references tree_forms (id);
 
     alter table tree_forms_expressions_chain 
-        add constraint FK_odixr0cg2sffi97kgn1twedbq 
-        foreign key (expressionChains_id) 
+        add constraint FK_9ci7n44y8tluqrc4pikjcitr0 
+        foreign key (expression_chain) 
         references expressions_chain (id);
 
     alter table tree_forms_expressions_chain 
-        add constraint FK_gk1nyr8acjbvubqut6coox9nq 
-        foreign key (tree_forms_id) 
+        add constraint FK_grick71aaipvnvsyup1xxl7ud 
+        foreign key (form) 
         references tree_forms (id);
 
     alter table tree_forms_rule 
-        add constraint FK_qywcba5hk1dbarg1hdttwxef6 
-        foreign key (rules_id) 
+        add constraint FK_gyqbf18go6la4iwmtq5leojl9 
+        foreign key (rule) 
         references rule (id);
 
     alter table tree_forms_rule 
-        add constraint FK_s5ey41ep7k9cp45hr16fv2eoc 
-        foreign key (tree_forms_id) 
+        add constraint FK_9rs2f818ipriw69olvgv1rp5j 
+        foreign key (form) 
         references tree_forms (id);
 
     alter table tree_forms_rule_decision_table 
-        add constraint FK_e0ilwwjcfr73m08kid8l8vqth 
-        foreign key (tableRules_id) 
+        add constraint FK_71aka1g9inevmbk5cqyk9l490 
+        foreign key (table) 
         references rule_decision_table (id);
 
     alter table tree_forms_rule_decision_table 
-        add constraint FK_66thky5y9pgts1o4rmohiq8sh 
-        foreign key (tree_forms_id) 
+        add constraint FK_dr80lmno4djoqidma1h9khh1h 
+        foreign key (form) 
         references tree_forms (id);
 
 	CREATE TABLE `hibernate_sequence` (

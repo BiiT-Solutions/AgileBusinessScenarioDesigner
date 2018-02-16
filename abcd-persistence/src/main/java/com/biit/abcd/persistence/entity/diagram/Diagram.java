@@ -12,6 +12,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -49,7 +50,8 @@ public class Diagram extends StorableObject implements INameAttribute {
 
 	@SerializedName("cells")
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
-	@JoinTable(name = "elements_of_diagram")
+	@JoinTable(name = "elements_of_diagram", joinColumns=@JoinColumn(name="diagram", referencedColumnName="id"),
+		      inverseJoinColumns=@JoinColumn(name="diagram_object", referencedColumnName="id"))
 	@BatchSize(size = 20)
 	private Set<DiagramObject> diagramObjects;
 

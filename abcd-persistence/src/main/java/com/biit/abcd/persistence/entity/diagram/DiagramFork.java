@@ -8,6 +8,8 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -20,9 +22,11 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 @Table(name = "diagram_fork")
 public class DiagramFork extends DiagramElement {
 	private static final long serialVersionUID = -998601407465207830L;
-	// Due to bug (https://hibernate.atlassian.net/browse/HHH-5559) orphanRemoval is not working correctly in @OneToOne.
+	// Due to bug (https://hibernate.atlassian.net/browse/HHH-5559)
+	// orphanRemoval is not working correctly in @OneToOne.
 	// We change a @OneToMany list with only one element.
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+	@JoinTable(name = "diagram_fork_references", joinColumns = @JoinColumn(name = "diagram_fork", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "reference", referencedColumnName = "id"))
 	private List<ExpressionValueTreeObjectReference> references;
 
 	public DiagramFork() {
@@ -60,8 +64,8 @@ public class DiagramFork extends DiagramElement {
 	}
 
 	/**
-	 * When the Diagram Fork changes, all outgoing links must be updated. I.e. links first expression element must be
-	 * updated.
+	 * When the Diagram Fork changes, all outgoing links must be updated. I.e.
+	 * links first expression element must be updated.
 	 */
 	public void resetOutgoingLinks() {
 		for (DiagramLink outLink : getOutgoingLinks()) {

@@ -8,6 +8,8 @@ import java.util.Set;
 import javax.persistence.Cacheable;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -40,6 +42,7 @@ public class TableRule extends StorableObject implements INameAttribute {
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@BatchSize(size = 20)
 	//@OrderBy(clause = "creationTime ASC")
+	@JoinTable(name = "rule_decision_table_row_rules", joinColumns = @JoinColumn(name = "rule_decision_table", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "rule", referencedColumnName = "id"))
 	private List<TableRuleRow> rules;
 
 	public TableRule() {

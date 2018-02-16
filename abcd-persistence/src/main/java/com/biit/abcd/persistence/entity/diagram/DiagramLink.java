@@ -35,10 +35,12 @@ public class DiagramLink extends DiagramObject {
 
 	@Expose
 	@OneToOne(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
+	@JoinColumn(name="source")
 	private Node source;
 
 	@Expose
 	@OneToOne(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
+	@JoinColumn(name="target")
 	private Node target;
 
 	private String text;

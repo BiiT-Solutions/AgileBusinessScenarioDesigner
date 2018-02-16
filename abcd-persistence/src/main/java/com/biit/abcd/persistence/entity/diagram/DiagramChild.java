@@ -5,6 +5,7 @@ import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -15,7 +16,9 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 @Table(name = "diagram_child")
 public class DiagramChild extends DiagramElement {
 	private static final long serialVersionUID = -5504613126614498746L;
+
 	@OneToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "diagram")
 	private Diagram diagram;
 
 	public DiagramChild() {

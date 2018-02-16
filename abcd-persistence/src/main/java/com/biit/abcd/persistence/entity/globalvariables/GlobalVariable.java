@@ -12,6 +12,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -35,7 +36,7 @@ public class GlobalVariable extends StorableObject implements IGlobalVariable {
 	private AnswerFormat format;
 
 	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
-	@JoinTable(name = "global_variable_data_set")
+	@JoinTable(name = "global_variable_data", joinColumns = @JoinColumn(name = "global_variable", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "variable_data", referencedColumnName = "id"))
 	private List<VariableData> variableData;
 
 	public GlobalVariable() {
