@@ -83,7 +83,7 @@ public class Form extends BaseForm {
 	private Set<Diagram> diagrams;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinTable(name = "tree_forms_rule_decision_table", joinColumns = @JoinColumn(name = "form", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "table", referencedColumnName = "id"))
+	@JoinTable(name = "tree_forms_rule_decision_table", joinColumns = @JoinColumn(name = "form", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "table_rule", referencedColumnName = "id"))
 	private Set<TableRule> tableRules;
 
 	@OneToMany(mappedBy = "form", cascade = CascadeType.ALL, orphanRemoval = true)

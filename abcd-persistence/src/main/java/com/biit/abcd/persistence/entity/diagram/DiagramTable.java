@@ -19,7 +19,7 @@ public class DiagramTable extends DiagramElement {
 	private static final long serialVersionUID = 8876603849399308548L;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "table")
+	@JoinColumn(name = "table_rule")
 	private TableRule table;
 
 	public DiagramTable() {

@@ -251,7 +251,7 @@
         position bigint,
         size bigint,
         text bigint,
-        table bigint,
+        table_rule bigint,
         primary key (id)
     );
 
@@ -838,8 +838,8 @@
 
     create table tree_forms_rule_decision_table (
         form bigint not null,
-        table bigint not null,
-        primary key (form, table)
+        table_rule bigint not null,
+        primary key (form, table_rule)
     );
 
     create table tree_groups (
@@ -1215,7 +1215,7 @@
         add constraint UK_gyqbf18go6la4iwmtq5leojl9  unique (rule);
 
     alter table tree_forms_rule_decision_table 
-        add constraint UK_71aka1g9inevmbk5cqyk9l490  unique (table);
+        add constraint UK_saklv952rv0ykbxy559pmv874  unique (table_rule);
 
     alter table tree_groups 
         add constraint UK_lkx000598o8fu6o45gc6j8j6h  unique (id);
@@ -1420,8 +1420,8 @@
         references diagram (id);
 
     alter table diagram_table 
-        add constraint FK_kgl1jnopf8xtnvq6d137o30ad 
-        foreign key (table) 
+        add constraint FK_e9i92wb61ka6q57bcdltq2mqm 
+        foreign key (table_rule) 
         references rule_decision_table (id);
 
     alter table diagram_table 
@@ -1565,8 +1565,8 @@
         references tree_forms (id);
 
     alter table tree_forms_rule_decision_table 
-        add constraint FK_71aka1g9inevmbk5cqyk9l490 
-        foreign key (table) 
+        add constraint FK_saklv952rv0ykbxy559pmv874 
+        foreign key (table_rule) 
         references rule_decision_table (id);
 
     alter table tree_forms_rule_decision_table 
