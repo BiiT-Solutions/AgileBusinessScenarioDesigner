@@ -14,8 +14,8 @@
 
 	<properties>
 		<!-- Project cloned for testing -->
-		<source.gui.project>${project.parent.artifactId}-gui</source.gui.project>
-		<source.release.project>${project.parent.artifactId}-release</source.release.project>
+		<source.gui.project>abcd-gui</source.gui.project>
+		<source.release.project>abcd-release</source.release.project>
 		<!-- Database server -->
 		<database.server>vagrant-mysql.biit-solutions.com</database.server>
 		<!-- Replace original database for a database for testing -->
