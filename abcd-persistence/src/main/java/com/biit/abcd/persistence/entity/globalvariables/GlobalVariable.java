@@ -31,12 +31,14 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 @Cacheable(true)
 public class GlobalVariable extends StorableObject implements IGlobalVariable {
 	private static final long serialVersionUID = 3463882037342518214L;
+
 	@Column(unique = true, length = MAX_UNIQUE_COLUMN_LENGTH)
 	private String name;
+
 	private AnswerFormat format;
 
 	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
-	@JoinTable(name = "global_variable_data", joinColumns = @JoinColumn(name = "global_variable", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "variable_data", referencedColumnName = "id"))
+	@JoinTable(name = "global_variables_variable_data", joinColumns = @JoinColumn(name = "global_variable", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "variable_data", referencedColumnName = "id"))
 	private List<VariableData> variableData;
 
 	public GlobalVariable() {

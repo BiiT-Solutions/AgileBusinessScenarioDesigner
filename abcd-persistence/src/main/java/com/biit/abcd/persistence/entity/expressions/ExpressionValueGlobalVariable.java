@@ -21,9 +21,9 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 @Table(name = "expression_value_global_variable")
 public class ExpressionValueGlobalVariable extends ExpressionValue<GlobalVariable> {
 	private static final long serialVersionUID = 3063006330916018596L;
-	
+
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name="global_variable")
+	@JoinColumn(name = "global_variable")
 	private GlobalVariable globalVariable;
 
 	protected ExpressionValueGlobalVariable() {
@@ -80,8 +80,7 @@ public class ExpressionValueGlobalVariable extends ExpressionValue<GlobalVariabl
 			ExpressionValueGlobalVariable expressionValueGlobalConstant = (ExpressionValueGlobalVariable) object;
 			this.setValue(expressionValueGlobalConstant.getValue());
 		} else {
-			throw new NotValidStorableObjectException("Object '" + object
-					+ "' is not an instance of ExpressionValueGlobalConstant.");
+			throw new NotValidStorableObjectException("Object '" + object + "' is not an instance of ExpressionValueGlobalConstant.");
 		}
 	}
 }

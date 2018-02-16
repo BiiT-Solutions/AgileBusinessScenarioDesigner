@@ -491,20 +491,6 @@
         expressions bigint not null
     );
 
-    create table global_variable_data (
-        id bigint not null auto_increment,
-        comparation_id varchar(190) not null,
-        created_by DOUBLE,
-        creation_time datetime not null,
-        update_time datetime,
-        updated_by DOUBLE,
-        valid_from datetime,
-        valid_to datetime,
-        global_variable bigint not null,
-        variable_data bigint not null,
-        primary key (id)
-    );
-
     create table global_variable_data_date (
         id bigint not null,
         comparation_id varchar(190) not null,
@@ -514,8 +500,6 @@
         updated_by DOUBLE,
         valid_from datetime,
         valid_to datetime,
-        global_variable bigint not null,
-        variable_data bigint not null,
         value datetime,
         primary key (id)
     );
@@ -529,8 +513,6 @@
         updated_by DOUBLE,
         valid_from datetime,
         valid_to datetime,
-        global_variable bigint not null,
-        variable_data bigint not null,
         value double precision,
         primary key (id)
     );
@@ -544,8 +526,6 @@
         updated_by DOUBLE,
         valid_from datetime,
         valid_to datetime,
-        global_variable bigint not null,
-        variable_data bigint not null,
         postalcode varchar(255),
         primary key (id)
     );
@@ -559,8 +539,6 @@
         updated_by DOUBLE,
         valid_from datetime,
         valid_to datetime,
-        global_variable bigint not null,
-        variable_data bigint not null,
         value varchar(255),
         primary key (id)
     );
@@ -575,6 +553,11 @@
         format integer,
         name varchar(190),
         primary key (id)
+    );
+
+    create table global_variables_variable_data (
+        global_variable bigint not null,
+        variable_data bigint not null
     );
 
     create table rule (
@@ -1058,20 +1041,11 @@
     alter table expressions_chain_expressions 
         add constraint UK_gfkvidp1dtdj24nbdx49uhhd7  unique (expressions);
 
-    alter table global_variable_data 
-        add constraint UK_1le77m582rbg6e5wk78afl4wa  unique (variable_data);
-
-    alter table global_variable_data 
-        add constraint UK_luredwpd20xmdaydg1qumfagy  unique (comparation_id);
-
     alter table global_variable_data_date 
         add constraint UK_jjcyaeadrlsle9w6ui03fxyts  unique (id);
 
     alter table global_variable_data_date 
         add constraint UK_msqrr3xst8ku9g7kokb6rb7en  unique (comparation_id);
-
-    alter table global_variable_data_date 
-        add constraint UK_nn39fxh98vq4seoichi3m1l06  unique (variable_data);
 
     alter table global_variable_data_number 
         add constraint UK_bj7tyc2ha6qe0116cq9vp1noi  unique (id);
@@ -1079,17 +1053,11 @@
     alter table global_variable_data_number 
         add constraint UK_74ua5ydhfxowubdgkjv9vqfj0  unique (comparation_id);
 
-    alter table global_variable_data_number 
-        add constraint UK_is0pe3nglkynecqelxo7q6dvr  unique (variable_data);
-
     alter table global_variable_data_postalcode 
         add constraint UK_im5todr6m202sjon36n213mxo  unique (id);
 
     alter table global_variable_data_postalcode 
         add constraint UK_a0mcoc1isf9pufl9p5dighu8f  unique (comparation_id);
-
-    alter table global_variable_data_postalcode 
-        add constraint UK_743oh2vilalyp9l0j3eni9k07  unique (variable_data);
 
     alter table global_variable_data_text 
         add constraint UK_8eoxdjy9bqti61l6bklvwg21g  unique (id);
@@ -1097,14 +1065,14 @@
     alter table global_variable_data_text 
         add constraint UK_jr5t4hfjxv9e4465ngdsl8x7f  unique (comparation_id);
 
-    alter table global_variable_data_text 
-        add constraint UK_ay7jlpu029pgjun743lv4501t  unique (variable_data);
-
     alter table global_variables 
         add constraint UK_8hxc6j1i2cfa44g7wypkkjxvo  unique (comparation_id);
 
     alter table global_variables 
         add constraint UK_ba2w3ms6v9agn6ac5ois703u2  unique (name);
+
+    alter table global_variables_variable_data 
+        add constraint UK_eg5ow0st4g9jhpus91x58i5s2  unique (variable_data);
 
     alter table rule 
         add constraint UK_kynfmryi32dudhf5d4ff1d248  unique (comparation_id);
@@ -1469,28 +1437,8 @@
         foreign key (expressions_chain) 
         references expressions_chain (id);
 
-    alter table global_variable_data 
-        add constraint FK_cnweumcj5da8xw7q8eclbr3dr 
-        foreign key (global_variable) 
-        references global_variables (id);
-
-    alter table global_variable_data_date 
-        add constraint FK_ijdp1pi4xq9yp75wvfv2m1pim 
-        foreign key (global_variable) 
-        references global_variables (id);
-
-    alter table global_variable_data_number 
-        add constraint FK_1bkolgnd3paoaocibpqjg714t 
-        foreign key (global_variable) 
-        references global_variables (id);
-
-    alter table global_variable_data_postalcode 
-        add constraint FK_2kn07e7r6lydwmxxoghxhniv4 
-        foreign key (global_variable) 
-        references global_variables (id);
-
-    alter table global_variable_data_text 
-        add constraint FK_21dyxtyov8ejah2o7586acgha 
+    alter table global_variables_variable_data 
+        add constraint FK_3jqe1nvcx8elyt4g5unqca2bk 
         foreign key (global_variable) 
         references global_variables (id);
 
