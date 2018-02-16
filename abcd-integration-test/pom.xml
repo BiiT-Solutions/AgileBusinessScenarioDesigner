@@ -14,7 +14,8 @@
 
 	<properties>
 		<!-- Project cloned for testing -->
-		<source.gui.project>abcd-gui</source.gui.project>
+		<source.gui.project>${project.parent.artifactId}-gui</source.gui.project>
+		<source.release.project>${project.parent.artifactId}-release</source.release.project>
 		<!-- Database server -->
 		<database.server>vagrant-mysql.biit-solutions.com</database.server>
 		<!-- Replace original database for a database for testing -->
@@ -199,6 +200,12 @@
 								<phase>process-resources</phase>
 								<configuration>
 									<target>
+										<!-- Copy schema exporter for creating database tests -->
+										<delete file="./src/test/resources/database/abcd_base.sql" />
+										<copy file="../${source.release.project}/database/create_mysql.sql" tofile="./src/test/resources/database/abcd_base.sql" />
+										<replace file="./src/test/resources/database/abcd_base.sql" token="create table custom_variables (" value="SET UNIQUE_CHECKS=0;&#xA; SET FOREIGN_KEY_CHECKS = 0;&#xA; create table custom_variables (" />
+										<concat destfile="./src/test/resources/database/abcd_base.sql" append="true">SET UNIQUE_CHECKS=1;
+											SET FOREIGN_KEY_CHECKS = 1;</concat>
 										<!-- Replicate webapp folder, needed for jetty to run -->
 										<delete dir="src/main/webapp" failonerror="false" includeemptydirs="true" />
 										<copy todir="src/main/webapp">
@@ -306,6 +313,12 @@
 								<phase>process-resources</phase>
 								<configuration>
 									<target>
+										<!-- Copy schema exporter for creating database tests -->
+										<delete file="./src/test/resources/database/abcd_base.sql" />
+										<copy file="../${source.release.project}/database/create_mysql.sql" tofile="./src/test/resources/database/abcd_base.sql" />
+										<replace file="./src/test/resources/database/abcd_base.sql" token="create table custom_variables (" value="SET UNIQUE_CHECKS=0;&#xA; SET FOREIGN_KEY_CHECKS = 0;&#xA; create table custom_variables (" />
+										<concat destfile="./src/test/resources/database/abcd_base.sql" append="true">SET UNIQUE_CHECKS=1;
+											SET FOREIGN_KEY_CHECKS = 1;</concat>
 										<!-- Replicate webapp folder, needed for jetty to run -->
 										<delete dir="src/main/webapp" failonerror="false" includeemptydirs="true" />
 										<copy todir="src/main/webapp">
