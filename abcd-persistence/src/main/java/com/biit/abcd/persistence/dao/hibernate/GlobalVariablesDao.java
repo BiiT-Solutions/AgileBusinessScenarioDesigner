@@ -26,8 +26,7 @@ public class GlobalVariablesDao extends AnnotatedGenericDao<GlobalVariable, Long
 		}
 
 		try {
-			Query query = getEntityManager().createQuery(
-					"SELECT count(*) FROM expression_value_global_variable WHERE variable=:globalVariableId");
+			Query query = getEntityManager().createQuery("SELECT count(*) FROM ExpressionValueCustomVariable WHERE variable=:globalVariableId");
 			query.setParameter("globalVariableId", globalVariable.getId());
 			Long count = (Long) query.getSingleResult();
 			return count.intValue();
@@ -50,9 +49,7 @@ public class GlobalVariablesDao extends AnnotatedGenericDao<GlobalVariable, Long
 		}
 
 		try {
-			Query query = getEntityManager()
-					.createQuery(
-							"SELECT count(*) FROM expression_value_global_variable WHERE variable IN (:globalVariablesId)");
+			Query query = getEntityManager().createQuery("SELECT count(*) FROM ExpressionValueCustomVariable WHERE variable IN (:globalVariablesId)");
 			query.setParameter("globalVariablesId", ids);
 			Long count = (Long) query.getSingleResult();
 			return count.intValue();
