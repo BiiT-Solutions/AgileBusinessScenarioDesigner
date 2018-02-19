@@ -30,6 +30,7 @@ import com.biit.abcd.webpages.components.IFormSelectedListener;
 import com.biit.abcd.webpages.elements.formdesigner.RootForm;
 import com.biit.abcd.webpages.elements.formmanager.FormManagerUpperMenu;
 import com.biit.abcd.webpages.elements.formmanager.FormManagerUpperMenu.IFormRemove;
+import com.biit.abcd.webpages.elements.formmanager.WindowImportJson;
 import com.biit.abcd.webpages.elements.formtable.FormsVersionsTreeTable;
 import com.biit.abcd.webpages.elements.formtable.FormsVersionsTreeTable.IFormStatusChange;
 import com.biit.form.exceptions.CharacterNotAllowedException;
@@ -40,12 +41,13 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.server.VaadinServlet;
+import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.ComboBox;
 
 public class FormManager extends FormWebPageComponent {
 	private static final long serialVersionUID = 8306642137791826056L;
-	private static final List<AbcdActivity> activityPermissions = new ArrayList<AbcdActivity>(
-			Arrays.asList(AbcdActivity.READ));
+	private static final List<AbcdActivity> activityPermissions = new ArrayList<AbcdActivity>(Arrays.asList(AbcdActivity.READ));
 	private FormsVersionsTreeTable formTable;
 	private FormManagerUpperMenu upperMenu;
 
@@ -91,6 +93,14 @@ public class FormManager extends FormWebPageComponent {
 					});
 					windowAccept.showCentered();
 				}
+			}
+		});
+		upperMenu.addImportJsonListener(new ClickListener() {
+			private static final long serialVersionUID = 927805685681030688L;
+
+			@Override
+			public void buttonClick(ClickEvent event) {
+				importJsonForm();
 			}
 		});
 		setUpperMenu(upperMenu);
@@ -167,6 +177,19 @@ public class FormManager extends FormWebPageComponent {
 		simpleView.setId(form.getId());
 	}
 
+	private void importJsonForm() {
+		WindowImportJson window = new WindowImportJson();
+		window.showCentered();
+		window.addAcceptActionListener(new AcceptActionListener() {
+
+			@Override
+			public void acceptAction(AcceptCancelWindow window) {
+				window.close();
+				formTable.refreshFormTable();
+			}
+		});
+	}
+
 	public void setFormById(Long formId) {
 		UserSessionHandler.setForm(formDao.get(formId));
 	}
@@ -193,28 +216,23 @@ public class FormManager extends FormWebPageComponent {
 			AbcdLogger.errorMessage(FormManager.class.getName(), e);
 		} catch (UnexpectedDatabaseException e) {
 			AbcdLogger.errorMessage(FormManager.class.getName(), e);
-			MessageManager.showError(LanguageCodes.ERROR_ACCESSING_DATABASE,
-					LanguageCodes.ERROR_ACCESSING_DATABASE_DESCRIPTION);
+			MessageManager.showError(LanguageCodes.ERROR_ACCESSING_DATABASE, LanguageCodes.ERROR_ACCESSING_DATABASE_DESCRIPTION);
 		}
 	}
 
-	public Form createNewFormVersion(SimpleFormView form) throws NotValidStorableObjectException,
-			CharacterNotAllowedException, UnexpectedDatabaseException {
-		AbcdLogger.info(this.getClass().getName(), "User: " + UserSessionHandler.getUser().getEmailAddress()
-				+ " createNewFormVersion " + form + " START");
+	public Form createNewFormVersion(SimpleFormView form) throws NotValidStorableObjectException, CharacterNotAllowedException, UnexpectedDatabaseException {
+		AbcdLogger.info(this.getClass().getName(), "User: " + UserSessionHandler.getUser().getEmailAddress() + " createNewFormVersion " + form + " START");
 
 		Form newFormVersion;
 		try {
 			Form realForm = formDao.getForm(form.getLabel(), form.getVersion(), form.getOrganizationId());
 			newFormVersion = realForm.createNewVersion(UserSessionHandler.getUser());
 		} catch (CharacterNotAllowedException | NotValidStorableObjectException ex) {
-			AbcdLogger.severe(this.getClass().getName(), "User: " + UserSessionHandler.getUser().getEmailAddress()
-					+ " createForm " + ex.getMessage());
+			AbcdLogger.severe(this.getClass().getName(), "User: " + UserSessionHandler.getUser().getEmailAddress() + " createForm " + ex.getMessage());
 			throw ex;
 		}
 
-		AbcdLogger.info(this.getClass().getName(), "User: " + UserSessionHandler.getUser().getEmailAddress()
-				+ " createNewFormVersion " + form + " END");
+		AbcdLogger.info(this.getClass().getName(), "User: " + UserSessionHandler.getUser().getEmailAddress() + " createNewFormVersion " + form + " END");
 		return newFormVersion;
 	}
 
@@ -226,15 +244,12 @@ public class FormManager extends FormWebPageComponent {
 			// If it is the last form, remove all its tests.
 			RootForm rootForm = formTable.getSelectedRootForm();
 			if (rootForm.getChildForms().size() <= 1) {
-				List<TestScenario> testScenarios = testScenarioDao.getTestScenarioByForm(selectedForm.getLabel(),
-						selectedForm.getOrganizationId());
+				List<TestScenario> testScenarios = testScenarioDao.getTestScenarioByForm(selectedForm.getLabel(), selectedForm.getOrganizationId());
 				for (TestScenario testScenario : testScenarios) {
 					try {
 						testScenarioDao.makeTransient(testScenario);
-						AbcdLogger.info(this.getClass().getName(), "User '"
-								+ UserSessionHandler.getUser().getEmailAddress() + "' has removed test scenario '"
-								+ testScenario.getName() + "' for form '" + selectedForm.getLabel() + "' (version "
-								+ selectedForm.getVersion() + ").");
+						AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress() + "' has removed test scenario '"
+								+ testScenario.getName() + "' for form '" + selectedForm.getLabel() + "' (version " + selectedForm.getVersion() + ").");
 					} catch (ElementCannotBeRemovedException e) {
 						// Impossible.
 						AbcdLogger.errorMessage(this.getClass().getName(), e);
@@ -248,9 +263,10 @@ public class FormManager extends FormWebPageComponent {
 				// Impossible.
 				AbcdLogger.errorMessage(this.getClass().getName(), e);
 			}
-			AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
-					+ "' has removed form '" + selectedForm.getLabel() + "' (version " + selectedForm.getVersion()
-					+ ").");
+			AbcdLogger.info(
+					this.getClass().getName(),
+					"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has removed form '" + selectedForm.getLabel() + "' (version "
+							+ selectedForm.getVersion() + ").");
 			formTable.refreshFormTable();
 		}
 	}
@@ -296,27 +312,21 @@ public class FormManager extends FormWebPageComponent {
 	}
 
 	private void showEditableWarningIfNeeded(FormWorkStatus previousStatus, FormWorkStatus comboBoxStatus) {
-		if (!getForm().isLastVersion() && comboBoxStatus.equals(FormWorkStatus.DESIGN)
-				&& previousStatus.equals(FormWorkStatus.FINAL_DESIGN)) {
-			MessageManager.showWarning(LanguageCodes.WARNING_TITLE,
-					LanguageCodes.WARNING_ONLY_RULES_AND_EXPRESSIONS_EDITABLE);
+		if (!getForm().isLastVersion() && comboBoxStatus.equals(FormWorkStatus.DESIGN) && previousStatus.equals(FormWorkStatus.FINAL_DESIGN)) {
+			MessageManager.showWarning(LanguageCodes.WARNING_TITLE, LanguageCodes.WARNING_ONLY_RULES_AND_EXPRESSIONS_EDITABLE);
 		}
 	}
 
-	private void changeStatusOnDatabase(SimpleFormView form, ComboBox statusComboBox, FormWorkStatus value)
-			throws NotEnoughRightsToChangeStatusException {
+	private void changeStatusOnDatabase(SimpleFormView form, ComboBox statusComboBox, FormWorkStatus value) throws NotEnoughRightsToChangeStatusException {
 		try {
-			if (!securityService.isAuthorizedActivity(UserSessionHandler.getUser(), form.getOrganizationId(),
-					AbcdActivity.FORM_STATUS_DOWNGRADE)) {
-				throw new NotEnoughRightsToChangeStatusException("User '"
-						+ UserSessionHandler.getUser().getEmailAddress()
+			if (!securityService.isAuthorizedActivity(UserSessionHandler.getUser(), form.getOrganizationId(), AbcdActivity.FORM_STATUS_DOWNGRADE)) {
+				throw new NotEnoughRightsToChangeStatusException("User '" + UserSessionHandler.getUser().getEmailAddress()
 						+ "' has not enought rights to change the status of form '" + form.getLabel() + "'!");
 			}
 			try {
 				formDao.updateFormStatus(form.getId(), value);
 			} catch (UnexpectedDatabaseException e) {
-				MessageManager.showError(LanguageCodes.ERROR_ACCESSING_DATABASE,
-						LanguageCodes.ERROR_ACCESSING_DATABASE_DESCRIPTION);
+				MessageManager.showError(LanguageCodes.ERROR_ACCESSING_DATABASE, LanguageCodes.ERROR_ACCESSING_DATABASE_DESCRIPTION);
 			}
 
 		} catch (NotEnoughRightsToChangeStatusException e) {

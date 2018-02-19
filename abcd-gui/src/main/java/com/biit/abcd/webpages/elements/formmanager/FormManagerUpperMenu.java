@@ -67,7 +67,7 @@ import com.vaadin.ui.Button.ClickListener;
 
 public class FormManagerUpperMenu extends UpperMenu {
 	private static final long serialVersionUID = 504419812975550794L;
-	private IconButton newButton, newFormButton, newVersion, exportToDrools, createTestScenario, launchTestScenario, removeForm, createPdf;
+	private IconButton newButton, newFormButton, newVersion, exportToDrools, createTestScenario, launchTestScenario, removeForm, createPdf, importJson;
 	private FormManager parent;
 	private List<IFormSelectedListener> formSelectedListeners;
 	private Form form;
@@ -302,6 +302,13 @@ public class FormManagerUpperMenu extends UpperMenu {
 		newVersion.setHeight("100%");
 		newVersion.setWidth(BUTTON_WIDTH);
 		iconButtonList.add(newVersion);
+
+		importJson = new IconButton(LanguageCodes.CAPTION_IMPORT_JSON_FORM, ThemeIcon.FORM_MANAGER_IMPORT_JSON_FORM, LanguageCodes.TOOLTIP_IMPORT_JSON_FORM,
+				IconSize.MEDIUM);
+		importJson.setHeight("100%");
+		importJson.setWidth(BUTTON_WIDTH);
+		iconButtonList.add(importJson);
+
 		return iconButtonList;
 	}
 
@@ -410,4 +417,9 @@ public class FormManagerUpperMenu extends UpperMenu {
 			listener.removeButtonPressed();
 		}
 	}
+
+	public void addImportJsonListener(ClickListener listener) {
+		importJson.addClickListener(listener);
+	}
+
 }

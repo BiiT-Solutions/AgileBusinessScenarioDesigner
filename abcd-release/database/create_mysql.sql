@@ -284,7 +284,7 @@
         update_time datetime,
         updated_by DOUBLE,
         sort_sequence bigint not null,
-        value varchar(255),
+        expression_value varchar(255),
         primary key (id)
     );
 
@@ -346,7 +346,7 @@
         update_time datetime,
         updated_by DOUBLE,
         sort_sequence bigint not null,
-        value bit,
+        expression_value bit,
         primary key (id)
     );
 
@@ -360,7 +360,7 @@
         sort_sequence bigint not null,
         unit varchar(255),
         reference bigint,
-        variable bigint,
+        custom_variable bigint,
         primary key (id)
     );
 
@@ -373,7 +373,7 @@
         updated_by DOUBLE,
         sort_sequence bigint not null,
         type varchar(255),
-        variable bigint,
+        custom_variable bigint,
         primary key (id)
     );
 
@@ -409,7 +409,7 @@
         update_time datetime,
         updated_by DOUBLE,
         sort_sequence bigint not null,
-        value double precision,
+        expression_value double precision,
         primary key (id)
     );
 
@@ -500,7 +500,7 @@
         updated_by DOUBLE,
         valid_from datetime,
         valid_to datetime,
-        value datetime,
+        variable_value datetime,
         primary key (id)
     );
 
@@ -513,7 +513,7 @@
         updated_by DOUBLE,
         valid_from datetime,
         valid_to datetime,
-        value double precision,
+        variable_value double precision,
         primary key (id)
     );
 
@@ -539,7 +539,7 @@
         updated_by DOUBLE,
         valid_from datetime,
         valid_to datetime,
-        value varchar(255),
+        variable_value varchar(255),
         primary key (id)
     );
 
@@ -1418,13 +1418,13 @@
         references diagram (id);
 
     alter table expression_value_custom_variable 
-        add constraint FK_2nswd0obxh9dycb44n2uynrji 
-        foreign key (variable) 
+        add constraint FK_s76hvcpxgw8o64y1hv3yjgkvg 
+        foreign key (custom_variable) 
         references custom_variables (id);
 
     alter table expression_value_generic_custom_variable 
-        add constraint FK_8n70184rsj92524498jmsgq84 
-        foreign key (variable) 
+        add constraint FK_4hf15s71vrbujxy345lx9rq4n 
+        foreign key (custom_variable) 
         references custom_variables (id);
 
     alter table expression_value_global_variable 

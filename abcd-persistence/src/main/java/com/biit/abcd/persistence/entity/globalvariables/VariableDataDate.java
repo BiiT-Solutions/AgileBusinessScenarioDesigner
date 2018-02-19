@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -16,6 +17,8 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 @Table(name = "global_variable_data_date")
 public class VariableDataDate extends VariableData {
 	private static final long serialVersionUID = 4865657000916202191L;
+	
+	@Column(name = "variable_value")
 	private Timestamp value;
 
 	public VariableDataDate() {

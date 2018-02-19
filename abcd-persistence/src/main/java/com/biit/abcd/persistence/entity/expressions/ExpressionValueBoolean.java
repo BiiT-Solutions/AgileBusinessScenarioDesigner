@@ -3,6 +3,7 @@ package com.biit.abcd.persistence.entity.expressions;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -17,6 +18,8 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 @Table(name = "expression_value_boolean")
 public class ExpressionValueBoolean extends ExpressionValue<Boolean> {
 	private static final long serialVersionUID = 4438705376703075628L;
+
+	@Column(name = "expression_value")
 	private Boolean value;
 
 	protected ExpressionValueBoolean() {
@@ -70,8 +73,7 @@ public class ExpressionValueBoolean extends ExpressionValue<Boolean> {
 			ExpressionValueBoolean expressionValueBoolean = (ExpressionValueBoolean) object;
 			this.setValue(expressionValueBoolean.getValue());
 		} else {
-			throw new NotValidStorableObjectException("Object '" + object
-					+ "' is not an instance of ExpressionValueBoolean.");
+			throw new NotValidStorableObjectException("Object '" + object + "' is not an instance of ExpressionValueBoolean.");
 		}
 	}
 

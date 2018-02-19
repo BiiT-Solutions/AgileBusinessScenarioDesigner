@@ -24,7 +24,7 @@ public class ExpressionValueCustomVariable extends ExpressionValueTreeObjectRefe
 	private static final long serialVersionUID = -5934937557607551025L;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name="variable")
+	@JoinColumn(name="custom_variable")
 	private CustomVariable variable;
 
 	public ExpressionValueCustomVariable() {

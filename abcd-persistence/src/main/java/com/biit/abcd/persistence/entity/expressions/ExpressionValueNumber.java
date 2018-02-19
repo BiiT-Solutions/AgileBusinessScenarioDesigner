@@ -3,6 +3,7 @@ package com.biit.abcd.persistence.entity.expressions;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -17,6 +18,8 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 @Table(name = "expression_value_number")
 public class ExpressionValueNumber extends ExpressionValue<Double> {
 	private static final long serialVersionUID = -8379130602709661373L;
+
+	@Column(name = "expression_value")
 	private Double value;
 
 	protected ExpressionValueNumber() {
@@ -46,8 +49,7 @@ public class ExpressionValueNumber extends ExpressionValue<Double> {
 
 	public String getValueWithoutTrailingZeroes() {
 		Double convertedValue = new Double(value);
-		return convertedValue.toString().indexOf(".") < 0 ? convertedValue.toString() : convertedValue.toString()
-				.replaceAll("0*$", "").replaceAll("\\.$", "");
+		return convertedValue.toString().indexOf(".") < 0 ? convertedValue.toString() : convertedValue.toString().replaceAll("0*$", "").replaceAll("\\.$", "");
 	}
 
 	@Override
@@ -68,8 +70,7 @@ public class ExpressionValueNumber extends ExpressionValue<Double> {
 			ExpressionValueNumber expressionValueNumber = (ExpressionValueNumber) object;
 			this.setValue(expressionValueNumber.getValue());
 		} else {
-			throw new NotValidStorableObjectException("Object '" + object
-					+ "' is not an instance of ExpressionValueNumber.");
+			throw new NotValidStorableObjectException("Object '" + object + "' is not an instance of ExpressionValueNumber.");
 		}
 	}
 

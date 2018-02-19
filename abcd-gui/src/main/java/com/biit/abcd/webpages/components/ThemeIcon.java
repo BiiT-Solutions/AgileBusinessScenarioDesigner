@@ -208,7 +208,9 @@ public enum ThemeIcon {
 	
 	PAGE_ERROR("page.error.svg"), 
 	
-	PAGE_NOT_FOUND("page.not.found.svg"), 
+	PAGE_NOT_FOUND("page.not.found.svg"),
+	
+	FORM_MANAGER_IMPORT_JSON_FORM("file.json.svg"), 
 	
 	CREATE_PDF("pdf.svg");
 	
