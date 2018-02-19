@@ -152,6 +152,9 @@ public enum LanguageCodes {
 	WINDOW_NEWFORM_SAVEBUTTON_LABEL("windowNewForm.savebutton.label"),
 	WINDOW_NEWFORM_SAVEBUTTON_TOOLTIP("windowNewForm.savebutton.tooltip"),
 	WINDOW_NEWFORM_CANCELBUTTON_LABEL("windowNewForm.cancelbutton.label"),
+	
+	FORM_NAME("form.name"),
+	FORM_GROUP("form.group"),
 
 
 	FORM_DIAGRAM_BUILDER_UPPER_BUTTON_NEW_DIAGRAM_CAPTION("formDiagramBuilder.upper.newDiagram.caption"),
@@ -559,6 +562,11 @@ public enum LanguageCodes {
 	
 	CAPTION_CREATE_PDF("caption.create.pdf"), 
 	TOOLTIP_CREATE_PDF("tooltip.create.pdf"),
+	
+	INVALID_JSON_CODE("invalid.json.code"),
+	INVALID_JSON_CODE_DESCRIPTION("invalid.json.code.description"), 
+	CAPTION_IMPORT_JSON_FORM("caption.import.json.form"),  
+	TOOLTIP_IMPORT_JSON_FORM("tooltip.import.json.form"),
 	;
 
 	private String value;
