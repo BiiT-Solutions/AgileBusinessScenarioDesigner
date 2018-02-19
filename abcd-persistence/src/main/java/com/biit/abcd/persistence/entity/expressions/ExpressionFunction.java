@@ -3,6 +3,7 @@ package com.biit.abcd.persistence.entity.expressions;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -22,8 +23,9 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class ExpressionFunction extends Expression implements IExpressionType<AvailableFunction> {
 	private static final long serialVersionUID = -4646054850756194839L;
-	
+
 	@Enumerated(EnumType.STRING)
+	@Column(name = "expression_value")
 	private AvailableFunction value;
 
 	public ExpressionFunction() {
@@ -70,8 +72,7 @@ public class ExpressionFunction extends Expression implements IExpressionType<Av
 			ExpressionFunction expressionFunction = (ExpressionFunction) object;
 			value = expressionFunction.getValue();
 		} else {
-			throw new NotValidStorableObjectException("Object '" + object
-					+ "' is not an instance of ExpressionFunction.");
+			throw new NotValidStorableObjectException("Object '" + object + "' is not an instance of ExpressionFunction.");
 		}
 	}
 

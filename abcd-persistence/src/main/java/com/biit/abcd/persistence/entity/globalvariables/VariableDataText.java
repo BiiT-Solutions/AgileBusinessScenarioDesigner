@@ -3,6 +3,7 @@ package com.biit.abcd.persistence.entity.globalvariables;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -14,6 +15,8 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 @Table(name = "global_variable_data_text")
 public class VariableDataText extends VariableData {
 	private static final long serialVersionUID = 5710769438060368212L;
+
+	@Column(name = "variable_value")
 	private String value;
 
 	public VariableDataText() {
