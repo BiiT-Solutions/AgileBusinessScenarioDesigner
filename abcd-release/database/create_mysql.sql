@@ -373,7 +373,7 @@
         updated_by DOUBLE,
         sort_sequence bigint not null,
         type varchar(255),
-        variable bigint,
+        custom_variable bigint,
         primary key (id)
     );
 
@@ -1423,8 +1423,8 @@
         references custom_variables (id);
 
     alter table expression_value_generic_custom_variable 
-        add constraint FK_8n70184rsj92524498jmsgq84 
-        foreign key (variable) 
+        add constraint FK_4hf15s71vrbujxy345lx9rq4n 
+        foreign key (custom_variable) 
         references custom_variables (id);
 
     alter table expression_value_global_variable 
