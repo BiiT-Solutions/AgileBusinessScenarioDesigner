@@ -39,7 +39,7 @@ public class ExpressionValueGlobalVariable extends ExpressionValue<GlobalVariabl
 	public String getRepresentation(boolean showWhiteCharacter) {
 		String expressionString = "";
 		if (globalVariable != null) {
-			expressionString += globalVariable.getName();
+			expressionString += globalVariable.getName() + "(" + globalVariable.getValue() + ")";
 		}
 		return expressionString;
 	}

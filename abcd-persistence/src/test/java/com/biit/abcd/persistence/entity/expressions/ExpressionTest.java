@@ -1,5 +1,10 @@
 package com.biit.abcd.persistence.entity.expressions;
 
+import java.sql.Timestamp;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -9,6 +14,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import com.biit.abcd.persistence.dao.IFormDao;
+import com.biit.abcd.persistence.dao.IGlobalVariablesDao;
 import com.biit.abcd.persistence.entity.AnswerFormat;
 import com.biit.abcd.persistence.entity.AnswerType;
 import com.biit.abcd.persistence.entity.Category;
@@ -17,6 +23,8 @@ import com.biit.abcd.persistence.entity.CustomVariableScope;
 import com.biit.abcd.persistence.entity.CustomVariableType;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Question;
+import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
+import com.biit.drools.global.variables.exceptions.NotValidTypeInVariableData;
 import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.DependencyExistException;
 import com.biit.form.exceptions.ElementIsReadOnly;
@@ -33,13 +41,22 @@ import com.biit.persistence.entity.exceptions.FieldTooLongException;
 public class ExpressionTest extends AbstractTransactionalTestNGSpringContextTests {
 	private final static String CATEGORY_NAME = "Category1";
 
+	private final static String GLOBAL_VARIABLE_NAME = "GlobalVariable1";
+	private static final Timestamp VARIABLE_DATA_VALID_FROM = new Timestamp((new Date().getTime() / 1000) * 1000);
+	private static final Timestamp VARIABLE_DATA_VALID_TO = new Timestamp(VARIABLE_DATA_VALID_FROM.getTime() + (3600 * 1000));
+	private static final Timestamp VARIABLE_DATA_VALID_TO_2 = new Timestamp(VARIABLE_DATA_VALID_TO.getTime() + (3600 * 1000));
+	private static final String VARIABLE_DATA_VALUE_1 = "AAA";
+	private static final String VARIABLE_DATA_VALUE_2 = "BBB";
+
 	@Autowired
 	private IFormDao formDao;
 
+	@Autowired
+	private IGlobalVariablesDao globalVariablesDao;
+
 	@Test
-	public void checkExpressionStorageAndOrder() throws FieldTooLongException, NotValidChildException,
-			InvalidAnswerFormatException, CharacterNotAllowedException, UnexpectedDatabaseException, ElementIsReadOnly,
-			ElementCannotBePersistedException, ElementCannotBeRemovedException {
+	public void checkExpressionStorageAndOrder() throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException,
+			CharacterNotAllowedException, UnexpectedDatabaseException, ElementIsReadOnly, ElementCannotBePersistedException, ElementCannotBeRemovedException {
 		// Create the form
 		Form form = new Form("DhszwForm");
 		form.setOrganizationId(0l);
@@ -51,8 +68,7 @@ public class ExpressionTest extends AbstractTransactionalTestNGSpringContextTest
 		birthdate.setAnswerFormat(AnswerFormat.DATE);
 		category.addChild(birthdate);
 
-		CustomVariable customVarCategory = new CustomVariable(form, "cScore", CustomVariableType.NUMBER,
-				CustomVariableScope.CATEGORY);
+		CustomVariable customVarCategory = new CustomVariable(form, "cScore", CustomVariableType.NUMBER, CustomVariableScope.CATEGORY);
 
 		form.getCustomVariables().add(customVarCategory);
 
@@ -75,10 +91,8 @@ public class ExpressionTest extends AbstractTransactionalTestNGSpringContextTest
 	}
 
 	@Test(expectedExceptions = { DependencyExistException.class })
-	public void checkExpressionDependencies() throws FieldTooLongException, NotValidChildException,
-			InvalidAnswerFormatException, CharacterNotAllowedException, UnexpectedDatabaseException,
-			DependencyExistException, ElementIsReadOnly, ElementCannotBePersistedException,
-			ElementCannotBeRemovedException {
+	public void checkExpressionDependencies() throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException, CharacterNotAllowedException,
+			UnexpectedDatabaseException, DependencyExistException, ElementIsReadOnly, ElementCannotBePersistedException, ElementCannotBeRemovedException {
 		// Create the form
 		Form form = new Form("DhszwForm");
 		form.setOrganizationId(0l);
@@ -90,8 +104,7 @@ public class ExpressionTest extends AbstractTransactionalTestNGSpringContextTest
 		birthdate.setAnswerFormat(AnswerFormat.DATE);
 		category.addChild(birthdate);
 
-		CustomVariable customVarCategory = new CustomVariable(form, "cScore", CustomVariableType.NUMBER,
-				CustomVariableScope.CATEGORY);
+		CustomVariable customVarCategory = new CustomVariable(form, "cScore", CustomVariableType.NUMBER, CustomVariableScope.CATEGORY);
 
 		form.getCustomVariables().add(customVarCategory);
 
@@ -116,9 +129,8 @@ public class ExpressionTest extends AbstractTransactionalTestNGSpringContextTest
 	}
 
 	@Test
-	public void checkExpressionDependenciesAcomplished() throws FieldTooLongException, NotValidChildException,
-			InvalidAnswerFormatException, CharacterNotAllowedException, UnexpectedDatabaseException,
-			DependencyExistException, ElementIsReadOnly, ElementCannotBePersistedException,
+	public void checkExpressionDependenciesAcomplished() throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException,
+			CharacterNotAllowedException, UnexpectedDatabaseException, DependencyExistException, ElementIsReadOnly, ElementCannotBePersistedException,
 			ElementCannotBeRemovedException {
 		// Create the form
 		Form form = new Form("DhszwForm");
@@ -131,8 +143,7 @@ public class ExpressionTest extends AbstractTransactionalTestNGSpringContextTest
 		birthdate.setAnswerFormat(AnswerFormat.DATE);
 		category.addChild(birthdate);
 
-		CustomVariable customVarCategory = new CustomVariable(form, "cScore", CustomVariableType.NUMBER,
-				CustomVariableScope.CATEGORY);
+		CustomVariable customVarCategory = new CustomVariable(form, "cScore", CustomVariableType.NUMBER, CustomVariableScope.CATEGORY);
 
 		form.getCustomVariables().add(customVarCategory);
 
@@ -156,5 +167,64 @@ public class ExpressionTest extends AbstractTransactionalTestNGSpringContextTest
 		// No errors in database.
 		formDao.makePersistent(form);
 		formDao.makeTransient(form);
+	}
+
+	@Test
+	public void checkExpressionGlobalVariable() throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException,
+			CharacterNotAllowedException, UnexpectedDatabaseException, DependencyExistException, ElementIsReadOnly, ElementCannotBePersistedException,
+			ElementCannotBeRemovedException, NotValidTypeInVariableData {
+		// Create the form
+		Form form = new Form("DhszwForm");
+		form.setOrganizationId(0l);
+		Category category = new Category(CATEGORY_NAME);
+		form.addChild(category);
+
+		Question birthdate = new Question("birthdate");
+		birthdate.setAnswerType(AnswerType.INPUT);
+		birthdate.setAnswerFormat(AnswerFormat.DATE);
+		category.addChild(birthdate);
+
+		CustomVariable customVarCategory = new CustomVariable(form, "cScore", CustomVariableType.NUMBER, CustomVariableScope.CATEGORY);
+
+		form.getCustomVariables().add(customVarCategory);
+
+		GlobalVariable globalVariable = new GlobalVariable(AnswerFormat.TEXT);
+		globalVariable.setName(GLOBAL_VARIABLE_NAME);
+
+		globalVariable.addVariableData(VARIABLE_DATA_VALUE_1, VARIABLE_DATA_VALID_FROM, VARIABLE_DATA_VALID_TO);
+		globalVariable.addVariableData(VARIABLE_DATA_VALUE_2, VARIABLE_DATA_VALID_TO, VARIABLE_DATA_VALID_TO_2);
+
+		globalVariablesDao.makePersistent(globalVariable);
+
+		ExpressionChain expressionChain = new ExpressionChain();
+		ExpressionValueCustomVariable customVariable = new ExpressionValueCustomVariable(category, customVarCategory);
+		ExpressionValueGlobalVariable globalVariableExpression = new ExpressionValueGlobalVariable(globalVariable);
+
+		expressionChain.addExpression(customVariable);
+		expressionChain.addExpression(new ExpressionOperatorMath(AvailableOperator.ASSIGNATION));
+		expressionChain.addExpression(globalVariableExpression);
+		Assert.assertEquals(expressionChain.getExpression(), "Category1_cScore = " + GLOBAL_VARIABLE_NAME + "_" + VARIABLE_DATA_VALUE_1 + "_");
+		form.getExpressionChains().add(expressionChain);
+
+		// Persist.
+		formDao.makePersistent(form);
+
+		// Check some functions.
+		Assert.assertEquals(globalVariablesDao.getFormNumberUsing(globalVariable), 1);
+		Set<GlobalVariable> globalVariables = new HashSet<>();
+		globalVariables.add(globalVariable);
+		Assert.assertEquals(globalVariablesDao.getFormNumberUsing(globalVariables), 1);
+
+		// Remove in order.
+		form.getExpressionChains().remove(form.getExpressionChains().iterator().next());
+		birthdate.remove();
+		form.remove(customVarCategory);
+
+		// No errors in database.
+		formDao.makePersistent(form);
+
+		formDao.makeTransient(form);
+
+		globalVariablesDao.makeTransient(globalVariable);
 	}
 }
