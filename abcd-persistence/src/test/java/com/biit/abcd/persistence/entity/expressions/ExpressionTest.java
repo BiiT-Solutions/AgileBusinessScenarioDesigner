@@ -203,7 +203,7 @@ public class ExpressionTest extends AbstractTransactionalTestNGSpringContextTest
 		expressionChain.addExpression(customVariable);
 		expressionChain.addExpression(new ExpressionOperatorMath(AvailableOperator.ASSIGNATION));
 		expressionChain.addExpression(globalVariableExpression);
-		Assert.assertEquals(expressionChain.getExpression(), "Category1_cScore = " + GLOBAL_VARIABLE_NAME + "_" + VARIABLE_DATA_VALUE_1 + "_");
+		Assert.assertEquals(expressionChain.getExpression(), "Category1_cScore = " + GLOBAL_VARIABLE_NAME);
 		form.getExpressionChains().add(expressionChain);
 
 		// Persist.
