@@ -1521,3 +1521,13 @@
         add constraint FK_dr80lmno4djoqidma1h9khh1h 
         foreign key (form) 
         references tree_forms (id);
+
+	CREATE TABLE `hibernate_sequence` (
+		`next_val` bigint(20) DEFAULT NULL
+	);
+
+	LOCK TABLES `hibernate_sequence` WRITE;
+	INSERT INTO `hibernate_sequence` VALUES (1);
+	UNLOCK TABLES;
+
+

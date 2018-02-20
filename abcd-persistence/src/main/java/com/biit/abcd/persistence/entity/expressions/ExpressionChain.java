@@ -34,12 +34,12 @@ public class ExpressionChain extends Expression implements INameAttribute {
 
 	private String name;
 
-	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
 	// Orderby not works correctly but help the 2nd level cache to not unsort
 	// elements.
 	@OrderBy(value = "sortSeq ASC")
 	@BatchSize(size = 500)
 	// @SortComparator(value = ExpressionSort.class)
+	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
 	@JoinTable(name = "expressions_chain_expressions", joinColumns = @JoinColumn(name = "expressions_chain", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "expressions", referencedColumnName = "id"))
 	private List<Expression> expressions;
 
