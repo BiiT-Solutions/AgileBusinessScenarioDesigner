@@ -1,9 +1,10 @@
-package com.biit.abcd.core;
+package com.biit.abcd.core.testscenarios;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.biit.abcd.core.SpringContextHelper;
 import com.biit.abcd.persistence.dao.ITestScenarioDao;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.testscenarios.TestScenario;
@@ -62,14 +63,15 @@ public class TestScenarioController {
 	}
 
 	/**
-	 * Remove all old test scenarios and store all the new ones. This method is synchronized.
+	 * Remove all old test scenarios and store all the new ones. This method is
+	 * synchronized.
 	 * 
 	 * @throws UnexpectedDatabaseException
 	 * @throws ElementCannotBeRemovedException
 	 * @throws ElementCannotBePersistedException
 	 */
-	public void update(List<TestScenario> testScenariosFromTable, Form form) throws UnexpectedDatabaseException,
-			ElementCannotBeRemovedException, ElementCannotBePersistedException {
+	public void update(List<TestScenario> testScenariosFromTable, Form form) throws UnexpectedDatabaseException, ElementCannotBeRemovedException,
+			ElementCannotBePersistedException {
 		synchronized (TestScenarioController.class) {
 			// Remove unused variables.
 			if (testScenarios != null) {
@@ -88,12 +90,12 @@ public class TestScenarioController {
 			}
 
 			for (TestScenario testScenario : testScenariosFromTable) {
-				if(testScenario.getId()==null){
+				if (testScenario.getId() == null) {
 					testScenarioDao.makePersistent(testScenario);
-				}else{
+				} else {
 					TestScenario mergedScenario = testScenarioDao.merge(testScenario);
-					testScenarioDao.makePersistent(mergedScenario);
-					
+					// testScenarioDao.makePersistent(mergedScenario);
+
 					testScenarios.set(testScenarios.indexOf(testScenario), mergedScenario);
 				}
 			}
