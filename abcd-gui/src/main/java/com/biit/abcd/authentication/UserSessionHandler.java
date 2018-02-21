@@ -10,7 +10,7 @@ import com.biit.abcd.MessageManager;
 import com.biit.abcd.core.FormController;
 import com.biit.abcd.core.GlobalVariablesController;
 import com.biit.abcd.core.SpringContextHelper;
-import com.biit.abcd.core.TestScenarioController;
+import com.biit.abcd.core.testscenarios.TestScenarioController;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.Form;
