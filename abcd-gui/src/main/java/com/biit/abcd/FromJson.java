@@ -47,7 +47,7 @@ public class FromJson {
 		Form newForm = Form.fromJson(json);
 		newForm.setOrganizationId(organizationId);
 		newForm.setLabel(formLabel);
-		newForm.resetUserTimestampInfo(UserSessionHandler.getUser().getId());
+		newForm.resetUserTimestampInfo(UserSessionHandler.getUser().getUniqueId());
 
 		// Reset ids before persisting buf after removing incorrect
 		// webservices.

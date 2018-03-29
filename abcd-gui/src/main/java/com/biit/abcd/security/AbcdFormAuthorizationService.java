@@ -34,7 +34,7 @@ public class AbcdFormAuthorizationService extends SecurityService implements IAb
 	@Override
 	public boolean isFormAlreadyInUse(Long formId, IUser<Long> user) {
 		IUser<Long> userUsingForm = UiAccesser.getUserUsingForm(formId);
-		return (userUsingForm != null) && !userUsingForm.getId().equals(user.getId());
+		return (userUsingForm != null) && !userUsingForm.getUniqueId().equals(user.getUniqueId());
 	}
 
 	/**

@@ -275,7 +275,7 @@ public class FormsVersionsTreeTable extends TreeTable {
 		for (List<SimpleFormView> forms : formMap.values()) {
 			for (SimpleFormView form : forms) {
 				for (IGroup<Long> organization : userOrganizations) {
-					if (form.getOrganizationId().equals(organization.getId())) {
+					if (form.getOrganizationId().equals(organization.getUniqueId())) {
 						addForm(form);
 					}
 				}

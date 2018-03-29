@@ -60,7 +60,7 @@ public class AbcdFormRestService {
 			}
 			List<SimpleFormView> simpleForms = new ArrayList<>();
 			for (IGroup<Long> organization : organizations) {
-				simpleForms.addAll(simpleFormViewDao.getSimpleFormViewByOrganization(organization.getId()));
+				simpleForms.addAll(simpleFormViewDao.getSimpleFormViewByOrganization(organization.getUniqueId()));
 			}
 			return Response.ok(parseSimpleFormViewList(simpleForms), MediaType.APPLICATION_JSON).build();
 		} else {
@@ -88,7 +88,7 @@ public class AbcdFormRestService {
 			Set<IGroup<Long>> userOrganizations = getUserOrganizations(parameters.get(0));
 			if (userOrganizations != null) {
 				for (IGroup<Long> organization : userOrganizations) {
-					if (organization.getId().equals(formOrganizationId)) {
+					if (organization.getUniqueId().equals(formOrganizationId)) {
 						// Get the simple form information
 						List<SimpleFormView> simpleForms = simpleFormViewDao.getSimpleFormViewByLabelAndOrganization(parameters.get(1), formOrganizationId);
 						return Response.ok(parseSimpleFormViewList(simpleForms), MediaType.APPLICATION_JSON).build();
@@ -121,7 +121,7 @@ public class AbcdFormRestService {
 			Form formById = formDao.get(Long.parseLong(parameters.get(1)));
 			if (userOrganizations != null) {
 				for (IGroup<Long> organization : userOrganizations) {
-					if (organization.getId().equals(formById.getOrganizationId())) {
+					if (organization.getUniqueId().equals(formById.getOrganizationId())) {
 						// Get the form information
 						return Response.ok(formById.toJson(), MediaType.APPLICATION_JSON).build();
 					}
@@ -154,7 +154,7 @@ public class AbcdFormRestService {
 			Set<IGroup<Long>> userOrganizations = getUserOrganizations(parameters.get(0));
 			if (userOrganizations != null) {
 				for (IGroup<Long> organization : userOrganizations) {
-					if (organization.getId().equals(formOrganization)) {
+					if (organization.getUniqueId().equals(formOrganization)) {
 						// Get the form information
 						Form form = formDao.getForm(parameters.get(1), Integer.parseInt(parameters.get(3)), Long.parseLong(parameters.get(2)));
 						return Response.ok(form.toJson(), MediaType.APPLICATION_JSON).build();
@@ -182,7 +182,7 @@ public class AbcdFormRestService {
 			Set<IGroup<Long>> userOrganizations = getUserOrganizations(parameters.get(0));
 			Long organizationId = Long.parseLong(parameters.get(1));
 			for (IGroup<Long> userOrganization : userOrganizations) {
-				if (userOrganization.getId().equals(organizationId)) {
+				if (userOrganization.getUniqueId().equals(organizationId)) {
 					List<Form> formList = formDao.getAll(organizationId);
 					return Response.ok(parseFormList(formList), MediaType.APPLICATION_JSON).build();
 				}

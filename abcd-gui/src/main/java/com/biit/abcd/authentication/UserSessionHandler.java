@@ -56,17 +56,17 @@ public class UserSessionHandler {
 	}
 
 	public static void checkOnlyOneSession(IUser<Long> user, UI ui, String ip) {
-		if (usersSession.get(user.getId()) != null) {
-			if (ip == null || !ip.equals(usersIp.get(user.getId()))) {
+		if (usersSession.get(user.getUniqueId()) != null) {
+			if (ip == null || !ip.equals(usersIp.get(user.getUniqueId()))) {
 				closeSession(user);
 				MessageManager.showWarning(LanguageCodes.INFO_USER_SESSION_EXPIRED);
 			}
 		}
-		if (usersSession.get(user.getId()) == null) {
-			usersSession.put(user.getId(), new ArrayList<UI>());
+		if (usersSession.get(user.getUniqueId()) == null) {
+			usersSession.put(user.getUniqueId(), new ArrayList<UI>());
 		}
-		usersSession.get(user.getId()).add(ui);
-		usersIp.put(user.getId(), ip);
+		usersSession.get(user.getUniqueId()).add(ui);
+		usersIp.put(user.getUniqueId(), ip);
 	}
 
 	/**
@@ -75,12 +75,12 @@ public class UserSessionHandler {
 	 * @param user
 	 */
 	public static void closeSession(IUser<Long> user) {
-		List<UI> uis = new ArrayList<>(usersSession.get(user.getId()));
+		List<UI> uis = new ArrayList<>(usersSession.get(user.getUniqueId()));
 		for (UI userUI : uis) {
 			try {
 				userUI.getNavigator().navigateTo(WebMap.getLoginPage().toString());
 				userUI.close();
-				usersSession.get(user.getId()).remove(userUI);
+				usersSession.get(user.getUniqueId()).remove(userUI);
 			} catch (Exception e) {
 				// maybe the session has expired in Vaadin and cannot be closed.
 			}
@@ -157,9 +157,9 @@ public class UserSessionHandler {
 	}
 
 	public static void logout(IUser<Long> user) {
-		usersSession.remove(user.getId());
-		usersIp.remove(user.getId());
-		userLastPage.remove(user.getId());
+		usersSession.remove(user.getUniqueId());
+		usersIp.remove(user.getUniqueId());
+		userLastPage.remove(user.getUniqueId());
 	}
 
 	@FindBugsSuppressWarnings("DC_DOUBLECHECK")
@@ -189,7 +189,7 @@ public class UserSessionHandler {
 	}
 
 	public static WebMap getUserLastPage(IUser<Long> user) {
-		return userLastPage.get(user.getId());
+		return userLastPage.get(user.getUniqueId());
 	}
 
 	public static void setUserLastPage(WebMap page) {
@@ -199,15 +199,15 @@ public class UserSessionHandler {
 	public static void setUserLastPage(IUser<Long> user, WebMap page) {
 		if (user != null) {
 			if (!WebMap.getMainPage().equals(page) && !WebMap.getLoginPage().equals(page)) {
-				userLastPage.put(user.getId(), page);
+				userLastPage.put(user.getUniqueId(), page);
 			} else {
-				userLastPage.remove(user.getId());
+				userLastPage.remove(user.getUniqueId());
 			}
 		}
 	}
 
 	private static void setLastForm(IUser<Long> user, Form form) {
-		userLastForm.put(user.getId(), form);
+		userLastForm.put(user.getUniqueId(), form);
 	}
 
 	public static void setForm(Form form) {
@@ -218,7 +218,7 @@ public class UserSessionHandler {
 	}
 
 	private static Form getLastForm(IUser<Long> user) {
-		return userLastForm.get(user.getId());
+		return userLastForm.get(user.getUniqueId());
 	}
 
 	/**

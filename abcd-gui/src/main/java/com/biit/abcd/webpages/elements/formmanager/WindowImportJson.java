@@ -53,7 +53,7 @@ public class WindowImportJson extends AcceptCancelWindow {
 			public void acceptAction(AcceptCancelWindow window) {
 				try {
 					FromJson fromJson = new FromJson();
-					fromJson.importFormFromJson(textArea.getValue(), textField.getValue(), ((IGroup<Long>) organizationField.getValue()).getId());
+					fromJson.importFormFromJson(textArea.getValue(), textField.getValue(), ((IGroup<Long>) organizationField.getValue()).getUniqueId());
 				} catch (UnexpectedDatabaseException e) {
 					MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR);
 				} catch (FormWithSameNameException e) {

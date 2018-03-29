@@ -77,7 +77,7 @@ public class FormVariables extends FormWebPageComponent {
 			public void buttonClick(ClickEvent event) {
 				CustomVariable customVariable = new CustomVariable(UserSessionHandler.getFormController().getForm(),
 						"", CustomVariableType.STRING, CustomVariableScope.FORM);
-				customVariable.setCreatedBy(UserSessionHandler.getUser().getId());
+				customVariable.setCreatedBy(UserSessionHandler.getUser().getUniqueId());
 				addNewVariable(customVariable);
 				UserSessionHandler.getFormController().getForm().getCustomVariables().add(customVariable);
 
