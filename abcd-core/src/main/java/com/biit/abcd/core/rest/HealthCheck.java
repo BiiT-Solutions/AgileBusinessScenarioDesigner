@@ -13,11 +13,11 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Path("/")
-public class CheckHealth {
+public class HealthCheck {
 
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
-	@Path("/checkHealth")
+	@Path("/healthCheck")
 	public Response checkHealth() {
 		return Response.ok().build();
 	}
