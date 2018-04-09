@@ -312,7 +312,7 @@ INSERT INTO `tree_questions` VALUES (5807,'cacce454-eb13-467c-86a5-546b25ab209b'
 UNLOCK TABLES;
 
 LOCK TABLES `hibernate_sequence` WRITE;
-UPDATE `hibernate_sequence` SET next_val=12051;
+UPDATE `hibernate_sequence` SET next_val=20000;
 UNLOCK TABLES;
 
 SET FOREIGN_KEY_CHECKS=1;

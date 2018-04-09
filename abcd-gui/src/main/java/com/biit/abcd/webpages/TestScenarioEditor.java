@@ -32,8 +32,7 @@ import com.vaadin.ui.UI;
 
 public class TestScenarioEditor extends FormWebPageComponent {
 	private static final long serialVersionUID = -6743796589244668454L;
-	private static final List<AbcdActivity> activityPermissions = new ArrayList<AbcdActivity>(
-			Arrays.asList(AbcdActivity.READ));
+	private static final List<AbcdActivity> activityPermissions = new ArrayList<AbcdActivity>(Arrays.asList(AbcdActivity.READ));
 	private TestScenarioMainLayout testScenarioForm;
 	private SelectTestScenarioTableEditable tableSelectTestScenario;
 	private TestScenarioEditorUpperMenu testScenarioUpperMenu;
@@ -46,8 +45,7 @@ public class TestScenarioEditor extends FormWebPageComponent {
 	protected void initContent() {
 		// If there is no form, then go back to form manager.
 		if (UserSessionHandler.getFormController().getForm() == null) {
-			AbcdLogger.warning(this.getClass().getName(),
-					"No Form selected, redirecting to Form Manager.");
+			AbcdLogger.warning(this.getClass().getName(), "No Form selected, redirecting to Form Manager.");
 			ApplicationFrame.navigateTo(WebMap.FORM_MANAGER);
 			return;
 		}
@@ -57,31 +55,25 @@ public class TestScenarioEditor extends FormWebPageComponent {
 		updateButtons(true);
 
 		// Create container
-		HorizontalCollapsiblePanel collapsibleLayout = new HorizontalCollapsiblePanel(
-				false);
+		HorizontalCollapsiblePanel collapsibleLayout = new HorizontalCollapsiblePanel(false);
 		collapsibleLayout.setSizeFull();
 
 		// Create menu
 		tableSelectTestScenario = new SelectTestScenarioTableEditable();
-		tableSelectTestScenario
-				.addValueChangeListener(new ValueChangeListener() {
-					private static final long serialVersionUID = 4251583661250518900L;
+		tableSelectTestScenario.addValueChangeListener(new ValueChangeListener() {
+			private static final long serialVersionUID = 4251583661250518900L;
 
-					@Override
-					public void valueChange(ValueChangeEvent event) {
-						try {
-							UserSessionHandler.getTestScenariosController()
-									.setLastAccessTestScenario(
-											getSelectedTestScenario());
-							refreshTestScenario();
-						} catch (FieldTooLongException
-								| CharacterNotAllowedException e) {
-							AbcdLogger.errorMessage(this.getClass().getName(),
-									e);
-						}
-					}
+			@Override
+			public void valueChange(ValueChangeEvent event) {
+				try {
+					UserSessionHandler.getTestScenariosController().setLastAccessTestScenario(getSelectedTestScenario());
+					refreshTestScenario();
+				} catch (FieldTooLongException | CharacterNotAllowedException e) {
+					AbcdLogger.errorMessage(this.getClass().getName(), e);
+				}
+			}
 
-				});
+		});
 		collapsibleLayout.createMenu(tableSelectTestScenario);
 
 		// Create empty form
@@ -89,38 +81,24 @@ public class TestScenarioEditor extends FormWebPageComponent {
 		collapsibleLayout.setContent(testScenarioForm);
 		getWorkingAreaLayout().addComponent(collapsibleLayout);
 
-		if (UserSessionHandler.getTestScenariosController().getTestScenarios(
-				UserSessionHandler.getFormController().getForm()) != null) {
+		if (UserSessionHandler.getTestScenariosController().getTestScenarios(UserSessionHandler.getFormController().getForm()) != null) {
 
-			UserSessionHandler.getTestScenariosController()
-					.clearWorkVariables();
+			UserSessionHandler.getTestScenariosController().clearWorkVariables();
 			// Add tables
-			tableSelectTestScenario.updateTestScenarios(UserSessionHandler
-					.getTestScenariosController().getTestScenarios(
-							UserSessionHandler.getFormController().getForm()));
+			tableSelectTestScenario.updateTestScenarios(UserSessionHandler.getTestScenariosController().getTestScenarios(
+					UserSessionHandler.getFormController().getForm()));
 
 			sortTableMenu();
 
-			if (UserSessionHandler.getTestScenariosController()
-					.getLastAccessTestScenario() != null) {
-				tableSelectTestScenario
-						.setSelectedTestScenario(UserSessionHandler
-								.getTestScenariosController()
-								.getLastAccessTestScenario());
+			if (UserSessionHandler.getTestScenariosController().getLastAccessTestScenario() != null) {
+				tableSelectTestScenario.setSelectedTestScenario(UserSessionHandler.getTestScenariosController().getLastAccessTestScenario());
 			} else {
 				// Select the first one if available.
-				if (UserSessionHandler
-						.getTestScenariosController()
-						.getTestScenarios(
-								UserSessionHandler.getFormController()
-										.getForm()).size() > 0) {
+				if (UserSessionHandler.getTestScenariosController().getTestScenarios(UserSessionHandler.getFormController().getForm()).size() > 0) {
 
-					Iterator<TestScenario> iterator = (UserSessionHandler
-							.getTestScenariosController().getTestScenarios(
-									UserSessionHandler.getFormController()
-											.getForm()).iterator());
-					tableSelectTestScenario.setSelectedTestScenario(iterator
-							.next());
+					Iterator<TestScenario> iterator = (UserSessionHandler.getTestScenariosController().getTestScenarios(
+							UserSessionHandler.getFormController().getForm()).iterator());
+					tableSelectTestScenario.setSelectedTestScenario(iterator.next());
 				}
 			}
 			// Create form panel content
@@ -131,8 +109,7 @@ public class TestScenarioEditor extends FormWebPageComponent {
 			}
 
 		} else {
-			AbcdLogger.warning(this.getClass().getName(),
-					"No Form selected, redirecting to Form Manager.");
+			AbcdLogger.warning(this.getClass().getName(), "No Form selected, redirecting to Form Manager.");
 			MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR);
 			ApplicationFrame.navigateTo(WebMap.FORM_MANAGER);
 		}
@@ -155,70 +132,44 @@ public class TestScenarioEditor extends FormWebPageComponent {
 			}
 		});
 
-		testScenarioUpperMenu
-				.addNewTestScenarioButtonClickListener(new ClickListener() {
-					private static final long serialVersionUID = 2168564207293259993L;
+		testScenarioUpperMenu.addNewTestScenarioButtonClickListener(new ClickListener() {
+			private static final long serialVersionUID = 2168564207293259993L;
 
-					@Override
-					public void buttonClick(ClickEvent event) {
-						UI.getCurrent()
-								.addWindow(
-										new WindowNewTestScenario(
-												thisPage,
-												LanguageCodes.TEST_SCENARIOS_EDITOR_NEW_WINDOW_CAPTION,
-												LanguageCodes.TEST_SCENARIOS_EDITOR_NEW_WINDOW_FIELD_CAPTION,
-												tableSelectTestScenario
-														.getTestScenarios()));
-					}
+			@Override
+			public void buttonClick(ClickEvent event) {
+				UI.getCurrent().addWindow(
+						new WindowNewTestScenario(thisPage, LanguageCodes.TEST_SCENARIOS_EDITOR_NEW_WINDOW_CAPTION,
+								LanguageCodes.TEST_SCENARIOS_EDITOR_NEW_WINDOW_FIELD_CAPTION, tableSelectTestScenario.getTestScenarios()));
+			}
 
-				});
+		});
 
-		testScenarioUpperMenu
-				.addRemoveTestScenarioButtonClickListener(new ClickListener() {
-					private static final long serialVersionUID = 4381294084873849759L;
+		testScenarioUpperMenu.addRemoveTestScenarioButtonClickListener(new ClickListener() {
+			private static final long serialVersionUID = 4381294084873849759L;
 
-					@Override
-					public void buttonClick(ClickEvent event) {
-						if (getSelectedTestScenario() != null) {
-							final AlertMessageWindow windowAccept = new AlertMessageWindow(
-									LanguageCodes.WARNING_TEST_SCENARIO_DELETION);
-							windowAccept
-									.addAcceptActionListener(new AcceptActionListener() {
-										@Override
-										public void acceptAction(
-												AcceptCancelWindow window) {
-											try {
-												TestScenario testScenario = getSelectedTestScenario();
-												removeSelectedTestScenario();
-												AbcdLogger
-														.info(this.getClass()
-																.getName(),
-																"User '"
-																		+ UserSessionHandler
-																				.getUser()
-																				.getEmailAddress()
-																		+ "' has removed a "
-																		+ testScenario
-																				.getClass()
-																		+ " with 'Name: "
-																		+ testScenario
-																				.getName()
-																		+ "'.");
-												windowAccept.close();
-											} catch (
-													FieldTooLongException
-													| CharacterNotAllowedException e) {
-												AbcdLogger.errorMessage(this
-														.getClass().getName(),
-														e);
-											}
+			@Override
+			public void buttonClick(ClickEvent event) {
+				if (getSelectedTestScenario() != null) {
+					final AlertMessageWindow windowAccept = new AlertMessageWindow(LanguageCodes.WARNING_TEST_SCENARIO_DELETION);
+					windowAccept.addAcceptActionListener(new AcceptActionListener() {
+						@Override
+						public void acceptAction(AcceptCancelWindow window) {
+							try {
+								TestScenario testScenario = getSelectedTestScenario();
+								removeSelectedTestScenario();
+								AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress() + "' has removed a "
+										+ testScenario.getClass() + " with name '" + testScenario.getName() + "'.");
+								windowAccept.close();
+							} catch (FieldTooLongException | CharacterNotAllowedException e) {
+								AbcdLogger.errorMessage(this.getClass().getName(), e);
+							}
 
-										}
-									});
-							windowAccept.showCentered();
 						}
-					}
-				});
+					});
+					windowAccept.showCentered();
+				}
+			}
+		});
 		setUpperMenu(testScenarioUpperMenu);
 	}
 
@@ -228,9 +179,8 @@ public class TestScenarioEditor extends FormWebPageComponent {
 
 	private void save() {
 		try {
-			UserSessionHandler.getTestScenariosController().update(
-					tableSelectTestScenario.getTestScenarios(),
-					UserSessionHandler.getFormController().getForm());
+			UserSessionHandler.getTestScenariosController()
+					.update(tableSelectTestScenario.getTestScenarios(), UserSessionHandler.getFormController().getForm());
 			refreshScenarios();
 			refreshTestScenario();
 			MessageManager.showInfo(LanguageCodes.INFO_DATA_STORED);
@@ -242,24 +192,20 @@ public class TestScenarioEditor extends FormWebPageComponent {
 
 	private void refreshScenarios() {
 		// TODO Auto-generated method stub
-		TestScenario selectedScenario = (TestScenario) tableSelectTestScenario
-				.getValue();
+		TestScenario selectedScenario = (TestScenario) tableSelectTestScenario.getValue();
 		tableSelectTestScenario.setValue(null);
 		tableSelectTestScenario.removeAllItems();
 
 		UserSessionHandler.getTestScenariosController().clearWorkVariables();
 		// Add tables
-		tableSelectTestScenario.updateTestScenarios(UserSessionHandler
-				.getTestScenariosController().getTestScenarios(
-						UserSessionHandler.getFormController().getForm()));
+		tableSelectTestScenario.updateTestScenarios(UserSessionHandler.getTestScenariosController().getTestScenarios(
+				UserSessionHandler.getFormController().getForm()));
 
 		sortTableMenu();
 
 		if (selectedScenario != null) {
-			for (TestScenario testScenario : UserSessionHandler.getTestScenariosController().
-					getTestScenarios(UserSessionHandler.getFormController().getForm())) {
-				if (testScenario.getComparationId().equals(
-						selectedScenario.getComparationId())) {
+			for (TestScenario testScenario : UserSessionHandler.getTestScenariosController().getTestScenarios(UserSessionHandler.getFormController().getForm())) {
+				if (testScenario.getComparationId().equals(selectedScenario.getComparationId())) {
 					tableSelectTestScenario.setSelectedTestScenario(testScenario);
 				}
 			}
@@ -271,15 +217,13 @@ public class TestScenarioEditor extends FormWebPageComponent {
 		return activityPermissions;
 	}
 
-	private void removeSelectedTestScenario() throws FieldTooLongException,
-			CharacterNotAllowedException {
+	private void removeSelectedTestScenario() throws FieldTooLongException, CharacterNotAllowedException {
 		tableSelectTestScenario.removeSelectedRow();
 		refreshTestScenario();
 		UserSessionHandler.getTestScenariosController().setUnsavedChanges(true);
 	}
 
-	public void addTestScenarioToMenu(TestScenario testScenario)
-			throws FieldTooLongException, CharacterNotAllowedException {
+	public void addTestScenarioToMenu(TestScenario testScenario) throws FieldTooLongException, CharacterNotAllowedException {
 		tableSelectTestScenario.addRow(testScenario);
 		tableSelectTestScenario.setSelectedTestScenario(testScenario);
 		refreshTestScenario();
@@ -293,11 +237,9 @@ public class TestScenarioEditor extends FormWebPageComponent {
 		tableSelectTestScenario.setSelectedTestScenario(testScenario);
 	}
 
-	private void refreshTestScenario() throws FieldTooLongException,
-			CharacterNotAllowedException {
+	private void refreshTestScenario() throws FieldTooLongException, CharacterNotAllowedException {
 		try {
-			testScenarioForm.setContent(UserSessionHandler.getFormController()
-					.getForm(), getSelectedTestScenario());
+			testScenarioForm.setContent(UserSessionHandler.getFormController().getForm(), getSelectedTestScenario());
 		} catch (NotValidChildException e) {
 			AbcdLogger.errorMessage(this.getClass().getName(), e);
 		}
