@@ -21,7 +21,7 @@
 		<repository>
 			<id>central</id>
 			<name>biit-releases</name>
-			<url>https://dev.biit-solutions.com/artifactory/ext-release-local</url>
+			<url>https://dev.biit-solutions.com/artifactory/libs-release</url>
 		</repository>
 		<snapshotRepository>
 			<id>snapshots</id>
