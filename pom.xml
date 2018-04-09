@@ -67,7 +67,6 @@
 		<h2.version>1.4.182</h2.version>
 		<ehcache.version>2.6.9</ehcache.version>
 		<c3p0.version>0.9.2.1</c3p0.version>
-		<DES-encryption.version>1.0.0</DES-encryption.version>
 		<maven-failsafe-plugin.version>2.18.1</maven-failsafe-plugin.version>
 		<maven-site-plugin.version>3.6</maven-site-plugin.version>
 		<findbugs-maven-plugin.version>3.0.0</findbugs-maven-plugin.version>
@@ -84,6 +83,7 @@
 		<batik.version>1.8</batik.version>
 		<xmlgraphics-commons.version>2.1</xmlgraphics-commons.version>
 		<!-- BiiT dependencies -->
+		<DES-encryption.version>[1.0,1.1)</DES-encryption.version>
 		<biit-common-utils.version>[0.4,0.5)</biit-common-utils.version>
 		<liferay-service-common.version>[0.8,0.9)</liferay-service-common.version>
 		<liferay-authentication-client.version>[0.9,0.10)</liferay-authentication-client.version>
