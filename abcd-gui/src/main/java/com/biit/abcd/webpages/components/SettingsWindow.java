@@ -10,6 +10,7 @@ import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.dao.IFormDao;
+import com.biit.abcd.persistence.dao.ITestScenarioDao;
 import com.biit.abcd.persistence.utils.Exceptions.BiitTextNotEqualsException;
 import com.biit.abcd.persistence.utils.Exceptions.CustomVariableNotEqualsException;
 import com.biit.abcd.persistence.utils.Exceptions.DiagramNotEqualsException;
@@ -45,6 +46,8 @@ public class SettingsWindow extends PopupWindow {
 	private Button logoutButton;
 
 	private IFormDao formDao;
+	
+	private ITestScenarioDao testScenarioDao;
 
 	private IAbcdFormAuthorizationService securityService;
 
@@ -61,6 +64,7 @@ public class SettingsWindow extends PopupWindow {
 
 		SpringContextHelper helper = new SpringContextHelper(VaadinServlet.getCurrent().getServletContext());
 		formDao = (IFormDao) helper.getBean("formDao");
+		testScenarioDao = (ITestScenarioDao) helper.getBean("testScenarioDao");
 		securityService = (IAbcdFormAuthorizationService) helper.getBean("abcdSecurityService");
 	}
 
@@ -126,6 +130,8 @@ public class SettingsWindow extends PopupWindow {
 									@Override
 									public void acceptAction(AcceptCancelWindow window) {
 										formDao.evictAllCache();
+										formDao.evictCache();
+										testScenarioDao.evictCache();
 										ApplicationFrame.navigateTo(WebMap.FORM_MANAGER);
 										AbcdLogger.info(this.getClass().getName(), "User '"
 												+ UserSessionHandler.getUser().getEmailAddress()
