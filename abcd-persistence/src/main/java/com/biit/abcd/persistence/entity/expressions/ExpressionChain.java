@@ -16,6 +16,8 @@ import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import com.biit.abcd.persistence.utils.INameAttribute;
 import com.biit.form.entity.TreeObject;
@@ -40,6 +42,7 @@ public class ExpressionChain extends Expression implements INameAttribute {
 	@BatchSize(size = 500)
 	// @SortComparator(value = ExpressionSort.class)
 	@OneToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER, orphanRemoval = true)
+	@Fetch(value = FetchMode.SUBSELECT)
 	@JoinTable(name = "expressions_chain_expressions", joinColumns = @JoinColumn(name = "expressions_chain", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "expressions", referencedColumnName = "id"))
 	private List<Expression> expressions;
 

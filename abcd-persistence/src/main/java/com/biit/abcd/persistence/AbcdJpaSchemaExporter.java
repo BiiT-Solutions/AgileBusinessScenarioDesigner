@@ -30,8 +30,9 @@ public class AbcdJpaSchemaExporter extends com.biit.persistence.JpaSchemaExporte
 	 * @param directory
 	 */
 	@Override
-	public void createDatabaseScript(HibernateDialect dialect, String directory, String outputFile, boolean onlyCreation) {
-		super.createDatabaseScript(dialect, directory, outputFile, onlyCreation);
+	public void createDatabaseScript(HibernateDialect dialect, String directory, String outputFile, String host, String port, String username, String password,
+			String databaseName, boolean onlyCreation) {
+		super.createDatabaseScript(dialect, directory, outputFile, host, port, username, password, databaseName, onlyCreation);
 		updateTables(directory, outputFile);
 	}
 
@@ -95,7 +96,8 @@ public class AbcdJpaSchemaExporter extends com.biit.persistence.JpaSchemaExporte
 
 		// Launch the JpaSchemaExporter
 		JpaSchemaExporter gen = new AbcdJpaSchemaExporter(getPacketsToScan(), getClassesToIgnoreWhenCreatingDatabase());
-		gen.createDatabaseScript(HibernateDialect.MYSQL, getDirectory(), getOutputFile(), true);
+		gen.createDatabaseScript(HibernateDialect.MYSQL, getDirectory(), getOutputFile(), getHost(), getPort(), getUser(), getPassword(), getDatabaseName(),
+				true);
 		gen = new AbcdJpaSchemaExporter(getPacketsToScan(), getClassesToIgnoreWhenUpdatingDatabase());
 		gen.updateDatabaseScript(HibernateDialect.MYSQL, getDirectory(), getHost(), getPort(), getUser(), getPassword(), getDatabaseName());
 
@@ -103,5 +105,6 @@ public class AbcdJpaSchemaExporter extends com.biit.persistence.JpaSchemaExporte
 		addTextToFile(createHibernateSequenceTable(), getDirectory() + File.separator + getOutputFile());
 		// Add extra information from a external script.
 		addTextToFile(readFile(getScriptsToAdd(), Charset.forName("UTF-8")), getDirectory() + File.separator + getOutputFile());
+		System.out.println("aaaaaa");
 	}
 }
