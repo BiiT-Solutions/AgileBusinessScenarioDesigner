@@ -9,6 +9,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
 
+import com.biit.abcd.configuration.AbcdConfigurationReader;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.persistence.HibernateDialect;
 import com.biit.persistence.JpaSchemaExporter;
@@ -105,6 +106,9 @@ public class AbcdJpaSchemaExporter extends com.biit.persistence.JpaSchemaExporte
 		addTextToFile(createHibernateSequenceTable(), getDirectory() + File.separator + getOutputFile());
 		// Add extra information from a external script.
 		addTextToFile(readFile(getScriptsToAdd(), Charset.forName("UTF-8")), getDirectory() + File.separator + getOutputFile());
-		System.out.println("aaaaaa");
+
+		// Close file watchers to ensure that the thread ends and maven exec is
+		// not frozen.
+		AbcdConfigurationReader.getInstance().stopFileWatchers();
 	}
 }
