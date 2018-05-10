@@ -62,7 +62,7 @@ public abstract class UpperMenu extends SecuredMenu {
 	private IFormDao formDao;
 	private ITestScenarioDao testScenarioDao;
 	private IGlobalVariablesDao globalVariablesDao;
-	private ICustomVariableDao customvariableDao;
+	private ICustomVariableDao customVariableDao;
 	// Settings buttons
 	private IconButton globalConstantsButton, clearCacheButton, logoutButton;
 	private Map<IconButton, List<IconButton>> subMenuButtons;
@@ -75,7 +75,7 @@ public abstract class UpperMenu extends SecuredMenu {
 		formDao = (IFormDao) helper.getBean("formDao");
 		testScenarioDao = (ITestScenarioDao) helper.getBean("testScenarioDao");
 		globalVariablesDao = (IGlobalVariablesDao) helper.getBean("globalVariablesDao");
-		customvariableDao = (ICustomVariableDao) helper.getBean("customvariableDao");
+		customVariableDao = (ICustomVariableDao) helper.getBean("customVariableDao");
 	}
 
 	@Override
@@ -286,7 +286,7 @@ public abstract class UpperMenu extends SecuredMenu {
 								formDao.evictAllCache();
 								testScenarioDao.evictAllCache();
 								globalVariablesDao.evictAllCache();
-								customvariableDao.evictAllCache();
+								customVariableDao.evictAllCache();
 								// Reset Liferay Users pool.
 								getSecurityService().reset();
 								ApplicationFrame.navigateTo(WebMap.FORM_MANAGER);
