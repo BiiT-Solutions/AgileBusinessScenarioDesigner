@@ -278,8 +278,6 @@ public abstract class UpperMenu extends SecuredMenu {
 						final AlertMessageWindow windowAccept = new AlertMessageWindow(LanguageCodes.WARNING_CLEAR_CACHE);
 						windowAccept.addAcceptActionListener(new AcceptActionListener() {
 							@Override
-							@Caching(evict = { @CacheEvict(value = "springTestScenariosByForm", allEntries = true),
-									@CacheEvict(value = "springTestScenarios", allEntries = true), @CacheEvict(value = "springFormCache", allEntries = true) })
 							public void acceptAction(AcceptCancelWindow window) {
 								// Reset ehCache.
 								formDao.evictAllCache();
