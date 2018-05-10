@@ -5,9 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Caching;
-
 import com.biit.abcd.ApplicationFrame;
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.UiAccesser;
@@ -16,7 +13,9 @@ import com.biit.abcd.core.SpringContextHelper;
 import com.biit.abcd.core.security.AbcdActivity;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.logger.AbcdLogger;
+import com.biit.abcd.persistence.dao.ICustomVariableDao;
 import com.biit.abcd.persistence.dao.IFormDao;
+import com.biit.abcd.persistence.dao.IGlobalVariablesDao;
 import com.biit.abcd.persistence.dao.ITestScenarioDao;
 import com.biit.abcd.persistence.utils.Exceptions.BiitTextNotEqualsException;
 import com.biit.abcd.persistence.utils.Exceptions.CustomVariableNotEqualsException;
@@ -62,6 +61,8 @@ public abstract class UpperMenu extends SecuredMenu {
 	private IconButton formManagerButton, settingsButton;
 	private IFormDao formDao;
 	private ITestScenarioDao testScenarioDao;
+	private IGlobalVariablesDao globalVariablesDao;
+	private ICustomVariableDao customvariableDao;
 	// Settings buttons
 	private IconButton globalConstantsButton, clearCacheButton, logoutButton;
 	private Map<IconButton, List<IconButton>> subMenuButtons;
@@ -73,6 +74,8 @@ public abstract class UpperMenu extends SecuredMenu {
 		SpringContextHelper helper = new SpringContextHelper(VaadinServlet.getCurrent().getServletContext());
 		formDao = (IFormDao) helper.getBean("formDao");
 		testScenarioDao = (ITestScenarioDao) helper.getBean("testScenarioDao");
+		globalVariablesDao = (IGlobalVariablesDao) helper.getBean("globalVariablesDao");
+		customvariableDao = (ICustomVariableDao) helper.getBean("customvariableDao");
 	}
 
 	@Override
@@ -282,6 +285,8 @@ public abstract class UpperMenu extends SecuredMenu {
 								// Reset ehCache.
 								formDao.evictAllCache();
 								testScenarioDao.evictAllCache();
+								globalVariablesDao.evictAllCache();
+								customvariableDao.evictAllCache();
 								// Reset Liferay Users pool.
 								getSecurityService().reset();
 								ApplicationFrame.navigateTo(WebMap.FORM_MANAGER);
