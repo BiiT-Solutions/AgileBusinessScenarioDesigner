@@ -3,8 +3,8 @@
        id bigint not null,
         comparation_id varchar(190) not null,
         created_by DOUBLE,
-        creation_time datetime not null,
-        update_time datetime,
+        creation_time datetime(6) not null,
+        update_time datetime(6),
         updated_by DOUBLE,
         default_value varchar(255),
         name varchar(190),
@@ -12,25 +12,25 @@
         type varchar(255),
         form bigint not null,
         primary key (id)
-    ) type=MyISAM;
+    ) engine=InnoDB;
 
     create table diagram (
        id bigint not null,
         comparation_id varchar(190) not null,
         created_by DOUBLE,
-        creation_time datetime not null,
-        update_time datetime,
+        creation_time datetime(6) not null,
+        update_time datetime(6),
         updated_by DOUBLE,
         name varchar(255),
         primary key (id)
-    ) type=MyISAM;
+    ) engine=InnoDB;
 
     create table diagram_child (
        id bigint not null,
         comparation_id varchar(190) not null,
         created_by DOUBLE,
-        creation_time datetime not null,
-        update_time datetime,
+        creation_time datetime(6) not null,
+        update_time datetime(6),
         updated_by DOUBLE,
         embeds varchar(255),
         jointjs_id varchar(255),
@@ -44,14 +44,14 @@
         text bigint,
         diagram bigint,
         primary key (id)
-    ) type=MyISAM;
+    ) engine=InnoDB;
 
     create table diagram_expression (
        id bigint not null,
         comparation_id varchar(190) not null,
         created_by DOUBLE,
-        creation_time datetime not null,
-        update_time datetime,
+        creation_time datetime(6) not null,
+        update_time datetime(6),
         updated_by DOUBLE,
         embeds varchar(255),
         jointjs_id varchar(255),
@@ -65,14 +65,14 @@
         text bigint,
         expression bigint,
         primary key (id)
-    ) type=MyISAM;
+    ) engine=InnoDB;
 
     create table diagram_fork (
        id bigint not null,
         comparation_id varchar(190) not null,
         created_by DOUBLE,
-        creation_time datetime not null,
-        update_time datetime,
+        creation_time datetime(6) not null,
+        update_time datetime(6),
         updated_by DOUBLE,
         embeds varchar(255),
         jointjs_id varchar(255),
@@ -85,19 +85,19 @@
         size bigint,
         text bigint,
         primary key (id)
-    ) type=MyISAM;
+    ) engine=InnoDB;
 
     create table diagram_fork_references (
        diagram_fork bigint not null,
         reference bigint not null
-    ) type=MyISAM;
+    ) engine=InnoDB;
 
     create table diagram_links (
        id bigint not null,
         comparation_id varchar(190) not null,
         created_by DOUBLE,
-        creation_time datetime not null,
-        update_time datetime,
+        creation_time datetime(6) not null,
+        update_time datetime(6),
         updated_by DOUBLE,
         embeds varchar(255),
         jointjs_id varchar(255),
@@ -113,39 +113,39 @@
         source bigint,
         target bigint,
         primary key (id)
-    ) type=MyISAM;
+    ) engine=InnoDB;
 
     create table diagram_nodes (
        id bigint not null,
         comparation_id varchar(190) not null,
         created_by DOUBLE,
-        creation_time datetime not null,
-        update_time datetime,
+        creation_time datetime(6) not null,
+        update_time datetime(6),
         updated_by DOUBLE,
         jointjs_id varchar(255),
         port varchar(255),
         selector varchar(255),
         primary key (id)
-    ) type=MyISAM;
+    ) engine=InnoDB;
 
     create table diagram_points (
        id bigint not null,
         comparation_id varchar(190) not null,
         created_by DOUBLE,
-        creation_time datetime not null,
-        update_time datetime,
+        creation_time datetime(6) not null,
+        update_time datetime(6),
         updated_by DOUBLE,
         x integer not null,
         y integer not null,
         primary key (id)
-    ) type=MyISAM;
+    ) engine=InnoDB;
 
     create table diagram_repeat (
        id bigint not null,
         comparation_id varchar(190) not null,
         created_by DOUBLE,
-        creation_time datetime not null,
-        update_time datetime,
+        creation_time datetime(6) not null,
+        update_time datetime(6),
         updated_by DOUBLE,
         embeds varchar(255),
         jointjs_id varchar(255),
@@ -158,14 +158,14 @@
         size bigint,
         text bigint,
         primary key (id)
-    ) type=MyISAM;
+    ) engine=InnoDB;
 
     create table diagram_rule (
        id bigint not null,
         comparation_id varchar(190) not null,
         created_by DOUBLE,
-        creation_time datetime not null,
-        update_time datetime,
+        creation_time datetime(6) not null,
+        update_time datetime(6),
         updated_by DOUBLE,
         embeds varchar(255),
         jointjs_id varchar(255),
@@ -179,14 +179,14 @@
         text bigint,
         rule bigint,
         primary key (id)
-    ) type=MyISAM;
+    ) engine=InnoDB;
 
     create table diagram_sink (
        id bigint not null,
         comparation_id varchar(190) not null,
         created_by DOUBLE,
-        creation_time datetime not null,
-        update_time datetime,
+        creation_time datetime(6) not null,
+        update_time datetime(6),
         updated_by DOUBLE,
         embeds varchar(255),
         jointjs_id varchar(255),
@@ -200,26 +200,26 @@
         text bigint,
         expression bigint,
         primary key (id)
-    ) type=MyISAM;
+    ) engine=InnoDB;
 
     create table diagram_sizes (
        id bigint not null,
         comparation_id varchar(190) not null,
         created_by DOUBLE,
-        creation_time datetime not null,
-        update_time datetime,
+        creation_time datetime(6) not null,
+        update_time datetime(6),
         updated_by DOUBLE,
         height integer not null,
         width integer not null,
         primary key (id)
-    ) type=MyISAM;
+    ) engine=InnoDB;
 
     create table diagram_source (
        id bigint not null,
         comparation_id varchar(190) not null,
         created_by DOUBLE,
-        creation_time datetime not null,
-        update_time datetime,
+        creation_time datetime(6) not null,
+        update_time datetime(6),
         updated_by DOUBLE,
         embeds varchar(255),
         jointjs_id varchar(255),
@@ -232,14 +232,14 @@
         size bigint,
         text bigint,
         primary key (id)
-    ) type=MyISAM;
+    ) engine=InnoDB;
 
     create table diagram_table (
        id bigint not null,
         comparation_id varchar(190) not null,
         created_by DOUBLE,
-        creation_time datetime not null,
-        update_time datetime,
+        creation_time datetime(6) not null,
+        update_time datetime(6),
         updated_by DOUBLE,
         embeds varchar(255),
         jointjs_id varchar(255),
@@ -253,14 +253,14 @@
         text bigint,
         table_rule bigint,
         primary key (id)
-    ) type=MyISAM;
+    ) engine=InnoDB;
 
     create table diagram_text (
        id bigint not null,
         comparation_id varchar(190) not null,
         created_by DOUBLE,
-        creation_time datetime not null,
-        update_time datetime,
+        creation_time datetime(6) not null,
+        update_time datetime(6),
         updated_by DOUBLE,
         fill varchar(255),
         font_size varchar(255),
@@ -268,301 +268,301 @@
         stroke_width varchar(255),
         text varchar(255),
         primary key (id)
-    ) type=MyISAM;
+    ) engine=InnoDB;
 
     create table elements_of_diagram (
        diagram bigint not null,
         diagram_object bigint not null,
         primary key (diagram, diagram_object)
-    ) type=MyISAM;
+    ) engine=InnoDB;
 
     create table expression_function (
        id bigint not null,
         comparation_id varchar(190) not null,
         created_by DOUBLE,
-        creation_time datetime not null,
-        update_time datetime,
+        creation_time datetime(6) not null,
+        update_time datetime(6),
         updated_by DOUBLE,
         sort_sequence bigint not null,
         expression_value varchar(255),
         primary key (id)
-    ) type=MyISAM;
+    ) engine=InnoDB;
 
     create table expression_operator_logic (
        id bigint not null,
         comparation_id varchar(190) not null,
         created_by DOUBLE,
-        creation_time datetime not null,
-        update_time datetime,
+        creation_time datetime(6) not null,
+        update_time datetime(6),
         updated_by DOUBLE,
         sort_sequence bigint not null,
         current_value varchar(255),
         primary key (id)
-    ) type=MyISAM;
+    ) engine=InnoDB;
 
     create table expression_operator_math (
        id bigint not null,
         comparation_id varchar(190) not null,
         created_by DOUBLE,
-        creation_time datetime not null,
-        update_time datetime,
+        creation_time datetime(6) not null,
+        update_time datetime(6),
         updated_by DOUBLE,
         sort_sequence bigint not null,
         current_value varchar(255),
         primary key (id)
-    ) type=MyISAM;
+    ) engine=InnoDB;
 
     create table expression_plugin_method (
        id bigint not null,
         comparation_id varchar(190) not null,
         created_by DOUBLE,
-        creation_time datetime not null,
-        update_time datetime,
+        creation_time datetime(6) not null,
+        update_time datetime(6),
         updated_by DOUBLE,
         sort_sequence bigint not null,
         plugin_interface varchar(255),
         plugin_method_name varchar(255),
         plugin_name varchar(255),
         primary key (id)
-    ) type=MyISAM;
+    ) engine=InnoDB;
 
     create table expression_symbol (
        id bigint not null,
         comparation_id varchar(190) not null,
         created_by DOUBLE,
-        creation_time datetime not null,
-        update_time datetime,
+        creation_time datetime(6) not null,
+        update_time datetime(6),
         updated_by DOUBLE,
         sort_sequence bigint not null,
         value varchar(255),
         primary key (id)
-    ) type=MyISAM;
+    ) engine=InnoDB;
 
     create table expression_value_boolean (
        id bigint not null,
         comparation_id varchar(190) not null,
         created_by DOUBLE,
-        creation_time datetime not null,
-        update_time datetime,
+        creation_time datetime(6) not null,
+        update_time datetime(6),
         updated_by DOUBLE,
         sort_sequence bigint not null,
         expression_value bit,
         primary key (id)
-    ) type=MyISAM;
+    ) engine=InnoDB;
 
     create table expression_value_custom_variable (
        id bigint not null,
         comparation_id varchar(190) not null,
         created_by DOUBLE,
-        creation_time datetime not null,
-        update_time datetime,
+        creation_time datetime(6) not null,
+        update_time datetime(6),
         updated_by DOUBLE,
         sort_sequence bigint not null,
         unit varchar(255),
         reference bigint,
         custom_variable bigint,
         primary key (id)
-    ) type=MyISAM;
+    ) engine=InnoDB;
 
     create table expression_value_generic_custom_variable (
        id bigint not null,
         comparation_id varchar(190) not null,
         created_by DOUBLE,
-        creation_time datetime not null,
-        update_time datetime,
+        creation_time datetime(6) not null,
+        update_time datetime(6),
         updated_by DOUBLE,
         sort_sequence bigint not null,
         type varchar(255),
         custom_variable bigint,
         primary key (id)
-    ) type=MyISAM;
+    ) engine=InnoDB;
 
     create table expression_value_generic_variable (
        id bigint not null,
         comparation_id varchar(190) not null,
         created_by DOUBLE,
-        creation_time datetime not null,
-        update_time datetime,
+        creation_time datetime(6) not null,
+        update_time datetime(6),
         updated_by DOUBLE,
         sort_sequence bigint not null,
         type varchar(255),
         primary key (id)
-    ) type=MyISAM;
+    ) engine=InnoDB;
 
     create table expression_value_global_variable (
        id bigint not null,
         comparation_id varchar(190) not null,
         created_by DOUBLE,
-        creation_time datetime not null,
-        update_time datetime,
+        creation_time datetime(6) not null,
+        update_time datetime(6),
         updated_by DOUBLE,
         sort_sequence bigint not null,
         global_variable bigint,
         primary key (id)
-    ) type=MyISAM;
+    ) engine=InnoDB;
 
     create table expression_value_number (
        id bigint not null,
         comparation_id varchar(190) not null,
         created_by DOUBLE,
-        creation_time datetime not null,
-        update_time datetime,
+        creation_time datetime(6) not null,
+        update_time datetime(6),
         updated_by DOUBLE,
         sort_sequence bigint not null,
         expression_value double precision,
         primary key (id)
-    ) type=MyISAM;
+    ) engine=InnoDB;
 
     create table expression_value_postal_code (
        id bigint not null,
         comparation_id varchar(190) not null,
         created_by DOUBLE,
-        creation_time datetime not null,
-        update_time datetime,
+        creation_time datetime(6) not null,
+        update_time datetime(6),
         updated_by DOUBLE,
         sort_sequence bigint not null,
         text TEXT,
         primary key (id)
-    ) type=MyISAM;
+    ) engine=InnoDB;
 
     create table expression_value_string (
        id bigint not null,
         comparation_id varchar(190) not null,
         created_by DOUBLE,
-        creation_time datetime not null,
-        update_time datetime,
+        creation_time datetime(6) not null,
+        update_time datetime(6),
         updated_by DOUBLE,
         sort_sequence bigint not null,
         text TEXT,
         primary key (id)
-    ) type=MyISAM;
+    ) engine=InnoDB;
 
     create table expression_value_systemdate (
        id bigint not null,
         comparation_id varchar(190) not null,
         created_by DOUBLE,
-        creation_time datetime not null,
-        update_time datetime,
+        creation_time datetime(6) not null,
+        update_time datetime(6),
         updated_by DOUBLE,
         sort_sequence bigint not null,
-        value datetime,
+        value datetime(6),
         primary key (id)
-    ) type=MyISAM;
+    ) engine=InnoDB;
 
     create table expression_value_timestamp (
        id bigint not null,
         comparation_id varchar(190) not null,
         created_by DOUBLE,
-        creation_time datetime not null,
-        update_time datetime,
+        creation_time datetime(6) not null,
+        update_time datetime(6),
         updated_by DOUBLE,
         sort_sequence bigint not null,
-        value datetime,
+        value datetime(6),
         primary key (id)
-    ) type=MyISAM;
+    ) engine=InnoDB;
 
     create table expression_value_tree_object_reference (
        id bigint not null,
         comparation_id varchar(190) not null,
         created_by DOUBLE,
-        creation_time datetime not null,
-        update_time datetime,
+        creation_time datetime(6) not null,
+        update_time datetime(6),
         updated_by DOUBLE,
         sort_sequence bigint not null,
         unit varchar(255),
         reference bigint,
         primary key (id)
-    ) type=MyISAM;
+    ) engine=InnoDB;
 
     create table expressions_chain (
        id bigint not null,
         comparation_id varchar(190) not null,
         created_by DOUBLE,
-        creation_time datetime not null,
-        update_time datetime,
+        creation_time datetime(6) not null,
+        update_time datetime(6),
         updated_by DOUBLE,
         sort_sequence bigint not null,
         name varchar(255),
         primary key (id)
-    ) type=MyISAM;
+    ) engine=InnoDB;
 
     create table expressions_chain_expressions (
        expressions_chain bigint not null,
         expressions bigint not null
-    ) type=MyISAM;
+    ) engine=InnoDB;
 
     create table global_variable_data_date (
        id bigint not null,
         comparation_id varchar(190) not null,
         created_by DOUBLE,
-        creation_time datetime not null,
-        update_time datetime,
+        creation_time datetime(6) not null,
+        update_time datetime(6),
         updated_by DOUBLE,
-        valid_from datetime,
-        valid_to datetime,
-        variable_value datetime,
+        valid_from datetime(6),
+        valid_to datetime(6),
+        variable_value datetime(6),
         primary key (id)
-    ) type=MyISAM;
+    ) engine=InnoDB;
 
     create table global_variable_data_number (
        id bigint not null,
         comparation_id varchar(190) not null,
         created_by DOUBLE,
-        creation_time datetime not null,
-        update_time datetime,
+        creation_time datetime(6) not null,
+        update_time datetime(6),
         updated_by DOUBLE,
-        valid_from datetime,
-        valid_to datetime,
+        valid_from datetime(6),
+        valid_to datetime(6),
         variable_value double precision,
         primary key (id)
-    ) type=MyISAM;
+    ) engine=InnoDB;
 
     create table global_variable_data_postalcode (
        id bigint not null,
         comparation_id varchar(190) not null,
         created_by DOUBLE,
-        creation_time datetime not null,
-        update_time datetime,
+        creation_time datetime(6) not null,
+        update_time datetime(6),
         updated_by DOUBLE,
-        valid_from datetime,
-        valid_to datetime,
+        valid_from datetime(6),
+        valid_to datetime(6),
         postalcode varchar(255),
         primary key (id)
-    ) type=MyISAM;
+    ) engine=InnoDB;
 
     create table global_variable_data_text (
        id bigint not null,
         comparation_id varchar(190) not null,
         created_by DOUBLE,
-        creation_time datetime not null,
-        update_time datetime,
+        creation_time datetime(6) not null,
+        update_time datetime(6),
         updated_by DOUBLE,
-        valid_from datetime,
-        valid_to datetime,
+        valid_from datetime(6),
+        valid_to datetime(6),
         variable_value varchar(255),
         primary key (id)
-    ) type=MyISAM;
+    ) engine=InnoDB;
 
     create table global_variables (
        id bigint not null,
         comparation_id varchar(190) not null,
         created_by DOUBLE,
-        creation_time datetime not null,
-        update_time datetime,
+        creation_time datetime(6) not null,
+        update_time datetime(6),
         updated_by DOUBLE,
         format integer,
         name varchar(190),
         primary key (id)
-    ) type=MyISAM;
+    ) engine=InnoDB;
 
     create table global_variables_variable_data (
        global_variable bigint not null,
         variable_data bigint not null
-    ) type=MyISAM;
+    ) engine=InnoDB;
 
     create table hibernate_sequence (
        next_val bigint
-    ) type=MyISAM;
+    ) engine=InnoDB;
 
     insert into hibernate_sequence values ( 1 );
 
@@ -600,119 +600,119 @@
        id bigint not null,
         comparation_id varchar(190) not null,
         created_by DOUBLE,
-        creation_time datetime not null,
-        update_time datetime,
+        creation_time datetime(6) not null,
+        update_time datetime(6),
         updated_by DOUBLE,
         name varchar(255),
         actions bigint,
         conditions bigint,
         primary key (id)
-    ) type=MyISAM;
+    ) engine=InnoDB;
 
     create table rule_decision_table (
        id bigint not null,
         comparation_id varchar(190) not null,
         created_by DOUBLE,
-        creation_time datetime not null,
-        update_time datetime,
+        creation_time datetime(6) not null,
+        update_time datetime(6),
         updated_by DOUBLE,
         name varchar(255),
         primary key (id)
-    ) type=MyISAM;
+    ) engine=InnoDB;
 
     create table rule_decision_table_row (
        id bigint not null,
         comparation_id varchar(190) not null,
         created_by DOUBLE,
-        creation_time datetime not null,
-        update_time datetime,
+        creation_time datetime(6) not null,
+        update_time datetime(6),
         updated_by DOUBLE,
         actions bigint,
         conditions bigint,
         primary key (id)
-    ) type=MyISAM;
+    ) engine=InnoDB;
 
     create table rule_decision_table_row_rules (
        rule_decision_table bigint not null,
         rule bigint not null
-    ) type=MyISAM;
+    ) engine=InnoDB;
 
     create table test_answer_input_date (
        id bigint not null,
         comparation_id varchar(190) not null,
         created_by DOUBLE,
-        creation_time datetime not null,
-        update_time datetime,
+        creation_time datetime(6) not null,
+        update_time datetime(6),
         updated_by DOUBLE,
-        date_value datetime,
+        date_value datetime(6),
         primary key (id)
-    ) type=MyISAM;
+    ) engine=InnoDB;
 
     create table test_answer_input_number (
        id bigint not null,
         comparation_id varchar(190) not null,
         created_by DOUBLE,
-        creation_time datetime not null,
-        update_time datetime,
+        creation_time datetime(6) not null,
+        update_time datetime(6),
         updated_by DOUBLE,
         input_value double precision,
         primary key (id)
-    ) type=MyISAM;
+    ) engine=InnoDB;
 
     create table test_answer_input_postalcode (
        id bigint not null,
         comparation_id varchar(190) not null,
         created_by DOUBLE,
-        creation_time datetime not null,
-        update_time datetime,
+        creation_time datetime(6) not null,
+        update_time datetime(6),
         updated_by DOUBLE,
         input_value varchar(255),
         primary key (id)
-    ) type=MyISAM;
+    ) engine=InnoDB;
 
     create table test_answer_input_text (
        id bigint not null,
         comparation_id varchar(190) not null,
         created_by DOUBLE,
-        creation_time datetime not null,
-        update_time datetime,
+        creation_time datetime(6) not null,
+        update_time datetime(6),
         updated_by DOUBLE,
         input_value varchar(255),
         primary key (id)
-    ) type=MyISAM;
+    ) engine=InnoDB;
 
     create table test_answer_multi_checkbox (
        id bigint not null,
         comparation_id varchar(190) not null,
         created_by DOUBLE,
-        creation_time datetime not null,
-        update_time datetime,
+        creation_time datetime(6) not null,
+        update_time datetime(6),
         updated_by DOUBLE,
         primary key (id)
-    ) type=MyISAM;
+    ) engine=InnoDB;
 
     create table test_answer_multi_checkbox_values (
        test_answer_multi_checkbox bigint not null,
         multi_check_box_value varchar(255)
-    ) type=MyISAM;
+    ) engine=InnoDB;
 
     create table test_answer_radio_button (
        id bigint not null,
         comparation_id varchar(190) not null,
         created_by DOUBLE,
-        creation_time datetime not null,
-        update_time datetime,
+        creation_time datetime(6) not null,
+        update_time datetime(6),
         updated_by DOUBLE,
         radio_button_value varchar(255),
         primary key (id)
-    ) type=MyISAM;
+    ) engine=InnoDB;
 
     create table test_scenario (
        id bigint not null,
         comparation_id varchar(190) not null,
         created_by DOUBLE,
-        creation_time datetime not null,
-        update_time datetime,
+        creation_time datetime(6) not null,
+        update_time datetime(6),
         updated_by DOUBLE,
         form_id bigint not null,
         form_label varchar(190) not null,
@@ -720,14 +720,14 @@
         name varchar(190),
         test_scenario_form bigint,
         primary key (id)
-    ) type=MyISAM;
+    ) engine=InnoDB;
 
     create table test_scenario_category (
        id bigint not null,
         comparation_id varchar(190) not null,
         created_by DOUBLE,
-        creation_time datetime not null,
-        update_time datetime,
+        creation_time datetime(6) not null,
+        update_time datetime(6),
         updated_by DOUBLE,
         label varchar(1000),
         name varchar(190),
@@ -735,14 +735,14 @@
         sort_sequence bigint not null,
         parent bigint,
         primary key (id)
-    ) type=MyISAM;
+    ) engine=InnoDB;
 
     create table test_scenario_form (
        id bigint not null,
         comparation_id varchar(190) not null,
         created_by DOUBLE,
-        creation_time datetime not null,
-        update_time datetime,
+        creation_time datetime(6) not null,
+        update_time datetime(6),
         updated_by DOUBLE,
         label varchar(1000),
         name varchar(190),
@@ -752,14 +752,14 @@
         organization_id DOUBLE not null,
         version integer,
         primary key (id)
-    ) type=MyISAM;
+    ) engine=InnoDB;
 
     create table test_scenario_group (
        id bigint not null,
         comparation_id varchar(190) not null,
         created_by DOUBLE,
-        creation_time datetime not null,
-        update_time datetime,
+        creation_time datetime(6) not null,
+        update_time datetime(6),
         updated_by DOUBLE,
         label varchar(1000),
         name varchar(190),
@@ -769,14 +769,14 @@
         repeatable bit not null,
         add_enabled bit,
         primary key (id)
-    ) type=MyISAM;
+    ) engine=InnoDB;
 
     create table test_scenario_question (
        id bigint not null,
         comparation_id varchar(190) not null,
         created_by DOUBLE,
-        creation_time datetime not null,
-        update_time datetime,
+        creation_time datetime(6) not null,
+        update_time datetime(6),
         updated_by DOUBLE,
         label varchar(1000),
         name varchar(190),
@@ -785,14 +785,14 @@
         parent bigint,
         test_answer bigint,
         primary key (id)
-    ) type=MyISAM;
+    ) engine=InnoDB;
 
     create table tree_answers (
        id bigint not null,
         comparation_id varchar(190) not null,
         created_by DOUBLE,
-        creation_time datetime not null,
-        update_time datetime,
+        creation_time datetime(6) not null,
+        update_time datetime(6),
         updated_by DOUBLE,
         label varchar(1000),
         name varchar(190),
@@ -800,14 +800,14 @@
         sort_sequence bigint not null,
         parent bigint,
         primary key (id)
-    ) type=MyISAM;
+    ) engine=InnoDB;
 
     create table tree_categories (
        id bigint not null,
         comparation_id varchar(190) not null,
         created_by DOUBLE,
-        creation_time datetime not null,
-        update_time datetime,
+        creation_time datetime(6) not null,
+        update_time datetime(6),
         updated_by DOUBLE,
         label varchar(1000),
         name varchar(190),
@@ -815,14 +815,14 @@
         sort_sequence bigint not null,
         parent bigint,
         primary key (id)
-    ) type=MyISAM;
+    ) engine=InnoDB;
 
     create table tree_forms (
        id bigint not null,
         comparation_id varchar(190) not null,
         created_by DOUBLE,
-        creation_time datetime not null,
-        update_time datetime,
+        creation_time datetime(6) not null,
+        update_time datetime(6),
         updated_by DOUBLE,
         label varchar(190),
         name varchar(190),
@@ -831,42 +831,42 @@
         parent bigint,
         organization_id DOUBLE not null,
         version integer,
-        available_from datetime not null,
-        available_to datetime,
+        available_from datetime(6) not null,
+        available_to datetime(6),
         status varchar(255),
         primary key (id)
-    ) type=MyISAM;
+    ) engine=InnoDB;
 
     create table tree_forms_diagram (
        form bigint not null,
         diagram bigint not null,
         primary key (form, diagram)
-    ) type=MyISAM;
+    ) engine=InnoDB;
 
     create table tree_forms_expressions_chain (
        form bigint not null,
         expression_chain bigint not null,
         primary key (form, expression_chain)
-    ) type=MyISAM;
+    ) engine=InnoDB;
 
     create table tree_forms_rule (
        form bigint not null,
         rule bigint not null,
         primary key (form, rule)
-    ) type=MyISAM;
+    ) engine=InnoDB;
 
     create table tree_forms_rule_decision_table (
        form bigint not null,
         table_rule bigint not null,
         primary key (form, table_rule)
-    ) type=MyISAM;
+    ) engine=InnoDB;
 
     create table tree_groups (
        id bigint not null,
         comparation_id varchar(190) not null,
         created_by DOUBLE,
-        creation_time datetime not null,
-        update_time datetime,
+        creation_time datetime(6) not null,
+        update_time datetime(6),
         updated_by DOUBLE,
         label varchar(1000),
         name varchar(190),
@@ -875,14 +875,14 @@
         parent bigint,
         repeatable bit not null,
         primary key (id)
-    ) type=MyISAM;
+    ) engine=InnoDB;
 
     create table tree_questions (
        id bigint not null,
         comparation_id varchar(190) not null,
         created_by DOUBLE,
-        creation_time datetime not null,
-        update_time datetime,
+        creation_time datetime(6) not null,
+        update_time datetime(6),
         updated_by DOUBLE,
         label varchar(1000),
         name varchar(190),
@@ -892,7 +892,7 @@
         answer_format varchar(255),
         answer_type varchar(255),
         primary key (id)
-    ) type=MyISAM;
+    ) engine=InnoDB;
 
     alter table custom_variables 
        add constraint UK_m5lcv2lfe2ndoj4jbynogd5wh unique (comparation_id);

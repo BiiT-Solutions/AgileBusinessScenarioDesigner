@@ -166,7 +166,7 @@ public class FormDao extends AnnotatedGenericDao<Form, Long> implements IFormDao
 	 * @return
 	 * @throws UnexpectedDatabaseException
 	 */
-	@CacheEvict(value = "forms", key = "#form.label, #form.organizationId")
+	@CacheEvict(value = "springFormCache", key = "#form.label, #form.organizationId")
 	@Transactional(value = "abcdTransactionManager", propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
 	public int updateValidTo(String label, int version, Long organizationId, Timestamp validTo) {
 		Query query = getEntityManager()
