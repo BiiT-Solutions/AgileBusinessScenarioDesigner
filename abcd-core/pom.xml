@@ -165,11 +165,6 @@
 			<artifactId>rest-services-security</artifactId>
 			<version>${rest-services-security.version}</version>
 		</dependency>
-		<dependency>
-		<groupId>org.glassfish.jersey.ext</groupId>
-			<artifactId>jersey-bean-validation</artifactId>
-			<version>${jersey-bean-validation.version}</version>
-		</dependency>
 	</dependencies>
 	<build>
 		<plugins>

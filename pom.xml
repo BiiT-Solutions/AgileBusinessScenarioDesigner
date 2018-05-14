@@ -82,7 +82,6 @@
 		<javax.servlet.version>2.5</javax.servlet.version>
 		<batik.version>1.8</batik.version>
 		<xmlgraphics-commons.version>2.1</xmlgraphics-commons.version>
-		<jersey-bean-validation.version>2.26</jersey-bean-validation.version>
 		<!-- BiiT dependencies -->
 		<DES-encryption.version>[1.0,1.1)</DES-encryption.version>
 		<biit-common-utils.version>[0.4,0.5)</biit-common-utils.version>
