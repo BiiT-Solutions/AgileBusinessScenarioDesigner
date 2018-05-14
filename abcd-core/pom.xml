@@ -153,6 +153,10 @@
 					<groupId>org.springframework</groupId>
 					<artifactId>spring-beans</artifactId>
 				</exclusion>
+				<exclusion>
+					<groupId>org.glassfish.hk2.external</groupId>
+					<artifactId>bean-validator</artifactId>
+				</exclusion>
 			</exclusions>
 		</dependency>
 		<!-- Rest Authentication -->
@@ -160,6 +164,11 @@
 			<groupId>com.biit</groupId>
 			<artifactId>rest-services-security</artifactId>
 			<version>${rest-services-security.version}</version>
+		</dependency>
+		<dependency>
+		<groupId>org.glassfish.jersey.ext</groupId>
+			<artifactId>jersey-bean-validation</artifactId>
+			<version>${jersey-bean-validation.version}</version>
 		</dependency>
 	</dependencies>
 	<build>
