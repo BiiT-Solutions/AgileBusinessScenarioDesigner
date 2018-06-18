@@ -1,5 +1,7 @@
 package com.biit.abcd.webpages.elements.decisiontable;
 
+import java.util.Objects;
+
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
@@ -19,13 +21,13 @@ public class WindoNewTable extends WindowCreateNewObject {
 	@Override
 	public void concreteAcceptAction(TextField inputTextField) {
 		for (TableRule existingTableRule : UserSessionHandler.getFormController().getForm().getTableRules()) {
-			if (existingTableRule.getName().equals(inputTextField.getValue())) {
+			if (Objects.equals(existingTableRule.getName().trim(), inputTextField.getValue().trim())) {
 				MessageManager.showError(LanguageCodes.ERROR_REPEATED_TABLE_RULE_NAME);
 				return;
 			}
 		}
 		TableRule tableRule = new TableRule();
-		tableRule.setName(inputTextField.getValue());
+		tableRule.setName(inputTextField.getValue().trim());
 		tableRule.setCreatedBy(UserSessionHandler.getUser());
 		tableRule.setUpdatedBy(UserSessionHandler.getUser());
 		tableRule.setUpdateTime();
@@ -33,8 +35,8 @@ public class WindoNewTable extends WindowCreateNewObject {
 		((TableRuleEditor) getParentWindow()).addTablefromWindow(tableRule);
 		((TableRuleEditor) getParentWindow()).sortTableMenu();
 
-		AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
-				+ "' has created a " + tableRule.getClass() + " with 'Name: " + tableRule.getName() + "'.");
+		AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress() + "' has created a " + tableRule.getClass()
+				+ " with 'Name: " + tableRule.getName() + "'.");
 
 		close();
 	}
