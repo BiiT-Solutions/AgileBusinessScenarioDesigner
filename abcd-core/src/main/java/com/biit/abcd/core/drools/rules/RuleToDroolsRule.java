@@ -183,20 +183,20 @@ public class RuleToDroolsRule {
 		List<TreeObject> treeObjects = null;
 		switch (expressionValueGenericVariable.getType()) {
 		case CATEGORY:
-			treeObjects = getDroolsHelper().getForm().getAll(Category.class);
+			treeObjects = new ArrayList<TreeObject>(getDroolsHelper().getForm().getAll(Category.class));
 			break;
 		case GROUP:
-			treeObjects = getDroolsHelper().getForm().getAll(Group.class);
+			treeObjects = new ArrayList<TreeObject>(getDroolsHelper().getForm().getAll(Group.class));
 			break;
 		case QUESTION_CATEGORY:
-			List<TreeObject> categories = getDroolsHelper().getForm().getAll(Category.class);
+			List<TreeObject> categories = new ArrayList<TreeObject>(getDroolsHelper().getForm().getAll(Category.class));
 			treeObjects = new ArrayList<TreeObject>();
 			for (TreeObject category : categories) {
 				treeObjects.addAll(category.getChildren(Question.class));
 			}
 			break;
 		case QUESTION_GROUP:
-			List<TreeObject> groups = getDroolsHelper().getForm().getAll(Group.class);
+			List<TreeObject> groups = new ArrayList<TreeObject>(getDroolsHelper().getForm().getAll(Group.class));
 			treeObjects = new ArrayList<TreeObject>();
 			for (TreeObject group : groups) {
 				treeObjects.addAll(group.getChildren(Question.class));

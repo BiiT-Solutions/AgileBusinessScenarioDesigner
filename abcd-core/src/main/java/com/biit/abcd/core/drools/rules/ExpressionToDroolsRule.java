@@ -78,7 +78,7 @@ public class ExpressionToDroolsRule {
 			break;
 		case GROUP:
 			for (TreeObject category : expressionValueGenericCustomVariable.getVariable().getForm().getChildren()) {
-				List<TreeObject> groups = category.getAll(Group.class);
+				List<Group> groups = category.getAll(Group.class);
 				// We need to reverse the groups to correctly generate the rules
 				// for nested groups
 				Collections.reverse(groups);
@@ -87,7 +87,7 @@ public class ExpressionToDroolsRule {
 			break;
 		case QUESTION_GROUP:
 			for (TreeObject category : expressionValueGenericCustomVariable.getVariable().getForm().getChildren()) {
-				List<TreeObject> groups = category.getAll(Group.class);
+				List<Group> groups = category.getAll(Group.class);
 				// We need to reverse the groups to correctly generate the rules
 				// for nested groups
 				Collections.reverse(groups);
@@ -358,7 +358,7 @@ public class ExpressionToDroolsRule {
 		switch (expressionValueGenericVariable.getType()) {
 		case CATEGORY:
 			if (leftTreeObject instanceof Form) {
-				treeObjects = leftTreeObject.getAll(Category.class);
+				treeObjects = new ArrayList<TreeObject>(leftTreeObject.getAll(Category.class));
 
 			} else if (leftTreeObject instanceof Category) {
 				// It is the same item (we don't want the brothers)
@@ -373,7 +373,7 @@ public class ExpressionToDroolsRule {
 			break;
 		case GROUP:
 			if (leftTreeObject instanceof Form) {
-				treeObjects = leftTreeObject.getAll(Group.class);
+				treeObjects = new ArrayList<TreeObject>(leftTreeObject.getAll(Group.class));
 
 			} else if ((leftTreeObject instanceof Category) || (leftTreeObject instanceof Group)) {
 				treeObjects = new ArrayList<TreeObject>(leftTreeObject.getChildren(Group.class));
@@ -386,7 +386,7 @@ public class ExpressionToDroolsRule {
 			break;
 		case QUESTION_CATEGORY:
 			if (leftTreeObject instanceof Form) {
-				List<TreeObject> categories = leftTreeObject.getAll(Category.class);
+				List<Category> categories = leftTreeObject.getAll(Category.class);
 				if (categories != null && !categories.isEmpty()) {
 					treeObjects = new ArrayList<TreeObject>();
 					for (TreeObject category : categories) {
@@ -402,7 +402,7 @@ public class ExpressionToDroolsRule {
 			break;
 		case QUESTION_GROUP:
 			if ((leftTreeObject instanceof Form) || (leftTreeObject instanceof Category)) {
-				List<TreeObject> groups = leftTreeObject.getAll(Group.class);
+				List<Group> groups = leftTreeObject.getAll(Group.class);
 				if (groups != null && !groups.isEmpty()) {
 					treeObjects = new ArrayList<TreeObject>();
 					for (TreeObject group : groups) {
