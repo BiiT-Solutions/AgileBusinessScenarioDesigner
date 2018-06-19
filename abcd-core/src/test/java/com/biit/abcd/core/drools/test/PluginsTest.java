@@ -67,7 +67,7 @@ public class PluginsTest extends KidsFormCreator {
 	private final static String DROOLS_PLUGIN_METHOD = "methodSumParameters";
 	private final static String LIFERAY_PLUGIN_NAME = "LiferayKnowledgeBasePlugin";
 	private final static String LIFERAY_PLUGIN_METHOD = "methodGetLatestArticleContent";
-	private final static Double LIFERAY_ARTICLE_RESOURCE_PRIMARY_KEY = 26383d;
+	private final static Double LIFERAY_ARTICLE_RESOURCE_PRIMARY_KEY = 24518d;
 	private final static String LIFERAY_PLUGIN_METHOD_BY_PROPERTY = "methodGetLatestArticleContentByProperty";
 	private final static String LIFERAY_PLUGIN_METHOD_GET_PROPERTIES_SOURCES = "methodGetPropertiesSources";
 	private final static String LIFERAY_ARTICLE_PROPERTY = "Article1";
