@@ -63,7 +63,7 @@ public class WindowImportJson extends AcceptCancelWindow {
 				} catch (ElementCannotBePersistedException e) {
 					MessageManager.showError(LanguageCodes.ERROR_ELEMENT_CANNOT_BE_SAVED, LanguageCodes.ERROR_ELEMENT_CANNOT_BE_SAVED_DESCRIPTION);
 					AbcdLogger.errorMessage(this.getClass().getName(), e);
-				} catch (JsonParseException jpe) {
+				} catch (JsonParseException | ClassNotFoundException | NullPointerException jpe) {
 					AbcdLogger.errorMessage(WindowImportJson.class.getName(), jpe);
 					MessageManager.showError(LanguageCodes.INVALID_JSON_CODE);
 				}
