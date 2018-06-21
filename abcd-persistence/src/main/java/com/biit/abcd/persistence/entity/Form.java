@@ -790,11 +790,11 @@ public class Form extends BaseForm {
 		return gson.toJson(this);
 	}
 
-	public static Form fromJson(String jsonString) throws ClassNotFoundException {
+	public static Form fromJson(String jsonString) {
 		return getFormDeserializer().fromJson(jsonString, Form.class);
 	}
 
-	public static Form[] fromJsonList(String jsonString) throws ClassNotFoundException {
+	public static Form[] fromJsonList(String jsonString) {
 		return getFormDeserializer().fromJson(jsonString, Form[].class);
 	}
 
