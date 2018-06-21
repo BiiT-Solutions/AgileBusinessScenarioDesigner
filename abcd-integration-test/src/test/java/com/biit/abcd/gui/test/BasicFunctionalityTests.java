@@ -19,14 +19,14 @@ public class BasicFunctionalityTests extends AbcdTester {
 
 	@Test
 	public void createForm() {
-		createForm(FORM_NAME, ABCD_FORM_EDIT_BIIT1);
+		createForm(FORM_NAME + "_1", ABCD_FORM_EDIT_BIIT1);
 		getFormManager().logOut();
 		deleteForm(1, ABCD_FORM_ADMIN_BIIT1);
 	}
 
 	@Test
 	public void attemptToEditFormOfAnotherOrganization() {
-		createForm(FORM_NAME, ABCD_FORM_EDIT_BIIT1);
+		createForm(FORM_NAME+ "_2", ABCD_FORM_EDIT_BIIT1);
 		getFormManager().logOut();
 		login(ABCD_FORM_EDIT_BIIT2);
 		Assert.assertFalse(getFormManager().checkIfRowExists(1));
@@ -37,7 +37,7 @@ public class BasicFunctionalityTests extends AbcdTester {
 
 	@Test
 	public void attemtToEditFormWithReadOnlyPermission() {
-		createForm(FORM_NAME, ABCD_FORM_EDIT_BIIT1);
+		createForm(FORM_NAME+ "_3", ABCD_FORM_EDIT_BIIT1);
 		getFormManager().logOut();
 		openForm(1, ABCD_READ_BIIT1);
 		checkNotificationIsWarning(getNotification());
@@ -48,7 +48,7 @@ public class BasicFunctionalityTests extends AbcdTester {
 
 	@Test
 	public void attemtToEditForm() {
-		createForm(FORM_NAME, ABCD_FORM_EDIT_BIIT1);
+		createForm(FORM_NAME+ "_4", ABCD_FORM_EDIT_BIIT1);
 		getFormManager().logOut();
 		openForm(1, ABCD_FORM_EDIT_BIIT1);
 		// No notification.
@@ -60,7 +60,7 @@ public class BasicFunctionalityTests extends AbcdTester {
 
 	@Test
 	public void finishForm() {
-		createForm(FORM_NAME, ABCD_FORM_EDIT_BIIT1);
+		createForm(FORM_NAME+ "_5", ABCD_FORM_EDIT_BIIT1);
 		getFormManager().goToDesigner(1);
 		getFormDesigner().finishDesign();
 		$(ComboBoxElement.class).first().getValue().equals("Final Design");
@@ -72,7 +72,7 @@ public class BasicFunctionalityTests extends AbcdTester {
 
 	@Test
 	public void changeFormStatus() {
-		createForm(FORM_NAME, ABCD_FORM_ADMIN_BIIT1);
+		createForm(FORM_NAME+ "_6", ABCD_FORM_ADMIN_BIIT1);
 		getFormManager().goToDesigner(1);
 		getFormDesigner().finishDesign();
 		$(ComboBoxElement.class).first().selectByText("Design");
@@ -86,7 +86,7 @@ public class BasicFunctionalityTests extends AbcdTester {
 
 	@Test
 	public void attemptToChangeFormStatus() {
-		createForm(FORM_NAME, ABCD_FORM_EDIT_BIIT1);
+		createForm(FORM_NAME+ "_7", ABCD_FORM_EDIT_BIIT1);
 		getFormManager().goToDesigner(1);
 		getFormDesigner().finishDesign();
 		Assert.assertFalse($(ComboBoxElement.class).first().isEnabled());
