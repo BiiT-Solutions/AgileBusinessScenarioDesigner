@@ -127,6 +127,7 @@ public class StringInputWindow extends AcceptCancelWindow {
 		if (expressionValue instanceof TextField) {
 			((TextField) expressionValue).setNullRepresentation("");
 		}
+		expressionValue.focus();
 
 		formLayout.addComponent(expressionValue);
 	}
