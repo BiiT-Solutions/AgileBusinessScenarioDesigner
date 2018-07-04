@@ -63,7 +63,6 @@ public class TreeElementMathExpressionVisitor implements ITreeElementVisitor {
 	@Override
 	public void visit(NameExpression name) throws NotCompatibleTypeException {
 		if (name.getExpressionChain().getExpressions().get(0) instanceof ExpressionValueCustomVariable) {
-
 			ExpressionValueCustomVariable expVal = (ExpressionValueCustomVariable) name.getExpressionChain().getExpressions().get(0);
 			String customVariableName = expVal.getVariable().getName();
 			TreeObject treeObject = expVal.getReference();
@@ -82,11 +81,10 @@ public class TreeElementMathExpressionVisitor implements ITreeElementVisitor {
 				}
 				break;
 			case STRING:
-				throw new NotCompatibleTypeException("Using a text variable inside a mathematical operation", expVal);
+				throw new NotCompatibleTypeException("Using a text variable inside a mathematical operation: '" + name.getExpressionChain().toString() + "'.",
+						expVal);
 			}
-
 		} else if (name.getExpressionChain().getExpressions().get(0) instanceof ExpressionValueTreeObjectReference) {
-
 			ExpressionValueTreeObjectReference expVal = (ExpressionValueTreeObjectReference) name.getExpressionChain().getExpressions().get(0);
 			TreeObject treeObject = expVal.getReference();
 			String id = treeObject.getUniqueNameReadable();
@@ -99,12 +97,12 @@ public class TreeElementMathExpressionVisitor implements ITreeElementVisitor {
 				case DATE:
 					if (expVal.getUnit() != null) {
 						builder.append(expVal.getUnit().getDroolsFunction() + "( $" + id + ".getAnswer('" + AnswerFormat.DATE.toString() + "'))");
-					}					
+					}
 					break;
 				case TEXT:
 				case MULTI_TEXT:
 				case POSTAL_CODE:
-					throw new NotCompatibleTypeException("Using a text variable inside a mathematical operation", expVal);
+					throw new NotCompatibleTypeException("Using a text variable inside a mathematical operation '" + name.getExpressionChain() + "'.", expVal);
 				}
 			}
 
@@ -123,8 +121,8 @@ public class TreeElementMathExpressionVisitor implements ITreeElementVisitor {
 			case TEXT:
 			case MULTI_TEXT:
 			case POSTAL_CODE:
-				throw new NotCompatibleTypeException("Using the text constant: " + name.getName() + " inside a mathematical operation",
-						(ExpressionValueGlobalVariable) name.getExpressionChain().getExpressions().get(0));
+				throw new NotCompatibleTypeException("Using the text constant: " + name.getName() + " inside a mathematical operation '"
+						+ name.getExpressionChain() + "'", (ExpressionValueGlobalVariable) name.getExpressionChain().getExpressions().get(0));
 			case DATE:
 				builder.append("(Date)" + name.getName());
 				break;
