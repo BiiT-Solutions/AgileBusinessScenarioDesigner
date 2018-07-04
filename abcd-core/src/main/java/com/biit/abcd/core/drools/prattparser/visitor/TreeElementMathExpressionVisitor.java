@@ -81,8 +81,9 @@ public class TreeElementMathExpressionVisitor implements ITreeElementVisitor {
 				}
 				break;
 			case STRING:
-				throw new NotCompatibleTypeException("Using a text variable inside a mathematical operation: '" + name.getExpressionChain().toString() + "'.",
-						expVal);
+				builder.append("$" + id + ".getVariableValue('" + customVariableName + "')");
+				//throw new NotCompatibleTypeException("Using a text variable inside a mathematical operation: '" + name.getExpressionChain().toString() + "'.",
+				//		expVal);
 			}
 		} else if (name.getExpressionChain().getExpressions().get(0) instanceof ExpressionValueTreeObjectReference) {
 			ExpressionValueTreeObjectReference expVal = (ExpressionValueTreeObjectReference) name.getExpressionChain().getExpressions().get(0);
