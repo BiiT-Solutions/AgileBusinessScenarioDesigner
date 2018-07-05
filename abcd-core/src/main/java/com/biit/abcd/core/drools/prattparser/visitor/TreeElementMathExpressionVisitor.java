@@ -82,6 +82,7 @@ public class TreeElementMathExpressionVisitor implements ITreeElementVisitor {
 				break;
 			case STRING:
 				builder.append("$" + id + ".getVariableValue('" + customVariableName + "')");
+				break;
 				//throw new NotCompatibleTypeException("Using a text variable inside a mathematical operation: '" + name.getExpressionChain().toString() + "'.",
 				//		expVal);
 			}
