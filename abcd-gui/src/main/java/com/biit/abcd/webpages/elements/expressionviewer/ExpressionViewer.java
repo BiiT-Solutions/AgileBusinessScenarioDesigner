@@ -312,7 +312,7 @@ public class ExpressionViewer extends CssLayout {
 							SelectFormElementVariableWindow variableWindow = new SelectFormElementVariableWindow();
 							variableWindow.showCentered();
 							variableWindow.collapseFrom(Category.class);
-							variableWindow.setvalue((ExpressionValueCustomVariable) expression);
+							variableWindow.setValue((ExpressionValueCustomVariable) expression);
 							variableWindow.addAcceptActionListener(new AcceptActionListener() {
 								@Override
 								public void acceptAction(AcceptCancelWindow window) {

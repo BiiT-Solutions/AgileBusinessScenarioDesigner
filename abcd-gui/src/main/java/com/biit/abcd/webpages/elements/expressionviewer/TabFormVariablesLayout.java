@@ -2,6 +2,7 @@ package com.biit.abcd.webpages.elements.expressionviewer;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import com.biit.abcd.authentication.UserSessionHandler;
@@ -39,15 +40,15 @@ public abstract class TabFormVariablesLayout extends TabLayout {
 	}
 
 	/**
-	 * Returns the selected list of element. All elements must be of the same class.
+	 * Returns the selected list of element. All elements must be of the same
+	 * class.
 	 * 
 	 * @return
 	 */
 	public List<TreeObject> getSelectedFormElements() {
 		List<TreeObject> selected = new ArrayList<>();
 		if (formQuestionTable instanceof TreeObjectTableMultiSelect) {
-			if (((((Collection<?>) formQuestionTable.getValue()) == null) || ((Collection<?>) formQuestionTable
-					.getValue()).isEmpty())) {
+			if (((((Collection<?>) formQuestionTable.getValue()) == null) || ((Collection<?>) formQuestionTable.getValue()).isEmpty())) {
 				return selected;
 			}
 			Class<?> firstClass = null;
@@ -89,8 +90,7 @@ public abstract class TabFormVariablesLayout extends TabLayout {
 
 	protected void initializeVariableSelection() {
 		variableSelection = new ListSelect();
-		variableSelection
-				.setCaption(ServerTranslate.translate(LanguageCodes.EXPRESSION_FORM_VARIABLE_WINDOW_VARIABLES));
+		variableSelection.setCaption(ServerTranslate.translate(LanguageCodes.EXPRESSION_FORM_VARIABLE_WINDOW_VARIABLES));
 		variableSelection.setSizeFull();
 		variableSelection.setNullSelectionAllowed(false);
 		variableSelection.setImmediate(true);
@@ -105,11 +105,13 @@ public abstract class TabFormVariablesLayout extends TabLayout {
 			variableSelection.setValue(null);
 			variableSelection.removeAllItems();
 			if (!getSelectedFormElements().isEmpty()) {
-				List<CustomVariable> customVariables = UserSessionHandler.getFormController().getForm()
-						.getCustomVariables(getSelectedFormElements().get(0));
-				for (CustomVariable customvariable : customVariables) {
-					variableSelection.addItem(customvariable);
-					variableSelection.setItemCaption(customvariable, customvariable.getName());
+				List<CustomVariable> customVariables = UserSessionHandler.getFormController().getForm().getCustomVariables(getSelectedFormElements().get(0));
+				if ((customVariables != null) && !customVariables.isEmpty()) {
+					Collections.sort(customVariables);
+					for (CustomVariable customvariable : customVariables) {
+						variableSelection.addItem(customvariable);
+						variableSelection.setItemCaption(customvariable, customvariable.getName());
+					}
 				}
 			}
 		}
