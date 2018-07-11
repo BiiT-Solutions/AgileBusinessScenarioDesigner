@@ -12,7 +12,15 @@ public class RuleChecker {
 			NotCompatibleTypeException {
 		if ((rule.getConditions() != null) && (rule.getConditions().getExpressions() != null) && !(rule.getConditions().getExpressions().isEmpty())
 				&& (rule.getActions() != null) && (rule.getActions().getExpressions() != null) && !(rule.getActions().getExpressions().isEmpty())) {
-			ExpressionValidator.validateRule(rule);
+			try {
+				ExpressionValidator.validateRule(rule);
+			} catch (NotCompatibleTypeException ncte) {
+				if (node != null) {
+					throw new NotCompatibleTypeException("Error parsing '" + rule + "' at diagram node '" + node.getText() + "'.", ncte);
+				} else {
+					throw new NotCompatibleTypeException("Error parsing '" + rule + "'.", ncte);
+				}
+			}
 
 		} else if ((rule.getActions() == null) || (rule.getActions().getExpressions() == null) || (rule.getActions().getExpressions().isEmpty())) {
 			// Some rules don't have actions defined by the user (like the
