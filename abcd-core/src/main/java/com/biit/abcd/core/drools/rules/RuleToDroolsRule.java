@@ -78,11 +78,10 @@ public class RuleToDroolsRule {
 					}
 				} catch (NotCompatibleTypeException ncte) {
 					if (node != null) {
-						AbcdLogger.errorMessage(RuleToDroolsRule.class.getName(), "Error parsing '" + rule + "' at diagram node '" + node.getText() + "'.");
+						throw new NotCompatibleTypeException("Error parsing '" + rule + "' at diagram node '" + node.getText() + "'.", ncte);
 					} else {
-						AbcdLogger.errorMessage(RuleToDroolsRule.class.getName(), "Error parsing '" + rule + "'.");
+						throw new NotCompatibleTypeException("Error parsing '" + rule + "'.", ncte);
 					}
-					throw ncte;
 				}
 			}
 			if (droolsRuleList != null) {
@@ -122,11 +121,10 @@ public class RuleToDroolsRule {
 				}
 			} catch (NotCompatibleTypeException ncte) {
 				if (node != null) {
-					AbcdLogger.errorMessage(RuleToDroolsRule.class.getName(), "Error parsing '" + rule + "' at diagram node '" + node.getText() + "'.");
+					throw new NotCompatibleTypeException("Error parsing '" + rule + "' at diagram node '" + node.getText() + "'.", ncte);
 				} else {
-					AbcdLogger.errorMessage(RuleToDroolsRule.class.getName(), "Error parsing '" + rule + "'.");
+					throw new NotCompatibleTypeException("Error parsing '" + rule + "'.", ncte);
 				}
-				throw ncte;
 			}
 		}
 		// Validate the rules

@@ -72,9 +72,14 @@ public class FormToJson extends AbstractTransactionalTestNGSpringContextTests {
 	@Test(groups = { "abcdToJson" }, expectedExceptions = { NullPointerException.class })
 	public void importWebform() throws FileNotFoundException, ClassNotFoundException {
 		String jsonContent = FileReader.getResource("InvalidForm.json", Charset.defaultCharset());
-		Form form = Form.fromJson(jsonContent);
-		Assert.assertNotNull(form);
-		Assert.assertEquals(form.getChildren().size(), 2);
+		System.out.println("-------------------- EXPECTED EXCEPTIONS --------------------");
+		try {
+			Form form = Form.fromJson(jsonContent);
+			Assert.assertNotNull(form);
+			Assert.assertEquals(form.getChildren().size(), 2);
+		} finally {
+			System.out.println("----------------- END OF EXPECTED EXCEPTIONS -----------------");
+		}
 	}
 
 	@Test(groups = { "abcdToJson" })

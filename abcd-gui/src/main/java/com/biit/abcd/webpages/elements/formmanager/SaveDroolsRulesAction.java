@@ -65,12 +65,14 @@ public class SaveDroolsRulesAction implements SaveAction {
 				MessageManager.showError(LanguageCodes.ZIP_FILE_NOT_GENERATED);
 				AbcdLogger.errorMessage(SettingsWindow.class.getName(), e);
 			}
-		} catch (DroolsRuleGenerationException | RuleNotImplementedException | NotCompatibleTypeException | ExpressionInvalidException
-				| NullTreeObjectException | TreeObjectInstanceNotRecognizedException | TreeObjectParentNotValidException | NullCustomVariableException
-				| NullExpressionValueException | BetweenFunctionInvalidException | DateComparisonNotPossibleException | PluginInvocationException
-				| DroolsRuleCreationException | PrattParserException | ActionNotImplementedException | InvalidExpressionException e) {
+		} catch (DroolsRuleGenerationException | RuleNotImplementedException | ExpressionInvalidException | NullTreeObjectException
+				| TreeObjectInstanceNotRecognizedException | TreeObjectParentNotValidException | NullCustomVariableException | NullExpressionValueException
+				| BetweenFunctionInvalidException | DateComparisonNotPossibleException | PluginInvocationException | DroolsRuleCreationException
+				| PrattParserException | ActionNotImplementedException | InvalidExpressionException e) {
 			AbcdLogger.errorMessage(SettingsWindow.class.getName(), e);
 			MessageManager.showError(LanguageCodes.ERROR_TITLE, LanguageCodes.DROOLS_RULES_GENERATION_EXCEPTION);
+		} catch (NotCompatibleTypeException ncte) {
+			MessageManager.showError(LanguageCodes.DROOLS_RULES_GENERATION_EXCEPTION, LanguageCodes.ERROR_DESCRIPTION, ncte.getDescription());
 		} catch (InvalidRuleException e) {
 			AbcdLogger.errorMessage(SettingsWindow.class.getName(), e);
 			MessageManager.showError(LanguageCodes.ERROR_TITLE, LanguageCodes.DROOLS_RULE_INVALID, ((InvalidRuleException) e).getRuleName());

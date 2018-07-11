@@ -2,9 +2,7 @@ package com.biit.abcd.core.drools.rules.validators;
 
 import com.biit.abcd.core.drools.prattparser.exceptions.PrattParserException;
 import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
-import com.biit.abcd.core.drools.rules.RuleToDroolsRule;
 import com.biit.abcd.core.drools.rules.exceptions.InvalidRuleException;
-import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.diagram.DiagramElement;
 import com.biit.abcd.persistence.entity.expressions.Rule;
 
@@ -23,22 +21,20 @@ public class RuleChecker {
 				ExpressionValidator.validateConditions(rule.getConditions());
 			} catch (NotCompatibleTypeException ncte) {
 				if (node != null) {
-					AbcdLogger.errorMessage(RuleToDroolsRule.class.getName(), "Error parsing '" + rule + "' at diagram node '" + node.getText() + "'.");
+					throw new NotCompatibleTypeException("Error parsing '" + rule + "' at diagram node '" + node.getText() + "'.", ncte);
 				} else {
-					AbcdLogger.errorMessage(RuleToDroolsRule.class.getName(), "Error parsing '" + rule + "'.");
+					throw new NotCompatibleTypeException("Error parsing '" + rule + "'.", ncte);
 				}
-				throw ncte;
 			}
 		} else {
 			try {
 				ExpressionValidator.validateActions(rule.getActions());
 			} catch (NotCompatibleTypeException ncte) {
 				if (node != null) {
-					AbcdLogger.errorMessage(RuleToDroolsRule.class.getName(), "Error parsing '" + rule + "' at diagram node '" + node.getText() + "'.");
+					throw new NotCompatibleTypeException("Error parsing '" + rule + "' at diagram node '" + node.getText() + "'.", ncte);
 				} else {
-					AbcdLogger.errorMessage(RuleToDroolsRule.class.getName(), "Error parsing '" + rule + "'.");
+					throw new NotCompatibleTypeException("Error parsing '" + rule + "'.", ncte);
 				}
-				throw ncte;
 			}
 		}
 	}
