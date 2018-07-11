@@ -10,6 +10,7 @@ public class NotCompatibleTypeException extends Exception {
 	public NotCompatibleTypeException(String message, ExpressionValue<?> expressionValue) {
 		super(message);
 		this.expressionValue = expressionValue;
+		this.description = message;
 	}
 
 	public NotCompatibleTypeException(String message, Exception e) {
