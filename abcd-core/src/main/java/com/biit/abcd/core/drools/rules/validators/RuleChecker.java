@@ -2,12 +2,16 @@ package com.biit.abcd.core.drools.rules.validators;
 
 import com.biit.abcd.core.drools.prattparser.exceptions.PrattParserException;
 import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
+import com.biit.abcd.core.drools.rules.RuleToDroolsRule;
 import com.biit.abcd.core.drools.rules.exceptions.InvalidRuleException;
+import com.biit.abcd.logger.AbcdLogger;
+import com.biit.abcd.persistence.entity.diagram.DiagramElement;
 import com.biit.abcd.persistence.entity.expressions.Rule;
 
 public class RuleChecker {
 
-	public static void checkRule(Rule rule, String ruleName) throws PrattParserException, InvalidExpressionException, NotCompatibleTypeException {
+	public static void checkRule(DiagramElement node, Rule rule, String ruleName) throws PrattParserException, InvalidExpressionException,
+			NotCompatibleTypeException {
 		if ((rule.getConditions() != null) && (rule.getConditions().getExpressions() != null) && !(rule.getConditions().getExpressions().isEmpty())
 				&& (rule.getActions() != null) && (rule.getActions().getExpressions() != null) && !(rule.getActions().getExpressions().isEmpty())) {
 			ExpressionValidator.validateRule(rule);
@@ -15,9 +19,27 @@ public class RuleChecker {
 		} else if ((rule.getActions() == null) || (rule.getActions().getExpressions() == null) || (rule.getActions().getExpressions().isEmpty())) {
 			// Some rules don't have actions defined by the user (like the
 			// group rules)
-			ExpressionValidator.validateConditions(rule.getConditions());
+			try {
+				ExpressionValidator.validateConditions(rule.getConditions());
+			} catch (NotCompatibleTypeException ncte) {
+				if (node != null) {
+					AbcdLogger.errorMessage(RuleToDroolsRule.class.getName(), "Error parsing '" + rule + "' at diagram node '" + node.getText() + "'.");
+				} else {
+					AbcdLogger.errorMessage(RuleToDroolsRule.class.getName(), "Error parsing '" + rule + "'.");
+				}
+				throw ncte;
+			}
 		} else {
-			ExpressionValidator.validateActions(rule.getActions());
+			try {
+				ExpressionValidator.validateActions(rule.getActions());
+			} catch (NotCompatibleTypeException ncte) {
+				if (node != null) {
+					AbcdLogger.errorMessage(RuleToDroolsRule.class.getName(), "Error parsing '" + rule + "' at diagram node '" + node.getText() + "'.");
+				} else {
+					AbcdLogger.errorMessage(RuleToDroolsRule.class.getName(), "Error parsing '" + rule + "'.");
+				}
+				throw ncte;
+			}
 		}
 	}
 
@@ -31,7 +53,7 @@ public class RuleChecker {
 	 * @throws PrattParserException
 	 */
 
-	public static void checkRule(Rule rule) throws PrattParserException, InvalidExpressionException, NotCompatibleTypeException {
-		checkRule(rule, null);
+	public static void checkRule(DiagramElement node, Rule rule) throws PrattParserException, InvalidExpressionException, NotCompatibleTypeException {
+		checkRule(node, rule, null);
 	}
 }

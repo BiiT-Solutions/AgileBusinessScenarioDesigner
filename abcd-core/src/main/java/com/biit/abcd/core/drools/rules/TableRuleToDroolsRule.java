@@ -12,6 +12,7 @@ import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
 import com.biit.abcd.core.drools.rules.validators.InvalidExpressionException;
 import com.biit.abcd.core.drools.rules.validators.RuleChecker;
 import com.biit.abcd.core.drools.utils.RuleGenerationUtils;
+import com.biit.abcd.persistence.entity.diagram.DiagramElement;
 import com.biit.abcd.persistence.entity.expressions.AvailableOperator;
 import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
@@ -39,8 +40,8 @@ public class TableRuleToDroolsRule {
 	 * @throws InvalidExpressionException
 	 * @throws PrattParserException
 	 */
-	public static List<DroolsRule> parse(TableRule tableRule, ExpressionChain extraConditions) throws ExpressionInvalidException, RuleNotImplementedException,
-			ActionNotImplementedException, PrattParserException, InvalidExpressionException, NotCompatibleTypeException {
+	public static List<DroolsRule> parse(DiagramElement node, TableRule tableRule, ExpressionChain extraConditions) throws ExpressionInvalidException,
+			RuleNotImplementedException, ActionNotImplementedException, PrattParserException, InvalidExpressionException, NotCompatibleTypeException {
 		List<DroolsRule> newRules = new ArrayList<>();
 		if (tableRule != null) {
 			String tableRuleName = tableRule.getName();
@@ -61,7 +62,7 @@ public class TableRuleToDroolsRule {
 			}
 		}
 		for (DroolsRule droolsRule : newRules) {
-			RuleChecker.checkRule(droolsRule, tableRule.getName());
+			RuleChecker.checkRule(node, droolsRule, tableRule.getName());
 		}
 		return newRules;
 	}

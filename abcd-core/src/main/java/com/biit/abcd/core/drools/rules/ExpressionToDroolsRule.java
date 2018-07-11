@@ -17,6 +17,7 @@ import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Group;
 import com.biit.abcd.persistence.entity.Question;
+import com.biit.abcd.persistence.entity.diagram.DiagramElement;
 import com.biit.abcd.persistence.entity.expressions.AvailableFunction;
 import com.biit.abcd.persistence.entity.expressions.AvailableOperator;
 import com.biit.abcd.persistence.entity.expressions.AvailableSymbol;
@@ -39,8 +40,8 @@ import com.biit.form.entity.TreeObject;
  */
 public class ExpressionToDroolsRule {
 
-	public static List<DroolsRule> parse(DroolsRule droolsRule, DroolsHelper droolsHelper) throws ExpressionInvalidException, RuleNotImplementedException,
-			InvalidRuleException, NotCompatibleTypeException {
+	public static List<DroolsRule> parse(DiagramElement node, DroolsRule droolsRule, DroolsHelper droolsHelper) throws ExpressionInvalidException,
+			RuleNotImplementedException, InvalidRuleException, NotCompatibleTypeException {
 		List<DroolsRule> droolsRules = null;
 
 		if (droolsRule.getActions() != null && !droolsRule.getActions().getExpressions().isEmpty()) {
@@ -59,7 +60,7 @@ public class ExpressionToDroolsRule {
 			List<DroolsRule> auxDroolsRules = parseIfRules(droolsRules);
 			droolsRules = new ArrayList<DroolsRule>();
 			for (DroolsRule auxRule : auxDroolsRules) {
-				droolsRules.addAll(RuleToDroolsRule.parse(auxRule, droolsHelper));
+				droolsRules.addAll(RuleToDroolsRule.parse(node, auxRule, droolsHelper));
 			}
 		}
 

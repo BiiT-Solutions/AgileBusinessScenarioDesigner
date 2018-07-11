@@ -49,12 +49,12 @@ public abstract class DiagramElement extends DiagramObject {
 	private String tooltip;
 	@Expose
 	@OneToOne(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
-	@JoinColumn(name="size")
+	@JoinColumn(name = "size")
 	private Size size;
-	
+
 	@Expose
 	@OneToOne(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
-	@JoinColumn(name="position")
+	@JoinColumn(name = "position")
 	private Point position;
 
 	@Expose
@@ -62,7 +62,7 @@ public abstract class DiagramElement extends DiagramObject {
 
 	@Expose
 	@OneToOne(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
-	@JoinColumn(name="text")
+	@JoinColumn(name = "text")
 	private DiagramText text;
 
 	public String getTooltip() {
@@ -263,5 +263,13 @@ public abstract class DiagramElement extends DiagramObject {
 		} else {
 			throw new NotValidStorableObjectException("Object '" + object + "' is not an instance of DiagramElement.");
 		}
+	}
+
+	@Override
+	public String toString() {
+		if (getText() != null) {
+			return getText().getText();
+		}
+		return super.toString();
 	}
 }
