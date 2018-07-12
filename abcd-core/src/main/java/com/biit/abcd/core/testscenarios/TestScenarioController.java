@@ -74,7 +74,7 @@ public class TestScenarioController {
 			ElementCannotBePersistedException {
 		synchronized (TestScenarioController.class) {
 			// Remove unused variables.
-			if (testScenarios != null) {
+			if (getTestScenarios(form) != null) {
 				Set<TestScenario> testScenariosToRemove = new HashSet<TestScenario>();
 				// Remove it from the database
 				for (TestScenario testScenarioFromMemory : testScenarios) {
