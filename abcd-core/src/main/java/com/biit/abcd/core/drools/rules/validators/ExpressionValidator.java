@@ -70,11 +70,11 @@ public class ExpressionValidator {
 				// invalid characters)
 				int parsedElements = countElementsInExpressionChain(prattExpressionChain);
 				if (cleanedExpression.getExpressions().size() != parsedElements) {
-					throw new InvalidExpressionException();
+					throw new InvalidExpressionException("Invalid expression '" + expressionChain + "'.");
 				}
 			}
 		} else {
-			throw new InvalidExpressionException();
+			throw new InvalidExpressionException("Invalid expression '" + expressionChain + "'.");
 		}
 	}
 
@@ -92,7 +92,7 @@ public class ExpressionValidator {
 			// The left value must be a variable
 			if (!(cleanedExpression.getExpressions().get(0) instanceof ExpressionValueCustomVariable)
 					&& !(cleanedExpression.getExpressions().get(0) instanceof ExpressionValueGenericCustomVariable)) {
-				throw new InvalidExpressionException();
+				throw new InvalidExpressionException("Invalid expression '" + expressionChain + "'.");
 			}
 			// Assign the value of the left variable
 			leftVariableFormat = getExpressionValueType((ExpressionValue<?>) cleanedExpression.getExpressions().get(0));
@@ -100,13 +100,13 @@ public class ExpressionValidator {
 			// assignation operator unless it's an IN or BETWEEN function
 			if (!(cleanedExpression.getExpressions().get(1) instanceof ExpressionOperatorMath)
 					|| !(((ExpressionOperatorMath) cleanedExpression.getExpressions().get(1)).getValue().equals(AvailableOperator.ASSIGNATION))) {
-				throw new InvalidExpressionException();
+				throw new InvalidExpressionException("Invalid expression '" + expressionChain + "'.");
 			}
 			Integer parsedElements = null;
 			// If the third expression is a function, the pratt parser removes
 			// the assignation expression
 			if (prattExpressionChain.getExpressions().size() < 1) {
-				throw new InvalidExpressionException();
+				throw new InvalidExpressionException("Invalid expression '" + expressionChain + "'.");
 			}
 			if (prattExpressionChain.getExpressions().get(1) instanceof ExpressionFunction) {
 				// If the expression is a function, we have to check the values
@@ -129,10 +129,10 @@ public class ExpressionValidator {
 				parsedElements = countElementsInExpressionChain(prattExpressionChain);
 			}
 			if (cleanedExpression.getExpressions().size() != parsedElements) {
-				throw new InvalidExpressionException();
+				throw new InvalidExpressionException("Invalid expression '" + expressionChain + "'.");
 			}
 		} else {
-			throw new InvalidExpressionException();
+			throw new InvalidExpressionException("Invalid expression '" + expressionChain + "'.");
 		}
 	}
 
@@ -141,7 +141,7 @@ public class ExpressionValidator {
 		if (!(prattExpressionChain.getExpressions().get(prattExpressionChain.getExpressions().size() - 1) instanceof ExpressionSymbol)
 				|| !(((ExpressionSymbol) prattExpressionChain.getExpressions().get(prattExpressionChain.getExpressions().size() - 1)).getValue()
 						.equals(AvailableSymbol.RIGHT_BRACKET))) {
-			throw new InvalidExpressionException();
+			throw new InvalidExpressionException("Invalid expression '" + prattExpressionChain + "'.");
 		}
 		checkMethodParameters(leftVariableFormat, prattExpressionChain);
 	}
@@ -181,16 +181,16 @@ public class ExpressionValidator {
 		switch (((ExpressionFunction) prattExpressionChain.getExpressions().get(1)).getValue()) {
 		case BETWEEN:
 			if (numberOfParameters != 2) {
-				throw new InvalidExpressionException();
+				throw new InvalidExpressionException("Invalid expression '" + prattExpressionChain + "'.");
 			}
 			break;
 		case PMT:
 			if (numberOfParameters != 3) {
-				throw new InvalidExpressionException();
+				throw new InvalidExpressionException("Invalid expression '" + prattExpressionChain + "'.");
 			}
 		default:
 			if (numberOfParameters == 0) {
-				throw new InvalidExpressionException();
+				throw new InvalidExpressionException("Invalid expression '" + prattExpressionChain + "'.");
 			}
 		}
 
@@ -225,18 +225,18 @@ public class ExpressionValidator {
 							throw new InvalidExpressionException();
 						}
 					} else {
-						throw new InvalidExpressionException();
+						throw new InvalidExpressionException("Invalid expression '" + prattExpressionChain + "'.");
 					}
 				} else {
-					throw new InvalidExpressionException();
+					throw new InvalidExpressionException("Invalid expression '" + prattExpressionChain + "'.");
 				}
 			} else {
-				throw new InvalidExpressionException();
+				throw new InvalidExpressionException("Invalid expression '" + prattExpressionChain + "'.");
 			}
 			break;
 		default:
 			if (!leftVariableFormat.equals(parameterType)) {
-				throw new InvalidExpressionException();
+				throw new InvalidExpressionException("Invalid expression '" + prattExpressionChain + "'.");
 			}
 		}
 	}
@@ -377,10 +377,14 @@ public class ExpressionValidator {
 	private static ITreeElement calculatePrattParserResult(ExpressionChain expressionChain) throws PrattParserException, InvalidExpressionException {
 		PrattParser prattParser = new ExpressionChainPrattParser(expressionChain);
 		ITreeElement prattParserResult = null;
-		prattParserResult = prattParser.parseExpression();
+		try {
+			prattParserResult = prattParser.parseExpression();
+		} catch (PrattParserException ppe) {
+			throw new PrattParserException("Error in expression '" + expressionChain + "'.", ppe);
+		}
 		if ((prattParserResult == null) || (prattParserResult.getExpressionChain() == null)
 				|| (prattParserResult.getExpressionChain().getExpressions().isEmpty())) {
-			throw new InvalidExpressionException();
+			throw new InvalidExpressionException("Invalid expression '" + expressionChain + "'.");
 		}
 		return prattParserResult;
 	}
@@ -473,7 +477,7 @@ public class ExpressionValidator {
 		if (!(prattExpressionChain.getExpressions().get(prattExpressionChain.getExpressions().size() - 1) instanceof ExpressionSymbol)
 				|| !(((ExpressionSymbol) prattExpressionChain.getExpressions().get(prattExpressionChain.getExpressions().size() - 1)).getValue()
 						.equals(AvailableSymbol.RIGHT_BRACKET))) {
-			throw new InvalidExpressionException();
+			throw new InvalidExpressionException("Invalid expression '" + prattExpressionChain + "'.");
 		}
 		checkPluginMethodParameters(prattExpressionChain);
 	}
@@ -508,7 +512,7 @@ public class ExpressionValidator {
 			pluginInterface.getPluginMethod(pluginMethod.getPluginMethodName(), listToArray(parameters));
 		} catch (NoSuchMethodException e) {
 			// If the method is not found, the parameters don't match
-			throw new InvalidExpressionException();
+			throw new InvalidExpressionException("Method '" + pluginMethod.getPluginMethodName() + "' not found at '" + prattExpressionChain + "'.");
 		}
 	}
 
