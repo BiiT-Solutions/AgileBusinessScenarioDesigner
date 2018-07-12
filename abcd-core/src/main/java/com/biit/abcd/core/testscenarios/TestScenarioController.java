@@ -94,12 +94,9 @@ public class TestScenarioController {
 					testScenarioDao.makePersistent(testScenario);
 				} else {
 					TestScenario mergedScenario = testScenarioDao.merge(testScenario);
-					// testScenarioDao.makePersistent(mergedScenario);
-
 					testScenarios.set(testScenarios.indexOf(testScenario), mergedScenario);
 				}
 			}
-
 			unsavedChanges = false;
 		}
 	}

@@ -191,7 +191,6 @@ public class TestScenarioEditor extends FormWebPageComponent {
 	}
 
 	private void refreshScenarios() {
-		// TODO Auto-generated method stub
 		TestScenario selectedScenario = (TestScenario) tableSelectTestScenario.getValue();
 		tableSelectTestScenario.setValue(null);
 		tableSelectTestScenario.removeAllItems();
