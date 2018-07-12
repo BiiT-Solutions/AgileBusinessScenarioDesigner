@@ -1028,7 +1028,7 @@ public class DroolsParser {
 			NullCustomVariableException, NullExpressionValueException {
 		String ruleCore = "";
 		List<Expression> chainList = actions.getExpressions();
-
+		
 		if (((ExpressionChain) chainList.get(0)).getExpressions().get(0) instanceof ExpressionValueCustomVariable) {
 			ExpressionValueCustomVariable leftExpressionCustomVariable = (ExpressionValueCustomVariable) ((ExpressionChain) chainList.get(0)).getExpressions()
 					.get(0);
@@ -1056,7 +1056,6 @@ public class DroolsParser {
 					+ leftExpressionCustomVariable.getVariable().getName() + ", " + mathematicalExpression + ")\");\n";
 
 		}
-		// }
 		return ruleCore;
 	}
 
@@ -1110,11 +1109,9 @@ public class DroolsParser {
 
 				}
 				// Its the first position because the parser removes the equals
-				// in
-				// the expression functions
+				// in the expression functions
 				// Could be changed to standardize the behavior of the parser
-				// but it
-				// works fine
+				// but it works fine
 				else if (prattParserResultExpressionChain.getExpressions().get(1) instanceof ExpressionFunction) {
 					switch (((ExpressionFunction) prattParserResultExpressionChain.getExpressions().get(1)).getValue()) {
 					case MAX:

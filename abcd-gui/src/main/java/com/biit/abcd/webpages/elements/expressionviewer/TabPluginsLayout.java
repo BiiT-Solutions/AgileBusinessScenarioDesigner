@@ -1,7 +1,10 @@
 package com.biit.abcd.webpages.elements.expressionviewer;
 
 import java.lang.reflect.Method;
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
@@ -52,8 +55,7 @@ public class TabPluginsLayout extends TabLayout {
 						IPlugin pluginSelected = (IPlugin) getPluginsTable().getParent(methodSelected);
 						// The interface implemented is always IPLUGIN
 						Class<?> pluginInterface = IPlugin.class;
-						addExpression(new ExpressionPluginMethod(pluginInterface, pluginSelected.getPluginName(),
-								methodSelected.getName()));
+						addExpression(new ExpressionPluginMethod(pluginInterface, pluginSelected.getPluginName(), methodSelected.getName()));
 					}
 				}
 			}
@@ -62,21 +64,23 @@ public class TabPluginsLayout extends TabLayout {
 		addComponent(addCustomFunctionButton);
 		setComponentAlignment(addCustomFunctionButton, Alignment.TOP_RIGHT);
 
-		
 		createPluginInformation();
 		addComponent(getPluginParametersInformation());
 	}
 
 	private void createPluginsTable() {
 		setPluginsTable(new TreeTable());
-		getPluginsTable().addContainerProperty(NAME_PROPERTY, String.class, null,
-				ServerTranslate.translate(LanguageCodes.FORM_TREE_PROPERTY_NAME), null, Align.LEFT);
+		getPluginsTable().addContainerProperty(NAME_PROPERTY, String.class, null, ServerTranslate.translate(LanguageCodes.FORM_TREE_PROPERTY_NAME), null,
+				Align.LEFT);
 		getPluginsTable().setCaption(ServerTranslate.translate(LanguageCodes.PLUGINS_TAB_TABLE_CAPTION));
 		getPluginsTable().setSizeFull();
 
-		Collection<IPlugin> plugins = PluginController.getInstance().getAllPlugins();
+		List<IPlugin> plugins = new ArrayList<>(PluginController.getInstance().getAllPlugins());
+		Collections.sort(plugins);
 		for (IPlugin plugin : plugins) {
 			Object pluginEntry = getPluginsTable().addItem(new Object[] { plugin.getPluginName() }, plugin);
+			List<Method> pluginsMethods = plugin.getPluginMethods();
+			Collections.sort(pluginsMethods, new SortMethods());
 			for (Method method : plugin.getPluginMethods()) {
 				// Remove the 'method' prefix of the methods name
 				Object methodEntry = getPluginsTable().addItem(new Object[] { method.getName().substring(6) }, method);
@@ -99,9 +103,10 @@ public class TabPluginsLayout extends TabLayout {
 					for (String parameterString : pluginSelected.getPluginMethodParametersString(methodSelected)) {
 						verticalLayout.addComponent(new Label(parameterString));
 					}
-					// Enable/disable the add function button based on the number of plugins available
+					// Enable/disable the add function button based on the
+					// number of plugins available
 					addCustomFunctionButton.setEnabled(true);
-				}else{
+				} else {
 					addCustomFunctionButton.setEnabled(false);
 				}
 				getPluginParametersInformation().setContent(verticalLayout);
@@ -132,5 +137,14 @@ public class TabPluginsLayout extends TabLayout {
 
 	private void setPluginParametersInformation(Panel pluginParametersInformation) {
 		this.pluginParametersInformation = pluginParametersInformation;
+	}
+
+	class SortMethods implements Comparator<Method> {
+
+		@Override
+		public int compare(Method arg0, Method arg1) {
+			return arg0.getName().compareTo(arg1.getName());
+		}
+
 	}
 }

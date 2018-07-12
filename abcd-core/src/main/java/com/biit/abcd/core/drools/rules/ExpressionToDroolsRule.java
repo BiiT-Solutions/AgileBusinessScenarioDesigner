@@ -17,6 +17,7 @@ import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Group;
 import com.biit.abcd.persistence.entity.Question;
+import com.biit.abcd.persistence.entity.diagram.DiagramElement;
 import com.biit.abcd.persistence.entity.expressions.AvailableFunction;
 import com.biit.abcd.persistence.entity.expressions.AvailableOperator;
 import com.biit.abcd.persistence.entity.expressions.AvailableSymbol;
@@ -39,8 +40,8 @@ import com.biit.form.entity.TreeObject;
  */
 public class ExpressionToDroolsRule {
 
-	public static List<DroolsRule> parse(DroolsRule droolsRule, DroolsHelper droolsHelper) throws ExpressionInvalidException, RuleNotImplementedException,
-			InvalidRuleException, NotCompatibleTypeException {
+	public static List<DroolsRule> parse(DiagramElement node, DroolsRule droolsRule, DroolsHelper droolsHelper) throws ExpressionInvalidException,
+			RuleNotImplementedException, InvalidRuleException, NotCompatibleTypeException {
 		List<DroolsRule> droolsRules = null;
 
 		if (droolsRule.getActions() != null && !droolsRule.getActions().getExpressions().isEmpty()) {
@@ -59,7 +60,7 @@ public class ExpressionToDroolsRule {
 			List<DroolsRule> auxDroolsRules = parseIfRules(droolsRules);
 			droolsRules = new ArrayList<DroolsRule>();
 			for (DroolsRule auxRule : auxDroolsRules) {
-				droolsRules.addAll(RuleToDroolsRule.parse(auxRule, droolsHelper));
+				droolsRules.addAll(RuleToDroolsRule.parse(node, auxRule, droolsHelper));
 			}
 		}
 
@@ -78,7 +79,7 @@ public class ExpressionToDroolsRule {
 			break;
 		case GROUP:
 			for (TreeObject category : expressionValueGenericCustomVariable.getVariable().getForm().getChildren()) {
-				List<TreeObject> groups = category.getAll(Group.class);
+				List<Group> groups = category.getAll(Group.class);
 				// We need to reverse the groups to correctly generate the rules
 				// for nested groups
 				Collections.reverse(groups);
@@ -87,7 +88,7 @@ public class ExpressionToDroolsRule {
 			break;
 		case QUESTION_GROUP:
 			for (TreeObject category : expressionValueGenericCustomVariable.getVariable().getForm().getChildren()) {
-				List<TreeObject> groups = category.getAll(Group.class);
+				List<Group> groups = category.getAll(Group.class);
 				// We need to reverse the groups to correctly generate the rules
 				// for nested groups
 				Collections.reverse(groups);
@@ -358,7 +359,7 @@ public class ExpressionToDroolsRule {
 		switch (expressionValueGenericVariable.getType()) {
 		case CATEGORY:
 			if (leftTreeObject instanceof Form) {
-				treeObjects = leftTreeObject.getAll(Category.class);
+				treeObjects = new ArrayList<TreeObject>(leftTreeObject.getAll(Category.class));
 
 			} else if (leftTreeObject instanceof Category) {
 				// It is the same item (we don't want the brothers)
@@ -373,7 +374,7 @@ public class ExpressionToDroolsRule {
 			break;
 		case GROUP:
 			if (leftTreeObject instanceof Form) {
-				treeObjects = leftTreeObject.getAll(Group.class);
+				treeObjects = new ArrayList<TreeObject>(leftTreeObject.getAll(Group.class));
 
 			} else if ((leftTreeObject instanceof Category) || (leftTreeObject instanceof Group)) {
 				treeObjects = new ArrayList<TreeObject>(leftTreeObject.getChildren(Group.class));
@@ -386,7 +387,7 @@ public class ExpressionToDroolsRule {
 			break;
 		case QUESTION_CATEGORY:
 			if (leftTreeObject instanceof Form) {
-				List<TreeObject> categories = leftTreeObject.getAll(Category.class);
+				List<Category> categories = leftTreeObject.getAll(Category.class);
 				if (categories != null && !categories.isEmpty()) {
 					treeObjects = new ArrayList<TreeObject>();
 					for (TreeObject category : categories) {
@@ -402,7 +403,7 @@ public class ExpressionToDroolsRule {
 			break;
 		case QUESTION_GROUP:
 			if ((leftTreeObject instanceof Form) || (leftTreeObject instanceof Category)) {
-				List<TreeObject> groups = leftTreeObject.getAll(Group.class);
+				List<Group> groups = leftTreeObject.getAll(Group.class);
 				if (groups != null && !groups.isEmpty()) {
 					treeObjects = new ArrayList<TreeObject>();
 					for (TreeObject group : groups) {

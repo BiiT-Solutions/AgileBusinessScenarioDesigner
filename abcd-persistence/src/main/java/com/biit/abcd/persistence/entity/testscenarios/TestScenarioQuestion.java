@@ -43,7 +43,7 @@ public class TestScenarioQuestion extends BaseQuestion {
 
 	@Override
 	public void copyData(StorableObject object) throws NotValidStorableObjectException {
-		// TODO Auto-generated method stub
+		// not implemented
 	}
 
 	@Override

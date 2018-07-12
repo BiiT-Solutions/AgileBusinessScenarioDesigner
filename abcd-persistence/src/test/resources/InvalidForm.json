@@ -1,0 +1,78 @@
+{
+  "class": "com.biit.webforms.persistence.entity.CompleteFormView",
+  "comparationId": "a2d6059c-68e4-4e1e-b333-888655a7596d",
+  "creationTime": "Jun 21, 2018 12:44:55 PM",
+  "updateTime": "Jun 21, 2018 12:44:55 PM",
+  "name": "form",
+  "label": "HRV",
+  "hidden": false,
+  "children": [
+    {
+      "class": "com.biit.webforms.persistence.entity.Category",
+      "comparationId": "fc2b189e-3072-4cb9-bea5-6eecd851e9f7",
+      "creationTime": "Jun 20, 2018 4:39:57 PM",
+      "updateTime": "Jun 21, 2018 11:13:43 AM",
+      "createdBy": 10436,
+      "updatedBy": 24903,
+      "name": "HRV",
+      "label": "Heart Rate Variability",
+      "hidden": false,
+      "children": [
+        {
+          "class": "com.biit.webforms.persistence.entity.Question",
+          "comparationId": "8933ee52-bf0a-42fb-ae98-8a8ded9308c2",
+          "creationTime": "Jun 20, 2018 4:40:55 PM",
+          "updateTime": "Jun 20, 2018 4:41:20 PM",
+          "createdBy": 10436,
+          "updatedBy": 10436,
+          "name": "HRV",
+          "label": "Heart Rate Variability",
+          "hidden": false,
+          "children": [],
+          "answerType": "INPUT",
+          "answerFormat": "NUMBER",
+          "answerSubformat": "POSITIVE_FLOAT",
+          "mandatory": true,
+          "horizontal": false,
+          "description": ""
+        }
+      ]
+    },
+    {
+      "class": "com.biit.webforms.persistence.entity.Category",
+      "comparationId": "eb892a89-59ce-407b-9bd2-64c0ac3564a5",
+      "creationTime": "Jun 21, 2018 11:12:59 AM",
+      "updateTime": "Jun 21, 2018 11:13:26 AM",
+      "createdBy": 24903,
+      "updatedBy": 24903,
+      "name": "Formulas",
+      "label": "formulas",
+      "hidden": true,
+      "children": [
+        {
+          "class": "com.biit.webforms.persistence.entity.Question",
+          "comparationId": "62b3ce33-03bb-4abe-933e-adc90a4b766d",
+          "creationTime": "Jun 21, 2018 11:13:16 AM",
+          "updateTime": "Jun 21, 2018 11:13:26 AM",
+          "createdBy": 24903,
+          "updatedBy": 24903,
+          "name": "HRV",
+          "label": "HRV",
+          "hidden": true,
+          "children": [],
+          "answerType": "INPUT",
+          "answerFormat": "TEXT",
+          "answerSubformat": "TEXT",
+          "mandatory": true,
+          "horizontal": false,
+          "description": ""
+        }
+      ]
+    }
+  ],
+  "version": 1,
+  "organizationId": 18903,
+  "description": "",
+  "flows": [],
+  "webserviceCalls": []
+}

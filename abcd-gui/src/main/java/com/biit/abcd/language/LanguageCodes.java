@@ -530,6 +530,7 @@ public enum LanguageCodes {
 	PLUGINS_TAB_INFO_PANEL_CAPTION("plugins.tab.info.panel.caption"),
 	
 	DROOLS_RULES_GENERATION_EXCEPTION("drools.rules.generation.exception"),
+	ERROR_DESCRIPTION("error.description"),
 	DROOLS_RULES_EXECUTION_EXCEPTION("drools.rules.execution.exception"),
 	DROOLS_RULE_INVALID("drools.rule.invalid"),
 

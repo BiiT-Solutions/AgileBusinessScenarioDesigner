@@ -98,7 +98,7 @@ public class TestScenarioDao extends AnnotatedGenericDao<TestScenario, Long> imp
 
 	@Override
 	@Transactional(value = "abcdTransactionManager", propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
-	@Caching(evict = { @CacheEvict(value = "springTestScenarios", key = "#testScenario.getId()"),
+	@Caching(evict = { @CacheEvict(value = "springTestScenarios", key = "#testScenario?.getId()"),
 			@CacheEvict(value = "springTestScenariosByForm", allEntries = true) })
 	public TestScenario merge(TestScenario testScenario) {
 		return super.merge(testScenario);

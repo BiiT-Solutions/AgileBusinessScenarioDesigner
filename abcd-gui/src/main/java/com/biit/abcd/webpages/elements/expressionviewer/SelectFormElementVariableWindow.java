@@ -103,8 +103,8 @@ public class SelectFormElementVariableWindow extends AcceptCancelWindow {
 		variableSelection.removeAllItems();
 		if (treeObject != null) {
 			List<CustomVariable> customVariables = UserSessionHandler.getFormController().getForm().getCustomVariables(treeObject);
-			Collections.sort(customVariables);
 			if (customVariables != null && !customVariables.isEmpty()) {
+				Collections.sort(customVariables);
 				for (CustomVariable customvariable : customVariables) {
 					variableSelection.addItem(customvariable);
 					variableSelection.setItemCaption(customvariable, customvariable.getName());
@@ -121,7 +121,7 @@ public class SelectFormElementVariableWindow extends AcceptCancelWindow {
 		return new ExpressionValueCustomVariable((TreeObject) formQuestionTable.getValue(), (CustomVariable) variableSelection.getValue());
 	}
 
-	public void setvalue(ExpressionValueCustomVariable expression) {
+	public void setValue(ExpressionValueCustomVariable expression) {
 		formQuestionTable.setValue(expression.getReference());
 		variableSelection.setValue(expression.getVariable());
 	}

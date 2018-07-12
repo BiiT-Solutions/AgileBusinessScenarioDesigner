@@ -108,8 +108,8 @@ public class RoleActivities implements IRoleActivities {
 	@Override
 	public Set<IActivity> getRoleActivities(IRole<Long> role) {
 		Set<IActivity> activities = new HashSet<IActivity>();
-		AbcdRoles webFormRole = AbcdRoles.parseTag(role.getUniqueName());
-		switch (webFormRole) {
+		AbcdRoles abcdRole = AbcdRoles.parseTag(role.getUniqueName());
+		switch (abcdRole) {
 		case FORM_ADMIN:
 			activities.addAll(formAdministratorPermissions);
 			activities.addAll(formManagerPermissions);

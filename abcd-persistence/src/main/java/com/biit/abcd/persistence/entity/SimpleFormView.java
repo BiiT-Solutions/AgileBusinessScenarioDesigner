@@ -12,7 +12,7 @@ import com.google.gson.GsonBuilder;
  * As Lazy is not correctly configured, we use this class to show basic form information in the Form Manager.
  */
 @Cacheable(true)
-public class SimpleFormView implements IBaseFormView {
+public class SimpleFormView implements IBaseFormView, Comparable<SimpleFormView> {
 	private String name;
 	private String label;
 	private Integer version;
@@ -201,6 +201,11 @@ public class SimpleFormView implements IBaseFormView {
 		gsonBuilder.setPrettyPrinting();
 		Gson gson = gsonBuilder.create();
 		return gson.toJson(this);
+	}
+
+	@Override
+	public int compareTo(SimpleFormView simpleForm) {
+		return getName().compareTo(simpleForm.getName());
 	}
 
 }

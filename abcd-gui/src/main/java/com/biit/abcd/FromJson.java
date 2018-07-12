@@ -34,6 +34,7 @@ public class FromJson {
 	 * @throws UnexpectedDatabaseException
 	 * @throws FieldTooLongException
 	 * @throws ElementCannotBePersistedException
+	 * @throws ClassNotFoundException
 	 */
 	public Form importFormFromJson(String json, String formLabel, Long organizationId) throws JsonParseException, FormWithSameNameException,
 			UnexpectedDatabaseException, FieldTooLongException, ElementCannotBePersistedException {

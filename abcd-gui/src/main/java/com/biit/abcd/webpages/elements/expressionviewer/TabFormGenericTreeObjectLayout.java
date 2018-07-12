@@ -1,5 +1,6 @@
 package com.biit.abcd.webpages.elements.expressionviewer;
 
+import java.util.Collections;
 import java.util.List;
 
 import com.biit.abcd.authentication.UserSessionHandler;
@@ -132,6 +133,7 @@ public class TabFormGenericTreeObjectLayout extends TabLayout {
 				List<CustomVariable> customVariables = UserSessionHandler.getFormController().getForm()
 						.getCustomVariables(((GenericTreeObjectType) variableTable.getValue()).getScope());
 				if ((customVariables != null) && !customVariables.isEmpty()) {
+					Collections.sort(customVariables);
 					for (CustomVariable customvariable : customVariables) {
 						variableSelection.addItem(customvariable);
 						variableSelection.setItemCaption(customvariable, customvariable.getName());

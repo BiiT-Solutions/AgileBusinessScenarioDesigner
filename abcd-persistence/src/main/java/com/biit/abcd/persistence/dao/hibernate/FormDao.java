@@ -40,7 +40,7 @@ public class FormDao extends AnnotatedGenericDao<Form, Long> implements IFormDao
 
 	@Override
 	@Transactional(value = "abcdTransactionManager", propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
-	@CachePut(value = "springFormCache", key = "#form.getId()", condition = "#form.getId() != null")
+	@CachePut(value = "springFormCache", key = "#form?.getId()", condition = "#form.getId() != null")
 	public Form makePersistent(Form form) {
 		form.updateChildrenSortSeqs();
 		// Update previous versions validTo.
@@ -55,14 +55,14 @@ public class FormDao extends AnnotatedGenericDao<Form, Long> implements IFormDao
 
 	@Override
 	@Transactional(value = "abcdTransactionManager", propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
-	@Caching(evict = { @CacheEvict(value = "springFormCache", key = "#form.getId()") })
+	@Caching(evict = { @CacheEvict(value = "springFormCache", key = "#form?.getId()") })
 	public void makeTransient(Form form) throws ElementCannotBeRemovedException {
 		super.makeTransient(form);
 	}
 
 	@Override
 	@Transactional(value = "abcdTransactionManager", propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
-	@Caching(evict = { @CacheEvict(value = "springFormCache", key = "#form.getId()") })
+	@Caching(evict = { @CacheEvict(value = "springFormCache", key = "#form?.getId()") })
 	//@CachePut(value = "springFormCache", key = "#form.getId()", condition = "#form.getId() != null")
 	public Form merge(Form form) {
 		return super.merge(form);

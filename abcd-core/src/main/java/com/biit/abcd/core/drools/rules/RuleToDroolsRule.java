@@ -20,6 +20,7 @@ import com.biit.abcd.persistence.entity.Category;
 import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.Group;
 import com.biit.abcd.persistence.entity.Question;
+import com.biit.abcd.persistence.entity.diagram.DiagramElement;
 import com.biit.abcd.persistence.entity.expressions.AvailableFunction;
 import com.biit.abcd.persistence.entity.expressions.AvailableOperator;
 import com.biit.abcd.persistence.entity.expressions.AvailableSymbol;
@@ -45,14 +46,14 @@ public class RuleToDroolsRule {
 
 	private static DroolsHelper droolsHelper;
 
-	public static List<DroolsRule> parse(DroolsRule droolsRule, DroolsHelper droolsHelper) throws InvalidRuleException, RuleNotImplementedException,
-			ExpressionInvalidException, NotCompatibleTypeException {
+	public static List<DroolsRule> parse(DiagramElement node, DroolsRule droolsRule, DroolsHelper droolsHelper) throws InvalidRuleException,
+			RuleNotImplementedException, ExpressionInvalidException, NotCompatibleTypeException {
 		setDroolsHelper(droolsHelper);
-		return parse(droolsRule, null, droolsHelper);
+		return parse(node, droolsRule, null, droolsHelper);
 	}
 
-	public static List<DroolsRule> parse(Rule rule, ExpressionChain extraConditions, DroolsHelper droolsHelper) throws InvalidRuleException,
-			RuleNotImplementedException, ExpressionInvalidException, NotCompatibleTypeException {
+	public static List<DroolsRule> parse(DiagramElement node, Rule rule, ExpressionChain extraConditions, DroolsHelper droolsHelper)
+			throws InvalidRuleException, RuleNotImplementedException, ExpressionInvalidException, NotCompatibleTypeException {
 
 		List<DroolsRule> conditionsRules = new ArrayList<>();
 		setDroolsHelper(droolsHelper);
@@ -69,10 +70,18 @@ public class RuleToDroolsRule {
 			}
 			// Check for AND/OR/NOT expressions
 			if (hasAndOrNotConditions(ruleCopy.getConditions())) {
-				if (droolsRuleList != null) {
-					droolsRuleList = parseAndOrNotConditions(droolsRuleList);
-				} else {
-					droolsRuleList = parseAndOrNotConditions(Arrays.asList(new DroolsRule(ruleCopy)));
+				try {
+					if (droolsRuleList != null) {
+						droolsRuleList = parseAndOrNotConditions(droolsRuleList);
+					} else {
+						droolsRuleList = parseAndOrNotConditions(Arrays.asList(new DroolsRule(ruleCopy)));
+					}
+				} catch (NotCompatibleTypeException ncte) {
+					if (node != null) {
+						throw new NotCompatibleTypeException("Error parsing '" + rule + "' at diagram node '" + node.getText() + "'.", ncte);
+					} else {
+						throw new NotCompatibleTypeException("Error parsing '" + rule + "'.", ncte);
+					}
 				}
 			}
 			if (droolsRuleList != null) {
@@ -105,9 +114,17 @@ public class RuleToDroolsRule {
 
 		List<DroolsRule> droolsRules = new ArrayList<>();
 		for (DroolsRule droolsRule : conditionsRules) {
-			List<DroolsRule> actionsRules = ExpressionToDroolsRule.parse(droolsRule, droolsHelper);
-			if (actionsRules != null && !actionsRules.isEmpty()) {
-				droolsRules.addAll(actionsRules);
+			try {
+				List<DroolsRule> actionsRules = ExpressionToDroolsRule.parse(node, droolsRule, droolsHelper);
+				if (actionsRules != null && !actionsRules.isEmpty()) {
+					droolsRules.addAll(actionsRules);
+				}
+			} catch (NotCompatibleTypeException ncte) {
+				if (node != null) {
+					throw new NotCompatibleTypeException("Error parsing '" + rule + "' at diagram node '" + node.getText() + "'.", ncte);
+				} else {
+					throw new NotCompatibleTypeException("Error parsing '" + rule + "'.", ncte);
+				}
 			}
 		}
 		// Validate the rules
@@ -183,20 +200,20 @@ public class RuleToDroolsRule {
 		List<TreeObject> treeObjects = null;
 		switch (expressionValueGenericVariable.getType()) {
 		case CATEGORY:
-			treeObjects = getDroolsHelper().getForm().getAll(Category.class);
+			treeObjects = new ArrayList<TreeObject>(getDroolsHelper().getForm().getAll(Category.class));
 			break;
 		case GROUP:
-			treeObjects = getDroolsHelper().getForm().getAll(Group.class);
+			treeObjects = new ArrayList<TreeObject>(getDroolsHelper().getForm().getAll(Group.class));
 			break;
 		case QUESTION_CATEGORY:
-			List<TreeObject> categories = getDroolsHelper().getForm().getAll(Category.class);
+			List<TreeObject> categories = new ArrayList<TreeObject>(getDroolsHelper().getForm().getAll(Category.class));
 			treeObjects = new ArrayList<TreeObject>();
 			for (TreeObject category : categories) {
 				treeObjects.addAll(category.getChildren(Question.class));
 			}
 			break;
 		case QUESTION_GROUP:
-			List<TreeObject> groups = getDroolsHelper().getForm().getAll(Group.class);
+			List<TreeObject> groups = new ArrayList<TreeObject>(getDroolsHelper().getForm().getAll(Group.class));
 			treeObjects = new ArrayList<TreeObject>();
 			for (TreeObject group : groups) {
 				treeObjects.addAll(group.getChildren(Question.class));

@@ -1,5 +1,7 @@
 package com.biit.abcd.persistence.json;
 
+import java.io.FileNotFoundException;
+import java.nio.charset.Charset;
 import java.util.List;
 
 import org.junit.runner.RunWith;
@@ -28,6 +30,7 @@ import com.biit.persistence.dao.exceptions.ElementCannotBePersistedException;
 import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
 import com.biit.persistence.entity.exceptions.ElementCannotBeRemovedException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
+import com.biit.utils.file.FileReader;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:applicationContextTest.xml" })
@@ -43,17 +46,15 @@ public class FormToJson extends AbstractTransactionalTestNGSpringContextTests {
 	private ISimpleFormViewDao simpleFormViewDao;
 
 	@Test(groups = { "abcdToJson" })
-	public void createJsonForm() throws NotValidChildException, FieldTooLongException, CharacterNotAllowedException,
-			UnexpectedDatabaseException, ElementCannotBePersistedException, ElementIsReadOnly,
-			ElementCannotBeRemovedException, InvalidAnswerFormatException {
+	public void createJsonForm() throws NotValidChildException, FieldTooLongException, CharacterNotAllowedException, UnexpectedDatabaseException,
+			ElementCannotBePersistedException, ElementIsReadOnly, ElementCannotBeRemovedException, InvalidAnswerFormatException {
 		String jsonForm = createForm(FULL_FORM).toJson();
 		Assert.assertEquals(jsonForm.contains(JSON_FORM_NAME), true);
 	}
 
 	@Test(groups = { "abcdToJson" })
-	public void createJsonSimpleForm() throws NotValidChildException, FieldTooLongException,
-			CharacterNotAllowedException, UnexpectedDatabaseException, ElementCannotBePersistedException,
-			ElementIsReadOnly, ElementCannotBeRemovedException, InvalidAnswerFormatException {
+	public void createJsonSimpleForm() throws NotValidChildException, FieldTooLongException, CharacterNotAllowedException, UnexpectedDatabaseException,
+			ElementCannotBePersistedException, ElementIsReadOnly, ElementCannotBeRemovedException, InvalidAnswerFormatException {
 
 		for (int i = 0; i < 10; i++) {
 			Form form = createForm(FULL_FORM + "_" + i);
@@ -68,9 +69,29 @@ public class FormToJson extends AbstractTransactionalTestNGSpringContextTests {
 		}
 	}
 
-	private Form createForm(String formName) throws NotValidChildException, FieldTooLongException,
-			CharacterNotAllowedException, UnexpectedDatabaseException, ElementCannotBePersistedException,
-			ElementIsReadOnly, ElementCannotBeRemovedException, InvalidAnswerFormatException {
+	@Test(groups = { "abcdToJson" }, expectedExceptions = { NullPointerException.class })
+	public void importWebform() throws FileNotFoundException, ClassNotFoundException {
+		String jsonContent = FileReader.getResource("InvalidForm.json", Charset.defaultCharset());
+		System.out.println("-------------------- EXPECTED EXCEPTIONS --------------------");
+		try {
+			Form form = Form.fromJson(jsonContent);
+			Assert.assertNotNull(form);
+			Assert.assertEquals(form.getChildren().size(), 2);
+		} finally {
+			System.out.println("----------------- END OF EXPECTED EXCEPTIONS -----------------");
+		}
+	}
+
+	@Test(groups = { "abcdToJson" })
+	public void importForm() throws FileNotFoundException, ClassNotFoundException {
+		String jsonContent = FileReader.getResource("ValidForm.json", Charset.defaultCharset());
+		Form form = Form.fromJson(jsonContent);
+		Assert.assertNotNull(form);
+		Assert.assertEquals(form.getChildren().size(), 2);
+	}
+
+	private Form createForm(String formName) throws NotValidChildException, FieldTooLongException, CharacterNotAllowedException, UnexpectedDatabaseException,
+			ElementCannotBePersistedException, ElementIsReadOnly, ElementCannotBeRemovedException, InvalidAnswerFormatException {
 		Form form = new Form();
 		form.setOrganizationId(0l);
 		form.setCreatedBy(1l);

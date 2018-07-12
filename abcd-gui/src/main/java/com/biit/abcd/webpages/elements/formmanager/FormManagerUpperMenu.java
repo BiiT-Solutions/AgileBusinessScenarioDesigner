@@ -189,11 +189,11 @@ public class FormManagerUpperMenu extends UpperMenu {
 											}
 											launchTestScenarioWindow.close();
 										}
-									} catch (DroolsRuleGenerationException | RuleNotImplementedException | NotCompatibleTypeException
-											| ExpressionInvalidException | NullTreeObjectException | TreeObjectInstanceNotRecognizedException
-											| TreeObjectParentNotValidException | NullCustomVariableException | NullExpressionValueException
-											| BetweenFunctionInvalidException | DateComparisonNotPossibleException | PluginInvocationException
-											| DroolsRuleCreationException | PrattParserException | ActionNotImplementedException | InvalidExpressionException e) {
+									} catch (DroolsRuleGenerationException | RuleNotImplementedException | ExpressionInvalidException | NullTreeObjectException
+											| TreeObjectInstanceNotRecognizedException | TreeObjectParentNotValidException | NullCustomVariableException
+											| NullExpressionValueException | BetweenFunctionInvalidException | DateComparisonNotPossibleException
+											| PluginInvocationException | DroolsRuleCreationException | PrattParserException | ActionNotImplementedException
+											| InvalidExpressionException e) {
 										AbcdLogger.errorMessage(SettingsWindow.class.getName(), e);
 										MessageManager.showError(LanguageCodes.ERROR_TITLE, LanguageCodes.DROOLS_RULES_GENERATION_EXCEPTION);
 									} catch (InvalidRuleException e) {
@@ -203,6 +203,9 @@ public class FormManagerUpperMenu extends UpperMenu {
 									} catch (DroolsRuleExecutionException e) {
 										AbcdLogger.errorMessage(SettingsWindow.class.getName(), e);
 										MessageManager.showError(LanguageCodes.ERROR_TITLE, LanguageCodes.DROOLS_RULES_EXECUTION_EXCEPTION);
+									} catch (NotCompatibleTypeException ncte) {
+										MessageManager.showError(LanguageCodes.DROOLS_RULES_GENERATION_EXCEPTION, LanguageCodes.ERROR_DESCRIPTION,
+												ncte.getDescription());
 									}
 								}
 							}
@@ -328,10 +331,10 @@ public class FormManagerUpperMenu extends UpperMenu {
 				});
 				droolsResultWindow.showCentered();
 			}
-		} catch (DroolsRuleGenerationException | RuleNotImplementedException | NotCompatibleTypeException | ExpressionInvalidException
-				| NullTreeObjectException | TreeObjectInstanceNotRecognizedException | TreeObjectParentNotValidException | NullCustomVariableException
-				| NullExpressionValueException | BetweenFunctionInvalidException | DateComparisonNotPossibleException | PluginInvocationException
-				| DroolsRuleCreationException | PrattParserException | ActionNotImplementedException | InvalidExpressionException e) {
+		} catch (DroolsRuleGenerationException | RuleNotImplementedException | ExpressionInvalidException | NullTreeObjectException
+				| TreeObjectInstanceNotRecognizedException | TreeObjectParentNotValidException | NullCustomVariableException | NullExpressionValueException
+				| BetweenFunctionInvalidException | DateComparisonNotPossibleException | PluginInvocationException | DroolsRuleCreationException
+				| PrattParserException | ActionNotImplementedException | InvalidExpressionException e) {
 			// This is a generic exception for everything related with the
 			// rules generation
 			// The exception that triggered the launch of this exception is
@@ -344,6 +347,8 @@ public class FormManagerUpperMenu extends UpperMenu {
 		} catch (DroolsRuleExecutionException e) {
 			AbcdLogger.errorMessage(SettingsWindow.class.getName(), e.getGeneratedException());
 			MessageManager.showError(LanguageCodes.ERROR_TITLE, LanguageCodes.DROOLS_RULES_EXECUTION_EXCEPTION);
+		} catch (NotCompatibleTypeException ncte) {
+			MessageManager.showError(LanguageCodes.DROOLS_RULES_GENERATION_EXCEPTION, LanguageCodes.ERROR_DESCRIPTION, ncte.getDescription());
 		}
 	}
 

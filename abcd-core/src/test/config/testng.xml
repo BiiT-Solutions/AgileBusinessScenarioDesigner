@@ -28,7 +28,7 @@
 			<class name="com.biit.abcd.core.drools.test.GlobalVariablesTest" />
 			<class name="com.biit.abcd.core.drools.test.TableRuleTest" />
 			<class name="com.biit.abcd.core.drools.test.ExpressionsTest" />
-			<class name="com.biit.abcd.core.drools.test.GenericsTest" />
+			<class name="com.biit.abcd.core.drools.test.GenericVariablesTest" />
 			<class name="com.biit.abcd.core.drools.test.NestedGroupsTest" />
 			<class name="com.biit.abcd.core.drools.test.ForksTest" />
 			<class name="com.biit.abcd.core.drools.test.OperatorsTest" />

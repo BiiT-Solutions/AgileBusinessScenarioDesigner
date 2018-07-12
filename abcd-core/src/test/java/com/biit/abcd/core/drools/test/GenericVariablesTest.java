@@ -44,7 +44,7 @@ import com.biit.form.exceptions.InvalidAnswerFormatException;
 import com.biit.form.exceptions.NotValidChildException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 
-public class GenericsTest extends KidsFormCreator {
+public class GenericVariablesTest extends KidsFormCreator {
 
 	private final static String FORM_SCORE = "formScore";
 	private final static String CATEGORY_SCORE = "catScore";
