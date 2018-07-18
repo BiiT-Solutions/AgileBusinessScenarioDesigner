@@ -63,14 +63,14 @@ public class ExpressionValidator {
 			rootTreeElement.accept(new TreeElementExpressionValidatorVisitor());
 			ExpressionChain prattExpressionChain = rootTreeElement.getExpressionChain();
 			if (hasPluginMethodExpression(cleanedExpression)) {
-				throw new InvalidExpressionException();
+				throw new InvalidExpressionException("Invalid expression '" + expressionChain + "'.");
 			} else {
 				// Check the number of elements returned by the Pratt parser
 				// (sometimes, the parser doesn't fail, it only skips the
 				// invalid characters)
 				int parsedElements = countElementsInExpressionChain(prattExpressionChain);
 				if (cleanedExpression.getExpressions().size() != parsedElements) {
-					throw new InvalidExpressionException("Invalid expression '" + expressionChain + "'.");
+					throw new InvalidExpressionException("Invalid expression .");
 				}
 			}
 		} else {
@@ -171,7 +171,7 @@ public class ExpressionValidator {
 					// After the parameterType being set, the rest of the
 					// parameters must match the value type
 					if (!parameterType.equals(getExpressionValueType(expressionValue))) {
-						throw new InvalidExpressionException();
+						throw new InvalidExpressionException("Invalid expression '" + prattExpressionChain + "'.");
 					}
 				}
 			}
@@ -202,12 +202,12 @@ public class ExpressionValidator {
 		case MIN:
 		case SUM:
 			if (!leftVariableFormat.equals(ValueType.NUMBER) && !parameterType.equals(ValueType.NUMBER)) {
-				throw new InvalidExpressionException();
+				throw new InvalidExpressionException("Invalid expression '" + prattExpressionChain + "'.");
 			}
 			break;
 		case CONCAT:
 			if (!leftVariableFormat.equals(ValueType.TEXT) && !parameterType.equals(ValueType.TEXT)) {
-				throw new InvalidExpressionException();
+				throw new InvalidExpressionException("Invalid expression '" + prattExpressionChain + "'.");
 			}
 			break;
 		case IF:
@@ -222,7 +222,7 @@ public class ExpressionValidator {
 						ExpressionValue<?> elseExpressionValue = (ExpressionValue<?>) elseExpressionChain.getExpressions().get(0);
 						if (!leftVariableFormat.equals(getExpressionValueType(thenExpressionValue))
 								&& !parameterType.equals(getExpressionValueType(elseExpressionValue))) {
-							throw new InvalidExpressionException();
+							throw new InvalidExpressionException("Invalid expression '" + prattExpressionChain + "'.");
 						}
 					} else {
 						throw new InvalidExpressionException("Invalid expression '" + prattExpressionChain + "'.");
