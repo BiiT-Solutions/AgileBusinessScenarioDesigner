@@ -8,7 +8,7 @@
 	<parent>
 		<groupId>com.biit</groupId>
 		<artifactId>abcd-tool</artifactId>
-		<version>1.8.17</version> 
+		<version>1.8.18-SNAPSHOT</version> 
 	</parent>
 
 	<!-- JBOSS repository -->
