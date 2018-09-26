@@ -224,6 +224,8 @@ public class DroolsRulesGenerator {
 
 			// Rule name
 			ruleName = RuleGenerationUtils.getRuleName(expressionValueCustomVariable.getVariable().getName() + "_default_value");
+			// Default rules must be executed first.
+			ruleName += " salience 1000";
 			// Conditions
 			defaultCustomVariableValue.append("when\n");
 			defaultCustomVariableValue.append("\t$droolsForm: DroolsForm()\n");
@@ -233,7 +235,7 @@ public class DroolsRulesGenerator {
 			defaultCustomVariableValue.append("then\n");
 			defaultCustomVariableValue.append("\t$" + TreeObjectDroolsIdMap.get(expressionValueCustomVariable.getReference()) + ".setVariableValue('"
 					+ expressionValueCustomVariable.getVariable().getName() + "', " + customVariableDefaultValue + ");\n");
-			defaultCustomVariableValue.append("\tDroolsEngineLogger.debug(\"DroolsRule\", \"Variable set ("
+			defaultCustomVariableValue.append("\tDroolsEngineLogger.debug(\"DroolsRule\", \"Default variable value set ("
 					+ expressionValueCustomVariable.getReference().getName() + ", " + expressionValueCustomVariable.getVariable().getName() + ", "
 					+ customVariableDefaultValue + ")\");\n");
 			defaultCustomVariableValue.append("end\n\n");
