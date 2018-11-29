@@ -542,7 +542,7 @@ public class DroolsParser {
 		String pluginCall = "";
 		Plugin pluginInterface = PluginController.getInstance().getPlugin(expressionPlugin.getPluginInterface());
 		if (pluginInterface instanceof IPlugin) {
-			String interfaceName = expressionPlugin.getPluginInterface().getCanonicalName();
+			String interfaceName = expressionPlugin.getPluginInterface().getName();
 			String pluginName = expressionPlugin.getPluginName();
 			String methodName = expressionPlugin.getPluginMethodName();
 
@@ -558,7 +558,7 @@ public class DroolsParser {
 				// Add last parameter
 				parametersValue += parameters.get(parameters.size() - 1);
 			}
-			pluginCall = "PluginController.getInstance().executePluginMethod('" + interfaceName + "', '" + pluginName + "', '" + methodName + "'"
+			pluginCall = "PluginController.getInstance().executePluginMethod(" + interfaceName + ", '" + pluginName + "', '" + methodName + "'"
 					+ (parametersValue != null ? ", " + parametersValue : "") + ")";
 		}
 		return pluginCall;
@@ -1028,7 +1028,7 @@ public class DroolsParser {
 			NullCustomVariableException, NullExpressionValueException {
 		String ruleCore = "";
 		List<Expression> chainList = actions.getExpressions();
-		
+
 		if (((ExpressionChain) chainList.get(0)).getExpressions().get(0) instanceof ExpressionValueCustomVariable) {
 			ExpressionValueCustomVariable leftExpressionCustomVariable = (ExpressionValueCustomVariable) ((ExpressionChain) chainList.get(0)).getExpressions()
 					.get(0);
