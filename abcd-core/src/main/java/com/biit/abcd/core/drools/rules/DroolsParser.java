@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 
-import net.xeoh.plugins.base.Plugin;
-
 import com.biit.abcd.core.drools.prattparser.ExpressionChainPrattParser;
 import com.biit.abcd.core.drools.prattparser.PrattParser;
 import com.biit.abcd.core.drools.prattparser.exceptions.PrattParserException;
@@ -56,9 +54,11 @@ import com.biit.abcd.persistence.entity.expressions.QuestionDateUnit;
 import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
 import com.biit.drools.engine.DroolsHelper;
-import com.biit.drools.engine.plugins.PluginController;
 import com.biit.drools.form.DroolsQuestionFormat;
 import com.biit.form.entity.TreeObject;
+import com.biit.plugins.PluginController;
+import com.biit.plugins.exceptions.DuplicatedPluginFoundException;
+import com.biit.plugins.exceptions.NoPluginFoundException;
 import com.biit.plugins.interfaces.IPlugin;
 
 public class DroolsParser {
@@ -540,8 +540,17 @@ public class DroolsParser {
 	private static String createPluginMethodCall(ExpressionChain actions) {
 		ExpressionPluginMethod expressionPlugin = (ExpressionPluginMethod) actions.getExpressions().get(1);
 		String pluginCall = "";
-		Plugin pluginInterface = PluginController.getInstance().getPlugin(expressionPlugin.getPluginInterface());
-		if (pluginInterface instanceof IPlugin) {
+		IPlugin pluginInterface;
+		try {
+			pluginInterface = PluginController.getInstance().getPlugin(IPlugin.class, expressionPlugin.getPluginName());
+		} catch (NoPluginFoundException e) {
+			pluginInterface = null;
+			AbcdLogger.errorMessage(DroolsParser.class.getName(), e);
+		} catch (DuplicatedPluginFoundException e) {
+			pluginInterface = null;
+			AbcdLogger.errorMessage(DroolsParser.class.getName(), e);
+		}
+		if (pluginInterface != null) {
 			String interfaceName = expressionPlugin.getPluginInterface().getName();
 			String pluginName = expressionPlugin.getPluginName();
 			String methodName = expressionPlugin.getPluginMethodName();

@@ -10,7 +10,7 @@
 	<parent>
 		<groupId>com.biit</groupId>
 		<artifactId>abcd-tool</artifactId>
-		<version>1.8.18-SNAPSHOT</version> 
+		<version>1.9.1-SNAPSHOT</version> 
 	</parent>
 
 	<dependencies>
@@ -63,6 +63,7 @@
 					<suiteXmlFiles>
 						<suiteXmlFile>src/test/config/testng.xml</suiteXmlFile>
 					</suiteXmlFiles>
+					<useSystemClassLoader>false</useSystemClassLoader>
 				</configuration>
 			</plugin>
 		</plugins>

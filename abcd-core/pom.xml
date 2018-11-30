@@ -8,7 +8,7 @@
 	<parent>
 		<groupId>com.biit</groupId>
 		<artifactId>abcd-tool</artifactId>
-		<version>1.8.18-SNAPSHOT</version> 
+		<version>1.9.1-SNAPSHOT</version> 
 	</parent>
 
 	<!-- JBOSS repository -->
@@ -179,6 +179,7 @@
 						<suiteXmlFile>src/test/config/testng.xml</suiteXmlFile>
 					</suiteXmlFiles>
 					<argLine>-Xms512m -Xmx2048M -Xss1024k -XX:MaxPermSize=512M</argLine>
+					<useSystemClassLoader>false</useSystemClassLoader>
 				</configuration>
 			</plugin>
 		</plugins>

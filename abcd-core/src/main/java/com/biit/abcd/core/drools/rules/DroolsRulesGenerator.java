@@ -121,7 +121,6 @@ public class DroolsRulesGenerator {
 
 		if (PluginController.getInstance().existsPlugins()) {
 			getRulesBuilder().append("import com.biit.plugins.PluginController \n");
-			getRulesBuilder().append("import net.xeoh.plugins.base.Plugin \n");
 			getRulesBuilder().append("import com.biit.plugins.interfaces.IPlugin \n");
 			getRulesBuilder().append("import java.lang.reflect.Method \n");
 		}

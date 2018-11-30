@@ -39,7 +39,6 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariabl
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueNumber;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueString;
 import com.biit.drools.engine.exceptions.DroolsRuleExecutionException;
-import com.biit.drools.engine.plugins.PluginController;
 import com.biit.drools.form.DroolsForm;
 import com.biit.drools.form.DroolsSubmittedForm;
 import com.biit.drools.global.variables.exceptions.NotValidTypeInVariableData;
@@ -48,6 +47,12 @@ import com.biit.form.exceptions.ElementIsReadOnly;
 import com.biit.form.exceptions.InvalidAnswerFormatException;
 import com.biit.form.exceptions.NotValidChildException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
+import com.biit.plugins.PluginController;
+import com.biit.plugins.exceptions.DuplicatedPluginFoundException;
+import com.biit.plugins.exceptions.InvalidMethodParametersException;
+import com.biit.plugins.exceptions.MethodInvocationException;
+import com.biit.plugins.exceptions.NoMethodFoundException;
+import com.biit.plugins.exceptions.NoPluginFoundException;
 import com.biit.plugins.interfaces.IPlugin;
 import com.biit.utils.configuration.IPropertiesSource;
 
@@ -59,13 +64,12 @@ import com.biit.utils.configuration.IPropertiesSource;
 public class PluginsTest extends KidsFormCreator {
 
 	private final static String CUSTOM_VARIABLE_RESULT = "customVariableResult";
-	private final static Class<?> PLUGIN_INTERFACE = com.biit.plugins.interfaces.IPlugin.class;
 	private final static String HELLO_WORLD_PLUGIN_NAME = "HelloWorld";
-	private final static String HELLO_WORLD_PLUGIN_RETURN = "Hello World";
+	private final static String HELLO_WORLD_PLUGIN_RETURN = "hello-world";
 	private final static String HELLO_WORLD_PLUGIN_METHOD = "methodHelloWorld";
-	private final static String DROOLS_PLUGIN_NAME = "DroolsFunctions";
+	private final static String DROOLS_PLUGIN_NAME = "drools-test";
 	private final static String DROOLS_PLUGIN_METHOD = "methodSumParameters";
-	private final static String LIFERAY_PLUGIN_NAME = "LiferayKnowledgeBasePlugin";
+	private final static String LIFERAY_PLUGIN_NAME = "liferay-article";
 	private final static String LIFERAY_PLUGIN_METHOD = "methodGetLatestArticleContent";
 	private final static Double LIFERAY_ARTICLE_RESOURCE_PRIMARY_KEY = 24518d;
 	private final static String LIFERAY_PLUGIN_METHOD_BY_PROPERTY = "methodGetLatestArticleContentByProperty";
@@ -78,7 +82,7 @@ public class PluginsTest extends KidsFormCreator {
 	public void helloWorldPluginSelectionTest1() {
 		try {
 			// Calling the first plugin
-			IPlugin pluginInterface = PluginController.getInstance().getPlugin(PLUGIN_INTERFACE, HELLO_WORLD_PLUGIN_NAME);
+			IPlugin pluginInterface = PluginController.getInstance().getPlugin(IPlugin.class, HELLO_WORLD_PLUGIN_NAME);
 			Method method = ((IPlugin) pluginInterface).getPluginMethod(HELLO_WORLD_PLUGIN_METHOD);
 			Assert.assertEquals(method.invoke(pluginInterface), HELLO_WORLD_PLUGIN_RETURN);
 		} catch (Exception e) {
@@ -90,7 +94,7 @@ public class PluginsTest extends KidsFormCreator {
 	public void helloWorldPluginOneCallTest() {
 		try {
 			// Calling the hello world plugin with only one call
-			Assert.assertEquals(PluginController.getInstance().executePluginMethod(PLUGIN_INTERFACE, HELLO_WORLD_PLUGIN_NAME, HELLO_WORLD_PLUGIN_METHOD),
+			Assert.assertEquals(PluginController.getInstance().executePluginMethod(IPlugin.class, HELLO_WORLD_PLUGIN_NAME, HELLO_WORLD_PLUGIN_METHOD),
 					HELLO_WORLD_PLUGIN_RETURN);
 		} catch (Exception e) {
 			Assert.fail("Exception in test");
@@ -108,7 +112,7 @@ public class PluginsTest extends KidsFormCreator {
 		Form form = createForm();
 		CustomVariable customvariableToAssign = new CustomVariable(form, CUSTOM_VARIABLE_RESULT, CustomVariableType.STRING, CustomVariableScope.FORM);
 		ExpressionChain expression = new ExpressionChain("helloWorldExpression", new ExpressionValueCustomVariable(form, customvariableToAssign),
-				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionPluginMethod(PLUGIN_INTERFACE, HELLO_WORLD_PLUGIN_NAME,
+				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionPluginMethod(IPlugin.class, HELLO_WORLD_PLUGIN_NAME,
 						HELLO_WORLD_PLUGIN_METHOD), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
 		form.getExpressionChains().add(expression);
 		form.addDiagram(createExpressionsDiagram(form));
@@ -129,9 +133,9 @@ public class PluginsTest extends KidsFormCreator {
 		Form form = createForm();
 		CustomVariable customVariableToAssign = new CustomVariable(form, CUSTOM_VARIABLE_RESULT, CustomVariableType.NUMBER, CustomVariableScope.FORM);
 		ExpressionChain expression = new ExpressionChain("helloWorldExpression", new ExpressionValueCustomVariable(form, customVariableToAssign),
-				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionPluginMethod(PLUGIN_INTERFACE, DROOLS_PLUGIN_NAME,
-						DROOLS_PLUGIN_METHOD), new ExpressionValueNumber(4.), new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueNumber(4.),
-				new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
+				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionPluginMethod(IPlugin.class, DROOLS_PLUGIN_NAME, DROOLS_PLUGIN_METHOD),
+				new ExpressionValueNumber(4.), new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueNumber(4.), new ExpressionSymbol(
+						AvailableSymbol.RIGHT_BRACKET));
 		form.getExpressionChains().add(expression);
 		form.addDiagram(createExpressionsDiagram(form));
 		// Create the rules and launch the engine
@@ -151,9 +155,9 @@ public class PluginsTest extends KidsFormCreator {
 		Form form = createForm();
 		CustomVariable customVariableToAssign = new CustomVariable(form, CUSTOM_VARIABLE_RESULT, CustomVariableType.STRING, CustomVariableScope.FORM);
 		ExpressionChain expression = new ExpressionChain("liferayExpression", new ExpressionValueCustomVariable(form, customVariableToAssign),
-				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionPluginMethod(PLUGIN_INTERFACE, LIFERAY_PLUGIN_NAME,
-						LIFERAY_PLUGIN_METHOD), new ExpressionValueNumber(LIFERAY_ARTICLE_RESOURCE_PRIMARY_KEY), new ExpressionSymbol(
-						AvailableSymbol.RIGHT_BRACKET));
+				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION),
+				new ExpressionPluginMethod(IPlugin.class, LIFERAY_PLUGIN_NAME, LIFERAY_PLUGIN_METHOD), new ExpressionValueNumber(
+						LIFERAY_ARTICLE_RESOURCE_PRIMARY_KEY), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
 		form.getExpressionChains().add(expression);
 		form.addDiagram(createExpressionsDiagram(form));
 		// Create the rules and launch the engine
@@ -173,7 +177,7 @@ public class PluginsTest extends KidsFormCreator {
 		Form form = createForm();
 		CustomVariable customVariableToAssign = new CustomVariable(form, CUSTOM_VARIABLE_RESULT, CustomVariableType.STRING, CustomVariableScope.FORM);
 		ExpressionChain expression = new ExpressionChain("liferayExpression", new ExpressionValueCustomVariable(form, customVariableToAssign),
-				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionPluginMethod(PLUGIN_INTERFACE, LIFERAY_PLUGIN_NAME,
+				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionPluginMethod(IPlugin.class, LIFERAY_PLUGIN_NAME,
 						LIFERAY_PLUGIN_METHOD_BY_PROPERTY), new ExpressionValueString(LIFERAY_ARTICLE_PROPERTY), new ExpressionSymbol(
 						AvailableSymbol.RIGHT_BRACKET));
 		form.getExpressionChains().add(expression);
@@ -187,8 +191,9 @@ public class PluginsTest extends KidsFormCreator {
 	@Test(groups = { "pluginsTest" })
 	@SuppressWarnings("unchecked")
 	public void liferayKnowledgeBasePluginConfigurationFoundInJarFolder() throws FieldTooLongException, CharacterNotAllowedException, NotValidChildException,
-			InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly {
-		List<IPropertiesSource> propertiesFiles = (List<IPropertiesSource>) PluginController.getInstance().executePluginMethod(PLUGIN_INTERFACE,
+			InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly, NoPluginFoundException, DuplicatedPluginFoundException,
+			NoMethodFoundException, InvalidMethodParametersException, MethodInvocationException {
+		List<IPropertiesSource> propertiesFiles = (List<IPropertiesSource>) PluginController.getInstance().executePluginMethod(IPlugin.class,
 				LIFERAY_PLUGIN_NAME, LIFERAY_PLUGIN_METHOD_GET_PROPERTIES_SOURCES);
 		boolean existConfigFile = false;
 		for (IPropertiesSource propertyFile : propertiesFiles) {

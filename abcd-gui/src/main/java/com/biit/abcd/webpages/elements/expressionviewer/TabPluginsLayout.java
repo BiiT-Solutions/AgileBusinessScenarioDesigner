@@ -9,7 +9,7 @@ import java.util.List;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.expressions.ExpressionPluginMethod;
-import com.biit.drools.engine.plugins.PluginController;
+import com.biit.plugins.PluginController;
 import com.biit.plugins.interfaces.IPlugin;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
