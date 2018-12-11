@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.biit</groupId>
+	<artifactId>abcd-tool</artifactId>
+	<packaging>pom</packaging>
+<<<<<<< HEAD
+	<version>1.8.19-SNAPSHOT</version>
+=======
+	<version>1.9.1-SNAPSHOT</version>
+>>>>>>> pf4j
+	<name>Agile Business sCenario Designer Tool</name>
+	<description>Rules Designer</description>
+
+	<modules>
+		<module>abcd-logger</module>
+		<module>abcd-persistence</module>
+		<module>abcd-core</module>
+		<module>abcd-gui</module>
+		<module>abcd-integration-test</module>
+		<module>abcd-release</module>
+	</modules>
+
+	<distributionManagement>
+		<repository>
+			<id>central</id>
+			<name>libs-releases</name>
+			<url>https://dev.biit-solutions.com/artifactory/libs-release</url>
+		</repository>
+		<snapshotRepository>
+			<id>snapshots</id>
+			<name>libs-snapshot</name>
+			<url>https://dev.biit-solutions.com/artifactory/libs-snapshot</url>
+		</snapshotRepository>
+	</distributionManagement>
+
+	<scm>
+		<connection>scm:git:git.biit-solutions.com:AgileBusinessScenarioDesigner.git</connection>
+		<developerConnection>scm:git:git.biit-solutions.com:AgileBusinessScenarioDesigner.git</developerConnection>
+		<tag>abcd-tool-1.5.278</tag>
+	</scm>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<jetty-maven-plugin.version>9.2.7.v20150116</jetty-maven-plugin.version>
+		<maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
+		<maven-resources-plugin.version>2.7</maven-resources-plugin.version>
+		<maven-antrun-plugin.version>1.8</maven-antrun-plugin.version>
+		<maven-surefire.version>2.17</maven-surefire.version>
+		<maven-war-plugin.version>2.3</maven-war-plugin.version>
+		<exec-maven-plugin.version>1.2.1</exec-maven-plugin.version>
+		<org.testng.version>6.8.7</org.testng.version>
+		<commons-io.version>2.4</commons-io.version>
+		<vaadin.version>7.3.10</vaadin.version>
+		<vaadin-testbench.version>4.0.3</vaadin-testbench.version>
+		<vaadin.plugin.version>${vaadin.version}</vaadin.plugin.version>
+		<vaadin-toolkit.version>LATEST</vaadin-toolkit.version>
+		<mysql-odbc.version>5.1.27</mysql-odbc.version>
+		<org.springframework.version>4.3.16.RELEASE</org.springframework.version>
+		<aspectj.version>1.8.2</aspectj.version>
+		<log4j.version>1.2.17</log4j.version>
+		<slf4j-api.version>1.7.7</slf4j-api.version>
+		<slf4j-log4j12.version>1.7.7</slf4j-log4j12.version>
+		<hibernate.version>5.2.17.Final</hibernate.version>
+		<itext.version>2.1.7</itext.version>
+		<jointjs-widget.version>0.1.3-WIDGET</jointjs-widget.version>
+		<jexeval.version>1.0.4</jexeval.version>
+		<apache-poi.version>3.10.1</apache-poi.version>
+		<root.directory>${project.basedir}</root.directory>
+		<gson.version>2.3.1</gson.version>
+		<h2.version>1.4.182</h2.version>
+		<ehcache.version>2.6.9</ehcache.version>
+		<c3p0.version>0.9.2.1</c3p0.version>
+		<maven-failsafe-plugin.version>2.18.1</maven-failsafe-plugin.version>
+		<maven-site-plugin.version>3.6</maven-site-plugin.version>
+		<findbugs-maven-plugin.version>3.0.0</findbugs-maven-plugin.version>
+		<maven-release-plugin.version>2.5.1</maven-release-plugin.version>
+		<maven-scm-provider-gitexe.version>1.9.2</maven-scm-provider-gitexe.version>
+		<project.scm.id>git</project.scm.id>
+		<versions-maven-plugin.version>2.1</versions-maven-plugin.version>
+		<maven-deploy-plugin.version>2.8.2</maven-deploy-plugin.version>
+		<graph-maven-plugin.version>1.2.3</graph-maven-plugin.version>
+		<slf4j.version>1.7.12</slf4j.version>
+		<mybatis.version>3.2.8</mybatis.version>
+		<jersey.version>2.17</jersey.version>
+		<javax.servlet.version>2.5</javax.servlet.version>
+		<batik.version>1.8</batik.version>
+		<xmlgraphics-commons.version>2.1</xmlgraphics-commons.version>
+		<!-- BiiT dependencies -->
+		<DES-encryption.version>[1.0,1.1)</DES-encryption.version>
+		<biit-common-utils.version>[0.4,0.5)</biit-common-utils.version>
+		<liferay-service-common.version>[0.8,0.9)</liferay-service-common.version>
+		<liferay-authentication-client.version>[0.9,0.10)</liferay-authentication-client.version>
+		<drools-engine.version>[0.5,0.6)</drools-engine.version>
+		<form-structure-drools.version>[0.2,0.3)</form-structure-drools.version>
+		<form-structure.version>[1.1,1.2)</form-structure.version>
+		<jpa-schema-exporter.version>[0.4,0.5)</jpa-schema-exporter.version>
+		<rest-services-security.version>[0.2,0.3)</rest-services-security.version>
+	</properties>
+
+	<dependencies>
+		<!-- Testing -->
+		<dependency>
+			<groupId>org.testng</groupId>
+			<artifactId>testng</artifactId>
+			<version>${org.testng.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- <dependency> <groupId>org.codehaus.mojo</groupId> <artifactId>versions-maven-plugin</artifactId> 
+			<version>${versions-maven-plugin.version}</version> </dependency> -->
+	</dependencies>
+	
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-site-plugin</artifactId>
+				<version>${maven-site-plugin.version}</version>
+				<configuration>
+					<reportPlugins>
+						<plugin>
+							<plugin>
+								<groupId>org.codehaus.mojo</groupId>
+								<artifactId>findbugs-maven-plugin</artifactId>
+								<version>${findbugs-maven-plugin.version}</version>
+								<configuration>
+									<effort>Max</effort>
+									<xmlOutput>true</xmlOutput>
+								</configuration>
+							</plugin>
+						</plugin>
+					</reportPlugins>
+				</configuration>
+			</plugin>
+		</plugins>
+	</reporting> 
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.kuali.maven.plugins</groupId>
+				<artifactId>graph-maven-plugin</artifactId>
+				<version>${graph-maven-plugin.version}</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${maven-compiler-plugin.version}</version>
+				<configuration>
+					<source>7</source>
+					<target>7</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>${maven-resources-plugin.version}</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>${maven-release-plugin.version}</version>
+				<dependencies>
+					<dependency>
+						<groupId>org.apache.maven.scm</groupId>
+						<artifactId>maven-scm-provider-gitexe</artifactId>
+						<version>${maven-scm-provider-gitexe.version}</version>
+					</dependency>
+				</dependencies>
+				<configuration>
+					<checkModificationExcludes>
+						<checkModificationExclude>pom.xml</checkModificationExclude>
+					</checkModificationExcludes>
+					<!-- This action is used by release:perform -->
+					<!-- During release:perform, enable the "release" profile -->
+					<releaseProfiles>release</releaseProfiles>
+					<!-- This goal is used by release:perform -->
+					<goals>deploy</goals>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>

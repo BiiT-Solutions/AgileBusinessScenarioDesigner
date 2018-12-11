@@ -8,7 +8,11 @@
 	<parent>
 		<groupId>com.biit</groupId>
 		<artifactId>abcd-tool</artifactId>
+<<<<<<< HEAD
+		<version>1.8.19-SNAPSHOT</version> 
+=======
 		<version>1.9.1-SNAPSHOT</version> 
+>>>>>>> pf4j
 	</parent>
 
 	<!-- JBOSS repository -->
@@ -178,8 +182,8 @@
 					<suiteXmlFiles>
 						<suiteXmlFile>src/test/config/testng.xml</suiteXmlFile>
 					</suiteXmlFiles>
-					<useSystemClassLoader>false</useSystemClassLoader>
 					<argLine>-Xms512m -Xmx2048M -Xss1024k -XX:MaxPermSize=512M</argLine>
+					<useSystemClassLoader>false</useSystemClassLoader>
 				</configuration>
 			</plugin>
 		</plugins>

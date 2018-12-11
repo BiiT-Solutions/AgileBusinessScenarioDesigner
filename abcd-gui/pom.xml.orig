@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>abcd-gui</artifactId>
+	<packaging>war</packaging>
+	<name>Agile Business sCenario Designer Tool (GUI)</name>
+	<parent>
+		<groupId>com.biit</groupId>
+		<artifactId>abcd-tool</artifactId>
+<<<<<<< HEAD
+		<version>1.8.19-SNAPSHOT</version>
+=======
+		<version>1.9.1-SNAPSHOT</version>
+>>>>>>> pf4j
+	</parent>
+	<properties>
+		<jetty.port>8081</jetty.port>
+		<param.value.true><![CDATA[<param-value>true</param-value>]]></param.value.true>
+	</properties>
+
+	<profiles>
+		<!-- Modify the web.xml for the release profile -->
+		<profile>
+			<id>release</id>
+			<build>
+				<plugins>
+					<plugin>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<version>${maven-antrun-plugin.version}</version>
+						<executions>
+							<execution>
+								<phase>process-resources</phase>
+								<configuration>
+									<target>
+										<!-- Modify the web.xml -->
+										<replaceregexp file="src/main/webapp/WEB-INF/web.xml" match=".*(param-value).(false).(\/param-value).*" replace="${param.value.true}" />
+									</target>
+								</configuration>
+								<goals>
+									<goal>run</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
+	<repositories>
+		<repository>
+			<id>vaadin-addons</id>
+			<url>http://maven.vaadin.com/vaadin-addons</url>
+		</repository>
+		<repository>
+			<id>vaadin-snapshots</id>
+			<url>http://oss.sonatype.org/content/repositories/vaadin-snapshots/</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>vaadin-snapshots</id>
+			<url>http://oss.sonatype.org/content/repositories/vaadin-snapshots/</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories>
+	<dependencies>
+		<!-- DESEncryption -->
+		<dependency>
+			<groupId>com.biit.security</groupId>
+			<artifactId>DES-encryption</artifactId>
+			<version>${DES-encryption.version}</version>
+		</dependency>
+		<!-- Vaadin plugins -->
+		<!-- JointJs Calendar Widget -->
+		<dependency>
+			<groupId>com.biit.vaadin</groupId>
+			<artifactId>jointjs-diagram-builder</artifactId>
+			<version>${jointjs-widget.version}</version>
+		</dependency>
+		<!-- Core -->
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>abcd-core</artifactId>
+			<version>${project.version}</version>
+			<type>jar</type>
+		</dependency>
+		<!-- Vaadin plugins -->
+		<!-- Vaadin -->
+		<dependency>
+			<groupId>com.vaadin</groupId>
+			<artifactId>vaadin-server</artifactId>
+			<version>${vaadin.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.vaadin</groupId>
+			<artifactId>vaadin-client-compiled</artifactId>
+			<version>${vaadin.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.vaadin</groupId>
+			<artifactId>vaadin-client-compiler</artifactId>
+			<scope>provided</scope>
+			<version>${vaadin.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-codec</groupId>
+					<artifactId>commons-codec</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>com.vaadin</groupId>
+			<artifactId>vaadin-client</artifactId>
+			<version>${vaadin.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.vaadin</groupId>
+			<artifactId>vaadin-push</artifactId>
+			<version>${vaadin.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.vaadin</groupId>
+			<artifactId>vaadin-themes</artifactId>
+			<version>${vaadin.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.testng</groupId>
+			<artifactId>testng</artifactId>
+			<version>${org.testng.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- Spring MVC framework -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>${org.springframework.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+			<version>${org.springframework.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aspects</artifactId>
+			<version>${org.springframework.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>${org.springframework.version}</version>
+		</dependency>
+		<!-- EhCache Logging -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+	</dependencies>
+	<build>
+		<plugins>
+			<!-- As we are doing "inplace" GWT compilation, ensure the widgetset -->
+			<!-- directory is cleaned properly -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-clean-plugin</artifactId>
+				<version>2.4.1</version>
+				<configuration>
+					<filesets>
+						<fileset>
+							<directory>src/main/webapp/VAADIN/widgetsets</directory>
+						</fileset>
+					</filesets>
+				</configuration>
+			</plugin>
+			<!-- Do not deploy this module in artifact -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<version>${maven-deploy-plugin.version}</version>
+				<configuration>
+					<skip>true</skip>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.eclipse.jetty</groupId>
+				<artifactId>jetty-maven-plugin</artifactId>
+				<version>${jetty-maven-plugin.version}</version>
+				<configuration>
+					<systemProperties>
+						<systemProperty>
+							<name>jetty.port</name>
+							<value>${jetty.port}</value>
+						</systemProperty>
+					</systemProperties>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>${maven-war-plugin.version}</version>
+				<configuration>
+					<webXml>src/main/webapp/WEB-INF/web.xml</webXml>
+					<warName>${project.parent.artifactId}-${project.parent.version}</warName>
+					<webResources>
+						<resource>
+							<directory>${project.basedir}/src/main/resources/META-INF</directory>
+							<filtering>true</filtering>
+							<targetPath>META-INF</targetPath>
+						</resource>
+					</webResources>
+					<archive>
+						<manifestEntries>
+							<Implementation-Version>${project.parent.version}</Implementation-Version>
+						</manifestEntries>
+					</archive>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>com.vaadin</groupId>
+				<artifactId>vaadin-maven-plugin</artifactId>
+				<version>${vaadin.plugin.version}</version>
+				<configuration>
+					<extraJvmArgs>-Xmx512M -Xss1024k</extraJvmArgs>
+					<!-- <runTarget>mobilemail</runTarget> -->
+					<!-- We are doing "inplace" but into subdir VAADIN/widgetsets. This 
+						way compatible with Vaadin eclipse plugin. -->
+					<webappDirectory>${basedir}/src/main/webapp/VAADIN/widgetsets
+					</webappDirectory>
+					<hostedWebapp>${basedir}/src/main/webapp/VAADIN/widgetsets
+					</hostedWebapp>
+					<noServer>true</noServer>
+					<!-- Remove draftCompile when project is ready -->
+					<draftCompile>false</draftCompile>
+					<compileReport>false</compileReport>
+					<style>OBF</style>
+					<strict>true</strict>
+					<runTarget>http://localhost:8080/</runTarget>
+					<gwtSdkFirstInClasspath>true</gwtSdkFirstInClasspath>
+				</configuration>
+				<executions>
+					<execution>
+						<configuration>
+							<!-- if you don't specify any modules, the plugin will find them -->
+							<!-- <modules> <module>com.vaadin.demo.mobilemail.gwt.ColorPickerWidgetSet</module> 
+								</modules> -->
+						</configuration>
+						<goals>
+							<goal>clean</goal>
+							<goal>resources</goal>
+							<goal>update-theme</goal>
+							<goal>update-widgetset</goal>
+							<goal>compile-theme</goal>
+							<goal>compile</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+		<pluginManagement>
+			<plugins>
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>com.vaadin</groupId>
+										<artifactId> vaadin-maven-plugin
+										</artifactId>
+										<versionRange> [${vaadin.version},)
+										</versionRange>
+										<goals>
+											<goal>clean</goal>
+											<goal>resources</goal>
+											<goal>update-theme</goal>
+											<goal>update-widgetset</goal>
+											<goal>compile-theme</goal>
+											<goal>compile</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore />
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+</project>
