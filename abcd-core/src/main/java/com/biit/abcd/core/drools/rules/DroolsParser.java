@@ -551,7 +551,7 @@ public class DroolsParser {
 			AbcdLogger.errorMessage(DroolsParser.class.getName(), e);
 		}
 		if (pluginInterface != null) {
-			String interfaceName = expressionPlugin.getPluginInterface().getName();
+			String interfaceName = expressionPlugin.getPluginInterface().getSimpleName() + ".class";
 			String pluginName = expressionPlugin.getPluginName();
 			String methodName = expressionPlugin.getPluginMethodName();
 

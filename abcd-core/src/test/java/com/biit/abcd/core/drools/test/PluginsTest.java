@@ -63,9 +63,9 @@ import com.biit.utils.configuration.IPropertiesSource;
  */
 public class PluginsTest extends KidsFormCreator {
 
-	private final static String CUSTOM_VARIABLE_RESULT = "customVariableResult";
-	private final static String HELLO_WORLD_PLUGIN_NAME = "HelloWorld";
-	private final static String HELLO_WORLD_PLUGIN_RETURN = "hello-world";
+	private final static String CUSTOM_VARIABLE_RESULT = "KB-Antropometrie-Text";
+	private final static String HELLO_WORLD_PLUGIN_NAME = "hello-world";
+	private final static String HELLO_WORLD_PLUGIN_RETURN = "Hello World";
 	private final static String HELLO_WORLD_PLUGIN_METHOD = "methodHelloWorld";
 	private final static String DROOLS_PLUGIN_NAME = "drools-test";
 	private final static String DROOLS_PLUGIN_METHOD = "methodSumParameters";
@@ -74,9 +74,10 @@ public class PluginsTest extends KidsFormCreator {
 	private final static Double LIFERAY_ARTICLE_RESOURCE_PRIMARY_KEY = 24518d;
 	private final static String LIFERAY_PLUGIN_METHOD_BY_PROPERTY = "methodGetLatestArticleContentByProperty";
 	private final static String LIFERAY_PLUGIN_METHOD_GET_PROPERTIES_SOURCES = "methodGetPropertiesSources";
-	private final static String LIFERAY_ARTICLE_PROPERTY = "Article1";
+	private final static String LIFERAY_ARTICLE_PROPERTY = "Appendix-Antropometrie";
 	private final static String LIFERAY_RESULT = "Basis Sportmedisch OnderzoekWhy to read this article...only if you want to know everything about the Basic Examination...";
-	private final static String LIFERAY_CONFIG_FILE = "abcd-core/src/test/resources/plugins/liferay-knowledge-base-0.2.5-SNAPSHOT-jar-with-dependencies.conf";
+	private final static String LIFERAY_RESULT2 = "A short description to explain the graphics below and what is this intended to achieve.";
+	private final static String LIFERAY_CONFIG_FILE = "abcd-core/src/test/resources/plugins/liferay-article-plugin-jar-with-dependencies.conf";
 
 	@Test(groups = { "pluginsTest" })
 	public void helloWorldPluginSelectionTest1() {
@@ -185,7 +186,7 @@ public class PluginsTest extends KidsFormCreator {
 		// Create the rules and launch the engine
 		DroolsForm droolsForm = createAndRunDroolsRules(form);
 		// Check result
-		Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT), LIFERAY_RESULT);
+		Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT), LIFERAY_RESULT2);
 	}
 
 	@Test(groups = { "pluginsTest" })
@@ -197,9 +198,6 @@ public class PluginsTest extends KidsFormCreator {
 				LIFERAY_PLUGIN_NAME, LIFERAY_PLUGIN_METHOD_GET_PROPERTIES_SOURCES);
 		boolean existConfigFile = false;
 		for (IPropertiesSource propertyFile : propertiesFiles) {
-			// The config file must have the version in the name. If plugin
-			// version is changed, the config file must be
-			// changed.
 			if (propertyFile.toString().contains(LIFERAY_CONFIG_FILE)) {
 				existConfigFile = true;
 			}
