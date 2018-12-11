@@ -20,3 +20,4 @@ release.properties
 /abcd-integration-test/src/test/resources/database/abcd_base.sql
 *.out
 *.error
+*.orig
