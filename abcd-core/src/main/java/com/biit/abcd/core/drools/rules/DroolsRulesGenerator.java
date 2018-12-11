@@ -34,7 +34,7 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariabl
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
 import com.biit.abcd.persistence.entity.globalvariables.VariableData;
 import com.biit.drools.engine.DroolsHelper;
-import com.biit.drools.engine.plugins.PluginController;
+import com.biit.plugins.PluginController;
 
 /**
  * Main class in charge of calling all the methods that generate the drools
@@ -120,8 +120,7 @@ public class DroolsRulesGenerator {
 		getRulesBuilder().append("import com.biit.drools.utils.* \n");
 
 		if (PluginController.getInstance().existsPlugins()) {
-			getRulesBuilder().append("import com.biit.drools.engine.plugins.PluginController \n");
-			getRulesBuilder().append("import net.xeoh.plugins.base.Plugin \n");
+			getRulesBuilder().append("import com.biit.plugins.PluginController \n");
 			getRulesBuilder().append("import com.biit.plugins.interfaces.IPlugin \n");
 			getRulesBuilder().append("import java.lang.reflect.Method \n");
 		}

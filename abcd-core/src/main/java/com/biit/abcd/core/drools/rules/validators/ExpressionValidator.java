@@ -34,8 +34,10 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueTimestamp;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
-import com.biit.drools.engine.plugins.PluginController;
 import com.biit.form.entity.TreeObject;
+import com.biit.plugins.PluginController;
+import com.biit.plugins.exceptions.DuplicatedPluginFoundException;
+import com.biit.plugins.exceptions.NoPluginFoundException;
 import com.biit.plugins.interfaces.IPlugin;
 
 public class ExpressionValidator {
@@ -503,7 +505,13 @@ public class ExpressionValidator {
 				}
 			}
 		}
-		IPlugin pluginInterface = PluginController.getInstance().getPlugin(pluginMethod.getPluginInterface(), pluginMethod.getPluginName());
+		IPlugin pluginInterface;
+		try {
+			pluginInterface = PluginController.getInstance().getPlugin(IPlugin.class, pluginMethod.getPluginName());
+		} catch (NoPluginFoundException | DuplicatedPluginFoundException e1) {
+			throw new InvalidExpressionException("Plugin interface: '" + pluginMethod.getPluginInterface() + "' not found for plugin: '"
+					+ pluginMethod.getPluginName() + "'", e1);
+		}
 		if (pluginInterface == null) {
 			throw new InvalidExpressionException("Plugin interface: '" + pluginMethod.getPluginInterface() + "' not found for plugin: '"
 					+ pluginMethod.getPluginName() + "'");
