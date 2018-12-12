@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>abcd-integration-test</artifactId>
@@ -10,7 +9,7 @@
 	<parent>
 		<groupId>com.biit</groupId>
 		<artifactId>abcd-tool</artifactId>
-		<version>1.9.1-SNAPSHOT</version>
+		<version>1.9.1</version>
 	</parent>
 
 	<properties>
@@ -205,17 +204,12 @@
 									<target>
 										<!-- Copy schema exporter for creating database tests -->
 										<delete file="./src/test/resources/database/abcd_base.sql" />
-										<copy file="../${source.release.project}/database/create_mysql.sql"
-											tofile="./src/test/resources/database/abcd_base.sql" />
-										<replace file="./src/test/resources/database/abcd_base.sql"
-											token="create table custom_variables ("
-											value="SET UNIQUE_CHECKS=0;&#xA; SET FOREIGN_KEY_CHECKS = 0;&#xA; create table custom_variables (" />
-										<concat destfile="./src/test/resources/database/abcd_base.sql"
-											append="true">SET UNIQUE_CHECKS=1;
+										<copy file="../${source.release.project}/database/create_mysql.sql" tofile="./src/test/resources/database/abcd_base.sql" />
+										<replace file="./src/test/resources/database/abcd_base.sql" token="create table custom_variables (" value="SET UNIQUE_CHECKS=0;&#xA; SET FOREIGN_KEY_CHECKS = 0;&#xA; create table custom_variables (" />
+										<concat destfile="./src/test/resources/database/abcd_base.sql" append="true">SET UNIQUE_CHECKS=1;
 											SET FOREIGN_KEY_CHECKS = 1;</concat>
 										<!-- Replicate webapp folder, needed for jetty to run -->
-										<delete dir="src/main/webapp" failonerror="false"
-											includeemptydirs="true" />
+										<delete dir="src/main/webapp" failonerror="false" includeemptydirs="true" />
 										<copy todir="src/main/webapp">
 											<fileset dir="../${source.gui.project}/src/main/webapp" />
 										</copy>
@@ -223,18 +217,13 @@
 											<fileset dir="../${source.gui.project}/target/classes" />
 										</copy>
 										<!-- Modify database connection to use test database -->
-										<replace
-											token="hibernate.connection.url=jdbc:mysql://${database.server}:3306/${original.database}?"
-											value="hibernate.connection.url=jdbc:mysql://${database.server}:3306/${test.database}?"
-											dir="target/classes">
+										<replace token="hibernate.connection.url=jdbc:mysql://${database.server}:3306/${original.database}?" value="hibernate.connection.url=jdbc:mysql://${database.server}:3306/${test.database}?" dir="target/classes">
 											<include name="**/*.properties" />
 										</replace>
-										<replace token="hibernate.connection.username=abcd"
-											value="hibernate.connection.username=testuser" dir="target/classes">
+										<replace token="hibernate.connection.username=abcd" value="hibernate.connection.username=testuser" dir="target/classes">
 											<include name="**/*.properties" />
 										</replace>
-										<replace token="hibernate.hbm2ddl.auto=validate"
-											value="hibernate.hbm2ddl.auto=create-drop" dir="target/classes">
+										<replace token="hibernate.hbm2ddl.auto=validate" value="hibernate.hbm2ddl.auto=create-drop" dir="target/classes">
 											<include name="**/*.properties" />
 										</replace>
 									</target>
@@ -329,17 +318,12 @@
 									<target>
 										<!-- Copy schema exporter for creating database tests -->
 										<delete file="./src/test/resources/database/abcd_base.sql" />
-										<copy file="../${source.release.project}/database/create_mysql.sql"
-											tofile="./src/test/resources/database/abcd_base.sql" />
-										<replace file="./src/test/resources/database/abcd_base.sql"
-											token="create table custom_variables ("
-											value="SET UNIQUE_CHECKS=0;&#xA; SET FOREIGN_KEY_CHECKS = 0;&#xA; create table custom_variables (" />
-										<concat destfile="./src/test/resources/database/abcd_base.sql"
-											append="true">SET UNIQUE_CHECKS=1;
+										<copy file="../${source.release.project}/database/create_mysql.sql" tofile="./src/test/resources/database/abcd_base.sql" />
+										<replace file="./src/test/resources/database/abcd_base.sql" token="create table custom_variables (" value="SET UNIQUE_CHECKS=0;&#xA; SET FOREIGN_KEY_CHECKS = 0;&#xA; create table custom_variables (" />
+										<concat destfile="./src/test/resources/database/abcd_base.sql" append="true">SET UNIQUE_CHECKS=1;
 											SET FOREIGN_KEY_CHECKS = 1;</concat>
 										<!-- Replicate webapp folder, needed for jetty to run -->
-										<delete dir="src/main/webapp" failonerror="false"
-											includeemptydirs="true" />
+										<delete dir="src/main/webapp" failonerror="false" includeemptydirs="true" />
 										<copy todir="src/main/webapp">
 											<fileset dir="../${source.gui.project}/src/main/webapp" />
 										</copy>
@@ -347,18 +331,13 @@
 											<fileset dir="../${source.gui.project}/target/classes" />
 										</copy>
 										<!-- Modify database connection to use test database -->
-										<replace
-											token="hibernate.connection.url=jdbc:mysql://${database.server}:3306/${original.database}?"
-											value="hibernate.connection.url=jdbc:mysql://${database.server}:3306/${test.database}?"
-											dir="target/classes">
+										<replace token="hibernate.connection.url=jdbc:mysql://${database.server}:3306/${original.database}?" value="hibernate.connection.url=jdbc:mysql://${database.server}:3306/${test.database}?" dir="target/classes">
 											<include name="**/*.properties" />
 										</replace>
-										<replace token="hibernate.connection.username=abcd"
-											value="hibernate.connection.username=testuser" dir="target/classes">
+										<replace token="hibernate.connection.username=abcd" value="hibernate.connection.username=testuser" dir="target/classes">
 											<include name="**/*.properties" />
 										</replace>
-										<replace token="hibernate.hbm2ddl.auto=validate"
-											value="hibernate.hbm2ddl.auto=create-drop" dir="target/classes">
+										<replace token="hibernate.hbm2ddl.auto=validate" value="hibernate.hbm2ddl.auto=create-drop" dir="target/classes">
 											<include name="**/*.properties" />
 										</replace>
 									</target>
