@@ -38,6 +38,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<java.version>1.8</java.version>
 		<jetty-maven-plugin.version>9.2.7.v20150116</jetty-maven-plugin.version>
 		<maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
 		<maven-resources-plugin.version>2.7</maven-resources-plugin.version>
@@ -45,7 +46,7 @@
 		<maven-surefire.version>2.17</maven-surefire.version>
 		<maven-war-plugin.version>2.3</maven-war-plugin.version>
 		<exec-maven-plugin.version>1.2.1</exec-maven-plugin.version>
-		<org.testng.version>6.8.7</org.testng.version>
+		<org.testng.version>6.14.3</org.testng.version>
 		<commons-io.version>2.4</commons-io.version>
 		<vaadin.version>7.3.10</vaadin.version>
 		<vaadin-testbench.version>4.0.3</vaadin-testbench.version>
@@ -67,7 +68,7 @@
 		<h2.version>1.4.182</h2.version>
 		<ehcache.version>2.6.9</ehcache.version>
 		<c3p0.version>0.9.2.1</c3p0.version>
-		<maven-failsafe-plugin.version>2.18.1</maven-failsafe-plugin.version>
+		<maven-failsafe-plugin.version>2.22.1</maven-failsafe-plugin.version>
 		<maven-site-plugin.version>3.6</maven-site-plugin.version>
 		<findbugs-maven-plugin.version>3.0.0</findbugs-maven-plugin.version>
 		<maven-release-plugin.version>2.5.1</maven-release-plugin.version>
@@ -102,8 +103,6 @@
 			<version>${org.testng.version}</version>
 			<scope>test</scope>
 		</dependency>
-		<!-- <dependency> <groupId>org.codehaus.mojo</groupId> <artifactId>versions-maven-plugin</artifactId> 
-			<version>${versions-maven-plugin.version}</version> </dependency> -->
 	</dependencies>
 	
 	<reporting>
@@ -143,8 +142,8 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>${maven-compiler-plugin.version}</version>
 				<configuration>
-					<source>7</source>
-					<target>7</target>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
 				</configuration>
 			</plugin>
 			<plugin>
