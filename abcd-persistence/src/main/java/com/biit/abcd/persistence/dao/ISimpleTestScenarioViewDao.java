@@ -7,11 +7,12 @@ import com.biit.abcd.persistence.entity.SimpleTestScenarioView;
 public interface ISimpleTestScenarioViewDao {
 
 	/**
-	 * Returns a list of all the test scenarios related to the forms that have form organization and form label equals
-	 * to the passed form
+	 * Returns a list of all the test scenarios related to the forms that have
+	 * form organization and form label equals to the passed form
 	 * 
 	 * @param formId
-	 * @return
+	 *            the id of a form.
+	 * @return the list of views.
 	 */
 	List<SimpleTestScenarioView> getSimpleTestScenariosByFormId(Long formId);
 }

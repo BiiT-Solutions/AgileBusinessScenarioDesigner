@@ -42,11 +42,11 @@ public class TreeObjectTable extends TreeTable {
 	private static final long serialVersionUID = -6949123334668973540L;;
 
 	/**
-	 * Gets Name property to show form a TreeObject element. If the name can't be defined, then raises a
-	 * {@link UnsupportedOperationException}
+	 * Gets Name property to show form a TreeObject element. If the name can't
+	 * be defined, then raises a {@link UnsupportedOperationException}
 	 * 
 	 * @param element
-	 * @return
+	 * @return the item name.
 	 */
 	public static String getItemName(TreeObject element) {
 		String name = null;
@@ -62,7 +62,8 @@ public class TreeObjectTable extends TreeTable {
 	}
 
 	/**
-	 * Adds item to table. This function is a specialization of {@link TreeTable#addItem(Object)} for form members.
+	 * Adds item to table. This function is a specialization of
+	 * {@link TreeTable#addItem(Object)} for form members.
 	 * 
 	 * @param element
 	 */
@@ -87,8 +88,8 @@ public class TreeObjectTable extends TreeTable {
 	}
 
 	/**
-	 * Adds item to table. This function is a specialization of {@link TreeTable#addItemAfter(Object, Object)} for form
-	 * members.
+	 * Adds item to table. This function is a specialization of
+	 * {@link TreeTable#addItemAfter(Object, Object)} for form members.
 	 * 
 	 * @param element
 	 */
@@ -112,7 +113,8 @@ public class TreeObjectTable extends TreeTable {
 	}
 
 	/**
-	 * Collapse the tree in a specific hierarchy level to inner levels. The level is specified by a class.
+	 * Collapse the tree in a specific hierarchy level to inner levels. The
+	 * level is specified by a class.
 	 * 
 	 * @param collapseFrom
 	 */
@@ -284,9 +286,11 @@ public class TreeObjectTable extends TreeTable {
 	}
 
 	/**
-	 * Loads a tree object structure recursively. At the end of the process selects the root element inserted. element.
-	 * It can also be specified an array of filterClasses. If this is not specified, then every kind of element is
-	 * allowed. Else only the elements in the hierarchy whose path is made of valid elements.
+	 * Loads a tree object structure recursively. At the end of the process
+	 * selects the root element inserted. element. It can also be specified an
+	 * array of filterClasses. If this is not specified, then every kind of
+	 * element is allowed. Else only the elements in the hierarchy whose path is
+	 * made of valid elements.
 	 * 
 	 * @param element
 	 * @param parent

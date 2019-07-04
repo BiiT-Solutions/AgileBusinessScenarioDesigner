@@ -8,7 +8,8 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
 /**
- * Pages that has a form definition and can access to other pages that also have a form.
+ * Pages that has a form definition and can access to other pages that also have
+ * a form.
  */
 public abstract class FormWebPageComponent extends SecuredWebPageComponent {
 	private static final long serialVersionUID = 5215781045989004097L;
@@ -58,7 +59,8 @@ public abstract class FormWebPageComponent extends SecuredWebPageComponent {
 
 		// Hide logout button.
 		if (upperMenu instanceof UpperMenu) {
-			if (((ApplicationFrame) UI.getCurrent()).getUserEmail() != null && ((ApplicationFrame) UI.getCurrent()).getPassword() != null) {
+			if (((ApplicationFrame) UI.getCurrent()).getUserEmail() != null
+					&& ((ApplicationFrame) UI.getCurrent()).getPassword() != null) {
 				((UpperMenu) upperMenu).hideLogoutButton(true);
 			}
 		}
@@ -74,9 +76,10 @@ public abstract class FormWebPageComponent extends SecuredWebPageComponent {
 	}
 
 	/**
-	 * The Working Area Layout is the layout where the page includes its own components.
+	 * The Working Area Layout is the layout where the page includes its own
+	 * components.
 	 * 
-	 * @return
+	 * @return The layout
 	 */
 	public AbstractOrderedLayout getWorkingAreaLayout() {
 		return workingAreaLayout;

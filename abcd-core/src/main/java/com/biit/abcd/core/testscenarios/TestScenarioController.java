@@ -27,7 +27,7 @@ public class TestScenarioController {
 	/**
 	 * Read all test scenarios from database. This method is synchronized.
 	 * 
-	 * @return
+	 * @return the list of test scenarios.
 	 */
 	public List<TestScenario> getTestScenarios(Form form) {
 		if (testScenarios == null) {
@@ -46,7 +46,7 @@ public class TestScenarioController {
 	/**
 	 * Return the test scenario with the Id passed
 	 * 
-	 * @return
+	 * @return a test scenario.
 	 */
 	public TestScenario getTestScenarioById(Long scenarioId) {
 		TestScenario testScenario = null;
@@ -70,8 +70,8 @@ public class TestScenarioController {
 	 * @throws ElementCannotBeRemovedException
 	 * @throws ElementCannotBePersistedException
 	 */
-	public void update(List<TestScenario> testScenariosFromTable, Form form) throws UnexpectedDatabaseException, ElementCannotBeRemovedException,
-			ElementCannotBePersistedException {
+	public void update(List<TestScenario> testScenariosFromTable, Form form) throws UnexpectedDatabaseException,
+			ElementCannotBeRemovedException, ElementCannotBePersistedException {
 		synchronized (TestScenarioController.class) {
 			// Remove unused variables.
 			if (getTestScenarios(form) != null) {

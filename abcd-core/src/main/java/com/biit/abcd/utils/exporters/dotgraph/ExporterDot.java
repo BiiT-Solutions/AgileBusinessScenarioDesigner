@@ -33,7 +33,7 @@ public abstract class ExporterDot<T> {
 	 * Return the string version of the dot graph code for a T structure.
 	 * 
 	 * @param structure
-	 * @return
+	 * @return the versionS
 	 */
 	public abstract String export(T structure);
 
@@ -41,7 +41,7 @@ public abstract class ExporterDot<T> {
 	 * Generates the list of nodes for a T structure.
 	 * 
 	 * @param structure
-	 * @return
+	 * @return the list of nodes as dot graph string syntax.
 	 */
 	public abstract String generateDotNodeList(T structure);
 
@@ -49,7 +49,7 @@ public abstract class ExporterDot<T> {
 	 * Generates the flow between nodes.
 	 * 
 	 * @param structure
-	 * @return
+	 * @return the flow as dot graph string syntax.
 	 */
 	public abstract String generateDotNodeFlow(T structure);
 
@@ -57,14 +57,14 @@ public abstract class ExporterDot<T> {
 	 * Generate the nodes enclosed in a element.
 	 * 
 	 * @param structure
-	 * @return
+	 * @return the node childs as dot graph string syntax.
 	 */
 	public abstract String generateDotNodeChilds(T structure);
 
 	/**
 	 * Limit sizes of the drawing
 	 * 
-	 * @return
+	 * @return the size of the draw as dot graph string syntax.
 	 */
 	public String getSizeLimit() {
 		return sizeLimit;

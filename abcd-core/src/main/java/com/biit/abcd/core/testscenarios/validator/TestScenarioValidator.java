@@ -38,7 +38,8 @@ public class TestScenarioValidator {
 	private List<TestScenarioValidatorMessage> validatorMessages;
 
 	/**
-	 * Compares the test scenario structure against the form structure and modifies the objects needed
+	 * Compares the test scenario structure against the form structure and
+	 * modifies the objects needed
 	 * 
 	 * @param form
 	 * @param testScenario
@@ -245,7 +246,7 @@ public class TestScenarioValidator {
 	 * 
 	 * @param form
 	 * @param testScenario
-	 * @return
+	 * @return true if is valid
 	 */
 	public boolean validateToLaunch(Form form, TestScenario testScenario) {
 		originalReferenceTreeObjectMap = form.getOriginalReferenceTreeObjectMap();

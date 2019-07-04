@@ -29,7 +29,7 @@ public class FromJson {
 	 * @param json
 	 * @param formLabel
 	 * @param organizationId
-	 * @return
+	 * @return the form.
 	 * @throws FormWithSameNameException
 	 * @throws UnexpectedDatabaseException
 	 * @throws FieldTooLongException

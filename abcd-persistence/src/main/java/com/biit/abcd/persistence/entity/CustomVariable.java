@@ -46,14 +46,15 @@ public class CustomVariable extends StorableObject implements Comparable<CustomV
 	@Enumerated(EnumType.STRING)
 	private CustomVariableType type;
 
-	@Column(name="default_value")
+	@Column(name = "default_value")
 	private String defaultValue;
 
 	public CustomVariable() {
 		super();
 	}
 
-	public CustomVariable(Form form, String name, CustomVariableType type, CustomVariableScope scope, String defaultValue) {
+	public CustomVariable(Form form, String name, CustomVariableType type, CustomVariableScope scope,
+			String defaultValue) {
 		super();
 		this.form = form;
 		this.name = name;
@@ -120,7 +121,7 @@ public class CustomVariable extends StorableObject implements Comparable<CustomV
 	 * Returns true if the custom variable compared has the same name and scope
 	 * 
 	 * @param otherVariable
-	 * @return
+	 * @return true if has the same name and scope.
 	 */
 	public boolean hasSameNameAndScope(CustomVariable otherVariable) {
 		if (getName().equals(otherVariable.getName()) && getScope().equals(otherVariable.getScope())) {

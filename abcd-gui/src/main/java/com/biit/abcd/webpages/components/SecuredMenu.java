@@ -78,9 +78,10 @@ public abstract class SecuredMenu extends HorizontalButtonGroup {
 	public abstract Set<Button> getSecuredButtons();
 
 	/**
-	 * Return a list of buttons that must be disabled due to user permissions limitations.
+	 * Return a list of buttons that must be disabled due to user permissions
+	 * limitations.
 	 * 
-	 * @return
+	 * @return a set of buttons that are disabled.
 	 */
 	public Set<Button> getDisabledButtons() {
 		if (disabledButtons == null) {

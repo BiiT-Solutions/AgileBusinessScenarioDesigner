@@ -54,9 +54,10 @@ public class Answer extends BaseAnswer {
 	}
 
 	/**
-	 * Checks if this answer is a subanswer by looking if it has a parent and if it has, if it is an answer.
+	 * Checks if this answer is a subanswer by looking if it has a parent and if
+	 * it has, if it is an answer.
 	 * 
-	 * @return
+	 * @return true is is a subanswer.
 	 */
 	public boolean isSubanswer() {
 		if (getParent() == null || !(getParent() instanceof Answer)) {

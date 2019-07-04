@@ -41,7 +41,7 @@ public class TableRule extends StorableObject implements INameAttribute {
 	// (http://stackoverflow.com/questions/4334970/hibernate-cannot-simultaneously-fetch-multiple-bags)
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@BatchSize(size = 20)
-	//@OrderBy(clause = "creationTime ASC")
+	// @OrderBy(clause = "creationTime ASC")
 	@JoinTable(name = "rule_decision_table_row_rules", joinColumns = @JoinColumn(name = "rule_decision_table", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "rule", referencedColumnName = "id"))
 	private List<TableRuleRow> rules;
 
@@ -96,10 +96,12 @@ public class TableRule extends StorableObject implements INameAttribute {
 	}
 
 	/**
-	 * When you add a new row, the table or the row is resized to allow the operation
+	 * When you add a new row, the table or the row is resized to allow the
+	 * operation
 	 * 
 	 * @param row
-	 * @return
+	 *            the row to add.
+	 * @return the row added.
 	 */
 	public TableRuleRow addRow(TableRuleRow row) {
 		if (!getRules().isEmpty()) {

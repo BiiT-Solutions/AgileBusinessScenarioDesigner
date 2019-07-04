@@ -101,7 +101,7 @@ public class FormToDroolsExporter {
 	 * 
 	 * @param form
 	 * @param globalVariables
-	 * @return
+	 * @return the submitted form.
 	 * @throws DroolsRuleGenerationException
 	 * @throws DroolsRuleExecutionException
 	 * @throws ActionNotImplementedException

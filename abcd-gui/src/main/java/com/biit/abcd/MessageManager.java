@@ -90,7 +90,7 @@ public class MessageManager {
 	/**
 	 * Last resort to show an error in the UI
 	 * 
-	 * @param string
+	 * @param error the error message.
 	 */
 	public static void showError(String error) {
 		try {

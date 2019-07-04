@@ -40,7 +40,7 @@ public class AbcdFormAuthorizationService extends SecurityService implements IAb
 	/**
 	 * Autowired not working correctly with this configuration of Vaadin. Use the helper if needed.
 	 * 
-	 * @return
+	 * @return the authentication service.
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
@@ -55,7 +55,7 @@ public class AbcdFormAuthorizationService extends SecurityService implements IAb
 	/**
 	 * Autowired not working correctly with this configuration of Vaadin. Use the helper if needed.
 	 * 
-	 * @return
+	 * @return the authentication service.
 	 */
 	@Override
 	@SuppressWarnings("unchecked")

@@ -13,14 +13,14 @@ public interface IPdfTableBlock {
 	/**
 	 * Returns the number of column spaces used by this table
 	 * 
-	 * @return
+	 * @return the number of columns.
 	 */
-	int getNumberCols();
+	int getNumberColumns();
 
 	/**
 	 * Returns the number of row spaces used by this table
 	 * 
-	 * @return
+	 * @return the number of rows.
 	 */
 	int getNumberRows();
 
@@ -28,13 +28,14 @@ public interface IPdfTableBlock {
 	 * Returns the well-formed state of the table. If the sum of spaces of the
 	 * elements doesn't generate a correct rectangle it returns false.
 	 * 
-	 * @return
+	 * @return true if the format is correct.
 	 */
 	boolean isWellFormatted();
 
 	/**
 	 * Returns all the sub elements of the table.
-	 * @return
+	 * 
+	 * @return a list of cells.
 	 */
 	List<PdfPCell> getCells();
 }

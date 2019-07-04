@@ -52,7 +52,8 @@ public class RuleGenerationUtils {
 		if (extraConditions == null) {
 			return "rule \"" + name + "_" + getUniqueId() + "\"\n";
 		} else {
-			return "rule \"" + name + "_" + extraConditions.getExpression().replaceAll("[^a-zA-Z0-9_]", "_") + "_" + getUniqueId() + "\"\n";
+			return "rule \"" + name + "_" + extraConditions.getExpression().replaceAll("[^a-zA-Z0-9_]", "_") + "_"
+					+ getUniqueId() + "\"\n";
 		}
 	}
 
@@ -78,7 +79,8 @@ public class RuleGenerationUtils {
 
 	public static String getGroupEndRuleExtraCondition(DroolsRuleGroupEndRule rule) {
 		if (rule.getName().startsWith("rule \"")) {
-			return "\tnot( FiredRule( getRuleName() == '" + rule.getName().split(" ")[1].replace("\n", "").replace("\"", "") + "') ) and\n";
+			return "\tnot( FiredRule( getRuleName() == '"
+					+ rule.getName().split(" ")[1].replace("\n", "").replace("\"", "") + "') ) and\n";
 		} else {
 			return "\tnot( FiredRule( getRuleName() == '" + rule.getName() + "') ) and\n";
 		}
@@ -87,9 +89,10 @@ public class RuleGenerationUtils {
 	public static String getGroupRuleActions(DroolsRuleGroup rule) {
 		String groupAction = "";
 		if (rule.getName().startsWith("rule \"")) {
-			groupAction = "\tDroolsEngineLogger.debug(\"RuleFired\", \"Rule " + rule.getName().split(" ")[1].replace("\n", "").replace("\"", "")
-					+ " fired\");\n";
-			groupAction += "\tinsert ( new FiredRule(\"" + rule.getName().split(" ")[1].replace("\n", "").replace("\"", "") + "\"));\n";
+			groupAction = "\tDroolsEngineLogger.debug(\"RuleFired\", \"Rule "
+					+ rule.getName().split(" ")[1].replace("\n", "").replace("\"", "") + " fired\");\n";
+			groupAction += "\tinsert ( new FiredRule(\""
+					+ rule.getName().split(" ")[1].replace("\n", "").replace("\"", "") + "\"));\n";
 		} else {
 			groupAction = "\tDroolsEngineLogger.debug(\"RuleFired\", \"Rule " + rule.getName() + " fired\");\n";
 			groupAction += "\tinsert ( new FiredRule(\"" + rule.getName() + "\"));\n";
@@ -105,7 +108,7 @@ public class RuleGenerationUtils {
 	 * It should be used before sending the rules to the engine <br>
 	 * 
 	 * @param ruleCore
-	 * @return
+	 * @return the rules without duplicated
 	 */
 	public static String removeDuplicateLines(String ruleCore) {
 		StringBuilder result = new StringBuilder();
@@ -115,8 +118,9 @@ public class RuleGenerationUtils {
 			if ((auxSplit[i] != null)) {
 				String compareTo = auxSplit[i];
 				for (int j = i + 1; j < auxSplit.length; j++) {
-					if ((auxSplit[j] != null) && !auxSplit[i].equals("\tand") && !auxSplit[i].equals("\t(") && !auxSplit[i].equals("\t)")
-							&& !auxSplit[i].trim().equals("(") && !auxSplit[i].trim().equals(")") && !auxSplit[i].equals("\tor")
+					if ((auxSplit[j] != null) && !auxSplit[i].equals("\tand") && !auxSplit[i].equals("\t(")
+							&& !auxSplit[i].equals("\t)") && !auxSplit[i].trim().equals("(")
+							&& !auxSplit[i].trim().equals(")") && !auxSplit[i].equals("\tor")
 							&& !auxSplit[i].equals("\tnot(")) {
 						if (auxSplit[j].equals(compareTo)) {
 							auxSplit[j] = null;
@@ -124,7 +128,8 @@ public class RuleGenerationUtils {
 					}
 				}
 				// In the last row, remove the ands (if any)
-				if ((i < (auxSplit.length - 1)) && (auxSplit[i + 1] != null) && auxSplit[i + 1].equals("then") && compareTo.endsWith("and")) {
+				if ((i < (auxSplit.length - 1)) && (auxSplit[i + 1] != null) && auxSplit[i + 1].equals("then")
+						&& compareTo.endsWith("and")) {
 					result.append(compareTo.substring(0, compareTo.length() - 3) + "\n");
 				} else {
 					result.append(compareTo + "\n");
@@ -351,7 +356,8 @@ public class RuleGenerationUtils {
 	public static String createRuleName(String ruleName, ExpressionChain extraConditions, String valueToAppend) {
 		if (ruleName != null && ruleName.startsWith("rule \"")) {
 			if (valueToAppend != null) {
-				ruleName = "rule \"" + ruleName.split(" ")[1].replace("\n", "").replace("\"", "").concat(valueToAppend) + "\"\n";
+				ruleName = "rule \"" + ruleName.split(" ")[1].replace("\n", "").replace("\"", "").concat(valueToAppend)
+						+ "\"\n";
 			}
 		} else {
 			ruleName = getRuleName(ruleName, extraConditions);
@@ -395,9 +401,10 @@ public class RuleGenerationUtils {
 	 * @param expressionChain
 	 * @param classToSearch
 	 * @param enumType
-	 * @return
+	 * @return if exists.
 	 */
-	public static boolean searchClassInExpressionChain(ExpressionChain expressionChain, Class<?> classToSearch, Object enumType) {
+	public static boolean searchClassInExpressionChain(ExpressionChain expressionChain, Class<?> classToSearch,
+			Object enumType) {
 		for (Expression expression : expressionChain.getExpressions()) {
 			if (expression instanceof ExpressionChain) {
 				searchClassInExpressionChain((ExpressionChain) expression, classToSearch, enumType);
@@ -415,7 +422,7 @@ public class RuleGenerationUtils {
 	/**
 	 * Returns the type of answer for the question in the parameter
 	 * 
-	 * @return
+	 * @return the type as string.
 	 */
 	public static String getTreeObjectAnswerType(TreeObject treeObject) {
 		if (treeObject instanceof Question) {
@@ -437,7 +444,8 @@ public class RuleGenerationUtils {
 	 * expression chains inside
 	 * 
 	 * @param expressionChain
-	 * @return
+	 *            the expression.
+	 * @return the expression chain filtered
 	 */
 	public static ExpressionChain flattenExpressionChain(ExpressionChain expressionChain) {
 		ExpressionChain flattenedExpressionChain = new ExpressionChain();
@@ -458,14 +466,18 @@ public class RuleGenerationUtils {
 	 * If there is a NOT function used, we add the required left parenthesis
 	 * 
 	 * @param expressionChain
+	 *            the expression.
 	 */
 	public static void fixNotConditions(ExpressionChain expressionChain) {
 		for (int index = 0; index < expressionChain.getExpressions().size(); index++) {
 			Expression expression = expressionChain.getExpressions().get(index);
-			if ((expression instanceof ExpressionFunction) && (((ExpressionFunction) expression).getValue().equals(AvailableFunction.NOT))) {
+			if ((expression instanceof ExpressionFunction)
+					&& (((ExpressionFunction) expression).getValue().equals(AvailableFunction.NOT))) {
 
-				if ((expressionChain.getExpressions().size() > index + 1) && (expressionChain.getExpressions().get(index + 1) instanceof ExpressionSymbol)
-						&& (((ExpressionSymbol) expressionChain.getExpressions().get(index + 1)).getValue().equals(AvailableSymbol.LEFT_BRACKET))) {
+				if ((expressionChain.getExpressions().size() > index + 1)
+						&& (expressionChain.getExpressions().get(index + 1) instanceof ExpressionSymbol)
+						&& (((ExpressionSymbol) expressionChain.getExpressions().get(index + 1)).getValue()
+								.equals(AvailableSymbol.LEFT_BRACKET))) {
 				} else {
 					expressionChain.getExpressions().add(index + 1, new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET));
 				}
@@ -493,7 +505,8 @@ public class RuleGenerationUtils {
 			if (tableNode.getTable() != null) {
 				for (TableRuleRow tableRuleRow : tableNode.getTable().getRules()) {
 					if (tableRuleRow.getConditions() != null) {
-						customVariablesList.addAll(lookForCustomVariableInExpressionChain(tableRuleRow.getConditions()));
+						customVariablesList
+								.addAll(lookForCustomVariableInExpressionChain(tableRuleRow.getConditions()));
 					}
 					if (tableRuleRow.getAction() != null) {
 						customVariablesList.addAll(lookForCustomVariableInExpressionChain(tableRuleRow.getAction()));
@@ -529,7 +542,8 @@ public class RuleGenerationUtils {
 				customVariablesList.add((ExpressionValueCustomVariable) forkNode.getReference());
 			}
 			for (DiagramLink outLink : forkNode.getOutgoingLinks()) {
-				customVariablesList.addAll(lookForCustomVariableInExpressionChain((ExpressionChain) outLink.getExpressionChain()));
+				customVariablesList.addAll(lookForCustomVariableInExpressionChain((ExpressionChain) outLink
+						.getExpressionChain()));
 			}
 			break;
 		default:
@@ -541,7 +555,8 @@ public class RuleGenerationUtils {
 		return customVariablesList;
 	}
 
-	private static List<ExpressionValueCustomVariable> lookForCustomVariableInExpressionChain(ExpressionChain expressionChain) {
+	private static List<ExpressionValueCustomVariable> lookForCustomVariableInExpressionChain(
+			ExpressionChain expressionChain) {
 		List<ExpressionValueCustomVariable> customVariablesList = new ArrayList<ExpressionValueCustomVariable>();
 		for (Expression expression : expressionChain.getExpressions()) {
 			if (expression instanceof ExpressionChain) {
@@ -574,7 +589,8 @@ public class RuleGenerationUtils {
 		return customVariablesList;
 	}
 
-	public static List<DroolsGlobalVariable> convertGlobalVariablesToDroolsGlobalVariables(List<GlobalVariable> globalVariables) {
+	public static List<DroolsGlobalVariable> convertGlobalVariablesToDroolsGlobalVariables(
+			List<GlobalVariable> globalVariables) {
 		// We use the json serializer/deserializer to transform the variables
 		return DroolsGlobalVariablesFromJson.fromJson(AbcdGlobalVariablesToJson.toJson(globalVariables));
 	}

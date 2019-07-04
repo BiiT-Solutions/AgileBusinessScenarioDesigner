@@ -4,8 +4,8 @@ import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.webpages.components.AcceptCancelClearWindow;
-import com.biit.abcd.webpages.elements.expressionviewer.ExpressionEditorComponent;
-import com.biit.abcd.webpages.elements.expressionviewer.SimpleExpressionEditorComponent;
+import com.biit.abcd.webpages.elements.expression.viewer.ExpressionEditorComponent;
+import com.biit.abcd.webpages.elements.expression.viewer.SimpleExpressionEditorComponent;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.VerticalLayout;
 

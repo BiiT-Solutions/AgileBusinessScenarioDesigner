@@ -102,7 +102,8 @@ public class TableCellLabelEdit extends Table {
 	/**
 	 * Updates a row of the table.
 	 * 
-	 * @param rule
+	 * @param object
+	 *            a storable object.
 	 */
 	@SuppressWarnings("unchecked")
 	protected void updateItemTableRuleInGui(StorableObject object) {

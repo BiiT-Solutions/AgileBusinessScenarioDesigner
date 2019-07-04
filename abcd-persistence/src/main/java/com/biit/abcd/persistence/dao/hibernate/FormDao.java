@@ -63,7 +63,8 @@ public class FormDao extends AnnotatedGenericDao<Form, Long> implements IFormDao
 	@Override
 	@Transactional(value = "abcdTransactionManager", propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
 	@Caching(evict = { @CacheEvict(value = "springFormCache", key = "#form?.getId()") })
-	//@CachePut(value = "springFormCache", key = "#form.getId()", condition = "#form.getId() != null")
+	// @CachePut(value = "springFormCache", key = "#form.getId()", condition =
+	// "#form.getId() != null")
 	public Form merge(Form form) {
 		return super.merge(form);
 	}
@@ -73,7 +74,8 @@ public class FormDao extends AnnotatedGenericDao<Form, Long> implements IFormDao
 	@Cacheable(value = "springFormCache", key = "#id")
 	public Form get(Long id) {
 		Form form = super.get(id);
-		// If we want to use spring cache, we need to load all elements before exiting this method.
+		// If we want to use spring cache, we need to load all elements before
+		// exiting this method.
 		if (form != null) {
 			form.initializeSets();
 		}
@@ -163,7 +165,7 @@ public class FormDao extends AnnotatedGenericDao<Form, Long> implements IFormDao
 	 * @param label
 	 * @param version
 	 * @param validTo
-	 * @return
+	 * @return the number of entities updated.
 	 * @throws UnexpectedDatabaseException
 	 */
 	@CacheEvict(value = "springFormCache", key = "#form.label, #form.organizationId")

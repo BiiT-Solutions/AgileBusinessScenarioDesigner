@@ -72,7 +72,7 @@ public class PdfTableGenerator {
 
 	private static boolean checkUniformity(int number, List<PdfTableBlock> tableBlocks) {
 		for (PdfTableBlock block : tableBlocks) {
-			if (!block.isWellFormatted() || (number != block.getNumberCols())) {
+			if (!block.isWellFormatted() || (number != block.getNumberColumns())) {
 				return false;
 			}
 		}

@@ -25,20 +25,20 @@ public class PdfTableBlock implements IPdfTableBlock {
 	}
 
 	public void insertRow(PdfRow row) throws BadBlockException {
-		if (!row.isWellFormatted() || (row.getNumberCols() != getRemainingCols()) || (row.getNumberRows() > getRemainingRows())) {
+		if (!row.isWellFormatted() || (row.getNumberColumns() != getRemainingCols()) || (row.getNumberRows() > getRemainingRows())) {
 			throw new BadBlockException();
 		}
 		tableBlocks.add(row);
 	}
 
 	public void insertCol(PdfCol col) throws BadBlockException {
-		if (!col.isWellFormatted() || (col.getNumberRows() != getRemainingRows()) || (col.getNumberCols() > getRemainingCols())) {
+		if (!col.isWellFormatted() || (col.getNumberRows() != getRemainingRows()) || (col.getNumberColumns() > getRemainingCols())) {
 			throw new BadBlockException();
 		}
 		tableBlocks.add(col);
 	}
 
-	public int getNumberCols() {
+	public int getNumberColumns() {
 		return numberCols;
 	}
 
@@ -50,7 +50,7 @@ public class PdfTableBlock implements IPdfTableBlock {
 		int remainingCols = numberCols;
 		for (IPdfTableBlock block : tableBlocks) {
 			if (block instanceof PdfCol) {
-				remainingCols -= block.getNumberCols();
+				remainingCols -= block.getNumberColumns();
 			}
 		}
 		return remainingCols;

@@ -80,53 +80,54 @@ public class FormController {
 			getForm().setUpdatedBy(getUser());
 			getForm().setUpdateTime();
 
-			if(getForm().getId()!=null){
-				//If the form has been persisted, we need to merge form to persistence context.
+			if (getForm().getId() != null) {
+				// If the form has been persisted, we need to merge form to
+				// persistence context.
 				this.form = formDao.merge(getForm());
 			}
 			formDao.makePersistent(getForm());
-				
+
 			try {
 				originalForm = (Form) getForm().generateCopy(true, true);
 				originalForm.resetIds();
 			} catch (NotValidStorableObjectException | CharacterNotAllowedException e) {
 			}
-			
+
 			updateLastAccessedReferences();
 		}
 	}
 
 	private void updateLastAccessedReferences() {
-		if(lastAccessTreeObject!=null){
+		if (lastAccessTreeObject != null) {
 			lastAccessTreeObject = getForm().findByComparationId(lastAccessTreeObject.getComparationId());
 		}
-		if(lastAccessDiagram!=null){
-			for(Diagram diagram: getForm().getDiagrams()){
-				if(diagram.getComparationId().equals(lastAccessDiagram.getComparationId())){
+		if (lastAccessDiagram != null) {
+			for (Diagram diagram : getForm().getDiagrams()) {
+				if (diagram.getComparationId().equals(lastAccessDiagram.getComparationId())) {
 					lastAccessDiagram = diagram;
 					break;
 				}
 			}
 		}
-		if(lastAccessExpression!=null){
-			for(ExpressionChain expression: getForm().getExpressionChains()){
-				if(expression.getComparationId().equals(lastAccessExpression.getComparationId())){
+		if (lastAccessExpression != null) {
+			for (ExpressionChain expression : getForm().getExpressionChains()) {
+				if (expression.getComparationId().equals(lastAccessExpression.getComparationId())) {
 					lastAccessExpression = expression;
 					break;
 				}
 			}
 		}
-		if(lastAccessTable!=null){
-			for(TableRule table: getForm().getTableRules()){
-				if(table.getComparationId().equals(lastAccessTable.getComparationId())){
+		if (lastAccessTable != null) {
+			for (TableRule table : getForm().getTableRules()) {
+				if (table.getComparationId().equals(lastAccessTable.getComparationId())) {
 					lastAccessTable = table;
 					break;
 				}
 			}
 		}
-		if(lastAccessRule!=null){
-			for(Rule rule: getForm().getRules()){
-				if(rule.getComparationId().equals(lastAccessRule.getComparationId())){
+		if (lastAccessRule != null) {
+			for (Rule rule : getForm().getRules()) {
+				if (rule.getComparationId().equals(lastAccessRule.getComparationId())) {
 					lastAccessRule = rule;
 					break;
 				}
@@ -312,10 +313,11 @@ public class FormController {
 	}
 
 	/**
-	 * Gets rules with treeObject as the common element for all the references in the rule.
+	 * Gets rules with treeObject as the common element for all the references
+	 * in the rule.
 	 * 
 	 * @param treeObject
-	 * @return
+	 * @return a set of rules
 	 */
 	public Set<Rule> getRulesAssignedToTreeObject(TreeObject treeObject) {
 		Set<Rule> assignedRules = new HashSet<>();
@@ -333,7 +335,7 @@ public class FormController {
 	 * Gets expressionChains that reference to a particular element.
 	 * 
 	 * @param element
-	 * @return
+	 * @return a set with the expressions
 	 */
 	public Set<ExpressionChain> getFormExpressionChainsAssignedToTreeObject(TreeObject element) {
 		Set<ExpressionChain> expressionChains = new HashSet<>();

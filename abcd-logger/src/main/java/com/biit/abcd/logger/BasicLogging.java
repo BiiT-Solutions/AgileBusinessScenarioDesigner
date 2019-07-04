@@ -18,13 +18,13 @@ import org.springframework.util.StopWatch;
 public class BasicLogging extends AbstractLogging {
 
 	/**
-	 * Following is the definition for a pointcut to select all the methods available. So advice will be called for all
-	 * the methods.
+	 * Following is the definition for a pointcut to select all the methods
+	 * available. So advice will be called for all the methods.
 	 */
 	@Pointcut("execution(* com.biit.abcd.persistence..*(..))")
 	private void selectAll() {
 	}
-	
+
 	/**
 	 * Using an existing annotation.
 	 */
@@ -33,7 +33,8 @@ public class BasicLogging extends AbstractLogging {
 	}
 
 	/**
-	 * This is the method which I would like to execute before a selected method execution.
+	 * This is the method which I would like to execute before a selected method
+	 * execution.
 	 */
 	@Before("selectAll()")
 	public void beforeAdvice() {
@@ -51,7 +52,8 @@ public class BasicLogging extends AbstractLogging {
 	}
 
 	/**
-	 * This is the method which I would like to execute after a selected method execution.
+	 * This is the method which I would like to execute after a selected method
+	 * execution.
 	 */
 	@After("selectAll()")
 	public void afterAdvice() {
@@ -59,6 +61,9 @@ public class BasicLogging extends AbstractLogging {
 
 	/**
 	 * This is the method which I would like to execute when any method returns.
+	 * 
+	 * @param retVal
+	 *            Returning value.
 	 */
 	@AfterReturning(pointcut = "selectAll() || isAnnotated()", returning = "retVal")
 	public void afterReturningAdvice(Object retVal) {
@@ -70,7 +75,11 @@ public class BasicLogging extends AbstractLogging {
 	}
 
 	/**
-	 * This is the method which I would like to execute if there is an exception raised by any method.
+	 * This is the method which I would like to execute if there is an exception
+	 * raised by any method.
+	 * 
+	 * @param ex
+	 *            exception to be handled
 	 */
 	@AfterThrowing(pointcut = "selectAll()", throwing = "ex")
 	public void AfterThrowingAdvice(IllegalArgumentException ex) {

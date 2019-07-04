@@ -39,7 +39,7 @@ public class PdfRow implements IPdfTableBlock{
 		return currentCols;
 	}
 	
-	public int getNumberCols() {
+	public int getNumberColumns() {
 		return numberCols;
 	}
 

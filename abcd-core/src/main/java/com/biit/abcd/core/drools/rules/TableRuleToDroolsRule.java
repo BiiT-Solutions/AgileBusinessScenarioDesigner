@@ -31,7 +31,7 @@ public class TableRuleToDroolsRule {
 	 * 
 	 * @param tableRule
 	 * @param extraConditions
-	 * @return
+	 * @return the list of rules
 	 * @throws ExpressionInvalidException
 	 * @throws RuleNotImplementedException
 	 * @throws ActionNotImplementedException
@@ -40,14 +40,16 @@ public class TableRuleToDroolsRule {
 	 * @throws InvalidExpressionException
 	 * @throws PrattParserException
 	 */
-	public static List<DroolsRule> parse(DiagramElement node, TableRule tableRule, ExpressionChain extraConditions) throws ExpressionInvalidException,
-			RuleNotImplementedException, ActionNotImplementedException, PrattParserException, InvalidExpressionException, NotCompatibleTypeException {
+	public static List<DroolsRule> parse(DiagramElement node, TableRule tableRule, ExpressionChain extraConditions)
+			throws ExpressionInvalidException, RuleNotImplementedException, ActionNotImplementedException,
+			PrattParserException, InvalidExpressionException, NotCompatibleTypeException {
 		List<DroolsRule> newRules = new ArrayList<>();
 		if (tableRule != null) {
 			String tableRuleName = tableRule.getName();
 			int i = 0;
 			for (TableRuleRow row : tableRule.getRules()) {
-				if (row.getAction() != null && row.getAction().getExpressions() != null && !row.getAction().getExpressions().isEmpty()) {
+				if (row.getAction() != null && row.getAction().getExpressions() != null
+						&& !row.getAction().getExpressions().isEmpty()) {
 					DroolsRule newRule = new DroolsRule();
 					ExpressionChain rowConditionExpression = convertTableRowToExpressionChain(row.getConditions());
 
@@ -87,7 +89,8 @@ public class TableRuleToDroolsRule {
 					&& (((ExpressionValueTreeObjectReference) questionExpression).getReference() != null)
 					&&
 					// Answer not empty
-					(answerExpression instanceof ExpressionChain) && (((ExpressionChain) answerExpression).getExpressions() != null)
+					(answerExpression instanceof ExpressionChain)
+					&& (((ExpressionChain) answerExpression).getExpressions() != null)
 					&& (!((ExpressionChain) answerExpression).getExpressions().isEmpty())) {
 
 				if (index > 0) {

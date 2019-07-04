@@ -44,7 +44,7 @@ public class PdfCol implements IPdfTableBlock {
 	}
 
 	@Override
-	public int getNumberCols() {
+	public int getNumberColumns() {
 		return numberCols;
 	}
 

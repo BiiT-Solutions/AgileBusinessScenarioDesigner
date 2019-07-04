@@ -25,7 +25,7 @@ public class GlobalVariablesController {
 	/**
 	 * Read all global variables from database. This method is synchronized.
 	 * 
-	 * @return
+	 * @return the list of variables.
 	 * @throws UnexpectedDatabaseException
 	 */
 	@FindBugsSuppressWarnings("DC_DOUBLECHECK")
@@ -73,9 +73,9 @@ public class GlobalVariablesController {
 			}
 
 			for (GlobalVariable globalVariable : globalVariables) {
-				if(globalVariable.getId()!=null){
+				if (globalVariable.getId() != null) {
 					globalVariablesDao.makePersistent(globalVariablesDao.merge(globalVariable));
-				}else{
+				} else {
 					globalVariablesDao.makePersistent(globalVariable);
 				}
 			}

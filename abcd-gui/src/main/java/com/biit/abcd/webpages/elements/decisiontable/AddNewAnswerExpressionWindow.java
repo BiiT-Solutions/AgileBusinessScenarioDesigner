@@ -9,8 +9,8 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariabl
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.webpages.components.AcceptCancelClearWindow;
 import com.biit.abcd.webpages.components.SelectFormAnswerTable;
-import com.biit.abcd.webpages.elements.expressionviewer.ExpressionEditorComponent;
-import com.biit.abcd.webpages.elements.expressionviewer.SimpleExpressionEditorComponent;
+import com.biit.abcd.webpages.elements.expression.viewer.ExpressionEditorComponent;
+import com.biit.abcd.webpages.elements.expression.viewer.SimpleExpressionEditorComponent;
 import com.biit.form.entity.TreeObject;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;

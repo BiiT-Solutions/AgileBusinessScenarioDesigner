@@ -50,8 +50,7 @@ public class Diagram extends StorableObject implements INameAttribute {
 
 	@SerializedName("cells")
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
-	@JoinTable(name = "elements_of_diagram", joinColumns=@JoinColumn(name="diagram", referencedColumnName="id"),
-		      inverseJoinColumns=@JoinColumn(name="diagram_object", referencedColumnName="id"))
+	@JoinTable(name = "elements_of_diagram", joinColumns = @JoinColumn(name = "diagram", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "diagram_object", referencedColumnName = "id"))
 	@BatchSize(size = 20)
 	private Set<DiagramObject> diagramObjects;
 
@@ -114,7 +113,7 @@ public class Diagram extends StorableObject implements INameAttribute {
 	 * Function to get the list of diagram object elements. Do not add elements
 	 * to this list, use the appropriate functions.
 	 * 
-	 * @return
+	 * @return all the diagram objects.
 	 */
 	public Set<DiagramObject> getDiagramObjects() {
 		return Collections.unmodifiableSet(diagramObjects);
@@ -175,7 +174,8 @@ public class Diagram extends StorableObject implements INameAttribute {
 	 * Retrieves all outgoing links of a specific Diagram Element.
 	 * 
 	 * @param source
-	 * @return
+	 *            the source to search.
+	 * @return all links
 	 */
 	public List<DiagramLink> getOutgoingLinks(DiagramElement source) {
 		List<DiagramLink> links = new ArrayList<>();
@@ -194,7 +194,8 @@ public class Diagram extends StorableObject implements INameAttribute {
 	 * Retrieves all incoming links of a specific Diagram Element.
 	 * 
 	 * @param source
-	 * @return
+	 *            the source
+	 * @return all incoming links
 	 */
 	public List<DiagramLink> getIncomingLinks(DiagramElement source) {
 		List<DiagramLink> links = new ArrayList<>();
@@ -246,7 +247,8 @@ public class Diagram extends StorableObject implements INameAttribute {
 					diagramElement.copyData(child);
 					addDiagramObject(diagramElement);
 				} catch (InstantiationException | IllegalAccessException e) {
-					throw new NotValidStorableObjectException("Object '" + object + "' has a problem copying '" + child + "'.");
+					throw new NotValidStorableObjectException("Object '" + object + "' has a problem copying '" + child
+							+ "'.");
 				}
 			}
 		} else {
@@ -258,6 +260,5 @@ public class Diagram extends StorableObject implements INameAttribute {
 	public String toString() {
 		return getName();
 	}
-
 
 }

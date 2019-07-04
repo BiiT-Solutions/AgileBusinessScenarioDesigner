@@ -23,8 +23,6 @@ public abstract class AbstractLogging {
 	/**
 	 * Method used for logging the name of the target class, parameters and the starting time.
 	 * 
-	 * @param millis
-	 *            execution time.
 	 * @param joinPoint
 	 *            join point containing all target information.
 	 * @param args

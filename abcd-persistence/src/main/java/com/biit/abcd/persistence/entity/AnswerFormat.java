@@ -30,9 +30,10 @@ public enum AnswerFormat {
 	/**
 	 * Used in drools to decide if a answerformat is treated as string.
 	 * 
-	 * @return
+	 * @return true is represents a string.
 	 */
 	public boolean isStringData() {
-		return this.equals(AnswerFormat.TEXT) || this.equals(AnswerFormat.MULTI_TEXT) || this.equals(AnswerFormat.POSTAL_CODE);
+		return this.equals(AnswerFormat.TEXT) || this.equals(AnswerFormat.MULTI_TEXT)
+				|| this.equals(AnswerFormat.POSTAL_CODE);
 	}
 }

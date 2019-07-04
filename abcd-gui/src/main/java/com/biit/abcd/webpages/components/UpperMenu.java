@@ -91,8 +91,8 @@ public abstract class UpperMenu extends SecuredMenu {
 		oldRootLayoutContainer.setStyleName(CLASSNAME_HORIZONTAL_BUTTON_WRAPPER);
 
 		// Add FormManager button.
-		formManagerButton = new IconButton(LanguageCodes.BOTTOM_MENU_FORM_MANAGER, ThemeIcon.FORM_MANAGER_PAGE, LanguageCodes.BOTTOM_MENU_FORM_MANAGER,
-				IconSize.BIG, new ClickListener() {
+		formManagerButton = new IconButton(LanguageCodes.BOTTOM_MENU_FORM_MANAGER, ThemeIcon.FORM_MANAGER_PAGE,
+				LanguageCodes.BOTTOM_MENU_FORM_MANAGER, IconSize.BIG, new ClickListener() {
 					private static final long serialVersionUID = 4002268252434768032L;
 
 					@Override
@@ -102,12 +102,16 @@ public abstract class UpperMenu extends SecuredMenu {
 							UserSessionHandler.getTestScenariosController().checkUnsavedChanges();
 							UiAccesser.releaseForm(UserSessionHandler.getUser());
 							ApplicationFrame.navigateTo(WebMap.FORM_MANAGER);
-						} catch (TreeObjectNotEqualsException | StorableObjectNotEqualsException | FormNotEqualsException | GroupNotEqualsException
-								| QuestionNotEqualsException | CustomVariableNotEqualsException | ExpressionNotEqualsException | TableRuleNotEqualsException
-								| RuleNotEqualsException | DiagramNotEqualsException | DiagramObjectNotEqualsException | NodeNotEqualsException
-								| SizeNotEqualsException | PointNotEqualsException | BiitTextNotEqualsException | GlobalVariableNotEqualsException
-								| VariableDataNotEqualsException | TestScenarioNotEqualsException e) {
-							final AlertMessageWindow windowAccept = new AlertMessageWindow(LanguageCodes.WARNING_LOST_UNSAVED_DATA);
+						} catch (TreeObjectNotEqualsException | StorableObjectNotEqualsException
+								| FormNotEqualsException | GroupNotEqualsException | QuestionNotEqualsException
+								| CustomVariableNotEqualsException | ExpressionNotEqualsException
+								| TableRuleNotEqualsException | RuleNotEqualsException | DiagramNotEqualsException
+								| DiagramObjectNotEqualsException | NodeNotEqualsException | SizeNotEqualsException
+								| PointNotEqualsException | BiitTextNotEqualsException
+								| GlobalVariableNotEqualsException | VariableDataNotEqualsException
+								| TestScenarioNotEqualsException e) {
+							final AlertMessageWindow windowAccept = new AlertMessageWindow(
+									LanguageCodes.WARNING_LOST_UNSAVED_DATA);
 							windowAccept.addAcceptActionListener(new AcceptActionListener() {
 								@Override
 								public void acceptAction(AcceptCancelWindow window) {
@@ -131,7 +135,8 @@ public abstract class UpperMenu extends SecuredMenu {
 
 		// First create the buttons of the submenu
 		List<IconButton> settingsButtonsList = createSettingButtons();
-		settingsButton = addSubMenu(ThemeIcon.SETTINGS, LanguageCodes.TOP_MENU_SETTINGS_TOOLTIP, LanguageCodes.TOP_MENU_SETTINGS_TOOLTIP, settingsButtonsList);
+		settingsButton = addSubMenu(ThemeIcon.SETTINGS, LanguageCodes.TOP_MENU_SETTINGS_TOOLTIP,
+				LanguageCodes.TOP_MENU_SETTINGS_TOOLTIP, settingsButtonsList);
 		settingsButton.setHeight("100%");
 		settingsButton.setWidth(BUTTON_WIDTH);
 		settingsButton.setId("settingsButton");
@@ -162,19 +167,21 @@ public abstract class UpperMenu extends SecuredMenu {
 	}
 
 	/**
+	 * Creates a submenu
 	 * 
 	 * @param icon
 	 * @param caption
 	 * @param tooltip
 	 * @param buttons
-	 * @return
+	 * @return an icon button.
 	 */
 	public IconButton addSubMenu(ThemeIcon icon, LanguageCodes caption, LanguageCodes tooltip, List<IconButton> buttons) {
 		IconButton subMenu = generateSubMenu(icon, caption, tooltip, buttons);
 		return subMenu;
 	}
 
-	public IconButton generateSubMenu(ThemeIcon icon, LanguageCodes caption, LanguageCodes tooltip, final List<IconButton> buttons) {
+	public IconButton generateSubMenu(ThemeIcon icon, LanguageCodes caption, LanguageCodes tooltip,
+			final List<IconButton> buttons) {
 		for (IconButton button : buttons) {
 			button.addStyleName("v-popover-upper-submenu");
 		}
@@ -219,7 +226,8 @@ public abstract class UpperMenu extends SecuredMenu {
 		rootLayout.setHeight(null);
 
 		// Settings menu.
-		IconButton aboutUsButton = new IconButton(LanguageCodes.CAPTION_ABOUT_US, ThemeIcon.ABOUT_US, LanguageCodes.TOOLTIP_ABOUT_US, IconSize.MEDIUM);
+		IconButton aboutUsButton = new IconButton(LanguageCodes.CAPTION_ABOUT_US, ThemeIcon.ABOUT_US,
+				LanguageCodes.TOOLTIP_ABOUT_US, IconSize.MEDIUM);
 		aboutUsButton.addClickListener(new ClickListener() {
 			private static final long serialVersionUID = -4996751752953783384L;
 
@@ -233,9 +241,11 @@ public abstract class UpperMenu extends SecuredMenu {
 		// Global Constant Button can be only used by users with an specific
 		// role.
 		try {
-			if (getSecurityService().isAuthorizedActivity(UserSessionHandler.getUser(), AbcdActivity.GLOBAL_VARIABLE_EDITOR)) {
-				globalConstantsButton = new IconButton(LanguageCodes.SETTINGS_GLOBAL_CONSTANTS, ThemeIcon.EXPRESSION_EDITOR_TAB_GLOBAL_CONSTANTS,
-						LanguageCodes.SETTINGS_GLOBAL_CONSTANTS, IconSize.MEDIUM);
+			if (getSecurityService().isAuthorizedActivity(UserSessionHandler.getUser(),
+					AbcdActivity.GLOBAL_VARIABLE_EDITOR)) {
+				globalConstantsButton = new IconButton(LanguageCodes.SETTINGS_GLOBAL_CONSTANTS,
+						ThemeIcon.EXPRESSION_EDITOR_TAB_GLOBAL_CONSTANTS, LanguageCodes.SETTINGS_GLOBAL_CONSTANTS,
+						IconSize.MEDIUM);
 				globalConstantsButton.addClickListener(new ClickListener() {
 					private static final long serialVersionUID = 5662848461729745562L;
 
@@ -244,12 +254,15 @@ public abstract class UpperMenu extends SecuredMenu {
 						try {
 							UserSessionHandler.getFormController().checkUnsavedChanges();
 							ApplicationFrame.navigateTo(WebMap.GLOBAL_VARIABLES);
-						} catch (TreeObjectNotEqualsException | StorableObjectNotEqualsException | FormNotEqualsException | GroupNotEqualsException
-								| QuestionNotEqualsException | CustomVariableNotEqualsException | ExpressionNotEqualsException | TableRuleNotEqualsException
-								| RuleNotEqualsException | DiagramNotEqualsException | DiagramObjectNotEqualsException | NodeNotEqualsException
-								| SizeNotEqualsException | PointNotEqualsException | BiitTextNotEqualsException | GlobalVariableNotEqualsException
-								| VariableDataNotEqualsException e) {
-							final AlertMessageWindow windowAccept = new AlertMessageWindow(LanguageCodes.WARNING_LOST_UNSAVED_DATA);
+						} catch (TreeObjectNotEqualsException | StorableObjectNotEqualsException
+								| FormNotEqualsException | GroupNotEqualsException | QuestionNotEqualsException
+								| CustomVariableNotEqualsException | ExpressionNotEqualsException
+								| TableRuleNotEqualsException | RuleNotEqualsException | DiagramNotEqualsException
+								| DiagramObjectNotEqualsException | NodeNotEqualsException | SizeNotEqualsException
+								| PointNotEqualsException | BiitTextNotEqualsException
+								| GlobalVariableNotEqualsException | VariableDataNotEqualsException e) {
+							final AlertMessageWindow windowAccept = new AlertMessageWindow(
+									LanguageCodes.WARNING_LOST_UNSAVED_DATA);
 							windowAccept.addAcceptActionListener(new AcceptActionListener() {
 								@Override
 								public void acceptAction(AcceptCancelWindow window) {
@@ -271,14 +284,15 @@ public abstract class UpperMenu extends SecuredMenu {
 		// Clear cache for admin users.
 		try {
 			if (getSecurityService().isAuthorizedActivity(UserSessionHandler.getUser(), AbcdActivity.EVICT_CACHE)) {
-				clearCacheButton = new IconButton(LanguageCodes.SETTINGS_CLEAR_CACHE, ThemeIcon.CLEAR_CACHE, LanguageCodes.SETTINGS_CLEAR_CACHE,
-						IconSize.MEDIUM);
+				clearCacheButton = new IconButton(LanguageCodes.SETTINGS_CLEAR_CACHE, ThemeIcon.CLEAR_CACHE,
+						LanguageCodes.SETTINGS_CLEAR_CACHE, IconSize.MEDIUM);
 				clearCacheButton.addClickListener(new ClickListener() {
 					private static final long serialVersionUID = -1121572145945309858L;
 
 					@Override
 					public void buttonClick(ClickEvent event) {
-						final AlertMessageWindow windowAccept = new AlertMessageWindow(LanguageCodes.WARNING_CLEAR_CACHE);
+						final AlertMessageWindow windowAccept = new AlertMessageWindow(
+								LanguageCodes.WARNING_CLEAR_CACHE);
 						windowAccept.addAcceptActionListener(new AcceptActionListener() {
 							@Override
 							public void acceptAction(AcceptCancelWindow window) {
@@ -290,7 +304,8 @@ public abstract class UpperMenu extends SecuredMenu {
 								// Reset Liferay Users pool.
 								getSecurityService().reset();
 								ApplicationFrame.navigateTo(WebMap.FORM_MANAGER);
-								AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
+								AbcdLogger.info(this.getClass().getName(), "User '"
+										+ UserSessionHandler.getUser().getEmailAddress()
 										+ "' has cleared all the 2nd level cache.");
 								MessageManager.showInfo(LanguageCodes.INFO_CACHE_CLEARED);
 								windowAccept.close();
@@ -307,7 +322,8 @@ public abstract class UpperMenu extends SecuredMenu {
 		}
 
 		// Only if you are not connected using Liferay.
-		logoutButton = new IconButton(LanguageCodes.SETTINGS_LOG_OUT, ThemeIcon.LOG_OUT, LanguageCodes.SETTINGS_LOG_OUT, IconSize.MEDIUM);
+		logoutButton = new IconButton(LanguageCodes.SETTINGS_LOG_OUT, ThemeIcon.LOG_OUT,
+				LanguageCodes.SETTINGS_LOG_OUT, IconSize.MEDIUM);
 		logoutButton.addClickListener(new ClickListener() {
 			private static final long serialVersionUID = -1121572145945309858L;
 
@@ -316,12 +332,14 @@ public abstract class UpperMenu extends SecuredMenu {
 				try {
 					UserSessionHandler.getFormController().checkUnsavedChanges();
 					logout();
-				} catch (TreeObjectNotEqualsException | StorableObjectNotEqualsException | FormNotEqualsException | GroupNotEqualsException
-						| QuestionNotEqualsException | CustomVariableNotEqualsException | ExpressionNotEqualsException | TableRuleNotEqualsException
-						| RuleNotEqualsException | DiagramNotEqualsException | DiagramObjectNotEqualsException | NodeNotEqualsException
-						| SizeNotEqualsException | PointNotEqualsException | BiitTextNotEqualsException | GlobalVariableNotEqualsException
-						| VariableDataNotEqualsException e) {
-					final AlertMessageWindow windowAccept = new AlertMessageWindow(LanguageCodes.WARNING_LOST_UNSAVED_DATA);
+				} catch (TreeObjectNotEqualsException | StorableObjectNotEqualsException | FormNotEqualsException
+						| GroupNotEqualsException | QuestionNotEqualsException | CustomVariableNotEqualsException
+						| ExpressionNotEqualsException | TableRuleNotEqualsException | RuleNotEqualsException
+						| DiagramNotEqualsException | DiagramObjectNotEqualsException | NodeNotEqualsException
+						| SizeNotEqualsException | PointNotEqualsException | BiitTextNotEqualsException
+						| GlobalVariableNotEqualsException | VariableDataNotEqualsException e) {
+					final AlertMessageWindow windowAccept = new AlertMessageWindow(
+							LanguageCodes.WARNING_LOST_UNSAVED_DATA);
 					windowAccept.addAcceptActionListener(new AcceptActionListener() {
 						@Override
 						public void acceptAction(AcceptCancelWindow window) {

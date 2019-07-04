@@ -135,15 +135,17 @@ public class ExpressionChain extends Expression implements INameAttribute {
 	 * Returns the expression in string format that can be evaluated by a
 	 * Expression Evaluator.
 	 * 
-	 * @return
+	 * @return the expression as string.
 	 */
 	@Override
 	public String getExpression() {
 		String result = "";
 		for (int i = 0; i < expressions.size(); i++) {
 			// Dots are not allowed in the Evaluator Expression.
-			if ((expressions.get(i) instanceof ExpressionValueString) || (expressions.get(i) instanceof ExpressionValueTreeObjectReference)
-					|| (expressions.get(i) instanceof ExpressionValueCustomVariable) || (expressions.get(i) instanceof ExpressionValueGlobalVariable)) {
+			if ((expressions.get(i) instanceof ExpressionValueString)
+					|| (expressions.get(i) instanceof ExpressionValueTreeObjectReference)
+					|| (expressions.get(i) instanceof ExpressionValueCustomVariable)
+					|| (expressions.get(i) instanceof ExpressionValueGlobalVariable)) {
 				result += filterVariables(expressions.get(i)) + " ";
 			} else {
 				result += expressions.get(i).getExpression() + " ";
@@ -163,7 +165,7 @@ public class ExpressionChain extends Expression implements INameAttribute {
 	/**
 	 * Only for using with hibernate.
 	 * 
-	 * @return
+	 * @return a list of expressions.
 	 */
 	public List<Expression> getExpressionsForInitializeSet() {
 		return expressions;
@@ -273,7 +275,8 @@ public class ExpressionChain extends Expression implements INameAttribute {
 					expressionCopied.copyData(expression);
 					addExpression(expressionCopied);
 				} catch (InstantiationException | IllegalAccessException e) {
-					throw new NotValidStorableObjectException("Object '" + object + "' is not an instance of ExpressionChain.");
+					throw new NotValidStorableObjectException("Object '" + object
+							+ "' is not an instance of ExpressionChain.");
 				}
 			}
 		} else {

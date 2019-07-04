@@ -18,8 +18,7 @@ public class TableTreeObjectLabel extends TreeObjectTable {
 	@Override
 	protected void initContainerProperties() {
 		super.initContainerProperties();
-		addContainerProperty(TreeObjectTableDesignerProperties.ELEMENT_LABEL, String.class, null,
-				"", null, Align.LEFT);
+		addContainerProperty(TreeObjectTableDesignerProperties.ELEMENT_LABEL, String.class, null, "", null, Align.LEFT);
 	}
 
 	@Override
@@ -29,29 +28,32 @@ public class TableTreeObjectLabel extends TreeObjectTable {
 		if (label == null) {
 			label = new String();
 		}
-		setLabelToItem(item,label);
+		setLabelToItem(item, label);
 	}
-	
+
 	/**
 	 * Sets label to item and cuts label to max length.
+	 * 
 	 * @param item
 	 * @param label
 	 */
 	@SuppressWarnings("unchecked")
-	protected void setLabelToItem(Item item, String label){
-		if(label.length()>LABEL_MAX_LENGTH){
-			label = label.substring(0, LABEL_MAX_LENGTH-1);
-			label +="...";
+	protected void setLabelToItem(Item item, String label) {
+		if (label.length() > LABEL_MAX_LENGTH) {
+			label = label.substring(0, LABEL_MAX_LENGTH - 1);
+			label += "...";
 		}
 		item.getItemProperty(TreeObjectTableDesignerProperties.ELEMENT_LABEL).setValue(label);
 	}
 
 	/**
 	 * Expands the tree until treeObject
-	 * @param whereToMove
+	 * 
+	 * @param treeObject
+	 *            the tree object.
 	 */
 	public void expand(TreeObject treeObject) {
-		if(treeObject.getParent()!=null){
+		if (treeObject.getParent() != null) {
 			expand(treeObject.getParent());
 		}
 		setCollapsed(treeObject, false);

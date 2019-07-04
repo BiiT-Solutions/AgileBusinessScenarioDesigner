@@ -26,7 +26,8 @@ public class ParagraphGenerator {
 		return generate("", PdfFont.NORMAL_FONT, PdfAlign.ALIGN_CENTER, spacing);
 	}
 
-	public static Paragraph generate(String content, PdfFont font, PdfAlign align, float spacing) throws DocumentException {
+	public static Paragraph generate(String content, PdfFont font, PdfAlign align, float spacing)
+			throws DocumentException {
 		Paragraph annexTitle = new Paragraph(content, font.getFont());
 		annexTitle.setAlignment(align.getAlignment());
 		annexTitle.setSpacingAfter(spacing);
@@ -37,18 +38,21 @@ public class ParagraphGenerator {
 		document.add(generate(content, PdfFont.FORM_TITLE_FONT, align, PADDING));
 	}
 
-	public static void generateAndAddSubtitle(Document document, String content, PdfAlign align) throws DocumentException {
+	public static void generateAndAddSubtitle(Document document, String content, PdfAlign align)
+			throws DocumentException {
 		document.add(generate(content, PdfFont.SUBTITLE_FONT, align, PADDING * 2));
 	}
 
-	public static void generateAndAddFormTitle(Document document, String content, PdfAlign align) throws DocumentException {
+	public static void generateAndAddFormTitle(Document document, String content, PdfAlign align)
+			throws DocumentException {
 		Paragraph title = new Paragraph(new Paragraph(content, PdfFont.FORM_TITLE_FONT.getFont()));
 		title.setAlignment(align.getAlignment());
 		title.setSpacingAfter(PADDING);
 		document.add(title);
 	}
 
-	public static void generateAndAddAnnexTitle(Document document, String content, PdfAlign align) throws DocumentException {
+	public static void generateAndAddAnnexTitle(Document document, String content, PdfAlign align)
+			throws DocumentException {
 		document.add(generate(content, PdfFont.ANNEX_TITLE_FONT, align, PADDING));
 	}
 
@@ -104,7 +108,8 @@ public class ParagraphGenerator {
 	}
 
 	public static Paragraph generateFieldName(Question question) {
-		String label = question.getAnswerType() != AnswerType.MULTI_CHECKBOX ? question.getLabel() + "*" : question.getLabel();
+		String label = question.getAnswerType() != AnswerType.MULTI_CHECKBOX ? question.getLabel() + "*" : question
+				.getLabel();
 		return new Paragraph(label, PdfFont.NORMAL_FONT.getFont());
 	}
 
@@ -112,7 +117,7 @@ public class ParagraphGenerator {
 	 * Text for descriptions
 	 * 
 	 * @param description
-	 * @return
+	 * @return the Phrase
 	 */
 	public static Phrase generateDescription(String description) {
 		return new Paragraph("Hint: " + description, PdfFont.DESCRIPTION_FONT.getFont());

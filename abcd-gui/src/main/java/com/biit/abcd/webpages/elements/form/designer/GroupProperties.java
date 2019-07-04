@@ -1,0 +1,122 @@
+package com.biit.abcd.webpages.elements.form.designer;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
+import com.biit.abcd.MessageManager;
+import com.biit.abcd.authentication.UserSessionHandler;
+import com.biit.abcd.language.LanguageCodes;
+import com.biit.abcd.language.ServerTranslate;
+import com.biit.abcd.logger.AbcdLogger;
+import com.biit.abcd.persistence.entity.Group;
+import com.biit.abcd.webpages.elements.form.designer.validators.ValidatorDuplicateNameOnSameTreeObjectLevel;
+import com.biit.abcd.webpages.elements.form.designer.validators.ValidatorTreeObjectName;
+import com.biit.abcd.webpages.elements.form.designer.validators.ValidatorTreeObjectNameLength;
+import com.biit.form.entity.TreeObject;
+import com.biit.form.exceptions.CharacterNotAllowedException;
+import com.biit.persistence.entity.exceptions.FieldTooLongException;
+import com.vaadin.data.validator.RegexpValidator;
+import com.vaadin.ui.AbstractComponent;
+import com.vaadin.ui.CheckBox;
+import com.vaadin.ui.FormLayout;
+import com.vaadin.ui.TextField;
+
+public class GroupProperties extends SecuredFormElementProperties<Group> {
+	private static final long serialVersionUID = -7673405239560362757L;
+
+	private Group instance;
+	private TextField groupLabel;
+	private CheckBox groupIsRepeatable;
+	private final String TECHNICAL_NAME_VALIDATOR_REGEX = "([A-Za-z\\xc0-\\xd6\\xd8-\\xf6\\xf8-\\xff_])([0-9A-Za-z\\xc0-\\xd6\\xd8-\\xf6\\xf8-\\xff\\_\\xb7]){2,}";
+
+	public GroupProperties() {
+		super(Group.class);
+	}
+
+	@Override
+	public void setElementForProperties(Group element) {
+		instance = element;
+
+		groupLabel = new TextField(ServerTranslate.translate(LanguageCodes.PROPERTIES_TECHNICAL_NAME));
+		groupLabel.addValidator(new ValidatorTreeObjectName(instance.getNameAllowedPattern()));
+		groupLabel.addValidator(new ValidatorDuplicateNameOnSameTreeObjectLevel(instance));
+		groupLabel.addValidator(new ValidatorTreeObjectNameLength());
+		groupLabel.addValidator(new RegexpValidator(TECHNICAL_NAME_VALIDATOR_REGEX, ServerTranslate
+				.translate(LanguageCodes.TECHNICAL_NAME_ERROR)));
+		groupLabel.setValue(instance.getName());
+
+		groupIsRepeatable = new CheckBox(ServerTranslate.translate(LanguageCodes.GROUP_PROPERTIES_REPEAT));
+		groupIsRepeatable.setValue(instance.isRepeatable());
+
+		FormLayout answerForm = new FormLayout();
+		answerForm.setWidth(null);
+		answerForm.addComponent(groupLabel);
+		answerForm.addComponent(groupIsRepeatable);
+
+		addTab(answerForm, ServerTranslate.translate(LanguageCodes.TREE_OBJECT_PROPERTIES_GROUP_FORM_CAPTION), true, 0);
+	}
+
+	@Override
+	protected void updateConcreteFormElement() {
+		if (groupLabel.isValid()) {
+			String instanceName = instance.getName();
+			// To avoid setting repeated values
+			if (!groupLabel.getValue().equals(instanceName)) {
+				try {
+					instance.setName(groupLabel.getValue());
+					AbcdLogger.info(this.getClass().getName(), "User '"
+							+ UserSessionHandler.getUser().getEmailAddress() + "' has modified the Group '"
+							+ instanceName + "' property 'Name' to '" + instance.getName() + "'.");
+				} catch (FieldTooLongException e) {
+					MessageManager.showWarning(LanguageCodes.WARNING_NAME_TOO_LONG,
+							LanguageCodes.WARNING_NAME_TOO_LONG_DESCRIPTION);
+					try {
+						try {
+							instance.setName(groupLabel.getValue().substring(0, 185));
+							AbcdLogger.info(this.getClass().getName(), "User '"
+									+ UserSessionHandler.getUser().getEmailAddress() + "' has modified the Group '"
+									+ instanceName + "' property 'Name' to '" + instance.getName()
+									+ "' (Name too long).");
+						} catch (CharacterNotAllowedException e1) {
+							MessageManager.showWarning(LanguageCodes.WARNING_NAME_INVALID_CHARACTERS, LanguageCodes.WARNING_NAME_INVALID_CHARACTERS_DESCRIPTION, 
+											instance.getName(), instance.getSimpleAsciiName() );
+							try {
+								instance.setName(instance.getSimpleAsciiName());
+							} catch (CharacterNotAllowedException e2) {
+								// Impossible.
+							}
+						}
+					} catch (FieldTooLongException e1) {
+						// Impossible.
+					}
+				} catch (CharacterNotAllowedException e) {
+					MessageManager.showWarning(LanguageCodes.WARNING_NAME_INVALID_CHARACTERS,LanguageCodes.WARNING_NAME_INVALID_CHARACTERS_DESCRIPTION, 
+											instance.getName(), instance.getSimpleAsciiName() );
+					try {
+						instance.setName(instance.getSimpleAsciiName());
+					} catch (FieldTooLongException | CharacterNotAllowedException e1) {
+						// Impossible.
+					}
+				}
+			}
+			if (groupIsRepeatable.getValue() != instance.isRepeatable()) {
+				instance.setRepeatable(groupIsRepeatable.getValue());
+				AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
+						+ "'Group '" + instance.getName() + "' value 'Repeat' set to '" + groupIsRepeatable.getValue()
+						+ "'.");
+			}
+
+		}
+	}
+
+	@Override
+	protected TreeObject getTreeObjectInstance() {
+		return instance;
+	}
+
+	@Override
+	protected Set<AbstractComponent> getProtectedElements() {
+		return new HashSet<AbstractComponent>(Arrays.asList(groupLabel, groupIsRepeatable));
+	}
+}

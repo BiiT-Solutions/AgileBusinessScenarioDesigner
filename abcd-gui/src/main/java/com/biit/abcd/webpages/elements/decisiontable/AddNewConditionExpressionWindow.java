@@ -2,8 +2,8 @@ package com.biit.abcd.webpages.elements.decisiontable;
 
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
-import com.biit.abcd.webpages.elements.expressionviewer.SimpleConditionEditorComponent;
-import com.biit.abcd.webpages.elements.expressionviewer.SimpleExpressionEditorComponent;
+import com.biit.abcd.webpages.elements.expression.viewer.SimpleConditionEditorComponent;
+import com.biit.abcd.webpages.elements.expression.viewer.SimpleExpressionEditorComponent;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.VerticalLayout;
 

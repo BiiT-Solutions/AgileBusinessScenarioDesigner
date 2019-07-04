@@ -66,7 +66,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 @Entity
-@Table(name = "tree_forms", uniqueConstraints = { @UniqueConstraint(columnNames = { "label", "version", "organization_id" }) })
+@Table(name = "tree_forms", uniqueConstraints = { @UniqueConstraint(columnNames = { "label", "version",
+		"organization_id" }) })
 @AttributeOverride(name = "label", column = @Column(length = StorableObject.MAX_UNIQUE_COLUMN_LENGTH, columnDefinition = "varchar("
 		+ StorableObject.MAX_UNIQUE_COLUMN_LENGTH + ")"))
 @Cacheable(true)
@@ -321,7 +322,8 @@ public class Form extends BaseForm {
 					if (formDiagrams.get(diagramChild.getDiagram().getComparationId()) != null) {
 						diagramChild.setDiagram(formDiagrams.get(diagramChild.getDiagram().getComparationId()));
 					} else {
-						AbcdLogger.warning(this.getClass().getName(), "Adding diagram '" + diagramChild.getDiagram() + "'.");
+						AbcdLogger.warning(this.getClass().getName(), "Adding diagram '" + diagramChild.getDiagram()
+								+ "'.");
 						formDiagrams.put(diagramChild.getDiagram().getComparationId(), diagramChild.getDiagram());
 					}
 				}
@@ -335,16 +337,20 @@ public class Form extends BaseForm {
 	 * @param storableObjects
 	 * @param formTableRules
 	 */
-	private void updateDiagramExpressionReferences(Set<StorableObject> storableObjects, Map<String, ExpressionChain> formExpressionChains) {
+	private void updateDiagramExpressionReferences(Set<StorableObject> storableObjects,
+			Map<String, ExpressionChain> formExpressionChains) {
 		for (StorableObject child : storableObjects) {
 			if (child instanceof DiagramExpression) {
 				DiagramExpression diagramExpression = (DiagramExpression) child;
 				if (diagramExpression.getExpression() != null) {
 					if (formExpressionChains.get(diagramExpression.getExpression().getComparationId()) != null) {
-						diagramExpression.setExpression(formExpressionChains.get(diagramExpression.getExpression().getComparationId()));
+						diagramExpression.setExpression(formExpressionChains.get(diagramExpression.getExpression()
+								.getComparationId()));
 					} else {
-						AbcdLogger.warning(this.getClass().getName(), "Adding expression '" + diagramExpression.getExpression() + "'.");
-						formExpressionChains.put(diagramExpression.getExpression().getComparationId(), diagramExpression.getExpression());
+						AbcdLogger.warning(this.getClass().getName(),
+								"Adding expression '" + diagramExpression.getExpression() + "'.");
+						formExpressionChains.put(diagramExpression.getExpression().getComparationId(),
+								diagramExpression.getExpression());
 					}
 				}
 			}
@@ -379,7 +385,8 @@ public class Form extends BaseForm {
 	 * @param storableObjects
 	 * @param formTableRules
 	 */
-	private void updateDiagramTableRuleReferences(Set<StorableObject> storableObjects, Map<String, TableRule> formTableRules) {
+	private void updateDiagramTableRuleReferences(Set<StorableObject> storableObjects,
+			Map<String, TableRule> formTableRules) {
 		for (StorableObject child : storableObjects) {
 			if (child instanceof DiagramTable) {
 				DiagramTable diagramTable = (DiagramTable) child;
@@ -387,7 +394,8 @@ public class Form extends BaseForm {
 					if (formTableRules.get(diagramTable.getTable().getComparationId()) != null) {
 						diagramTable.setTable(formTableRules.get(diagramTable.getTable().getComparationId()));
 					} else {
-						AbcdLogger.warning(this.getClass().getName(), "Adding table '" + diagramTable.getTable() + "'.");
+						AbcdLogger
+								.warning(this.getClass().getName(), "Adding table '" + diagramTable.getTable() + "'.");
 						formTableRules.put(diagramTable.getTable().getComparationId(), diagramTable.getTable());
 					}
 				}
@@ -408,10 +416,11 @@ public class Form extends BaseForm {
 				ExpressionValueTreeObjectReference expressionValueTreeObjectReference = (ExpressionValueTreeObjectReference) child;
 				if (expressionValueTreeObjectReference.getReference() != null) {
 					if (formElements.get(expressionValueTreeObjectReference.getReference().getOriginalReference()) != null) {
-						expressionValueTreeObjectReference.setReference(formElements.get(expressionValueTreeObjectReference.getReference()
-								.getOriginalReference()));
+						expressionValueTreeObjectReference.setReference(formElements
+								.get(expressionValueTreeObjectReference.getReference().getOriginalReference()));
 					} else {
-						AbcdLogger.warning(this.getClass().getName(), "Adding reference '" + expressionValueTreeObjectReference.getReference() + "'.");
+						AbcdLogger.warning(this.getClass().getName(), "Adding reference '"
+								+ expressionValueTreeObjectReference.getReference() + "'.");
 						formElements.put(expressionValueTreeObjectReference.getReference().getOriginalReference(),
 								expressionValueTreeObjectReference.getReference());
 					}
@@ -427,24 +436,28 @@ public class Form extends BaseForm {
 	 * @param formElements
 	 * @param formVariables
 	 */
-	private void updateVariablesReferences(Set<StorableObject> storableObjects, Map<String, CustomVariable> formVariables) {
+	private void updateVariablesReferences(Set<StorableObject> storableObjects,
+			Map<String, CustomVariable> formVariables) {
 		for (StorableObject child : storableObjects) {
 			if (child instanceof ExpressionValueCustomVariable) {
 				ExpressionValueCustomVariable expressionValueCustomVariable = (ExpressionValueCustomVariable) child;
 				if (expressionValueCustomVariable.getVariable() != null) {
 					if (formVariables.get(expressionValueCustomVariable.getVariable().getComparationId()) != null) {
-						expressionValueCustomVariable.setVariable(formVariables.get(expressionValueCustomVariable.getVariable().getComparationId()));
+						expressionValueCustomVariable.setVariable(formVariables.get(expressionValueCustomVariable
+								.getVariable().getComparationId()));
 					} else {
-						formVariables.put(expressionValueCustomVariable.getVariable().getComparationId(), expressionValueCustomVariable.getVariable());
+						formVariables.put(expressionValueCustomVariable.getVariable().getComparationId(),
+								expressionValueCustomVariable.getVariable());
 					}
 				}
 			} else if (child instanceof ExpressionValueGenericCustomVariable) {
 				ExpressionValueGenericCustomVariable expressionValueGenericCustomVariable = (ExpressionValueGenericCustomVariable) child;
 				if (formVariables.get(expressionValueGenericCustomVariable.getVariable().getComparationId()) != null) {
-					expressionValueGenericCustomVariable.setVariable(formVariables.get(expressionValueGenericCustomVariable.getVariable().getComparationId()));
+					expressionValueGenericCustomVariable.setVariable(formVariables
+							.get(expressionValueGenericCustomVariable.getVariable().getComparationId()));
 				} else {
-					formVariables
-							.put(expressionValueGenericCustomVariable.getVariable().getComparationId(), expressionValueGenericCustomVariable.getVariable());
+					formVariables.put(expressionValueGenericCustomVariable.getVariable().getComparationId(),
+							expressionValueGenericCustomVariable.getVariable());
 				}
 			}
 		}
@@ -528,7 +541,7 @@ public class Form extends BaseForm {
 	 * Get Custom variables for a specific tree Object.
 	 * 
 	 * @param treeObject
-	 * @return
+	 * @return the list of variables.
 	 */
 	public List<CustomVariable> getCustomVariables(TreeObject treeObject) {
 		List<CustomVariable> customVariablesInThisElement = new ArrayList<CustomVariable>();
@@ -543,8 +556,9 @@ public class Form extends BaseForm {
 	/**
 	 * Get Custom variables for a generic tree Object.
 	 * 
-	 * @param treeObject
-	 * @return
+	 * @param treeObjectClass
+	 *            the class
+	 * @return the list of variables.
 	 */
 	public List<CustomVariable> getCustomVariables(Class<?> treeObjectClass) {
 		List<CustomVariable> customVariablesInThisElement = new ArrayList<CustomVariable>();
@@ -596,6 +610,8 @@ public class Form extends BaseForm {
 	 * diagram.
 	 * 
 	 * @param diagram
+	 *            the diagram.
+	 * @return the parent.
 	 */
 	public Diagram getDiagramParent(Diagram diagram) {
 		for (Diagram parentDiagram : getDiagrams()) {
@@ -737,8 +753,6 @@ public class Form extends BaseForm {
 
 	/**
 	 * Disable lazy behavior of Form element. Needed for using spring cache.
-	 * 
-	 * @param form
 	 */
 	@Override
 	public void initializeSets() {
@@ -756,8 +770,8 @@ public class Form extends BaseForm {
 		return getLabel();
 	}
 
-	public synchronized static TreeObject move(TreeObject objectToMove, TreeObject toParent) throws ChildrenNotFoundException, NotValidChildException,
-			ElementIsReadOnly {
+	public synchronized static TreeObject move(TreeObject objectToMove, TreeObject toParent)
+			throws ChildrenNotFoundException, NotValidChildException, ElementIsReadOnly {
 		if (!Objects.equals(objectToMove.getAncestor(Form.class), toParent.getAncestor(Form.class))) {
 			throw new NotValidChildException("Root form for each element is different");
 		}
@@ -774,7 +788,7 @@ public class Form extends BaseForm {
 	 * Only transforms the form structure, it doesn't add rules, expressions,
 	 * variables ...
 	 * 
-	 * @return
+	 * @return the json representation.
 	 */
 	public String toJson() {
 		GsonBuilder gsonBuilder = new GsonBuilder();

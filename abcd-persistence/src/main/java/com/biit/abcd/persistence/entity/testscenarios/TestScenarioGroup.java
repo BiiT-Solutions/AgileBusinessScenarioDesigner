@@ -18,8 +18,8 @@ import com.biit.persistence.entity.exceptions.FieldTooLongException;
 public class TestScenarioGroup extends BaseRepeatableGroup {
 	private static final long serialVersionUID = -1684961388128862471L;
 	private static final String DEFAULT_GROUP_NAME = "TestScenarioGroup";
-	
-	@Column(name="add_enabled")
+
+	@Column(name = "add_enabled")
 	private boolean addEnabled;
 
 	public TestScenarioGroup() {
@@ -33,10 +33,11 @@ public class TestScenarioGroup extends BaseRepeatableGroup {
 
 	/**
 	 * Creates a copy of the group and its children.<br>
-	 * The father needs a clean enabled attribute, but the children have to maintain their attribute value.
+	 * The father needs a clean enabled attribute, but the children have to
+	 * maintain their attribute value.
 	 * 
 	 * @param isChildren
-	 * @return
+	 * @return the test scenario group
 	 * @throws NotValidChildException
 	 * @throws FieldTooLongException
 	 * @throws CharacterNotAllowedException

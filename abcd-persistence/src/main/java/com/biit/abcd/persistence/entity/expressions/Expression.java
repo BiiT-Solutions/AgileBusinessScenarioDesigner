@@ -13,7 +13,8 @@ import com.biit.persistence.entity.StorableObject;
 import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 
 /**
- * Basic class for defining an expression. Any other expression must inherit from this class.
+ * Basic class for defining an expression. Any other expression must inherit
+ * from this class.
  * 
  */
 @Entity
@@ -29,7 +30,7 @@ public abstract class Expression extends StorableObject {
 	// For solving Hibernate bug https://hibernate.atlassian.net/browse/HHH-1268
 	// we cannot use the list of children with
 	// @Orderby or @OrderColumn we use our own order manager.
-	@Column(name="sort_sequence", nullable = false)
+	@Column(name = "sort_sequence", nullable = false)
 	private long sortSeq = 0;
 
 	public Expression() {
@@ -56,17 +57,18 @@ public abstract class Expression extends StorableObject {
 	}
 
 	/**
-	 * Returns the expression in string format that can be evaluated by a Expression Evaluator. Not allowed characters
-	 * are ',', '.', ':', operators, ... that must filtered of the expression if necessary.
+	 * Returns the expression in string format that can be evaluated by a
+	 * Expression Evaluator. Not allowed characters are ',', '.', ':',
+	 * operators, ... that must filtered of the expression if necessary.
 	 * 
-	 * @return
+	 * @return the expression as a string.
 	 */
 	protected abstract String getExpression();
 
 	/**
 	 * Returns a text representation of the Expression
 	 * 
-	 * @return
+	 * @return a string as a representation.
 	 */
 	public abstract String getRepresentation(boolean showWhiteCharacter);
 

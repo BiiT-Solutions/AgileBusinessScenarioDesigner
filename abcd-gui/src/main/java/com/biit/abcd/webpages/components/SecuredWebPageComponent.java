@@ -17,7 +17,8 @@ import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.VaadinServlet;
 
 /**
- * Before entering to the web page, the system checks user permissions to allow the access or redirect to another page.
+ * Before entering to the web page, the system checks user permissions to allow
+ * the access or redirect to another page.
  */
 public abstract class SecuredWebPageComponent extends WebPageComponent {
 	private static final long serialVersionUID = 1948083638306683637L;
@@ -34,9 +35,11 @@ public abstract class SecuredWebPageComponent extends WebPageComponent {
 	}
 
 	/**
-	 * For increasing the performance, any class inheriting this, must defined the creation of the components inside the
-	 * securedEnter method. Is recommended then, that the rootlayout is inserted the last one to avoid multiple
-	 * communications with the client, i.e. add any component, button to the rootlayout and the last operation is
+	 * For increasing the performance, any class inheriting this, must defined
+	 * the creation of the components inside the securedEnter method. Is
+	 * recommended then, that the rootlayout is inserted the last one to avoid
+	 * multiple communications with the client, i.e. add any component, button
+	 * to the rootlayout and the last operation is
 	 * getWorkingAreaLayout().addComponent(rootLayout);
 	 */
 	protected abstract void initContent();
@@ -77,9 +80,10 @@ public abstract class SecuredWebPageComponent extends WebPageComponent {
 	}
 
 	/**
-	 * Authorization required to access to this page. If user is not allowed, it will be redirect to login screen.
+	 * Authorization required to access to this page. If user is not allowed, it
+	 * will be redirect to login screen.
 	 * 
-	 * @return
+	 * @return a list of activities.
 	 */
 	public abstract List<AbcdActivity> accessAuthorizationsRequired();
 

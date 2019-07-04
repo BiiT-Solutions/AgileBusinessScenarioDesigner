@@ -5,7 +5,7 @@ import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.Category;
 import com.biit.abcd.webpages.components.TreeObjectTableMultiSelect;
-import com.biit.abcd.webpages.elements.expressionviewer.TabFormVariablesLayout;
+import com.biit.abcd.webpages.elements.expression.viewer.TabFormVariablesLayout;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 

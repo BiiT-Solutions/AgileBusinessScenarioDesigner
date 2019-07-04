@@ -6,30 +6,34 @@ package com.biit.abcd.webpages.components;
 public interface SaveAction {
 
 	/**
-	 * Returns if is valid to save or not. This serves to implement a validation condition previous to a download.
+	 * Returns if is valid to save or not. This serves to implement a validation
+	 * condition previous to a download.
 	 * 
-	 * @return
+	 * @return true if is valid.
 	 */
 	boolean isValid();
 
 	byte[] getInformationData();
 
 	/**
-	 * Extension of the file to generate. Also must be the type of file in graphviz.
+	 * Extension of the file to generate. Also must be the type of file in
+	 * graphviz.
 	 * 
-	 * @return
+	 * @return the extension of the file.S
 	 */
 	String getExtension();
 
 	/**
 	 * Mimetype of the generated file ("application/pdf", "image/png", ...)
 	 * 
-	 * @return
+	 * @return the mimetype.
 	 */
 	String getMimeType();
 
 	/**
 	 * Gets the file name.
+	 * 
+	 * @return the file name.
 	 */
 	String getFileName();
 

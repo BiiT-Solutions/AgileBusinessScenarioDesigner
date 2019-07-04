@@ -62,16 +62,21 @@ public class CheckDependencies {
 	 * Check dependencies inside the expression chain hierarchy
 	 * 
 	 * @param expressionChain
+	 *            expression to check.
+	 * @param treeObject
+	 *            element
 	 * @throws DependencyExistException
 	 */
-	private static void checkTreeObjectDependeciesInExpressionChain(ExpressionChain expressionChain, TreeObject treeObject) throws DependencyExistException {
+	private static void checkTreeObjectDependeciesInExpressionChain(ExpressionChain expressionChain,
+			TreeObject treeObject) throws DependencyExistException {
 		if (expressionChain != null) {
 			List<Expression> conditions = expressionChain.getExpressions();
 			for (Expression condition : conditions) {
 				if (condition instanceof ExpressionValueTreeObjectReference) {
 					TreeObject reference = ((ExpressionValueTreeObjectReference) condition).getReference();
 					if ((reference != null) && Objects.equals(reference, treeObject)) {
-						throw new DependencyExistException("Cannot delete " + treeObject.getClass().getName() + ", referenced in the form.");
+						throw new DependencyExistException("Cannot delete " + treeObject.getClass().getName()
+								+ ", referenced in the form.");
 					}
 				} else if (condition instanceof ExpressionChain) {
 					checkTreeObjectDependeciesInExpressionChain((ExpressionChain) condition, treeObject);
@@ -89,17 +94,23 @@ public class CheckDependencies {
 	 * - DiagramChild: to check internal dependencies<br>
 	 * 
 	 * @param diagram
+	 *            diagram to check.
+	 * @param treeObject
+	 *            element.
 	 * @throws DependencyExistException
 	 */
-	private static void checkTreeObjectDependenciesInDiagram(Diagram diagram, TreeObject treeObject) throws DependencyExistException {
+	private static void checkTreeObjectDependenciesInDiagram(Diagram diagram, TreeObject treeObject)
+			throws DependencyExistException {
 		if (diagram != null) {
 			Set<DiagramObject> diagramObjectsList = diagram.getDiagramObjects();
 			for (DiagramObject diagramObject : diagramObjectsList) {
 				if (diagramObject instanceof DiagramLink) {
-					checkTreeObjectDependeciesInExpressionChain(((DiagramLink) diagramObject).getExpressionChain(), treeObject);
+					checkTreeObjectDependeciesInExpressionChain(((DiagramLink) diagramObject).getExpressionChain(),
+							treeObject);
 				} else if (diagramObject instanceof DiagramFork) {
 					if (Objects.equals(((DiagramFork) diagramObject).getReference(), treeObject)) {
-						throw new DependencyExistException("Cannot delete " + treeObject.getClass().getName() + ", referenced in the form.");
+						throw new DependencyExistException("Cannot delete " + treeObject.getClass().getName()
+								+ ", referenced in the form.");
 					}
 				} else if (diagramObject instanceof DiagramChild) {
 					checkTreeObjectDependenciesInDiagram(((DiagramChild) diagramObject).getDiagram(), treeObject);
@@ -119,16 +130,20 @@ public class CheckDependencies {
 	 * Look for table rule dependencies inside the diagram<br>
 	 * 
 	 * @param diagram
+	 *            diagram to check
+	 * @param tableRule
+	 *            table
 	 * @throws DependencyExistException
 	 */
-	private static void checkTableRuleDependenciesInDiagram(Diagram diagram, TableRule tableRule) throws DependencyExistException {
+	private static void checkTableRuleDependenciesInDiagram(Diagram diagram, TableRule tableRule)
+			throws DependencyExistException {
 		if (diagram != null) {
 			Set<DiagramObject> diagramObjectsList = diagram.getDiagramObjects();
 			for (DiagramObject diagramObject : diagramObjectsList) {
 				if (diagramObject instanceof DiagramTable) {
 					if (Objects.equals(((DiagramTable) diagramObject).getTable(), tableRule)) {
-						throw new DependencyExistException("Cannot delete " + tableRule.getClass().getName() + ", with name: " + tableRule.getName()
-								+ " referenced in the form.");
+						throw new DependencyExistException("Cannot delete " + tableRule.getClass().getName()
+								+ ", with name: " + tableRule.getName() + " referenced in the form.");
 					}
 				} else if (diagramObject instanceof DiagramChild) {
 					checkTableRuleDependenciesInDiagram(((DiagramChild) diagramObject).getDiagram(), tableRule);
@@ -145,10 +160,12 @@ public class CheckDependencies {
 	}
 
 	/**
-	 * Look for rule dependencies inside the diagram<br>
+	 * Look for rule dependencies inside the diagram
 	 * 
 	 * @param diagram
-	 * @throws DependencyExistException
+	 *            diagram to check
+	 * @throws rule
+	 *             the rule
 	 */
 	private static void checkRuleDependenciesInDiagram(Diagram diagram, Rule rule) throws DependencyExistException {
 		if (diagram != null) {
@@ -156,8 +173,8 @@ public class CheckDependencies {
 			for (DiagramObject diagramObject : diagramObjectsList) {
 				if (diagramObject instanceof DiagramRule) {
 					if (Objects.equals(((DiagramRule) diagramObject).getRule(), rule)) {
-						throw new DependencyExistException("Cannot delete " + rule.getClass().getName() + ", with name: " + rule.getName()
-								+ " referenced in the form.");
+						throw new DependencyExistException("Cannot delete " + rule.getClass().getName()
+								+ ", with name: " + rule.getName() + " referenced in the form.");
 					}
 				} else if (diagramObject instanceof DiagramChild) {
 					checkRuleDependenciesInDiagram(((DiagramChild) diagramObject).getDiagram(), rule);
@@ -166,7 +183,8 @@ public class CheckDependencies {
 		}
 	}
 
-	public static void checkExpressionDependencies(Form form, ExpressionChain expressionChain) throws DependencyExistException {
+	public static void checkExpressionDependencies(Form form, ExpressionChain expressionChain)
+			throws DependencyExistException {
 		// Only dependency possible in the diagrams
 		for (Diagram diagram : form.getDiagrams()) {
 			checkExpressionChainDependenciesInDiagram(diagram, expressionChain);
@@ -177,32 +195,40 @@ public class CheckDependencies {
 	 * Look up for rule dependencies inside the diagram<br>
 	 * 
 	 * @param diagram
-	 * @throws DependencyExistException
+	 *            diagram to check.
+	 * @throws expressionChain
+	 *             expression.
 	 */
-	private static void checkExpressionChainDependenciesInDiagram(Diagram diagram, ExpressionChain expressionChain) throws DependencyExistException {
+	private static void checkExpressionChainDependenciesInDiagram(Diagram diagram, ExpressionChain expressionChain)
+			throws DependencyExistException {
 		if (diagram != null) {
 			Set<DiagramObject> diagramObjectsList = diagram.getDiagramObjects();
 			for (DiagramObject diagramObject : diagramObjectsList) {
 				if (diagramObject instanceof DiagramExpression) {
 					if (((DiagramExpression) diagramObject).getExpression() != null
 							&& Objects.equals(((DiagramExpression) diagramObject).getExpression(), expressionChain)) {
-						throw new DependencyExistException("Cannot delete " + expressionChain.getClass().getName() + ", with name: "
-								+ expressionChain.getName() + " referenced in the form.");
+						throw new DependencyExistException("Cannot delete " + expressionChain.getClass().getName()
+								+ ", with name: " + expressionChain.getName() + " referenced in the form.");
 					}
 				} else if (diagramObject instanceof DiagramChild) {
-					checkExpressionChainDependenciesInDiagram(((DiagramChild) diagramObject).getDiagram(), expressionChain);
+					checkExpressionChainDependenciesInDiagram(((DiagramChild) diagramObject).getDiagram(),
+							expressionChain);
 				}
 			}
 		}
 	}
 
 	/**
-	 * Look up for custom variables.<br>
+	 * Look up for custom variables.
 	 * 
-	 * @param diagram
+	 * @param form
+	 *            form to check
+	 * @param customVariable
+	 *            variable
 	 * @throws DependencyExistException
 	 */
-	public static void checkCustomVariableDependencies(Form form, CustomVariable customVariable) throws DependencyExistException {
+	public static void checkCustomVariableDependencies(Form form, CustomVariable customVariable)
+			throws DependencyExistException {
 		for (ExpressionChain expressionChain : form.getExpressionChains()) {
 			for (StorableObject storableObject : expressionChain.getAllInnerStorableObjects()) {
 				if (storableObject instanceof Expression) {
@@ -237,18 +263,19 @@ public class CheckDependencies {
 
 	}
 
-	private static void checkCustomVariableDependencies(Expression expression, CustomVariable customVariable) throws DependencyExistException {
+	private static void checkCustomVariableDependencies(Expression expression, CustomVariable customVariable)
+			throws DependencyExistException {
 		if (expression instanceof ExpressionValueCustomVariable) {
 			if (Objects.equals(((ExpressionValueCustomVariable) expression).getVariable(), customVariable)) {
-				throw new DependencyExistException("Cannot delete custom variable '" + customVariable.getName() + "'. Used in expression '"
-						+ expression.getRepresentation(true) + "'");
+				throw new DependencyExistException("Cannot delete custom variable '" + customVariable.getName()
+						+ "'. Used in expression '" + expression.getRepresentation(true) + "'");
 			}
 		}
 
 		if (expression instanceof ExpressionValueGenericCustomVariable) {
 			if (Objects.equals(((ExpressionValueGenericCustomVariable) expression).getVariable(), customVariable)) {
-				throw new DependencyExistException("Cannot delete custom variable '" + customVariable.getName() + "'. Used in expression '"
-						+ expression.getRepresentation(true) + "'");
+				throw new DependencyExistException("Cannot delete custom variable '" + customVariable.getName()
+						+ "'. Used in expression '" + expression.getRepresentation(true) + "'");
 			}
 		}
 	}

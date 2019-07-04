@@ -35,7 +35,7 @@ public class SimpleConditionsGenerator {
 	 * memory and assign it to a variable
 	 * 
 	 * @param treeObject
-	 * @return
+	 * @return a trign with the condition.
 	 * @throws NullTreeObjectException
 	 * @throws TreeObjectInstanceNotRecognizedException
 	 * @throws TreeObjectParentNotValidException
@@ -124,7 +124,7 @@ public class SimpleConditionsGenerator {
 	 * Also checks if the treeObject has a custom variable with value set.
 	 * 
 	 * @param expressionValueCustomVariable
-	 * @return
+	 * @return a string with the conditions.
 	 * @throws NullCustomVariableException
 	 * @throws NullTreeObjectException
 	 * @throws NullExpressionValueException
@@ -167,7 +167,7 @@ public class SimpleConditionsGenerator {
 	 * @param customVariable
 	 * @param parent
 	 * @param treeObject
-	 * @return
+	 * @return a string with the conditions.
 	 * @throws TreeObjectInstanceNotRecognizedException
 	 */
 	private static String getCategoryCustomVariableCondition(CustomVariable customVariable, TreeObject parent,
@@ -239,7 +239,7 @@ public class SimpleConditionsGenerator {
 	 * the custom variable value set in the tree object.
 	 * 
 	 * @param expressionValueCustomVariable
-	 * @return
+	 * @return a string with the conditions.
 	 * @throws NullCustomVariableException
 	 * @throws NullTreeObjectException
 	 * @throws NullExpressionValueException
