@@ -17,7 +17,7 @@ public class StatusPreservingTests extends AbcdTester {
 
 		GROUP("Group"),
 
-		QUESTION("Question"), ;
+		QUESTION("Question"),;
 
 		private String value;
 
@@ -185,11 +185,13 @@ public class StatusPreservingTests extends AbcdTester {
 		getDiagramDesigner().isRowSelected(DIAGRAM_1_ROW);
 		getDiagramDesigner().selectRow(DIAGRAM_2_ROW);
 		getDiagramDesigner().clickFormDesigner();
+		sleep(250);
 		getFormDesigner().clickDiagramDesigner();
+		sleep(250);
 		getDiagramDesigner().isRowSelected(DIAGRAM_2_ROW);
 
 		// Rule expression
-		getFormDesigner().clickRuleExpressionEditor();
+		getDiagramDesigner().clickRuleExpressionEditor();
 		getRuleExpression().newRuleExpression(RULE_1);
 		getRuleExpression().newRuleExpression(RULE_2);
 		getRuleExpression().selectRow(RULE_1_ROW);
@@ -267,7 +269,7 @@ public class StatusPreservingTests extends AbcdTester {
 		login(ABCD_FORM_EDIT_BIIT1);
 		getFormManager().createNewForm(TEST_FORM_1);
 		getFormManager().clickFormDesigner();
-		
+
 		sleep(250);
 		getFormDesigner().clickInTableRow(0);
 		getFormDesigner().createCategory(0, CATEGORY_1);
