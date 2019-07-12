@@ -7,7 +7,7 @@ public class SelectGenericVariable extends AcceptCancelWindow {
 
 	private static final String GENERIC_ELEMENT_TABLE = "Select a Generic Element:";
 	private static final String SELECT_GENERIC_VARIABLE = "Select a Generic Variable:";
-	private static final String WINDOW_ID = "com.biit.abcd.webpages.elements.expressionviewer.SelectFormGenericVariablesWindow";
+	private static final String WINDOW_ID = "com.biit.abcd.webpages.elements.expression.viewer.SelectFormGenericVariablesWindow";
 
 	public void selectAndAccept(int row, String variable) {
 		selectGenericElement(row);

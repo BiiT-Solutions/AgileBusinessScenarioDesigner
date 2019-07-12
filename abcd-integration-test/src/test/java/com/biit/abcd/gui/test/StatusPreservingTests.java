@@ -9,27 +9,6 @@ import com.biit.abcd.gui.test.webpage.FormDesigner.AnswerType;
 @Test(groups = "statusPreserving")
 public class StatusPreservingTests extends AbcdTester {
 
-	public enum Scope {
-
-		FORM("Form"),
-
-		CATEGORY("Category"),
-
-		GROUP("Group"),
-
-		QUESTION("Question"),;
-
-		private String value;
-
-		Scope(String caption) {
-			this.value = caption;
-		}
-
-		public String getValue() {
-			return value;
-		}
-	}
-
 	private static final String TEST_FORM_1 = "test_1";
 	private static final String TEST_FORM_1_CHANGED_NAME = "test_1_changed";
 	private static final String TEST_FORM_2 = "test_2";
@@ -60,6 +39,27 @@ public class StatusPreservingTests extends AbcdTester {
 	private static final String VARIABLE_1 = "variable1";
 	private static final String VARIABLE_1_VALUE = "0.0";
 	private static final int VARIABLE_1_ROW = 0;
+	
+	public enum Scope {
+
+		FORM("Form"),
+
+		CATEGORY("Category"),
+
+		GROUP("Group"),
+
+		QUESTION("Question"),;
+
+		private String value;
+
+		Scope(String caption) {
+			this.value = caption;
+		}
+
+		public String getValue() {
+			return value;
+		}
+	}
 
 	private void formDesignerCheckSaveWarning() {
 		// Go to Form Designer without saving check warning is visible

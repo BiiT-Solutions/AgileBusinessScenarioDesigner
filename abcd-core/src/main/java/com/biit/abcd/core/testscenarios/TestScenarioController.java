@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.biit.abcd.core.SpringContextHelper;
+import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.dao.ITestScenarioDao;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.testscenarios.TestScenario;
@@ -91,7 +92,14 @@ public class TestScenarioController {
 
 			for (TestScenario testScenario : testScenariosFromTable) {
 				if (testScenario.getId() == null) {
-					testScenarioDao.makePersistent(testScenario);
+					try {
+						TestScenario savedTestScenario = testScenarioDao.makePersistent(testScenario);
+						testScenarios.set(testScenarios.indexOf(testScenario), savedTestScenario);
+					} catch (Exception e) {
+						AbcdLogger.errorMessage(this.getClass().getName(), "Impossible to store TestScenario '"
+								+ testScenario + "' with id '" + testScenario.getId() + "'.");
+						throw e;
+					}
 				} else {
 					TestScenario mergedScenario = testScenarioDao.merge(testScenario);
 					testScenarios.set(testScenarios.indexOf(testScenario), mergedScenario);
