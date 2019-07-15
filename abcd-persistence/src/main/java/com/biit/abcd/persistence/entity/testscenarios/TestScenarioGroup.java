@@ -36,12 +36,12 @@ public class TestScenarioGroup extends BaseRepeatableGroup {
 	 * The father needs a clean enabled attribute, but the children have to
 	 * maintain their attribute value.
 	 * 
-	 * @param isChildren
+	 * @param isChildren if is a children
 	 * @return the test scenario group
-	 * @throws NotValidChildException
-	 * @throws FieldTooLongException
-	 * @throws CharacterNotAllowedException
-	 * @throws ElementIsReadOnly
+	 * @throws NotValidChildException if the children is not valid.
+	 * @throws FieldTooLongException if cannot copy the element.
+	 * @throws CharacterNotAllowedException if cannot copy the element.
+	 * @throws ElementIsReadOnly if cannot copy the element.
 	 */
 	public TestScenarioGroup copyTestScenarioGroup(boolean isChildren) throws NotValidChildException,
 			FieldTooLongException, CharacterNotAllowedException, ElementIsReadOnly {

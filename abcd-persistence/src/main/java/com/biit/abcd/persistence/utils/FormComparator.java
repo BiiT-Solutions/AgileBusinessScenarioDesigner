@@ -60,7 +60,8 @@ import com.biit.form.entity.TreeObject;
 import com.biit.persistence.entity.StorableObject;
 
 /**
- * Compares two forms. Must be equals (but with different IDs and ComparationIds).
+ * Compares two forms. Must be equals (but with different IDs and
+ * ComparationIds).
  */
 public class FormComparator {
 	private Set<StorableObject> alreadyComparedForm1Element = new HashSet<>();
@@ -72,8 +73,8 @@ public class FormComparator {
 
 	private void compare(StorableObject object1, StorableObject object2) throws StorableObjectNotEqualsException {
 		if ((object1 != null && object2 == null) || (object1 == null && object2 != null)) {
-			throw new StorableObjectNotEqualsException("One of the Storable objects is null: '" + object1 + "' and '"
-					+ object2 + "'.");
+			throw new StorableObjectNotEqualsException(
+					"One of the Storable objects is null: '" + object1 + "' and '" + object2 + "'.");
 		}
 
 		if (checkIds && object1.getId() != null && object2.getId() != null && object1.getId().equals(object2.getId())) {
@@ -81,31 +82,31 @@ public class FormComparator {
 		}
 
 		if (checkIds && object1.getComparationId().equals(object2.getComparationId())) {
-			throw new StorableObjectNotEqualsException("Storable objects are the same objects: '" + object1 + "' and '"
-					+ object2 + "'.");
+			throw new StorableObjectNotEqualsException(
+					"Storable objects are the same objects: '" + object1 + "' and '" + object2 + "'.");
 		}
 	}
 
 	private void compare(Group object1, Group object2) throws GroupNotEqualsException {
 		if (object1.isRepeatable() != object2.isRepeatable()) {
-			throw new GroupNotEqualsException("Check repeatable options of groups '" + object1 + "' and '" + object2
-					+ "'.");
+			throw new GroupNotEqualsException(
+					"Check repeatable options of groups '" + object1 + "' and '" + object2 + "'.");
 		}
 	}
 
 	private void compare(Question object1, Question object2) throws QuestionNotEqualsException {
 		if (object1.getAnswerFormat() != object2.getAnswerFormat()) {
-			throw new QuestionNotEqualsException("Answer formats are different between questions '" + object1
-					+ "' and '" + object2 + "'.");
+			throw new QuestionNotEqualsException(
+					"Answer formats are different between questions '" + object1 + "' and '" + object2 + "'.");
 		}
 		if (object1.getAnswerType() != object2.getAnswerType()) {
-			throw new QuestionNotEqualsException("Answer types are different between questions '" + object1 + "' and '"
-					+ object2 + "'.");
+			throw new QuestionNotEqualsException(
+					"Answer types are different between questions '" + object1 + "' and '" + object2 + "'.");
 		}
 	}
 
-	private void compare(CustomVariable object1, CustomVariable object2) throws CustomVariableNotEqualsException,
-			StorableObjectNotEqualsException {
+	private void compare(CustomVariable object1, CustomVariable object2)
+			throws CustomVariableNotEqualsException, StorableObjectNotEqualsException {
 
 		if (object1 instanceof StorableObject || object2 instanceof StorableObject) {
 			compare((StorableObject) object1, (StorableObject) object2);
@@ -113,36 +114,35 @@ public class FormComparator {
 
 		if ((object1.getForm() != null && object2.getForm() == null)
 				|| (object1.getForm() == null && object2.getForm() != null)
-				|| ((object1.getForm() != null && object2.getForm() != null) && !object1.getForm().getName()
-						.equals(object2.getForm().getName()))) {
-			throw new CustomVariableNotEqualsException("Parents are different between custom variables '" + object1
-					+ "' and '" + object2 + "'.");
+				|| ((object1.getForm() != null && object2.getForm() != null)
+						&& !object1.getForm().getName().equals(object2.getForm().getName()))) {
+			throw new CustomVariableNotEqualsException(
+					"Parents are different between custom variables '" + object1 + "' and '" + object2 + "'.");
 		}
 		if ((object1.getName() != null && object2.getName() == null)
-				|| (object1.getName() == null && object2.getName() != null)
-				|| (object1.getName() != null && object2.getName() != null && !object1.getName().equals(
-						object2.getName()))) {
-			throw new CustomVariableNotEqualsException("Names are different between custom variables '" + object1
-					+ "' and '" + object2 + "'.");
+				|| (object1.getName() == null && object2.getName() != null) || (object1.getName() != null
+						&& object2.getName() != null && !object1.getName().equals(object2.getName()))) {
+			throw new CustomVariableNotEqualsException(
+					"Names are different between custom variables '" + object1 + "' and '" + object2 + "'.");
 
 		}
 		if (object1.getScope() != object2.getScope()) {
-			throw new CustomVariableNotEqualsException("Scopes are different between custom variables '" + object1
-					+ "' and '" + object2 + "'.");
+			throw new CustomVariableNotEqualsException(
+					"Scopes are different between custom variables '" + object1 + "' and '" + object2 + "'.");
 
 		}
 		if (object1.getType() != object2.getType()) {
-			throw new CustomVariableNotEqualsException("Types are different between custom variables '" + object1
-					+ "' and '" + object2 + "'.");
+			throw new CustomVariableNotEqualsException(
+					"Types are different between custom variables '" + object1 + "' and '" + object2 + "'.");
 		}
 		if (!Objects.equals(object1.getDefaultValue(), object2.getDefaultValue())) {
-			throw new CustomVariableNotEqualsException("Default value are different between custom variables '"
-					+ object1 + "' and '" + object2 + "'.");
+			throw new CustomVariableNotEqualsException(
+					"Default value are different between custom variables '" + object1 + "' and '" + object2 + "'.");
 		}
 	}
 
-	private void compare(GlobalVariable object1, GlobalVariable object2) throws GlobalVariableNotEqualsException,
-			VariableDataNotEqualsException {
+	private void compare(GlobalVariable object1, GlobalVariable object2)
+			throws GlobalVariableNotEqualsException, VariableDataNotEqualsException {
 
 		if (object1 == null && object2 == null) {
 			return;
@@ -155,19 +155,17 @@ public class FormComparator {
 		// No compare Ids. Global Variables are not duplicated.
 
 		if ((object1.getName() != null && object2.getName() == null)
-				|| (object1.getName() == null && object2.getName() != null)
-				|| (object1.getName() != null && object2.getName() != null && !object1.getName().equals(
-						object2.getName()))) {
-			throw new GlobalVariableNotEqualsException("Names are different between global variables '" + object1
-					+ "' and '" + object2 + "'.");
+				|| (object1.getName() == null && object2.getName() != null) || (object1.getName() != null
+						&& object2.getName() != null && !object1.getName().equals(object2.getName()))) {
+			throw new GlobalVariableNotEqualsException(
+					"Names are different between global variables '" + object1 + "' and '" + object2 + "'.");
 		}
 
 		if ((object1.getFormat() != null && object2.getFormat() == null)
-				|| (object1.getFormat() == null && object2.getFormat() != null)
-				|| (object1.getFormat() != null && object2.getFormat() != null && !object1.getFormat().equals(
-						object2.getFormat()))) {
-			throw new GlobalVariableNotEqualsException("Formats are different between global variables '" + object1
-					+ "' and '" + object2 + "'.");
+				|| (object1.getFormat() == null && object2.getFormat() != null) || (object1.getFormat() != null
+						&& object2.getFormat() != null && !object1.getFormat().equals(object2.getFormat()))) {
+			throw new GlobalVariableNotEqualsException(
+					"Formats are different between global variables '" + object1 + "' and '" + object2 + "'.");
 		}
 
 		// Compare Expressions
@@ -192,34 +190,31 @@ public class FormComparator {
 
 		// No compare Ids. Variables are not duplicated.
 		if ((object1.getValidFrom() != null && object2.getValidFrom() == null)
-				|| (object1.getValidFrom() == null && object2.getValidFrom() != null)
-				|| (object1.getValidFrom() != null && object2.getValidFrom() != null && !object1.getValidFrom().equals(
-						object2.getValidFrom()))) {
-			throw new VariableDataNotEqualsException("'Valid From' information is not equals between '" + object1
-					+ "' and '" + object2 + "'.");
+				|| (object1.getValidFrom() == null && object2.getValidFrom() != null) || (object1.getValidFrom() != null
+						&& object2.getValidFrom() != null && !object1.getValidFrom().equals(object2.getValidFrom()))) {
+			throw new VariableDataNotEqualsException(
+					"'Valid From' information is not equals between '" + object1 + "' and '" + object2 + "'.");
 		}
 
 		if ((object1.getValidTo() != null && object2.getValidTo() == null)
-				|| (object1.getValidTo() == null && object2.getValidTo() != null)
-				|| (object1.getValidTo() != null && object2.getValidTo() != null && !object1.getValidTo().equals(
-						object2.getValidTo()))) {
-			throw new VariableDataNotEqualsException("'Valid To' information is not equals between '" + object1
-					+ "' and '" + object2 + "'.");
+				|| (object1.getValidTo() == null && object2.getValidTo() != null) || (object1.getValidTo() != null
+						&& object2.getValidTo() != null && !object1.getValidTo().equals(object2.getValidTo()))) {
+			throw new VariableDataNotEqualsException(
+					"'Valid To' information is not equals between '" + object1 + "' and '" + object2 + "'.");
 		}
 
 		// Variable Data value is number, string or Date.
 		if ((object1.getValue() != null && object2.getValue() == null)
-				|| (object1.getValue() == null && object2.getValue() != null)
-				|| (object1.getValue() != null && object2.getValue() != null && !object1.getValue().equals(
-						object2.getValue()))) {
-			throw new VariableDataNotEqualsException("Value is not equals between '" + object1 + "' and '" + object2
-					+ "'.");
+				|| (object1.getValue() == null && object2.getValue() != null) || (object1.getValue() != null
+						&& object2.getValue() != null && !object1.getValue().equals(object2.getValue()))) {
+			throw new VariableDataNotEqualsException(
+					"Value is not equals between '" + object1 + "' and '" + object2 + "'.");
 		}
 	}
 
-	private void compare(Expression object1, Expression object2) throws StorableObjectNotEqualsException,
-			ExpressionNotEqualsException, GlobalVariableNotEqualsException, VariableDataNotEqualsException,
-			CustomVariableNotEqualsException {
+	private void compare(Expression object1, Expression object2)
+			throws StorableObjectNotEqualsException, ExpressionNotEqualsException, GlobalVariableNotEqualsException,
+			VariableDataNotEqualsException, CustomVariableNotEqualsException {
 		if (object1 == null && object2 == null) {
 			return;
 		}
@@ -227,17 +222,17 @@ public class FormComparator {
 			compare((StorableObject) object1, (StorableObject) object2);
 		}
 		if (!object1.getClass().equals(object2.getClass())) {
-			throw new ExpressionNotEqualsException("Classes are different between expressions '" + object1 + "' and '"
-					+ object2 + "'");
+			throw new ExpressionNotEqualsException(
+					"Classes are different between expressions '" + object1 + "' and '" + object2 + "'");
 		}
 
 		if (object1.isEditable() != object2.isEditable()) {
-			throw new ExpressionNotEqualsException("Editable fields are different between expressions '" + object1
-					+ "' and '" + object2 + "'.");
+			throw new ExpressionNotEqualsException(
+					"Editable fields are different between expressions '" + object1 + "' and '" + object2 + "'.");
 		}
 		if (object1.getSortSeq() != object2.getSortSeq()) {
-			throw new ExpressionNotEqualsException("SortSeq fields are different between expressions '" + object1
-					+ "' and '" + object2 + "'.");
+			throw new ExpressionNotEqualsException(
+					"SortSeq fields are different between expressions '" + object1 + "' and '" + object2 + "'.");
 		}
 
 		try {
@@ -259,10 +254,10 @@ public class FormComparator {
 	}
 
 	@SuppressWarnings("unchecked")
-	private void compareExpressionValue(Object object1, Object object2) throws TreeObjectNotEqualsException,
-			StorableObjectNotEqualsException, GroupNotEqualsException, QuestionNotEqualsException,
-			ExpressionNotEqualsException, GlobalVariableNotEqualsException, VariableDataNotEqualsException,
-			CustomVariableNotEqualsException {
+	private void compareExpressionValue(Object object1, Object object2)
+			throws TreeObjectNotEqualsException, StorableObjectNotEqualsException, GroupNotEqualsException,
+			QuestionNotEqualsException, ExpressionNotEqualsException, GlobalVariableNotEqualsException,
+			VariableDataNotEqualsException, CustomVariableNotEqualsException {
 
 		if (object1 == null && object2 == null) {
 			return;
@@ -273,14 +268,15 @@ public class FormComparator {
 		}
 
 		if ((object1 != null && object2 == null) || (object1 == null && object2 != null)) {
-			throw new ExpressionNotEqualsException("Value fields are different: '" + object1 + "' and '" + object2
-					+ "'");
+			throw new ExpressionNotEqualsException(
+					"Value fields are different: '" + object1 + "' and '" + object2 + "'");
 		}
 		// Hibernate replace arrays. Check if it is the case.
 		if (!object1.getClass().getName().equals("org.hibernate.collection.internal.PersistentBag")
 				&& !object2.getClass().getName().equals("org.hibernate.collection.internal.PersistentBag")) {
 			if (!object1.getClass().equals(object2.getClass())) {
-				throw new ExpressionNotEqualsException("Classes are different: '" + object1 + "' and '" + object2 + "'");
+				throw new ExpressionNotEqualsException(
+						"Classes are different: '" + object1 + "' and '" + object2 + "'");
 			}
 		}
 		// Special cases.
@@ -300,9 +296,9 @@ public class FormComparator {
 		}
 	}
 
-	private void compare(ExpressionChain object1, ExpressionChain object2) throws StorableObjectNotEqualsException,
-			ExpressionNotEqualsException, GlobalVariableNotEqualsException, VariableDataNotEqualsException,
-			CustomVariableNotEqualsException {
+	private void compare(ExpressionChain object1, ExpressionChain object2)
+			throws StorableObjectNotEqualsException, ExpressionNotEqualsException, GlobalVariableNotEqualsException,
+			VariableDataNotEqualsException, CustomVariableNotEqualsException {
 
 		if (object1 == null && object2 == null) {
 			return;
@@ -313,11 +309,10 @@ public class FormComparator {
 		}
 
 		if ((object1.getName() != null && object2.getName() == null)
-				|| (object1.getName() == null && object2.getName() != null)
-				|| (object1.getName() != null && object2.getName() != null && !object1.getName().equals(
-						object2.getName()))) {
-			throw new ExpressionNotEqualsException("Names are different between expressions '" + object1 + "' and '"
-					+ object2 + "'.");
+				|| (object1.getName() == null && object2.getName() != null) || (object1.getName() != null
+						&& object2.getName() != null && !object1.getName().equals(object2.getName()))) {
+			throw new ExpressionNotEqualsException(
+					"Names are different between expressions '" + object1 + "' and '" + object2 + "'.");
 		}
 
 		// Compare Expressions
@@ -337,9 +332,9 @@ public class FormComparator {
 		}
 	}
 
-	private void compare(List<Expression> object1, List<Expression> object2) throws ExpressionNotEqualsException,
-			StorableObjectNotEqualsException, CustomVariableNotEqualsException, GlobalVariableNotEqualsException,
-			VariableDataNotEqualsException {
+	private void compare(List<Expression> object1, List<Expression> object2)
+			throws ExpressionNotEqualsException, StorableObjectNotEqualsException, CustomVariableNotEqualsException,
+			GlobalVariableNotEqualsException, VariableDataNotEqualsException {
 		// Compare Expressions
 		Iterator<Expression> expressionsIterator1 = object1.iterator();
 		Iterator<Expression> expressionsIterator2 = object2.iterator();
@@ -374,23 +369,24 @@ public class FormComparator {
 
 		if ((object1.getName() != null && object2.getName() == null)
 				|| (object1.getName() == null && object2.getName() != null)
-				|| ((object1.getName() != null && object2.getName() != null) && !object1.getName().equals(
-						object2.getName()))) {
-			throw new TreeObjectNotEqualsException("Names are different between tree objects '" + object1 + "' and '"
-					+ object2 + "'.");
+				|| ((object1.getName() != null && object2.getName() != null)
+						&& !object1.getName().equals(object2.getName()))) {
+			throw new TreeObjectNotEqualsException(
+					"Names are different between tree objects '" + object1 + "' and '" + object2 + "'.");
 		}
 		if ((object1.getLabel() != null && object2.getLabel() == null)
 				|| (object1.getLabel() == null && object2.getLabel() != null)
-				|| ((object1.getLabel() != null && object2.getLabel() != null) && !object1.getLabel().equals(
-						object2.getLabel()))) {
-			throw new TreeObjectNotEqualsException("Labels are different between tree objects '" + object1 + "' and '"
-					+ object2 + "'.");
+				|| ((object1.getLabel() != null && object2.getLabel() != null)
+						&& !object1.getLabel().equals(object2.getLabel()))) {
+			throw new TreeObjectNotEqualsException(
+					"Labels are different between tree objects '" + object1 + "' and '" + object2 + "'.");
 		}
 
 		// Compare parent.
 		if (((object1.getParent() != null && object2.getParent() == null)
-				|| (object1.getParent() == null && object2.getParent() != null) || ((object1.getParent() != null && object2
-				.getParent() != null) && (!object1.getParent().getName().equals(object2.getParent().getName()))))) {
+				|| (object1.getParent() == null && object2.getParent() != null)
+				|| ((object1.getParent() != null && object2.getParent() != null)
+						&& (!object1.getParent().getName().equals(object2.getParent().getName()))))) {
 			throw new TreeObjectNotEqualsException("TreeObject '" + object1 + "' compared with '" + object2
 					+ "' has different parents '" + object1.getParent() + "' and '" + object2.getParent() + "'.");
 		}
@@ -414,9 +410,9 @@ public class FormComparator {
 		alreadyComparedForm1Element.add(object1);
 	}
 
-	private void compare(TableRule object1, TableRule object2) throws StorableObjectNotEqualsException,
-			TableRuleNotEqualsException, ExpressionNotEqualsException, CustomVariableNotEqualsException,
-			GlobalVariableNotEqualsException, VariableDataNotEqualsException {
+	private void compare(TableRule object1, TableRule object2)
+			throws StorableObjectNotEqualsException, TableRuleNotEqualsException, ExpressionNotEqualsException,
+			CustomVariableNotEqualsException, GlobalVariableNotEqualsException, VariableDataNotEqualsException {
 		if (object1 == null && object2 == null) {
 			return;
 		}
@@ -426,10 +422,10 @@ public class FormComparator {
 
 		if ((object1.getName() != null && object2.getName() == null)
 				|| (object1.getName() == null && object2.getName() != null)
-				|| ((object1.getName() != null && object2.getName() != null) && !object1.getName().equals(
-						object2.getName()))) {
-			throw new TableRuleNotEqualsException("Names are different between table rules '" + object1 + "' and '"
-					+ object2 + "'.");
+				|| ((object1.getName() != null && object2.getName() != null)
+						&& !object1.getName().equals(object2.getName()))) {
+			throw new TableRuleNotEqualsException(
+					"Names are different between table rules '" + object1 + "' and '" + object2 + "'.");
 		}
 
 		// Compare table rules rows.
@@ -443,9 +439,9 @@ public class FormComparator {
 		}
 	}
 
-	private void compare(TableRuleRow object1, TableRuleRow object2) throws StorableObjectNotEqualsException,
-			TableRuleNotEqualsException, ExpressionNotEqualsException, CustomVariableNotEqualsException,
-			GlobalVariableNotEqualsException, VariableDataNotEqualsException {
+	private void compare(TableRuleRow object1, TableRuleRow object2)
+			throws StorableObjectNotEqualsException, TableRuleNotEqualsException, ExpressionNotEqualsException,
+			CustomVariableNotEqualsException, GlobalVariableNotEqualsException, VariableDataNotEqualsException {
 		if (object1 == null && object2 == null) {
 			return;
 		}
@@ -457,9 +453,9 @@ public class FormComparator {
 		compare(object1.getAction(), object2.getAction());
 	}
 
-	private void compare(Rule object1, Rule object2) throws StorableObjectNotEqualsException, RuleNotEqualsException,
-			ExpressionNotEqualsException, CustomVariableNotEqualsException, GlobalVariableNotEqualsException,
-			VariableDataNotEqualsException {
+	private void compare(Rule object1, Rule object2)
+			throws StorableObjectNotEqualsException, RuleNotEqualsException, ExpressionNotEqualsException,
+			CustomVariableNotEqualsException, GlobalVariableNotEqualsException, VariableDataNotEqualsException {
 		if (object1 == null && object2 == null) {
 			return;
 		}
@@ -469,10 +465,10 @@ public class FormComparator {
 
 		if ((object1.getName() != null && object2.getName() == null)
 				|| (object1.getName() == null && object2.getName() != null)
-				|| ((object1.getName() != null && object2.getName() != null) && !object1.getName().equals(
-						object2.getName()))) {
-			throw new RuleNotEqualsException("Names are different between rules '" + object1 + "' and '" + object2
-					+ "'.");
+				|| ((object1.getName() != null && object2.getName() != null)
+						&& !object1.getName().equals(object2.getName()))) {
+			throw new RuleNotEqualsException(
+					"Names are different between rules '" + object1 + "' and '" + object2 + "'.");
 		}
 
 		compare(object1.getConditions(), object2.getConditions());
@@ -488,18 +484,18 @@ public class FormComparator {
 		}
 
 		if (object1.getWidth() != object2.getWidth()) {
-			throw new SizeNotEqualsException("Widths are different between Sizes '" + object1 + "' and '" + object2
-					+ "'.");
+			throw new SizeNotEqualsException(
+					"Widths are different between Sizes '" + object1 + "' and '" + object2 + "'.");
 		}
 
 		if (object1.getHeight() != object2.getHeight()) {
-			throw new SizeNotEqualsException("Heights are different between Sizes '" + object1 + "' and '" + object2
-					+ "'.");
+			throw new SizeNotEqualsException(
+					"Heights are different between Sizes '" + object1 + "' and '" + object2 + "'.");
 		}
 	}
 
-	private void compare(Point object1, Point object2) throws StorableObjectNotEqualsException, SizeNotEqualsException,
-			PointNotEqualsException {
+	private void compare(Point object1, Point object2)
+			throws StorableObjectNotEqualsException, SizeNotEqualsException, PointNotEqualsException {
 
 		if (object1 == null && object2 == null) {
 			return;
@@ -509,13 +505,13 @@ public class FormComparator {
 		}
 
 		if (object1.getX() != object2.getX()) {
-			throw new PointNotEqualsException("Widths are different between Points '" + object1 + "' and '" + object2
-					+ "'.");
+			throw new PointNotEqualsException(
+					"Widths are different between Points '" + object1 + "' and '" + object2 + "'.");
 		}
 
 		if (object1.getY() != object2.getY()) {
-			throw new PointNotEqualsException("Heights are different between Points '" + object1 + "' and '" + object2
-					+ "'.");
+			throw new PointNotEqualsException(
+					"Heights are different between Points '" + object1 + "' and '" + object2 + "'.");
 		}
 	}
 
@@ -531,79 +527,79 @@ public class FormComparator {
 
 		if ((object1.getText() != null && object2.getText() == null)
 				|| (object1.getText() == null && object2.getText() != null)
-				|| ((object1.getText() != null && object2.getText() != null) && !object1.getText().equals(
-						object2.getText()))) {
-			throw new BiitTextNotEqualsException("Text are different between BiitTexts '" + object1 + "' and '"
-					+ object2 + "'.");
+				|| ((object1.getText() != null && object2.getText() != null)
+						&& !object1.getText().equals(object2.getText()))) {
+			throw new BiitTextNotEqualsException(
+					"Text are different between BiitTexts '" + object1 + "' and '" + object2 + "'.");
 		}
 
 		if ((object1.getFill() != null && object2.getFill() == null)
 				|| (object1.getFill() == null && object2.getFill() != null)
-				|| ((object1.getFill() != null && object2.getFill() != null) && !object1.getFill().equals(
-						object2.getFill()))) {
-			throw new BiitTextNotEqualsException("Fill values are different between BiitTexts '" + object1 + "' and '"
-					+ object2 + "'.");
+				|| ((object1.getFill() != null && object2.getFill() != null)
+						&& !object1.getFill().equals(object2.getFill()))) {
+			throw new BiitTextNotEqualsException(
+					"Fill values are different between BiitTexts '" + object1 + "' and '" + object2 + "'.");
 		}
 
 		if ((object1.getFontSize() != null && object2.getFontSize() == null)
 				|| (object1.getFontSize() == null && object2.getFontSize() != null)
-				|| ((object1.getFontSize() != null && object2.getFontSize() != null) && !object1.getFontSize().equals(
-						object2.getFontSize()))) {
-			throw new BiitTextNotEqualsException("FontSize values are different between BiitTexts '" + object1
-					+ "' and '" + object2 + "'.");
+				|| ((object1.getFontSize() != null && object2.getFontSize() != null)
+						&& !object1.getFontSize().equals(object2.getFontSize()))) {
+			throw new BiitTextNotEqualsException(
+					"FontSize values are different between BiitTexts '" + object1 + "' and '" + object2 + "'.");
 		}
 
 		if ((object1.getStroke() != null && object2.getStroke() == null)
 				|| (object1.getStroke() == null && object2.getStroke() != null)
-				|| ((object1.getStroke() != null && object2.getStroke() != null) && !object1.getStroke().equals(
-						object2.getStroke()))) {
-			throw new BiitTextNotEqualsException("Stroke values are different between BiitTexts '" + object1
-					+ "' and '" + object2 + "'.");
+				|| ((object1.getStroke() != null && object2.getStroke() != null)
+						&& !object1.getStroke().equals(object2.getStroke()))) {
+			throw new BiitTextNotEqualsException(
+					"Stroke values are different between BiitTexts '" + object1 + "' and '" + object2 + "'.");
 		}
 
 		if ((object1.getStrokeWidth() != null && object2.getStrokeWidth() == null)
 				|| (object1.getStrokeWidth() == null && object2.getStrokeWidth() != null)
-				|| ((object1.getStrokeWidth() != null && object2.getStrokeWidth() != null) && !object1.getStrokeWidth()
-						.equals(object2.getStrokeWidth()))) {
-			throw new BiitTextNotEqualsException("StrokeWidth values are different between BiitTexts '" + object1
-					+ "' and '" + object2 + "'.");
+				|| ((object1.getStrokeWidth() != null && object2.getStrokeWidth() != null)
+						&& !object1.getStrokeWidth().equals(object2.getStrokeWidth()))) {
+			throw new BiitTextNotEqualsException(
+					"StrokeWidth values are different between BiitTexts '" + object1 + "' and '" + object2 + "'.");
 		}
 	}
 
-	private void compare(DiagramElement object1, DiagramElement object2) throws StorableObjectNotEqualsException,
-			DiagramObjectNotEqualsException, SizeNotEqualsException, PointNotEqualsException,
-			BiitTextNotEqualsException {
+	private void compare(DiagramElement object1, DiagramElement object2)
+			throws StorableObjectNotEqualsException, DiagramObjectNotEqualsException, SizeNotEqualsException,
+			PointNotEqualsException, BiitTextNotEqualsException {
 		if ((object1.getTooltip() != null && object2.getTooltip() == null)
 				|| (object1.getTooltip() == null && object2.getTooltip() != null)
-				|| ((object1.getTooltip() != null && object2.getTooltip() != null) && !object1.getTooltip().equals(
-						object2.getTooltip()))) {
-			throw new DiagramObjectNotEqualsException("ToolTip are different between DiagramElements '" + object1
-					+ "' and '" + object2 + "'.");
+				|| ((object1.getTooltip() != null && object2.getTooltip() != null)
+						&& !object1.getTooltip().equals(object2.getTooltip()))) {
+			throw new DiagramObjectNotEqualsException(
+					"ToolTip are different between DiagramElements '" + object1 + "' and '" + object2 + "'.");
 		}
 
 		if (object1.getAngle() != object2.getAngle()) {
-			throw new DiagramObjectNotEqualsException("Anges are different between DiagramElements '" + object1
-					+ "' and '" + object2 + "'.");
+			throw new DiagramObjectNotEqualsException(
+					"Anges are different between DiagramElements '" + object1 + "' and '" + object2 + "'.");
 		}
 
 		if ((object1.getSize() != null && object2.getSize() == null)
 				|| (object1.getSize() == null && object2.getSize() != null)) {
-			throw new DiagramObjectNotEqualsException("Size are different between DiagramElements '" + object1
-					+ "' and '" + object2 + "'.");
+			throw new DiagramObjectNotEqualsException(
+					"Size are different between DiagramElements '" + object1 + "' and '" + object2 + "'.");
 		}
 		compare(object1.getSize(), object2.getSize());
 
 		if ((object1.getPosition() != null && object2.getPosition() == null)
 				|| (object1.getPosition() == null && object2.getPosition() != null)) {
-			throw new DiagramObjectNotEqualsException("Points are different between DiagramElements '" + object1
-					+ "' and '" + object2 + "'.");
+			throw new DiagramObjectNotEqualsException(
+					"Points are different between DiagramElements '" + object1 + "' and '" + object2 + "'.");
 		}
 		compare(object1.getPosition(), object2.getPosition());
 
 		if ((object1.getText() != null && object2.getText() == null)
 				|| (object1.getText() == null && object2.getText() != null)) {
-			throw new DiagramObjectNotEqualsException("BiitTexts are different between DiagramElements '" + object1
-					+ "' and '" + object2 + "'.");
+			throw new DiagramObjectNotEqualsException(
+					"BiitTexts are different between DiagramElements '" + object1 + "' and '" + object2 + "'.");
 		}
 		compare(object1.getText(), object2.getText());
 	}
@@ -616,34 +612,34 @@ public class FormComparator {
 		if (object1 == null && object2 == null) {
 			return;
 		}
-		
+
 		if (object1 == null || object2 == null) {
 			throw new DiagramObjectNotEqualsException("Cannot compare '" + object1 + "' with '" + object2 + "'.");
 		}
-		
+
 		compare((DiagramElement) object1, (DiagramElement) object2);
 		if ((object1.getDiagram() != null && object2.getDiagram() == null)
 				|| (object1.getDiagram() == null && object2.getDiagram() != null)) {
-			throw new DiagramObjectNotEqualsException("Diagrams are different between diagram objects '" + object1
-					+ "' and '" + object2 + "'.");
+			throw new DiagramObjectNotEqualsException(
+					"Diagrams are different between diagram objects '" + object1 + "' and '" + object2 + "'.");
 		}
 		if (object1.getDiagram() != null && object2.getDiagram() != null) {
 			compare(object1.getDiagram(), object2.getDiagram());
 		}
 	}
 
-	private void compare(DiagramExpression object1, DiagramExpression object2) throws StorableObjectNotEqualsException,
-			DiagramObjectNotEqualsException, ExpressionNotEqualsException, CustomVariableNotEqualsException,
-			GlobalVariableNotEqualsException, VariableDataNotEqualsException, SizeNotEqualsException,
-			PointNotEqualsException, BiitTextNotEqualsException {
+	private void compare(DiagramExpression object1, DiagramExpression object2)
+			throws StorableObjectNotEqualsException, DiagramObjectNotEqualsException, ExpressionNotEqualsException,
+			CustomVariableNotEqualsException, GlobalVariableNotEqualsException, VariableDataNotEqualsException,
+			SizeNotEqualsException, PointNotEqualsException, BiitTextNotEqualsException {
 		compare((DiagramElement) object1, (DiagramElement) object2);
 		compare(object1.getExpression(), object2.getExpression());
 	}
 
-	private void compare(DiagramFork object1, DiagramFork object2) throws StorableObjectNotEqualsException,
-			DiagramObjectNotEqualsException, ExpressionNotEqualsException, CustomVariableNotEqualsException,
-			GlobalVariableNotEqualsException, VariableDataNotEqualsException, SizeNotEqualsException,
-			PointNotEqualsException, BiitTextNotEqualsException {
+	private void compare(DiagramFork object1, DiagramFork object2)
+			throws StorableObjectNotEqualsException, DiagramObjectNotEqualsException, ExpressionNotEqualsException,
+			CustomVariableNotEqualsException, GlobalVariableNotEqualsException, VariableDataNotEqualsException,
+			SizeNotEqualsException, PointNotEqualsException, BiitTextNotEqualsException {
 		compare((DiagramElement) object1, (DiagramElement) object2);
 
 		if ((object1.getReference() != null && object2.getReference() == null)
@@ -665,26 +661,26 @@ public class FormComparator {
 
 		if ((object1.getJointjsId() != null && object2.getJointjsId() == null)
 				|| (object1.getJointjsId() == null && object2.getJointjsId() != null)
-				|| ((object1.getJointjsId() != null && object2.getJointjsId() != null) && !object1.getJointjsId()
-						.equals(object2.getJointjsId()))) {
-			throw new NodeNotEqualsException("JointjsId are different between Nodes '" + object1 + "' and '" + object2
-					+ "'.");
+				|| ((object1.getJointjsId() != null && object2.getJointjsId() != null)
+						&& !object1.getJointjsId().equals(object2.getJointjsId()))) {
+			throw new NodeNotEqualsException(
+					"JointjsId are different between Nodes '" + object1 + "' and '" + object2 + "'.");
 		}
 
 		if ((object1.getSelector() != null && object2.getSelector() == null)
 				|| (object1.getSelector() == null && object2.getSelector() != null)
-				|| ((object1.getSelector() != null && object2.getSelector() != null) && !object1.getSelector().equals(
-						object2.getSelector()))) {
-			throw new NodeNotEqualsException("Selectors are different between Nodes '" + object1 + "' and '" + object2
-					+ "'.");
+				|| ((object1.getSelector() != null && object2.getSelector() != null)
+						&& !object1.getSelector().equals(object2.getSelector()))) {
+			throw new NodeNotEqualsException(
+					"Selectors are different between Nodes '" + object1 + "' and '" + object2 + "'.");
 		}
 
 		if ((object1.getPort() != null && object2.getPort() == null)
 				|| (object1.getPort() == null && object2.getPort() != null)
-				|| ((object1.getPort() != null && object2.getPort() != null) && !object1.getPort().equals(
-						object2.getPort()))) {
-			throw new NodeNotEqualsException("Ports are different between Nodes '" + object1 + "' and '" + object2
-					+ "'.");
+				|| ((object1.getPort() != null && object2.getPort() != null)
+						&& !object1.getPort().equals(object2.getPort()))) {
+			throw new NodeNotEqualsException(
+					"Ports are different between Nodes '" + object1 + "' and '" + object2 + "'.");
 		}
 	}
 
@@ -694,36 +690,36 @@ public class FormComparator {
 
 		if ((object1.getAttrs() != null && object2.getAttrs() == null)
 				|| (object1.getAttrs() == null && object2.getAttrs() != null)
-				|| ((object1.getAttrs() != null && object2.getAttrs() != null) && !object1.getAttrs().equals(
-						object2.getAttrs()))) {
-			throw new DiagramObjectNotEqualsException("Attrs are different between diagram objects '" + object1
-					+ "' and '" + object2 + "'.");
+				|| ((object1.getAttrs() != null && object2.getAttrs() != null)
+						&& !object1.getAttrs().equals(object2.getAttrs()))) {
+			throw new DiagramObjectNotEqualsException(
+					"Attrs are different between diagram objects '" + object1 + "' and '" + object2 + "'.");
 		}
 
 		if ((object1.getVertices() != null && object2.getVertices() == null)
 				|| (object1.getVertices() == null && object2.getVertices() != null)
-				|| ((object1.getVertices() != null && object2.getVertices() != null) && !object1.getVertices().equals(
-						object2.getVertices()))) {
-			throw new DiagramObjectNotEqualsException("Vertices are different between diagram objects '" + object1
-					+ "' and '" + object2 + "'.");
+				|| ((object1.getVertices() != null && object2.getVertices() != null)
+						&& !object1.getVertices().equals(object2.getVertices()))) {
+			throw new DiagramObjectNotEqualsException(
+					"Vertices are different between diagram objects '" + object1 + "' and '" + object2 + "'.");
 		}
 
 		if ((object1.isManhattan() != object2.isManhattan())) {
-			throw new DiagramObjectNotEqualsException("Manhattan values are different between diagram objects '"
-					+ object1 + "' and '" + object2 + "'.");
+			throw new DiagramObjectNotEqualsException(
+					"Manhattan values are different between diagram objects '" + object1 + "' and '" + object2 + "'.");
 		}
 
 		if ((object1.isSmooth() != object2.isSmooth())) {
-			throw new DiagramObjectNotEqualsException("Smooth values are different between diagram objects '" + object1
-					+ "' and '" + object2 + "'.");
+			throw new DiagramObjectNotEqualsException(
+					"Smooth values are different between diagram objects '" + object1 + "' and '" + object2 + "'.");
 		}
 
 		if ((object1.getText() != null && object2.getText() == null)
 				|| (object1.getText() == null && object2.getText() != null)
-				|| ((object1.getText() != null && object2.getText() != null) && !object1.getText().equals(
-						object2.getText()))) {
-			throw new DiagramObjectNotEqualsException("Texts are different between diagram objects '" + object1
-					+ "' and '" + object2 + "'.");
+				|| ((object1.getText() != null && object2.getText() != null)
+						&& !object1.getText().equals(object2.getText()))) {
+			throw new DiagramObjectNotEqualsException(
+					"Texts are different between diagram objects '" + object1 + "' and '" + object2 + "'.");
 		}
 
 		compare(object1.getSource(), object2.getSource());
@@ -732,35 +728,35 @@ public class FormComparator {
 
 	}
 
-	private void compare(DiagramRepeat object1, DiagramRepeat object2) throws StorableObjectNotEqualsException,
-			DiagramObjectNotEqualsException, SizeNotEqualsException, PointNotEqualsException,
-			BiitTextNotEqualsException {
+	private void compare(DiagramRepeat object1, DiagramRepeat object2)
+			throws StorableObjectNotEqualsException, DiagramObjectNotEqualsException, SizeNotEqualsException,
+			PointNotEqualsException, BiitTextNotEqualsException {
 		compare((DiagramElement) object1, (DiagramElement) object2);
 	}
 
-	private void compare(DiagramRule object1, DiagramRule object2) throws StorableObjectNotEqualsException,
-			DiagramObjectNotEqualsException, SizeNotEqualsException, PointNotEqualsException,
-			BiitTextNotEqualsException, RuleNotEqualsException, ExpressionNotEqualsException,
+	private void compare(DiagramRule object1, DiagramRule object2)
+			throws StorableObjectNotEqualsException, DiagramObjectNotEqualsException, SizeNotEqualsException,
+			PointNotEqualsException, BiitTextNotEqualsException, RuleNotEqualsException, ExpressionNotEqualsException,
 			CustomVariableNotEqualsException, GlobalVariableNotEqualsException, VariableDataNotEqualsException {
 		compare((DiagramElement) object1, (DiagramElement) object2);
 		if ((object1.getRule() != null && object2.getRule() == null)
 				|| (object1.getRule() == null && object2.getRule() != null)) {
-			throw new DiagramObjectNotEqualsException("Rules are different between diagram objects '" + object1
-					+ "' and '" + object2 + "'.");
+			throw new DiagramObjectNotEqualsException(
+					"Rules are different between diagram objects '" + object1 + "' and '" + object2 + "'.");
 		}
 		compare(object1.getRule(), object2.getRule());
 	}
 
-	private void compare(DiagramSink object1, DiagramSink object2) throws StorableObjectNotEqualsException,
-			DiagramObjectNotEqualsException, ExpressionNotEqualsException, CustomVariableNotEqualsException,
-			GlobalVariableNotEqualsException, VariableDataNotEqualsException, SizeNotEqualsException,
-			PointNotEqualsException, BiitTextNotEqualsException {
+	private void compare(DiagramSink object1, DiagramSink object2)
+			throws StorableObjectNotEqualsException, DiagramObjectNotEqualsException, ExpressionNotEqualsException,
+			CustomVariableNotEqualsException, GlobalVariableNotEqualsException, VariableDataNotEqualsException,
+			SizeNotEqualsException, PointNotEqualsException, BiitTextNotEqualsException {
 		compare((DiagramExpression) object1, (DiagramExpression) object2);
 	}
 
-	private void compare(DiagramSource object1, DiagramSource object2) throws StorableObjectNotEqualsException,
-			DiagramObjectNotEqualsException, SizeNotEqualsException, PointNotEqualsException,
-			BiitTextNotEqualsException {
+	private void compare(DiagramSource object1, DiagramSource object2)
+			throws StorableObjectNotEqualsException, DiagramObjectNotEqualsException, SizeNotEqualsException,
+			PointNotEqualsException, BiitTextNotEqualsException {
 		compare((DiagramElement) object1, (DiagramElement) object2);
 	}
 
@@ -771,17 +767,17 @@ public class FormComparator {
 		compare((DiagramElement) object1, (DiagramElement) object2);
 		if ((object1.getTable() != null && object2.getTable() == null)
 				|| (object1.getTable() == null && object2.getTable() != null)) {
-			throw new DiagramObjectNotEqualsException("Tables are different between diagram objects '" + object1
-					+ "' and '" + object2 + "'.");
+			throw new DiagramObjectNotEqualsException(
+					"Tables are different between diagram objects '" + object1 + "' and '" + object2 + "'.");
 		}
 		compare(object1.getTable(), object2.getTable());
 	}
 
-	private void compare(DiagramObject object1, DiagramObject object2) throws StorableObjectNotEqualsException,
-			DiagramObjectNotEqualsException, ExpressionNotEqualsException, CustomVariableNotEqualsException,
-			GlobalVariableNotEqualsException, VariableDataNotEqualsException, NodeNotEqualsException,
-			SizeNotEqualsException, PointNotEqualsException, BiitTextNotEqualsException, TableRuleNotEqualsException,
-			RuleNotEqualsException, DiagramNotEqualsException {
+	private void compare(DiagramObject object1, DiagramObject object2)
+			throws StorableObjectNotEqualsException, DiagramObjectNotEqualsException, ExpressionNotEqualsException,
+			CustomVariableNotEqualsException, GlobalVariableNotEqualsException, VariableDataNotEqualsException,
+			NodeNotEqualsException, SizeNotEqualsException, PointNotEqualsException, BiitTextNotEqualsException,
+			TableRuleNotEqualsException, RuleNotEqualsException, DiagramNotEqualsException {
 
 		if (object1 == null && object2 == null) {
 			return;
@@ -792,39 +788,39 @@ public class FormComparator {
 
 		if ((object1.getParent().getName() != null && object2.getParent().getName() == null)
 				|| (object1.getParent().getName() == null && object2.getParent().getName() != null)
-				|| ((object1.getParent() != null && object2.getParent() != null) && !object1.getParent().getName()
-						.equals(object2.getParent().getName()))) {
-			throw new DiagramObjectNotEqualsException("Parents are different between diagram objects '" + object1
-					+ "' and '" + object2 + "'.");
+				|| ((object1.getParent() != null && object2.getParent() != null)
+						&& !object1.getParent().getName().equals(object2.getParent().getName()))) {
+			throw new DiagramObjectNotEqualsException(
+					"Parents are different between diagram objects '" + object1 + "' and '" + object2 + "'.");
 		}
 
 		if ((object1.getType() != null && object2.getType() == null)
 				|| (object1.getType() == null && object2.getType() != null)
-				|| ((object1.getType() != null && object2.getType() != null) && !object1.getType().equals(
-						object2.getType()))) {
-			throw new DiagramObjectNotEqualsException("Types are different between diagram objects '" + object1
-					+ "' and '" + object2 + "'.");
+				|| ((object1.getType() != null && object2.getType() != null)
+						&& !object1.getType().equals(object2.getType()))) {
+			throw new DiagramObjectNotEqualsException(
+					"Types are different between diagram objects '" + object1 + "' and '" + object2 + "'.");
 		}
 
 		if ((object1.getJointjsId() != null && object2.getJointjsId() == null)
 				|| (object1.getJointjsId() == null && object2.getJointjsId() != null)
-				|| ((object1.getJointjsId() != null && object2.getJointjsId() != null) && !object1.getJointjsId()
-						.equals(object2.getJointjsId()))) {
-			throw new DiagramObjectNotEqualsException("JointJsIds are different between diagram objects '" + object1
-					+ "' and '" + object2 + "'.");
+				|| ((object1.getJointjsId() != null && object2.getJointjsId() != null)
+						&& !object1.getJointjsId().equals(object2.getJointjsId()))) {
+			throw new DiagramObjectNotEqualsException(
+					"JointJsIds are different between diagram objects '" + object1 + "' and '" + object2 + "'.");
 		}
 
 		if ((object1.getEmbeds() != null && object2.getEmbeds() == null)
 				|| (object1.getEmbeds() == null && object2.getEmbeds() != null)
-				|| ((object1.getEmbeds() != null && object2.getEmbeds() != null) && !object1.getEmbeds().equals(
-						object2.getEmbeds()))) {
-			throw new DiagramObjectNotEqualsException("Embeds are different between diagram objects '" + object1
-					+ "' and '" + object2 + "'.");
+				|| ((object1.getEmbeds() != null && object2.getEmbeds() != null)
+						&& !object1.getEmbeds().equals(object2.getEmbeds()))) {
+			throw new DiagramObjectNotEqualsException(
+					"Embeds are different between diagram objects '" + object1 + "' and '" + object2 + "'.");
 		}
 
 		if (object1.getZ() != object2.getZ()) {
-			throw new DiagramObjectNotEqualsException("Z is different between diagram objects '" + object1 + "' and '"
-					+ object2 + "'.");
+			throw new DiagramObjectNotEqualsException(
+					"Z is different between diagram objects '" + object1 + "' and '" + object2 + "'.");
 		}
 
 		// For each diagram element.
@@ -850,21 +846,21 @@ public class FormComparator {
 
 	}
 
-	private void compare(Diagram object1, Diagram object2) throws StorableObjectNotEqualsException,
-			DiagramNotEqualsException, DiagramObjectNotEqualsException, ExpressionNotEqualsException,
-			CustomVariableNotEqualsException, GlobalVariableNotEqualsException, VariableDataNotEqualsException,
-			NodeNotEqualsException, SizeNotEqualsException, PointNotEqualsException, BiitTextNotEqualsException,
-			TableRuleNotEqualsException, RuleNotEqualsException {
+	private void compare(Diagram object1, Diagram object2)
+			throws StorableObjectNotEqualsException, DiagramNotEqualsException, DiagramObjectNotEqualsException,
+			ExpressionNotEqualsException, CustomVariableNotEqualsException, GlobalVariableNotEqualsException,
+			VariableDataNotEqualsException, NodeNotEqualsException, SizeNotEqualsException, PointNotEqualsException,
+			BiitTextNotEqualsException, TableRuleNotEqualsException, RuleNotEqualsException {
 		if (object1 instanceof StorableObject || object2 instanceof StorableObject) {
 			compare((StorableObject) object1, (StorableObject) object2);
 		}
 
 		if ((object1.getName() != null && object2.getName() == null)
 				|| (object1.getName() == null && object2.getName() != null)
-				|| ((object1.getName() != null && object2.getName() != null) && !object1.getName().equals(
-						object2.getName()))) {
-			throw new DiagramNotEqualsException("Names are different between diagrams '" + object1 + "' and '"
-					+ object2 + "'.");
+				|| ((object1.getName() != null && object2.getName() != null)
+						&& !object1.getName().equals(object2.getName()))) {
+			throw new DiagramNotEqualsException(
+					"Names are different between diagrams '" + object1 + "' and '" + object2 + "'.");
 		}
 
 		// Compare DiagramObjects
@@ -891,25 +887,25 @@ public class FormComparator {
 	/**
 	 * Form1 is the previous version of Form2.
 	 * 
-	 * @param form1
-	 * @param form2
-	 * @throws TreeObjectNotEqualsException
-	 * @throws StorableObjectNotEqualsException
-	 * @throws FormNotEqualsException
-	 * @throws QuestionNotEqualsException
-	 * @throws GroupNotEqualsException
-	 * @throws CustomVariableNotEqualsException
-	 * @throws ExpressionNotEqualsException
-	 * @throws GlobalVariableNotEqualsException
-	 * @throws VariableDataNotEqualsException
-	 * @throws TableRuleNotEqualsException
-	 * @throws RuleNotEqualsException
-	 * @throws DiagramNotEqualsException
-	 * @throws DiagramObjectNotEqualsException
-	 * @throws NodeNotEqualsException
-	 * @throws SizeNotEqualsException
-	 * @throws PointNotEqualsException
-	 * @throws BiitTextNotEqualsException
+	 * @param form1 one form
+	 * @param form2 other form.
+	 * @throws TreeObjectNotEqualsException     form element is not equals.
+	 * @throws StorableObjectNotEqualsException form element is not equals.
+	 * @throws FormNotEqualsException           form element is not equals.
+	 * @throws QuestionNotEqualsException       form element is not equals.
+	 * @throws GroupNotEqualsException          form element is not equals.
+	 * @throws CustomVariableNotEqualsException form element is not equals.
+	 * @throws ExpressionNotEqualsException     form element is not equals.
+	 * @throws GlobalVariableNotEqualsException form element is not equals.
+	 * @throws VariableDataNotEqualsException   form element is not equals.
+	 * @throws TableRuleNotEqualsException      form element is not equals.
+	 * @throws RuleNotEqualsException           form element is not equals.
+	 * @throws DiagramNotEqualsException        form element is not equals.
+	 * @throws DiagramObjectNotEqualsException  form element is not equals.
+	 * @throws NodeNotEqualsException           form element is not equals.
+	 * @throws SizeNotEqualsException           form element is not equals.
+	 * @throws PointNotEqualsException          form element is not equals.
+	 * @throws BiitTextNotEqualsException       form element is not equals.
 	 */
 	public void compare(Form form1, Form form2) throws TreeObjectNotEqualsException, StorableObjectNotEqualsException,
 			FormNotEqualsException, GroupNotEqualsException, QuestionNotEqualsException,
@@ -920,11 +916,11 @@ public class FormComparator {
 		if ((form1 == null || form2 == null) && (form1 != null || form2 != null)) {
 			throw new FormNotEqualsException("Obtained form is null");
 		}
-		
+
 		if (form1 == null || form2 == null) {
 			throw new FormNotEqualsException("Cannot compare '" + form1 + "' with '" + form2 + "'.");
 		}
-		
+
 		if (form1.getChildren().size() != form2.getChildren().size()) {
 			throw new FormNotEqualsException("Form has different children size!");
 		}
@@ -1033,15 +1029,15 @@ public class FormComparator {
 	protected void compareFormDates(Form form1, Form form2) throws FormNotEqualsException {
 		if ((form1.getAvailableTo() == null && form2.getAvailableTo() != null)
 				|| (form1.getAvailableTo() != null && form2.getAvailableTo() == null)
-				|| ((form1.getAvailableTo() != null && form2.getAvailableTo() != null) && !form1.getAvailableTo()
-						.equals(form2.getAvailableTo()))) {
+				|| ((form1.getAvailableTo() != null && form2.getAvailableTo() != null)
+						&& !form1.getAvailableTo().equals(form2.getAvailableTo()))) {
 			throw new FormNotEqualsException("Form's validTo dates are different!");
 		}
 
 		if ((form1.getAvailableFrom() == null && form2.getAvailableFrom() != null)
 				|| (form1.getAvailableFrom() != null && form2.getAvailableFrom() == null)
-				|| ((form1.getAvailableFrom() != null && form2.getAvailableFrom() != null) && !form1.getAvailableFrom()
-						.equals(form2.getAvailableFrom()))) {
+				|| ((form1.getAvailableFrom() != null && form2.getAvailableFrom() != null)
+						&& !form1.getAvailableFrom().equals(form2.getAvailableFrom()))) {
 			throw new FormNotEqualsException("Form's validFrom dates are different!");
 		}
 	}

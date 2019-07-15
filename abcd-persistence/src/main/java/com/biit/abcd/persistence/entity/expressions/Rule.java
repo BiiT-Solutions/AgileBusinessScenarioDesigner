@@ -67,6 +67,8 @@ public class Rule extends StorableObject implements INameAttribute {
 
 	/**
 	 * Add more conditions to the existing one (with 'AND' operator)
+	 * 
+	 * @param extraConditions the conditions to add.
 	 */
 	public void addExtraConditions(ExpressionChain extraConditions) {
 		if (extraConditions != null) {

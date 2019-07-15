@@ -72,7 +72,8 @@ public class GlobalVariable extends StorableObject implements IGlobalVariable {
 
 	public void setName(String name) throws FieldTooLongException {
 		if (name.length() > MAX_UNIQUE_COLUMN_LENGTH) {
-			throw new FieldTooLongException("Name is limited to " + MAX_UNIQUE_COLUMN_LENGTH + " characters due to database restrictions. ");
+			throw new FieldTooLongException(
+					"Name is limited to " + MAX_UNIQUE_COLUMN_LENGTH + " characters due to database restrictions. ");
 		}
 		this.name = name;
 	}
@@ -100,15 +101,13 @@ public class GlobalVariable extends StorableObject implements IGlobalVariable {
 	/**
 	 * Creates a new variable data and adds it to the global variable
 	 * 
-	 * @param value
-	 *            : the value of the variable data
-	 * @param validFrom
-	 *            : starting time of the variable
-	 * @param validTo
-	 *            : finishing time of the variable
-	 * @throws NotValidTypeInVariableData
+	 * @param value     the value of the variable data
+	 * @param validFrom starting time of the variable
+	 * @param validTo   finishing time of the variable
+	 * @throws NotValidTypeInVariableData if does not exist a type.
 	 */
-	public void addVariableData(Object value, Timestamp validFrom, Timestamp validTo) throws NotValidTypeInVariableData {
+	public void addVariableData(Object value, Timestamp validFrom, Timestamp validTo)
+			throws NotValidTypeInVariableData {
 		VariableData variableData = getNewInstanceVariableData();
 		variableData.setValue(value);
 		variableData.setValidFrom(validFrom);
@@ -157,7 +156,8 @@ public class GlobalVariable extends StorableObject implements IGlobalVariable {
 					data.copyData((VariableData) child);
 					variableData.add(data);
 				} catch (InstantiationException | IllegalAccessException e) {
-					throw new NotValidStorableObjectException("Object '" + object + "' is not a valid instance of GlobalVariable.");
+					throw new NotValidStorableObjectException(
+							"Object '" + object + "' is not a valid instance of GlobalVariable.");
 				}
 			}
 		} else {
@@ -186,7 +186,8 @@ public class GlobalVariable extends StorableObject implements IGlobalVariable {
 				Timestamp endTime = variableData.getValidTo();
 				// Sometimes endtime can be null, meaning that the
 				// variable data has no ending time
-				if ((currentTime.after(initTime) && (endTime == null)) || (currentTime.after(initTime) && currentTime.before(endTime))) {
+				if ((currentTime.after(initTime) && (endTime == null))
+						|| (currentTime.after(initTime) && currentTime.before(endTime))) {
 					return variableData.getValue();
 				}
 			}

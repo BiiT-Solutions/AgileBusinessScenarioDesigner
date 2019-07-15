@@ -61,10 +61,8 @@ public class CheckDependencies {
 	/**
 	 * Check dependencies inside the expression chain hierarchy
 	 * 
-	 * @param expressionChain
-	 *            expression to check.
-	 * @param treeObject
-	 *            element
+	 * @param expressionChain expression to check.
+	 * @param treeObject      element
 	 * @throws DependencyExistException
 	 */
 	private static void checkTreeObjectDependeciesInExpressionChain(ExpressionChain expressionChain,
@@ -75,8 +73,8 @@ public class CheckDependencies {
 				if (condition instanceof ExpressionValueTreeObjectReference) {
 					TreeObject reference = ((ExpressionValueTreeObjectReference) condition).getReference();
 					if ((reference != null) && Objects.equals(reference, treeObject)) {
-						throw new DependencyExistException("Cannot delete " + treeObject.getClass().getName()
-								+ ", referenced in the form.");
+						throw new DependencyExistException(
+								"Cannot delete " + treeObject.getClass().getName() + ", referenced in the form.");
 					}
 				} else if (condition instanceof ExpressionChain) {
 					checkTreeObjectDependeciesInExpressionChain((ExpressionChain) condition, treeObject);
@@ -87,16 +85,14 @@ public class CheckDependencies {
 
 	/**
 	 * Look for tree object dependencies inside the diagram<br>
-	 * Only three node types can create new dependencies that hasn't been
-	 * checked yet:<br>
+	 * Only three node types can create new dependencies that hasn't been checked
+	 * yet:<br>
 	 * - DiagramLink<br>
 	 * - DiagramFork<br>
 	 * - DiagramChild: to check internal dependencies<br>
 	 * 
-	 * @param diagram
-	 *            diagram to check.
-	 * @param treeObject
-	 *            element.
+	 * @param diagram    diagram to check.
+	 * @param treeObject element.
 	 * @throws DependencyExistException
 	 */
 	private static void checkTreeObjectDependenciesInDiagram(Diagram diagram, TreeObject treeObject)
@@ -108,9 +104,9 @@ public class CheckDependencies {
 					checkTreeObjectDependeciesInExpressionChain(((DiagramLink) diagramObject).getExpressionChain(),
 							treeObject);
 				} else if (diagramObject instanceof DiagramFork) {
-					if (Objects.equals(((DiagramFork) diagramObject).getReference(), treeObject)) {
-						throw new DependencyExistException("Cannot delete " + treeObject.getClass().getName()
-								+ ", referenced in the form.");
+					if (Objects.equals(((DiagramFork) diagramObject).getReference().getReference(), treeObject)) {
+						throw new DependencyExistException(
+								"Cannot delete " + treeObject.getClass().getName() + ", referenced in the form.");
 					}
 				} else if (diagramObject instanceof DiagramChild) {
 					checkTreeObjectDependenciesInDiagram(((DiagramChild) diagramObject).getDiagram(), treeObject);
@@ -129,10 +125,8 @@ public class CheckDependencies {
 	/**
 	 * Look for table rule dependencies inside the diagram<br>
 	 * 
-	 * @param diagram
-	 *            diagram to check
-	 * @param tableRule
-	 *            table
+	 * @param diagram   diagram to check
+	 * @param tableRule table
 	 * @throws DependencyExistException
 	 */
 	private static void checkTableRuleDependenciesInDiagram(Diagram diagram, TableRule tableRule)
@@ -162,10 +156,8 @@ public class CheckDependencies {
 	/**
 	 * Look for rule dependencies inside the diagram
 	 * 
-	 * @param diagram
-	 *            diagram to check
-	 * @throws rule
-	 *             the rule
+	 * @param diagram diagram to check
+	 * @throws rule the rule
 	 */
 	private static void checkRuleDependenciesInDiagram(Diagram diagram, Rule rule) throws DependencyExistException {
 		if (diagram != null) {
@@ -194,10 +186,8 @@ public class CheckDependencies {
 	/**
 	 * Look up for rule dependencies inside the diagram<br>
 	 * 
-	 * @param diagram
-	 *            diagram to check.
-	 * @throws expressionChain
-	 *             expression.
+	 * @param diagram diagram to check.
+	 * @throws expressionChain expression.
 	 */
 	private static void checkExpressionChainDependenciesInDiagram(Diagram diagram, ExpressionChain expressionChain)
 			throws DependencyExistException {
@@ -221,11 +211,9 @@ public class CheckDependencies {
 	/**
 	 * Look up for custom variables.
 	 * 
-	 * @param form
-	 *            form to check
-	 * @param customVariable
-	 *            variable
-	 * @throws DependencyExistException
+	 * @param form           form to check
+	 * @param customVariable variable
+	 * @throws DependencyExistException already exists a dependency.
 	 */
 	public static void checkCustomVariableDependencies(Form form, CustomVariable customVariable)
 			throws DependencyExistException {

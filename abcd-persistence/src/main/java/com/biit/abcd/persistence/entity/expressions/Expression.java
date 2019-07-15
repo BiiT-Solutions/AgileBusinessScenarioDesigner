@@ -57,9 +57,9 @@ public abstract class Expression extends StorableObject {
 	}
 
 	/**
-	 * Returns the expression in string format that can be evaluated by a
-	 * Expression Evaluator. Not allowed characters are ',', '.', ':',
-	 * operators, ... that must filtered of the expression if necessary.
+	 * Returns the expression in string format that can be evaluated by a Expression
+	 * Evaluator. Not allowed characters are ',', '.', ':', operators, ... that must
+	 * filtered of the expression if necessary.
 	 * 
 	 * @return the expression as a string.
 	 */
@@ -68,6 +68,7 @@ public abstract class Expression extends StorableObject {
 	/**
 	 * Returns a text representation of the Expression
 	 * 
+	 * @param showWhiteCharacter if white characters must be keeped or not.
 	 * @return a string as a representation.
 	 */
 	public abstract String getRepresentation(boolean showWhiteCharacter);

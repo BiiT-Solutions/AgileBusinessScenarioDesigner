@@ -22,11 +22,11 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 @Entity
 @Table(name = "expression_operator")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public abstract class ExpressionOperator extends Expression implements IExpressionType<AvailableOperator> { 
+public abstract class ExpressionOperator extends Expression implements IExpressionType<AvailableOperator> {
 	private static final long serialVersionUID = 122060488311950177L;
-	
+
 	@Enumerated(EnumType.STRING)
-	@Column(name="current_value")
+	@Column(name = "current_value")
 	private AvailableOperator currentValue;
 
 	public ExpressionOperator() {
@@ -52,17 +52,17 @@ public abstract class ExpressionOperator extends Expression implements IExpressi
 	/**
 	 * Set a value.
 	 * 
-	 * @param exprOpvalue
-	 * @throws NotValidOperatorInExpression
-	 *             If this exception is launched, check ALLOWED_OPERATORS of the class.
+	 * @param exprOpvalue the value.
+	 * @throws NotValidOperatorInExpression If this exception is launched, check
+	 *                                      ALLOWED_OPERATORS of the class.
 	 */
 	@Override
 	public void setValue(AvailableOperator exprOpvalue) throws NotValidOperatorInExpression {
 		if (getAcceptedValues().contains(exprOpvalue)) {
 			currentValue = exprOpvalue;
 		} else {
-			throw new NotValidOperatorInExpression("The operator '" + exprOpvalue
-					+ "' is not allowed in this expression.");
+			throw new NotValidOperatorInExpression(
+					"The operator '" + exprOpvalue + "' is not allowed in this expression.");
 		}
 	}
 
@@ -77,8 +77,8 @@ public abstract class ExpressionOperator extends Expression implements IExpressi
 			super.copyData(object);
 			currentValue = ((ExpressionOperator) object).getValue();
 		} else {
-			throw new NotValidStorableObjectException("Object '" + object
-					+ "' is not an instance of ExpressionOperator.");
+			throw new NotValidStorableObjectException(
+					"Object '" + object + "' is not an instance of ExpressionOperator.");
 		}
 	}
 }

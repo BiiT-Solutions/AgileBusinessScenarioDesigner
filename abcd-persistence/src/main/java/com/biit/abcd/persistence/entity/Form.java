@@ -540,7 +540,7 @@ public class Form extends BaseForm {
 	/**
 	 * Get Custom variables for a specific tree Object.
 	 * 
-	 * @param treeObject
+	 * @param treeObject the element to retrieve the variables.
 	 * @return the list of variables.
 	 */
 	public List<CustomVariable> getCustomVariables(TreeObject treeObject) {
@@ -573,6 +573,8 @@ public class Form extends BaseForm {
 	/**
 	 * Looks for the custom variable with the specified scope and name.
 	 * 
+	 * @param name the name of the variable.
+	 * @param scope the context of the variable.
 	 * @return the custom variable or null if not found
 	 */
 	public CustomVariable getCustomVariable(String name, String scope) {

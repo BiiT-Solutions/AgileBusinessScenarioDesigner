@@ -162,18 +162,18 @@ public class FormDao extends AnnotatedGenericDao<Form, Long> implements IFormDao
 	/**
 	 * Updates the validTo field of a form defined by its label and version.
 	 * 
-	 * @param label
-	 * @param version
-	 * @param validTo
+	 * @param label          the label of the element to update.
+	 * @param version        the version of the element to update.
+	 * @param organizationId the organization id.
+	 * @param validTo        the date until this element is valid.
 	 * @return the number of entities updated.
-	 * @throws UnexpectedDatabaseException
+	 * @throws UnexpectedDatabaseException error in the database.
 	 */
 	@CacheEvict(value = "springFormCache", key = "#form.label, #form.organizationId")
 	@Transactional(value = "abcdTransactionManager", propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
 	public int updateValidTo(String label, int version, Long organizationId, Timestamp validTo) {
-		Query query = getEntityManager()
-				.createQuery(
-						"UPDATE Form SET availableTo = CASE WHEN :availableTo > availableFrom THEN :availableTo ELSE availableFrom END where label = :label and version = :version and organization_id = :organization_id");
+		Query query = getEntityManager().createQuery(
+				"UPDATE Form SET availableTo = CASE WHEN :availableTo > availableFrom THEN :availableTo ELSE availableFrom END where label = :label and version = :version and organization_id = :organization_id");
 		query.setParameter("label", label);
 		query.setParameter("version", version);
 		query.setParameter("organization_id", organizationId);

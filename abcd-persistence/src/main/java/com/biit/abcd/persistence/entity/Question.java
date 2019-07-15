@@ -48,7 +48,7 @@ public class Question extends BaseQuestion {
 	 * This setter sets AnswerType and sets the answer format to the default
 	 * answer format for a type.
 	 * 
-	 * @param answerType
+	 * @param answerType the type of the answer.
 	 */
 	public void setAnswerType(AnswerType answerType) {
 		AnswerType prevValue = this.answerType;

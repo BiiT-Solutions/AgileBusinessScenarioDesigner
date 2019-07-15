@@ -27,13 +27,21 @@ public class AbcdJpaSchemaExporter extends com.biit.persistence.JpaSchemaExporte
 	/**
 	 * Create a script that can generate a database for the selected dialect
 	 * 
-	 * @param dialect
-	 * @param directory
+	 * @param dialect      the hibernate dialect
+	 * @param directory    the folder.
+	 * @param outputFile   the file.
+	 * @param host         connection host.
+	 * @param port         the port of the host.
+	 * @param username     database username.
+	 * @param password     database password.
+	 * @param databaseName the database to inspect.
+	 * @param onlyCreation not update script.
 	 */
 	@Override
-	public void createDatabaseScript(HibernateDialect dialect, String directory, String outputFile, String host, String port, String username, String password,
-			String databaseName, boolean onlyCreation) {
-		super.createDatabaseScript(dialect, directory, outputFile, host, port, username, password, databaseName, onlyCreation);
+	public void createDatabaseScript(HibernateDialect dialect, String directory, String outputFile, String host,
+			String port, String username, String password, String databaseName, boolean onlyCreation) {
+		super.createDatabaseScript(dialect, directory, outputFile, host, port, username, password, databaseName,
+				onlyCreation);
 		updateTables(directory, outputFile);
 	}
 
@@ -97,15 +105,18 @@ public class AbcdJpaSchemaExporter extends com.biit.persistence.JpaSchemaExporte
 
 		// Launch the JpaSchemaExporter
 		JpaSchemaExporter gen = new AbcdJpaSchemaExporter(getPacketsToScan(), getClassesToIgnoreWhenCreatingDatabase());
-		gen.createDatabaseScript(HibernateDialect.MYSQL, getDirectory(), getOutputFile(), getHost(), getPort(), getUser(), getPassword(), getDatabaseName(),
-				true);
+		gen.createDatabaseScript(HibernateDialect.MYSQL, getDirectory(), getOutputFile(), getHost(), getPort(),
+				getUser(), getPassword(), getDatabaseName(), true);
 		gen = new AbcdJpaSchemaExporter(getPacketsToScan(), getClassesToIgnoreWhenUpdatingDatabase());
-		gen.updateDatabaseScript(HibernateDialect.MYSQL, getDirectory(), getHost(), getPort(), getUser(), getPassword(), getDatabaseName());
+		gen.updateDatabaseScript(HibernateDialect.MYSQL, getDirectory(), getHost(), getPort(), getUser(), getPassword(),
+				getDatabaseName());
 
 		// Add hibernate sequence table.
-		//addTextToFile(createHibernateSequenceTable(), getDirectory() + File.separator + getOutputFile());
+		// addTextToFile(createHibernateSequenceTable(), getDirectory() + File.separator
+		// + getOutputFile());
 		// Add extra information from a external script.
-		addTextToFile(readFile(getScriptsToAdd(), Charset.forName("UTF-8")), getDirectory() + File.separator + getOutputFile());
+		addTextToFile(readFile(getScriptsToAdd(), Charset.forName("UTF-8")),
+				getDirectory() + File.separator + getOutputFile());
 
 		// Close file watchers to ensure that the thread ends and maven exec is
 		// not frozen.

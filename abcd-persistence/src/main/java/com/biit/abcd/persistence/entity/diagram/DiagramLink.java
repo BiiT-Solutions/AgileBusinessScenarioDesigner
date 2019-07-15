@@ -315,7 +315,7 @@ public class DiagramLink extends DiagramObject {
 	 * currently Hibernate doesn't handle correctly the Orphan removal. Use
 	 * setExpressions of ExpressionChain.
 	 * 
-	 * @param expressionChain
+	 * @param expressionChain the expression
 	 */
 	public void setExpressionChain(ExpressionChain expressionChain) {
 		this.expressionChain = expressionChain;
@@ -324,7 +324,7 @@ public class DiagramLink extends DiagramObject {
 	/**
 	 * Replace any existing expressions with this expression.
 	 * 
-	 * @param expression
+	 * @param expression the expression
 	 */
 	public void replaceExpressions(Expression expression) {
 		getExpressionChain().setExpressions(Arrays.asList(expression));
