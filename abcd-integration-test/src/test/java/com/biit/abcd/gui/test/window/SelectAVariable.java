@@ -9,7 +9,7 @@ public class SelectAVariable extends AcceptCancelWindow {
 	private static final String WINDOW_CAPTION = "Select Form Variables";
 	private static final String SELECTION_CAPTION = "Select a Variable:";
 	private static final String ELEMENT_TABLE = "Select an Element:";
-	private static final String CLASS_NAME = "com.biit.abcd.webpages.elements.expressionviewer.SelectFormElementVariableWindow";
+	private static final String CLASS_NAME = "com.biit.abcd.webpages.elements.expression.viewer.SelectFormElementVariableWindow";
 
 	public void selectVariableAndAcceptElement(String name) {
 		waitToShow();

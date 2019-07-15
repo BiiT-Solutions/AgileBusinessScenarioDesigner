@@ -8,7 +8,7 @@ public class AddNewValueWindow extends AcceptCancelWindow {
 	private static final String VALUE_CAPTION = "Value";
 	private static final String VALID_FROM = "Valid from";
 	private static final String VALID_TO = "Valid to";
-	private static final String CLASS_NAME = "com.biit.abcd.webpages.elements.globalvariables.VariableDataWindow";
+	private static final String CLASS_NAME = "com.biit.abcd.webpages.elements.global.variables.VariableDataWindow";
 
 	public void setValue(String value) {
 		try {

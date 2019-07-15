@@ -8,7 +8,7 @@ public class NewVariableWindow extends AcceptCancelWindow{
 
 	private static final String NAME_CAPTION = "Name";
 	private static final String NAME_TYPE = "Type";
-	private static final String CLASS_NAME = "com.biit.abcd.webpages.elements.globalvariables.VariableWindow";
+	private static final String CLASS_NAME = "com.biit.abcd.webpages.elements.global.variables.VariableWindow";
 
 	public void setName(String name){
 		$(TextFieldElement.class).caption(NAME_CAPTION).first().setValue(name);
