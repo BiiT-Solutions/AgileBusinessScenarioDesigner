@@ -79,10 +79,10 @@ public class RuleGenerationUtils {
 
 	public static String getGroupEndRuleExtraCondition(DroolsRuleGroupEndRule rule) {
 		if (rule.getName().startsWith("rule \"")) {
-			return "\tnot( FiredRule( getRuleName() == '"
-					+ rule.getName().split(" ")[1].replace("\n", "").replace("\"", "") + "') ) and\n";
+			return "\tnot(FiredRule(getRuleName() == '"
+					+ rule.getName().split(" ")[1].replace("\n", "").replace("\"", "") + "')) and\n";
 		} else {
-			return "\tnot( FiredRule( getRuleName() == '" + rule.getName() + "') ) and\n";
+			return "\tnot(FiredRule( getRuleName() == '" + rule.getName() + "')) and\n";
 		}
 	}
 
@@ -91,11 +91,11 @@ public class RuleGenerationUtils {
 		if (rule.getName().startsWith("rule \"")) {
 			groupAction = "\tDroolsEngineLogger.debug(\"RuleFired\", \"Rule "
 					+ rule.getName().split(" ")[1].replace("\n", "").replace("\"", "") + " fired\");\n";
-			groupAction += "\tinsert ( new FiredRule(\""
+			groupAction += "\tinsert(new FiredRule(\""
 					+ rule.getName().split(" ")[1].replace("\n", "").replace("\"", "") + "\"));\n";
 		} else {
 			groupAction = "\tDroolsEngineLogger.debug(\"RuleFired\", \"Rule " + rule.getName() + " fired\");\n";
-			groupAction += "\tinsert ( new FiredRule(\"" + rule.getName() + "\"));\n";
+			groupAction += "\tinsert(new FiredRule(\"" + rule.getName() + "\"));\n";
 		}
 
 		return groupAction;
