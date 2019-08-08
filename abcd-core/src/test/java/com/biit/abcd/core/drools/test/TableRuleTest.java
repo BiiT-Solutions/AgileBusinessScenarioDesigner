@@ -157,7 +157,7 @@ public class TableRuleTest extends KidsFormCreator {
 
 		// If it contains this string, means that the multiple columns are being
 		// parsed by the engine
-		Assert.assertTrue(droolsRules.contains("not( FiredRule( getRuleName()"));
+		Assert.assertTrue(droolsRules.contains("not(FiredRule(getRuleName()"));
 	}
 
 	private void createQuestionAnswerTableRule(Form form) throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException {

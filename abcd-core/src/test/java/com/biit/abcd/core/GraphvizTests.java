@@ -22,8 +22,8 @@ import com.biit.persistence.entity.exceptions.FieldTooLongException;
 public class GraphvizTests {
 
 	@Test
-	public void createDiagramImage() throws FieldTooLongException, NotValidChildException, CharacterNotAllowedException, InvalidAnswerFormatException,
-			ElementIsReadOnly, IOException, InterruptedException, TranscoderException {
+	public void createDiagramImage() throws FieldTooLongException, NotValidChildException, CharacterNotAllowedException,
+			InvalidAnswerFormatException, ElementIsReadOnly, IOException, InterruptedException, TranscoderException {
 		Form form = FormUtils.createCompleteForm();
 		Assert.assertNotNull(form);
 

@@ -20,12 +20,12 @@ import com.biit.utils.os.exceptions.PathToExecutableNotFound;
  */
 public class GraphvizApp {
 
-	/* Official variable name but it's not usually set */
-	public static String GRAPHVIZ_SYSVAR = "GVBINDIR";
+	// Official variable name but it's not usually set
+	public static final String GRAPHVIZ_SYSVAR = "GVBINDIR";
 	public static String applicationPath = null;
 
 	public enum ImgType {
-		GIF("gif"), DOT("dot"), FIG("fig"), PDF("pdf"), PS("ps"), SVG("svg"), PNG("png"), ;
+		GIF("gif"), DOT("dot"), FIG("fig"), PDF("pdf"), PS("ps"), SVG("svg"), PNG("png"),;
 		private String type;
 
 		private ImgType(String imgType) {
@@ -57,19 +57,16 @@ public class GraphvizApp {
 	/**
 	 * This function gets dot code in string form and generates a image of
 	 * {@code imgType} using temporal files. When the process is finished all
-	 * temporal files are deleted and the result image is returned as a byte
-	 * array.
+	 * temporal files are deleted and the result image is returned as a byte array.
 	 * 
-	 * @param dotCode
-	 *            dot code in string form
-	 * @param imgType
-	 *            image file format
+	 * @param dotCode dot code in string form
+	 * @param imgType image file format
 	 * @return
 	 * @throws IOException
 	 * @throws InterruptedException
 	 */
-	private static byte[] generateImageFromDotCode(String dotCode, ImgType imgType) throws IOException,
-			InterruptedException {
+	private static byte[] generateImageFromDotCode(String dotCode, ImgType imgType)
+			throws IOException, InterruptedException {
 		byte[] img_stream = null;
 
 		try {
@@ -109,18 +106,15 @@ public class GraphvizApp {
 	 * Generates the graph image of a form with the type {@code imgType} if
 	 * {@code filter} is null no filter is used and all the form is rendered.
 	 * 
-	 * @param form
-	 *            source form
-	 * @param diagram
-	 *            the diagram
-	 * @param imgType
-	 *            image file format
+	 * @param form    source form
+	 * @param diagram the diagram
+	 * @param imgType image file format
 	 * @return Byte data of image
 	 * @throws IOException
 	 * @throws InterruptedException
 	 */
-	public static byte[] generateImage(Form form, Diagram diagram, ImgType imgType) throws IOException,
-			InterruptedException {
+	public static byte[] generateImage(Form form, Diagram diagram, ImgType imgType)
+			throws IOException, InterruptedException {
 		// Generate DotCode
 		String dotCode = null;
 		ExporterDotForm exporter = new ExporterDotForm();
