@@ -353,6 +353,11 @@ public class FormManagerUpperMenu extends UpperMenu {
 					UserSessionHandler.getGlobalVariablesController().getGlobalVariables(), generatedSumbittedForm);
 
 			if (submittedForm instanceof DroolsForm) {
+				AbcdLogger.debug(this.getClass().getName(),
+						"Testing Submitted Form:\n" + generatedSumbittedForm.toJson());
+				AbcdLogger.debug(this.getClass().getName(), "Submitted Form:\n" + generatedSumbittedForm.toJson());
+				AbcdLogger.debug(this.getClass().getName(),
+						"Drools Submitted Form:\n" + ((DroolsForm) submittedForm).getDroolsSubmittedForm().toJson());
 				final DroolsSubmittedFormResultWindow droolsResultWindow = new DroolsSubmittedFormResultWindow(
 						((DroolsForm) submittedForm).getDroolsSubmittedForm(),
 						UserSessionHandler.getFormController().getForm());
