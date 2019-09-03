@@ -186,13 +186,28 @@ public class FormManagerUpperMenu extends UpperMenu {
 													generatedSumbittedForm);
 
 											if (submittedForm instanceof DroolsForm) {
-												/*AbcdLogger.debug(this.getClass().getName(),
-														"Testing Submitted Form:\n" + generatedSumbittedForm.toJson());
-												AbcdLogger.debug(this.getClass().getName(),
-														"Submitted Form:\n" + generatedSumbittedForm.toJson());
-												AbcdLogger.debug(this.getClass().getName(),
-														"Drools Submitted Form:\n" + ((DroolsForm) submittedForm)
-																.getDroolsSubmittedForm().toJson());*/
+												try {
+													AbcdLogger.debug(this.getClass().getName(),
+															"Testing Submitted Form:\n"
+																	+ generatedSumbittedForm.toJson());
+												} catch (Exception e) {
+													AbcdLogger.debug(this.getClass().getName(),
+															"Testing Submitted Form: null");
+												}
+												try {
+													AbcdLogger.debug(this.getClass().getName(),
+															"Submitted Form:\n" + generatedSumbittedForm.toJson());
+												} catch (Exception e) {
+													AbcdLogger.debug(this.getClass().getName(), "Submitted Form: null");
+												}
+												try {
+													AbcdLogger.debug(this.getClass().getName(),
+															"Drools Submitted Form:\n" + ((DroolsForm) submittedForm)
+																	.getDroolsSubmittedForm().toJson());
+												} catch (Exception e) {
+													AbcdLogger.debug(this.getClass().getName(),
+															"Drools Submitted Form: null");
+												}
 												final DroolsSubmittedFormResultWindow droolsResultWindow = new DroolsSubmittedFormResultWindow(
 														((DroolsForm) submittedForm).getDroolsSubmittedForm(),
 														UserSessionHandler.getFormController().getForm());
@@ -353,11 +368,13 @@ public class FormManagerUpperMenu extends UpperMenu {
 					UserSessionHandler.getGlobalVariablesController().getGlobalVariables(), generatedSumbittedForm);
 
 			if (submittedForm instanceof DroolsForm) {
-				/*AbcdLogger.debug(this.getClass().getName(),
-						"Testing Submitted Form:\n" + generatedSumbittedForm.toJson());
-				AbcdLogger.debug(this.getClass().getName(), "Submitted Form:\n" + generatedSumbittedForm.toJson());
-				AbcdLogger.debug(this.getClass().getName(),
-						"Drools Submitted Form:\n" + ((DroolsForm) submittedForm).getDroolsSubmittedForm().toJson());*/
+				/*
+				 * AbcdLogger.debug(this.getClass().getName(), "Testing Submitted Form:\n" +
+				 * generatedSumbittedForm.toJson()); AbcdLogger.debug(this.getClass().getName(),
+				 * "Submitted Form:\n" + generatedSumbittedForm.toJson());
+				 * AbcdLogger.debug(this.getClass().getName(), "Drools Submitted Form:\n" +
+				 * ((DroolsForm) submittedForm).getDroolsSubmittedForm().toJson());
+				 */
 				final DroolsSubmittedFormResultWindow droolsResultWindow = new DroolsSubmittedFormResultWindow(
 						((DroolsForm) submittedForm).getDroolsSubmittedForm(),
 						UserSessionHandler.getFormController().getForm());
