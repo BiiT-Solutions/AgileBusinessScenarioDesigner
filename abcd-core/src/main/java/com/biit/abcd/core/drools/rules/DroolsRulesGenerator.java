@@ -125,6 +125,7 @@ public class DroolsRulesGenerator {
 			getRulesBuilder().append("import java.lang.reflect.Method \n");
 		}
 		getRulesBuilder().append("import com.biit.drools.logger.DroolsEngineLogger \n\n");
+		getRulesBuilder().append("import com.biit.drools.logger.DroolsRulesLogger \n\n");
 	}
 
 	/**
@@ -234,7 +235,7 @@ public class DroolsRulesGenerator {
 			defaultCustomVariableValue.append("then\n");
 			defaultCustomVariableValue.append("\t$" + TreeObjectDroolsIdMap.get(expressionValueCustomVariable.getReference()) + ".setVariableValue('"
 					+ expressionValueCustomVariable.getVariable().getName() + "', " + customVariableDefaultValue + ");\n");
-			defaultCustomVariableValue.append("\tDroolsEngineLogger.debug(\"DroolsRule\", \"Default variable value set ("
+			defaultCustomVariableValue.append("\tDroolsRulesLogger.info(\"DroolsRule\", \"Default variable value set ("
 					+ expressionValueCustomVariable.getReference().getName() + ", " + expressionValueCustomVariable.getVariable().getName() + ", "
 					+ customVariableDefaultValue + ")\");\n");
 			defaultCustomVariableValue.append("end\n\n");

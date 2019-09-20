@@ -139,7 +139,7 @@ public class DroolsParser {
 						+ "' not found.", actions);
 			}
 			// Set the value calculated
-			ruleCore += "\tDroolsEngineLogger.debug(\"DroolsRule\", \"Variable set ("
+			ruleCore += "\tDroolsRulesLogger.info(\"DroolsRule\", \"Variable set ("
 					+ leftExpressionCustomVariable.getReference().getName() + ", \"" + "+$"
 					+ getTreeObjectName(leftExpressionCustomVariable.getReference()) + ".getVariableValue('"
 					+ leftExpressionCustomVariable.getVariable().getName() + "')+\")\");\n";
@@ -1131,7 +1131,7 @@ public class DroolsParser {
 			}
 			ruleCore += "\t$" + getTreeObjectName(leftExpressionCustomVariable.getReference()) + ".setVariableValue('"
 					+ leftExpressionCustomVariable.getVariable().getName() + "', " + mathematicalExpression + ");\n";
-			ruleCore += "\tDroolsEngineLogger.debug(\"DroolsRule\", \"Variable set ("
+			ruleCore += "\tDroolsRulesLogger.info(\"DroolsRule\", \"Variable set ("
 					+ leftExpressionCustomVariable.getReference().getName() + ", "
 					+ leftExpressionCustomVariable.getVariable().getName() + ", " + mathematicalExpression + ")\");\n";
 
@@ -1443,7 +1443,7 @@ public class DroolsParser {
 			ruleCore += "\tObject callResult = " + pluginCall + ";\n";
 			ruleCore += "\t$" + getTreeObjectName(leftExpressionCustomVariable.getReference()) + ".setVariableValue('"
 					+ leftExpressionCustomVariable.getVariable().getName() + "', callResult);\n";
-			ruleCore += "\tDroolsEngineLogger.debug(\"DroolsRule\", \"Variable set ("
+			ruleCore += "\tDroolsRulesLogger.info(\"DroolsRule\", \"Variable set ("
 					+ leftExpressionCustomVariable.getReference().getName() + ", "
 					+ leftExpressionCustomVariable.getVariable().getName() + ", callResult)\");\n";
 

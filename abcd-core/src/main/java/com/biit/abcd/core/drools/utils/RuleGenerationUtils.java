@@ -89,12 +89,12 @@ public class RuleGenerationUtils {
 	public static String getGroupRuleActions(DroolsRuleGroup rule) {
 		String groupAction = "";
 		if (rule.getName().startsWith("rule \"")) {
-			groupAction = "\tDroolsEngineLogger.debug(\"RuleFired\", \"Rule "
+			groupAction = "\tDroolsRulesLogger.debug(\"RuleFired\", \"Rule "
 					+ rule.getName().split(" ")[1].replace("\n", "").replace("\"", "") + " fired\");\n";
 			groupAction += "\tinsert(new FiredRule(\""
 					+ rule.getName().split(" ")[1].replace("\n", "").replace("\"", "") + "\"));\n";
 		} else {
-			groupAction = "\tDroolsEngineLogger.debug(\"RuleFired\", \"Rule " + rule.getName() + " fired\");\n";
+			groupAction = "\tDroolsRulesLogger.debug(\"RuleFired\", \"Rule " + rule.getName() + " fired\");\n";
 			groupAction += "\tinsert(new FiredRule(\"" + rule.getName() + "\"));\n";
 		}
 
