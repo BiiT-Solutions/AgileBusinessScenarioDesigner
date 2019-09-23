@@ -184,30 +184,8 @@ public class FormManagerUpperMenu extends UpperMenu {
 													UserSessionHandler.getFormController().getForm(), UserSessionHandler
 															.getGlobalVariablesController().getGlobalVariables(),
 													generatedSumbittedForm);
-
 											if (submittedForm instanceof DroolsForm) {
-												try {
-													AbcdLogger.debug(this.getClass().getName(),
-															"Testing Submitted Form:\n"
-																	+ generatedSumbittedForm.toJson());
-												} catch (Exception e) {
-													AbcdLogger.debug(this.getClass().getName(),
-															"Testing Submitted Form: null");
-												}
-												try {
-													AbcdLogger.debug(this.getClass().getName(),
-															"Submitted Form:\n" + generatedSumbittedForm.toJson());
-												} catch (Exception e) {
-													AbcdLogger.debug(this.getClass().getName(), "Submitted Form: null");
-												}
-												try {
-													AbcdLogger.debug(this.getClass().getName(),
-															"Drools Submitted Form:\n" + ((DroolsForm) submittedForm)
-																	.getDroolsSubmittedForm().toJson());
-												} catch (Exception e) {
-													AbcdLogger.debug(this.getClass().getName(),
-															"Drools Submitted Form: null");
-												}
+												logTestForms(submittedForm);
 												final DroolsSubmittedFormResultWindow droolsResultWindow = new DroolsSubmittedFormResultWindow(
 														((DroolsForm) submittedForm).getDroolsSubmittedForm(),
 														UserSessionHandler.getFormController().getForm());
@@ -267,6 +245,25 @@ public class FormManagerUpperMenu extends UpperMenu {
 		addIconButton(exportToDrools);
 		addIconButton(createTestScenario);
 		addIconButton(launchTestScenario);
+	}
+
+	private void logTestForms(final ISubmittedForm generatedSumbittedForm) {
+		try {
+			AbcdLogger.debug(this.getClass().getName(), "Testing Submitted Form:\n" + generatedSumbittedForm.toJson());
+		} catch (Exception e) {
+			AbcdLogger.debug(this.getClass().getName(), "Testing Submitted Form: null");
+		}
+		try {
+			AbcdLogger.debug(this.getClass().getName(), "Submitted Form:\n" + generatedSumbittedForm.toJson());
+		} catch (Exception e) {
+			AbcdLogger.debug(this.getClass().getName(), "Submitted Form: null");
+		}
+		try {
+			AbcdLogger.debug(this.getClass().getName(),
+					"Drools Submitted Form:\n" + ((DroolsForm) submittedForm).getDroolsSubmittedForm().toJson());
+		} catch (Exception e) {
+			AbcdLogger.debug(this.getClass().getName(), "Drools Submitted Form: null");
+		}
 	}
 
 	private List<IconButton> createNewFormButtons() {
@@ -368,13 +365,7 @@ public class FormManagerUpperMenu extends UpperMenu {
 					UserSessionHandler.getGlobalVariablesController().getGlobalVariables(), generatedSumbittedForm);
 
 			if (submittedForm instanceof DroolsForm) {
-				/*
-				 * AbcdLogger.debug(this.getClass().getName(), "Testing Submitted Form:\n" +
-				 * generatedSumbittedForm.toJson()); AbcdLogger.debug(this.getClass().getName(),
-				 * "Submitted Form:\n" + generatedSumbittedForm.toJson());
-				 * AbcdLogger.debug(this.getClass().getName(), "Drools Submitted Form:\n" +
-				 * ((DroolsForm) submittedForm).getDroolsSubmittedForm().toJson());
-				 */
+				logTestForms(submittedForm);
 				final DroolsSubmittedFormResultWindow droolsResultWindow = new DroolsSubmittedFormResultWindow(
 						((DroolsForm) submittedForm).getDroolsSubmittedForm(),
 						UserSessionHandler.getFormController().getForm());
