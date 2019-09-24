@@ -225,7 +225,7 @@ public class DroolsRulesGenerator {
 			// Rule name
 			ruleName = RuleGenerationUtils.getRuleName(expressionValueCustomVariable.getVariable().getName() + "_default_value");
 			// Default rules must be executed first.
-			ruleName += " salience 1000";
+			ruleName += "salience 1000 \n";
 			// Conditions
 			defaultCustomVariableValue.append("when\n");
 			defaultCustomVariableValue.append("\t$droolsForm: DroolsForm()\n");
