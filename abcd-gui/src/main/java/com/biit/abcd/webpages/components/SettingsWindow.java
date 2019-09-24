@@ -10,6 +10,7 @@ import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.dao.IFormDao;
+import com.biit.abcd.persistence.dao.IGlobalVariablesDao;
 import com.biit.abcd.persistence.dao.ITestScenarioDao;
 import com.biit.abcd.persistence.utils.Exceptions.BiitTextNotEqualsException;
 import com.biit.abcd.persistence.utils.Exceptions.CustomVariableNotEqualsException;
@@ -46,10 +47,12 @@ public class SettingsWindow extends PopupWindow {
 	private Button logoutButton;
 
 	private IFormDao formDao;
-	
+
 	private ITestScenarioDao testScenarioDao;
 
 	private IAbcdFormAuthorizationService securityService;
+
+	private IGlobalVariablesDao globalVariableDao;
 
 	public SettingsWindow() {
 		setClosable(true);
@@ -66,6 +69,7 @@ public class SettingsWindow extends PopupWindow {
 		formDao = (IFormDao) helper.getBean("formDao");
 		testScenarioDao = (ITestScenarioDao) helper.getBean("testScenarioDao");
 		securityService = (IAbcdFormAuthorizationService) helper.getBean("abcdSecurityService");
+		globalVariableDao = (IGlobalVariablesDao) helper.getBean("globalVariableDao");
 	}
 
 	private Component generateContent() {
@@ -75,7 +79,8 @@ public class SettingsWindow extends PopupWindow {
 
 		// Global Constant Button can be only used by users with an specific role.
 		try {
-			if (securityService.isAuthorizedActivity(UserSessionHandler.getUser(), AbcdActivity.GLOBAL_VARIABLE_EDITOR)) {
+			if (securityService.isAuthorizedActivity(UserSessionHandler.getUser(),
+					AbcdActivity.GLOBAL_VARIABLE_EDITOR)) {
 				Button globalConstantsButton = new Button(
 						ServerTranslate.translate(LanguageCodes.SETTINGS_GLOBAL_CONSTANTS), new ClickListener() {
 							private static final long serialVersionUID = 5662848461729745562L;
@@ -132,10 +137,13 @@ public class SettingsWindow extends PopupWindow {
 										formDao.evictAllCache();
 										formDao.evictCache();
 										testScenarioDao.evictCache();
+										globalVariableDao.evictCache();
+										globalVariableDao.evictAllCache();
+
 										ApplicationFrame.navigateTo(WebMap.FORM_MANAGER);
-										AbcdLogger.info(this.getClass().getName(), "User '"
-												+ UserSessionHandler.getUser().getEmailAddress()
-												+ "' has cleared all the 2nd level cache.");
+										AbcdLogger.info(this.getClass().getName(),
+												"User '" + UserSessionHandler.getUser().getEmailAddress()
+														+ "' has cleared all the 2nd level cache.");
 										MessageManager.showInfo(LanguageCodes.INFO_CACHE_CLEARED);
 										windowAccept.close();
 									}

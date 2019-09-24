@@ -11,7 +11,6 @@ import javax.persistence.criteria.Root;
 import javax.persistence.metamodel.EntityType;
 import javax.persistence.metamodel.Metamodel;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -21,7 +20,6 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.biit.abcd.persistence.dao.ICustomVariableDao;
 import com.biit.abcd.persistence.dao.IFormDao;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.FormWorkStatus;
@@ -30,9 +28,6 @@ import com.biit.persistence.entity.exceptions.ElementCannotBeRemovedException;
 
 @Repository
 public class FormDao extends AnnotatedGenericDao<Form, Long> implements IFormDao {
-
-	@Autowired
-	private ICustomVariableDao customVariableDao;
 
 	public FormDao() {
 		super(Form.class);
