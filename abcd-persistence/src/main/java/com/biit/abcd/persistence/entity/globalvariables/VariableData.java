@@ -19,13 +19,13 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 @Table(name = "global_variable_data")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @Cacheable(true)
-public abstract class VariableData extends StorableObject implements IVariableData{
+public abstract class VariableData extends StorableObject implements IVariableData {
 	private static final long serialVersionUID = 6356292873575007675L;
 
-	@Column(name="valid_from")
+	@Column(name = "valid_from")
 	private Timestamp validFrom;
 
-	@Column(name="valid_to")
+	@Column(name = "valid_to")
 	private Timestamp validTo;
 
 	// Attribute used for json deserialization due to parent abstract class
@@ -62,7 +62,10 @@ public abstract class VariableData extends StorableObject implements IVariableDa
 
 	@Override
 	public String toString() {
-		return getValue().toString();
+		if (getValue() != null) {
+			return getValue().toString();
+		}
+		return "";
 	}
 
 	public String getType() {

@@ -85,12 +85,12 @@ public class VariableDataTable extends Table {
 	private void refreshItem(IVariableData variableData, Item item) {
 		if (item != null) {
 			if (variableData instanceof VariableDataDate) {
-				item.getItemProperty(Properties.VARIABLE_VALUE)
-						.setValue(
-								DateManager.convertDateToString((Date) variableData.getValue(),
-										DateManager.DATE_FORMAT_SIMPLE));
+				item.getItemProperty(Properties.VARIABLE_VALUE).setValue(DateManager
+						.convertDateToString((Date) variableData.getValue(), DateManager.DATE_FORMAT_SIMPLE));
 			} else {
-				item.getItemProperty(Properties.VARIABLE_VALUE).setValue(variableData.getValue());
+				if (variableData.getValue() != null) {
+					item.getItemProperty(Properties.VARIABLE_VALUE).setValue(variableData.getValue().toString());
+				}
 			}
 			item.getItemProperty(Properties.VARIABLE_VALID_FROM).setValue(
 					DateManager.convertDateToString(variableData.getValidFrom(), DateManager.DATE_FORMAT_SIMPLE));
