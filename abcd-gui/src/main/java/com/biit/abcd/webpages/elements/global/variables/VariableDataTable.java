@@ -88,9 +88,7 @@ public class VariableDataTable extends Table {
 				item.getItemProperty(Properties.VARIABLE_VALUE).setValue(DateManager
 						.convertDateToString((Date) variableData.getValue(), DateManager.DATE_FORMAT_SIMPLE));
 			} else {
-				if (variableData.getValue() != null) {
-					item.getItemProperty(Properties.VARIABLE_VALUE).setValue(variableData.getValue().toString());
-				}
+				item.getItemProperty(Properties.VARIABLE_VALUE).setValue(variableData.getValue());
 			}
 			item.getItemProperty(Properties.VARIABLE_VALID_FROM).setValue(
 					DateManager.convertDateToString(variableData.getValidFrom(), DateManager.DATE_FORMAT_SIMPLE));
