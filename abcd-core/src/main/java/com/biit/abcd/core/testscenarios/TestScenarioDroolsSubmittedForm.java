@@ -16,9 +16,7 @@ import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.testscenarios.TestAnswer;
 import com.biit.abcd.persistence.entity.testscenarios.TestAnswerInputDate;
 import com.biit.abcd.persistence.entity.testscenarios.TestAnswerMultiCheckBox;
-import com.biit.abcd.persistence.entity.testscenarios.TestScenario;
 import com.biit.abcd.persistence.entity.testscenarios.TestScenarioCategory;
-import com.biit.abcd.persistence.entity.testscenarios.TestScenarioForm;
 import com.biit.abcd.persistence.entity.testscenarios.TestScenarioGroup;
 import com.biit.abcd.persistence.entity.testscenarios.TestScenarioQuestion;
 import com.biit.drools.form.DroolsSubmittedCategory;
@@ -43,14 +41,13 @@ public class TestScenarioDroolsSubmittedForm {
 	private TestScenarioValidator testValidator = null;
 	private ISubmittedForm submittedForm;
 
-	public ISubmittedForm createSubmittedForm(Form form, TestScenario testScenario) {
+	public ISubmittedForm createSubmittedForm(Form form, BaseForm testScenario) {
 		if ((form != null) && (testScenario != null)) {
 			// If the test scenario is a subset of the form passed, we parse the
 			// structure
 			testValidator = new TestScenarioValidator();
 			testValidator.checkAndModifyTestScenarioStructure(form, testScenario);
-			TestScenarioForm testForm = testScenario.getTestScenarioForm();
-			createDroolsSubmittedForm(testForm);
+			createDroolsSubmittedForm(testScenario);
 		}
 		createSubmittedFormFile(getSubmitedForm());
 		return getSubmitedForm();
@@ -60,7 +57,9 @@ public class TestScenarioDroolsSubmittedForm {
 		if (submittedForm != null) {
 			try {
 				String submmitedFormXml = ((DroolsSubmittedForm) submittedForm).generateXML();
-				Files.write(Paths.get(System.getProperty("java.io.tmpdir") + File.separator + "generatedSubmittedForm.xml"), submmitedFormXml.getBytes("UTF-8"));
+				Files.write(
+						Paths.get(System.getProperty("java.io.tmpdir") + File.separator + "generatedSubmittedForm.xml"),
+						submmitedFormXml.getBytes("UTF-8"));
 			} catch (IOException e) {
 				AbcdLogger.errorMessage(TestScenarioDroolsSubmittedForm.class.getName(), e);
 			}

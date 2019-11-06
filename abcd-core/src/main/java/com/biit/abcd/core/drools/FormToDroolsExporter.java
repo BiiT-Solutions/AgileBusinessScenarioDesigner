@@ -121,7 +121,7 @@ public class FormToDroolsExporter {
 	 * @throws RuleNotImplementedException
 	 * @throws InvalidExpressionException
 	 */
-	public ISubmittedForm processForm(Form form, List<GlobalVariable> globalVariables, ISubmittedForm iSubmittedForm) throws DroolsRuleGenerationException,
+	public ISubmittedForm processForm(Form form, List<GlobalVariable> globalVariables, ISubmittedForm submittedForm) throws DroolsRuleGenerationException,
 			DroolsRuleExecutionException, RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
 			BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException,
@@ -129,9 +129,9 @@ public class FormToDroolsExporter {
 		// Generate all drools rules.
 		DroolsRulesGenerator rulesGenerator = generateDroolRules(form, globalVariables);
 		// Obtain results
-		if ((rulesGenerator != null) && (iSubmittedForm != null)) {
+		if ((rulesGenerator != null) && (submittedForm != null)) {
 			DroolsRulesEngine droolsEngine = new DroolsRulesEngine();
-			return droolsEngine.applyDrools(iSubmittedForm, rulesGenerator.getRules(),
+			return droolsEngine.applyDrools(submittedForm, rulesGenerator.getRules(),
 					RuleGenerationUtils.convertGlobalVariablesToDroolsGlobalVariables(globalVariables));
 		} else
 			return null;

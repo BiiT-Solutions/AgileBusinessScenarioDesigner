@@ -20,9 +20,9 @@ import com.biit.abcd.persistence.entity.testscenarios.TestAnswerMultiCheckBox;
 import com.biit.abcd.persistence.entity.testscenarios.TestAnswerRadioButton;
 import com.biit.abcd.persistence.entity.testscenarios.TestScenario;
 import com.biit.abcd.persistence.entity.testscenarios.TestScenarioCategory;
-import com.biit.abcd.persistence.entity.testscenarios.TestScenarioForm;
 import com.biit.abcd.persistence.entity.testscenarios.TestScenarioGroup;
 import com.biit.abcd.persistence.entity.testscenarios.TestScenarioQuestion;
+import com.biit.form.entity.BaseForm;
 import com.biit.form.entity.TreeObject;
 import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.ChildrenNotFoundException;
@@ -34,22 +34,22 @@ import com.biit.persistence.entity.exceptions.FieldTooLongException;
 public class TestScenarioValidator {
 
 	private HashMap<String, TreeObject> originalReferenceTreeObjectMap;
-	private TestScenario testScenarioAnalyzed;
+	private BaseForm testScenarioAnalyzed;
 	private List<TestScenarioValidatorMessage> validatorMessages;
 
 	/**
-	 * Compares the test scenario structure against the form structure and
-	 * modifies the objects needed
+	 * Compares the test scenario structure against the form structure and modifies
+	 * the objects needed
 	 * 
 	 * @param form
 	 * @param testScenario
 	 */
-	public void checkAndModifyTestScenarioStructure(Form form, TestScenario testScenario) {
+	public void checkAndModifyTestScenarioStructure(Form form, BaseForm testScenario) {
 		if (form != null && testScenario != null) {
 			testScenarioAnalyzed = testScenario;
 			// First check the changes in the structure already existent
 			originalReferenceTreeObjectMap = form.getOriginalReferenceTreeObjectMap();
-			TestScenarioForm testScenarioForm = testScenario.getTestScenarioForm();
+			BaseForm testScenarioForm = testScenario;
 			if (originalReferenceTreeObjectMap.containsKey(testScenarioForm.getOriginalReference())) {
 
 				try {
@@ -71,7 +71,7 @@ public class TestScenarioValidator {
 				}
 			}
 			for (TreeObject treeObject : form.getChildren()) {
-				checkRemainingFormStructure(treeObject, testScenario.getTestScenarioForm());
+				checkRemainingFormStructure(treeObject, testScenario);
 			}
 		}
 	}
@@ -99,7 +99,8 @@ public class TestScenarioValidator {
 					}
 				}
 			}
-		} catch (DependencyExistException | FieldTooLongException | CharacterNotAllowedException | ElementIsReadOnly e) {
+		} catch (DependencyExistException | FieldTooLongException | CharacterNotAllowedException
+				| ElementIsReadOnly e) {
 			AbcdLogger.errorMessage(TestScenarioValidator.class.getName(), e);
 		}
 	}
@@ -128,8 +129,8 @@ public class TestScenarioValidator {
 					// If the group exists but is in a different position
 					TreeObject whatToMove = testScenarioGroup;
 					TreeObject oldParent = testScenarioGroup.getParent();
-					TreeObject whereToMove = testScenarioAnalyzed.getTestScenarioForm()
-							.getOriginalReferenceTreeObjectMap().get(group.getParent().getOriginalReference());
+					TreeObject whereToMove = testScenarioAnalyzed.getOriginalReferenceTreeObjectMap()
+							.get(group.getParent().getOriginalReference());
 					TreeObject.move(whatToMove, whereToMove);
 
 					addValidatorMessages("group.moved", testScenarioGroup.getName(), oldParent.getName(),
@@ -174,7 +175,8 @@ public class TestScenarioValidator {
 				}
 				checkAnswerType((Question) question, testScenarioQuestion);
 			}
-		} catch (DependencyExistException | FieldTooLongException | CharacterNotAllowedException | ElementIsReadOnly e) {
+		} catch (DependencyExistException | FieldTooLongException | CharacterNotAllowedException
+				| ElementIsReadOnly e) {
 			AbcdLogger.errorMessage(TestScenarioValidator.class.getName(), e);
 		}
 	}
@@ -335,8 +337,8 @@ public class TestScenarioValidator {
 	}
 
 	private void setTestAnswerReplaceMessage(TestAnswer oldTestAnswer, TestAnswer newTestAnswer) {
-		addValidatorMessages("answer.replaced", oldTestAnswer.getClass().getSimpleName(), newTestAnswer.getClass()
-				.getSimpleName());
+		addValidatorMessages("answer.replaced", oldTestAnswer.getClass().getSimpleName(),
+				newTestAnswer.getClass().getSimpleName());
 	}
 
 	private TestScenarioQuestion replaceTestScenarioQuestion(TestScenarioQuestion testScenarioQuestion) {

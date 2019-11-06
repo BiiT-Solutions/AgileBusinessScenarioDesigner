@@ -73,7 +73,7 @@ public class FormManagerUpperMenu extends UpperMenu {
 	private List<IFormSelectedListener> formSelectedListeners;
 	private Form form;
 	private IFormDao formDao;
-	private ISubmittedForm submittedForm;
+	private ISubmittedForm resultsFromDrools;
 	private List<IFormRemove> removeFormListeners;
 
 	public interface IFormRemove {
@@ -161,7 +161,13 @@ public class FormManagerUpperMenu extends UpperMenu {
 										TestScenarioDroolsSubmittedForm testAnswerImporter = new TestScenarioDroolsSubmittedForm();
 										final ISubmittedForm generatedSumbittedForm = testAnswerImporter
 												.createSubmittedForm(UserSessionHandler.getFormController().getForm(),
-														testScenarioDB);
+														testScenarioDB.getTestScenarioForm());
+										try {
+											AbcdLogger.debug(this.getClass().getName(),
+													"Form Answers:\n" + generatedSumbittedForm.toJson());
+										} catch (Exception e) {
+											AbcdLogger.debug(this.getClass().getName(), "Form Answers: null");
+										}
 
 										if ((testAnswerImporter.getTestScenarioModifications() != null)
 												&& !testAnswerImporter.getTestScenarioModifications().isEmpty()) {
@@ -180,14 +186,14 @@ public class FormManagerUpperMenu extends UpperMenu {
 											});
 											windowAccept.showCentered();
 										} else {
-											submittedForm = droolsExporter.processForm(
+											resultsFromDrools = droolsExporter.processForm(
 													UserSessionHandler.getFormController().getForm(), UserSessionHandler
 															.getGlobalVariablesController().getGlobalVariables(),
 													generatedSumbittedForm);
-											if (submittedForm instanceof DroolsForm) {
-												logTestForms(submittedForm);
+											if (resultsFromDrools instanceof DroolsForm) {
+												logTestForms(resultsFromDrools);
 												final DroolsSubmittedFormResultWindow droolsResultWindow = new DroolsSubmittedFormResultWindow(
-														((DroolsForm) submittedForm).getDroolsSubmittedForm(),
+														((DroolsForm) resultsFromDrools).getDroolsSubmittedForm(),
 														UserSessionHandler.getFormController().getForm());
 												droolsResultWindow.addAcceptActionListener(new AcceptActionListener() {
 													@Override
@@ -249,6 +255,12 @@ public class FormManagerUpperMenu extends UpperMenu {
 
 	private void logTestForms(final ISubmittedForm generatedSumbittedForm) {
 		try {
+			AbcdLogger.debug(this.getClass().getName(),
+					"Original Form:\n" + UserSessionHandler.getFormController().getForm().toJson());
+		} catch (Exception e) {
+			AbcdLogger.debug(this.getClass().getName(), "Original Form: null");
+		}
+		try {
 			AbcdLogger.debug(this.getClass().getName(), "Testing Submitted Form:\n" + generatedSumbittedForm.toJson());
 		} catch (Exception e) {
 			AbcdLogger.debug(this.getClass().getName(), "Testing Submitted Form: null");
@@ -260,7 +272,7 @@ public class FormManagerUpperMenu extends UpperMenu {
 		}
 		try {
 			AbcdLogger.debug(this.getClass().getName(),
-					"Drools Submitted Form:\n" + ((DroolsForm) submittedForm).getDroolsSubmittedForm().toJson());
+					"Drools Submitted Form:\n" + ((DroolsForm) resultsFromDrools).getDroolsSubmittedForm().toJson());
 		} catch (Exception e) {
 			AbcdLogger.debug(this.getClass().getName(), "Drools Submitted Form: null");
 		}
@@ -361,13 +373,13 @@ public class FormManagerUpperMenu extends UpperMenu {
 	private void acceptActionTestScenarioReportWindow(FormToDroolsExporter droolsExporter,
 			ISubmittedForm generatedSumbittedForm) {
 		try {
-			submittedForm = droolsExporter.processForm(UserSessionHandler.getFormController().getForm(),
+			resultsFromDrools = droolsExporter.processForm(UserSessionHandler.getFormController().getForm(),
 					UserSessionHandler.getGlobalVariablesController().getGlobalVariables(), generatedSumbittedForm);
 
-			if (submittedForm instanceof DroolsForm) {
-				logTestForms(submittedForm);
+			if (resultsFromDrools instanceof DroolsForm) {
+				logTestForms(resultsFromDrools);
 				final DroolsSubmittedFormResultWindow droolsResultWindow = new DroolsSubmittedFormResultWindow(
-						((DroolsForm) submittedForm).getDroolsSubmittedForm(),
+						((DroolsForm) resultsFromDrools).getDroolsSubmittedForm(),
 						UserSessionHandler.getFormController().getForm());
 				droolsResultWindow.addAcceptActionListener(new AcceptActionListener() {
 					@Override
