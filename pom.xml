@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.biit</groupId>
 	<artifactId>abcd-tool</artifactId>
@@ -83,6 +85,7 @@
 		<javax.servlet.version>2.5</javax.servlet.version>
 		<batik.version>1.8</batik.version>
 		<xmlgraphics-commons.version>2.1</xmlgraphics-commons.version>
+		<junit.version>4.12</junit.version>
 		<!-- BiiT dependencies -->
 		<DES-encryption.version>[1.0,1.1)</DES-encryption.version>
 		<biit-common-utils.version>[1.0,1.1)</biit-common-utils.version>
@@ -101,6 +104,12 @@
 			<groupId>org.testng</groupId>
 			<artifactId>testng</artifactId>
 			<version>${org.testng.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

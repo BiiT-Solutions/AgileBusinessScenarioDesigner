@@ -37,7 +37,7 @@ public class TestScenarioMainLayout extends HorizontalLayout {
 		removeAllComponents();
 		if (form != null && testScenario != null) {
 			TestScenarioValidator testScenarioValidator = new TestScenarioValidator();
-			testScenarioValidator.checkAndModifyTestScenarioStructure(form, testScenario);
+			testScenarioValidator.checkAndModifyTestScenarioStructure(form, testScenario.getTestScenarioForm());
 			originalReferenceTreeObjectMap = form.getOriginalReferenceTreeObjectMap();
 			createContent(form, testScenario);
 		}

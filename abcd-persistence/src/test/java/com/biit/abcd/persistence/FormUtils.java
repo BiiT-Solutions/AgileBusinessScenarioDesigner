@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import com.biit.abcd.persistence.entity.Answer;
 import com.biit.abcd.persistence.entity.AnswerFormat;
@@ -319,8 +319,8 @@ public class FormUtils {
 				variableMap.get("bonus"));
 		expressionChain2.addExpression(customVariable2);
 		expressionChain2.addExpression(new ExpressionOperatorMath(AvailableOperator.ASSIGNATION));
-		expressionChain2.addExpression(new ExpressionValueTreeObjectReference(elementsMap.get("InsertDate"),
-				QuestionDateUnit.YEARS));
+		expressionChain2.addExpression(
+				new ExpressionValueTreeObjectReference(elementsMap.get("InsertDate"), QuestionDateUnit.YEARS));
 		expressionsMap.put("Expression2", expressionChain2);
 
 		return expressionsMap;
@@ -351,8 +351,8 @@ public class FormUtils {
 		expressionChain = new ExpressionChain();
 		expressionChain.addExpression(customVariable);
 		expressionChain.addExpression(new ExpressionOperatorMath(AvailableOperator.ASSIGNATION));
-		expressionChain.addExpression(new ExpressionValueCustomVariable(elementsMap.get("Category1"), variableMap
-				.get("cScore")));
+		expressionChain.addExpression(
+				new ExpressionValueCustomVariable(elementsMap.get("Category1"), variableMap.get("cScore")));
 		expressionChain.addExpression(new ExpressionOperatorMath(AvailableOperator.PLUS));
 		expressionChain.addExpression(new ExpressionValueNumber(1d));
 		tableRuleRow1.getAction().addExpression(expressionChain);
@@ -378,7 +378,7 @@ public class FormUtils {
 					.get(0)).getExpressions().get(2)).setReference(elementsMap.get("Answer" + i));
 			// Category1.score=Category1.score+X;
 			((ExpressionValueNumber) ((ExpressionChain) tableRuleRow.getAction().getExpressions().get(0))
-					.getExpressions().get(4)).setValue(new Double(i));
+					.getExpressions().get(4)).setValue(Double.valueOf(i));
 			i++;
 		}
 
@@ -412,8 +412,8 @@ public class FormUtils {
 		expressionChain = new ExpressionChain();
 		expressionChain.addExpression(customVariable);
 		expressionChain.addExpression(new ExpressionOperatorMath(AvailableOperator.ASSIGNATION));
-		expressionChain.addExpression(new ExpressionValueCustomVariable(elementsMap.get("Category1"), variableMap
-				.get("cScore")));
+		expressionChain.addExpression(
+				new ExpressionValueCustomVariable(elementsMap.get("Category1"), variableMap.get("cScore")));
 		expressionChain.addExpression(new ExpressionOperatorMath(AvailableOperator.PLUS));
 		expressionChain.addExpression(new ExpressionValueNumber(1d));
 		rule.setActions(expressionChain);
