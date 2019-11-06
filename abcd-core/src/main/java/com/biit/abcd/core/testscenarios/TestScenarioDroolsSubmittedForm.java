@@ -37,6 +37,7 @@ import com.biit.form.submitted.ISubmittedQuestion;
  * presented to the user.
  */
 public class TestScenarioDroolsSubmittedForm {
+	private final static String DEFAULT_APPLICATION_NAME = "ABCD";
 
 	private TestScenarioValidator testValidator = null;
 	private ISubmittedForm submittedForm;
@@ -71,7 +72,7 @@ public class TestScenarioDroolsSubmittedForm {
 	}
 
 	private void createDroolsSubmittedForm(BaseForm form) {
-		setSubmittedForm(new DroolsSubmittedForm("", form.getLabel()));
+		setSubmittedForm(new DroolsSubmittedForm(DEFAULT_APPLICATION_NAME, form.getLabel(), form.getVersion()));
 		createSubmittedFromStructure(form, getSubmitedForm());
 	}
 
