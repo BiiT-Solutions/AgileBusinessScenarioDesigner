@@ -8,7 +8,6 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.usermanager.entity.IGroup;
 import com.biit.usermanager.entity.IRole;
@@ -18,6 +17,7 @@ import com.biit.usermanager.security.IAuthenticationService;
 import com.biit.usermanager.security.IAuthorizationService;
 import com.biit.usermanager.security.exceptions.UserDoesNotExistException;
 import com.biit.usermanager.security.exceptions.UserManagementException;
+import com.liferay.portal.log.SecurityLogger;
 
 @Component
 public class SecurityService implements ISecurityService {
@@ -36,7 +36,7 @@ public class SecurityService implements ISecurityService {
 		try {
 			return getAuthenticationService().getDefaultGroup(user);
 		} catch (UserManagementException e) {
-			AbcdLogger.errorMessage(this.getClass().getName(), e);
+			SecurityLogger.errorMessage(this.getClass().getName(), e);
 		}
 		return null;
 	}
@@ -46,23 +46,29 @@ public class SecurityService implements ISecurityService {
 		for (IRole<Long> role : roles) {
 			activities.addAll(getAuthorizationService().getRoleActivities(role));
 		}
+		SecurityLogger.debug(this.getClass().getName(), "Activities for roles '" + roles + "' are '" + activities + "'.");
 		return activities;
 	}
 
 	@Override
-	public boolean isUserAuthorizedInAnyOrganization(IUser<Long> user, IActivity activity) throws UserManagementException {
-
+	public boolean isUserAuthorizedInAnyOrganization(IUser<Long> user, IActivity activity)
+			throws UserManagementException {
 		// Check isUserAuthorizedActivity (own permissions)
 		if (getAuthorizationService().isAuthorizedActivity(user, activity)) {
+			SecurityLogger.info(this.getClass().getName(), "User '" + user + "' is authorized for '" + activity + "'.");
 			return true;
 		}
+
 		// Get all organizations of user
 		Set<IGroup<Long>> organizations = getUserOrganizations(user);
 		for (IGroup<Long> organization : organizations) {
-			if (getAuthorizationService().isAuthorizedActivity(user, organization, activity)) {
+			if (isAuthorizedActivity(user, organization, activity)) {
+				SecurityLogger.info(this.getClass().getName(),
+						"User '" + user + "' has authorization for '" + activity + "' at '" + organization + "'.");
 				return true;
 			}
 		}
+		SecurityLogger.info(this.getClass().getName(), "User '" + user + "' is NOT authorized for '" + activity + "'.");
 		return false;
 	}
 
@@ -85,7 +91,7 @@ public class SecurityService implements ISecurityService {
 		try {
 			return getAuthorizationService().isAuthorizedActivity(user, organization, activity);
 		} catch (UserManagementException e) {
-			AbcdLogger.errorMessage(this.getClass().getName(), e);
+			SecurityLogger.errorMessage(this.getClass().getName(), e);
 			// For security
 			return false;
 		}
@@ -100,7 +106,7 @@ public class SecurityService implements ISecurityService {
 				}
 			}
 		} catch (UserManagementException e) {
-			AbcdLogger.errorMessage(this.getClass().getName(), e);
+			SecurityLogger.errorMessage(this.getClass().getName(), e);
 		}
 
 		return null;
@@ -119,8 +125,10 @@ public class SecurityService implements ISecurityService {
 				}
 			}
 		} catch (UserManagementException e) {
-			AbcdLogger.errorMessage(this.getClass().getName(), e);
+			SecurityLogger.errorMessage(this.getClass().getName(), e);
 		}
+		SecurityLogger.info(this.getClass().getName(),
+				"User '" + user + "' is authorized for '" + activity + "' at '" + organizations + "'.");
 		return organizations;
 	}
 

@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import junit.framework.Assert;
+import org.testng.Assert;
 
 import com.biit.abcd.core.utils.TableRuleUtils;
 import com.biit.abcd.persistence.entity.Answer;
@@ -53,8 +53,8 @@ import com.biit.persistence.entity.exceptions.FieldTooLongException;
 public class FormUtils {
 	private static Random random = new Random();
 
-	public static Form createCompleteForm() throws FieldTooLongException, NotValidChildException,
-			CharacterNotAllowedException, InvalidAnswerFormatException, ElementIsReadOnly {
+	public static Form createCompleteForm()
+			throws FieldTooLongException, NotValidChildException, CharacterNotAllowedException, InvalidAnswerFormatException, ElementIsReadOnly {
 		Map<String, CustomVariable> variableMap;
 		Map<String, TableRule> tablesMap;
 		Map<String, ExpressionChain> expressionsMap;
@@ -105,10 +105,10 @@ public class FormUtils {
 	 * @throws FieldTooLongException
 	 * @throws CharacterNotAllowedException
 	 * @throws InvalidAnswerFormatException
-	 * @throws ElementIsReadOnly 
+	 * @throws ElementIsReadOnly
 	 */
-	public static Map<String, TreeObject> createCategory() throws NotValidChildException, FieldTooLongException,
-			CharacterNotAllowedException, InvalidAnswerFormatException, ElementIsReadOnly {
+	public static Map<String, TreeObject> createCategory()
+			throws NotValidChildException, FieldTooLongException, CharacterNotAllowedException, InvalidAnswerFormatException, ElementIsReadOnly {
 		Map<String, TreeObject> elementsMap = new HashMap<>();
 		Category category = new Category();
 		category.setName("Category1");
@@ -288,23 +288,19 @@ public class FormUtils {
 
 	public static Map<String, CustomVariable> addFormCustomVariables(Form form) {
 		Map<String, CustomVariable> variableMap = new HashMap<>();
-		CustomVariable customVarCategory = new CustomVariable(form, "cScore", CustomVariableType.NUMBER,
-				CustomVariableScope.CATEGORY);
+		CustomVariable customVarCategory = new CustomVariable(form, "cScore", CustomVariableType.NUMBER, CustomVariableScope.CATEGORY);
 		variableMap.put("cScore", customVarCategory);
 
-		CustomVariable customVarQuestion = new CustomVariable(form, "bonus", CustomVariableType.NUMBER,
-				CustomVariableScope.QUESTION);
+		CustomVariable customVarQuestion = new CustomVariable(form, "bonus", CustomVariableType.NUMBER, CustomVariableScope.QUESTION);
 		variableMap.put("bonus", customVarQuestion);
 		return variableMap;
 	}
 
-	public static Map<String, ExpressionChain> addFormExpressions(Map<String, TreeObject> elementsMap,
-			Map<String, CustomVariable> variableMap) {
+	public static Map<String, ExpressionChain> addFormExpressions(Map<String, TreeObject> elementsMap, Map<String, CustomVariable> variableMap) {
 		Map<String, ExpressionChain> expressionsMap = new HashMap<>();
 		ExpressionChain expressionChain = new ExpressionChain();
 		expressionChain.setName("Expression1");
-		ExpressionValueCustomVariable customVariable = new ExpressionValueCustomVariable(elementsMap.get("Category1"),
-				variableMap.get("cScore"));
+		ExpressionValueCustomVariable customVariable = new ExpressionValueCustomVariable(elementsMap.get("Category1"), variableMap.get("cScore"));
 		// Category.Score=1+1;
 		expressionChain.addExpression(customVariable);
 		expressionChain.addExpression(new ExpressionOperatorMath(AvailableOperator.ASSIGNATION));
@@ -316,19 +312,16 @@ public class FormUtils {
 		// Category1.bonus=InsertDate(Y)
 		ExpressionChain expressionChain2 = new ExpressionChain();
 		expressionChain2.setName("Expression2");
-		ExpressionValueCustomVariable customVariable2 = new ExpressionValueCustomVariable(elementsMap.get("Category1"),
-				variableMap.get("bonus"));
+		ExpressionValueCustomVariable customVariable2 = new ExpressionValueCustomVariable(elementsMap.get("Category1"), variableMap.get("bonus"));
 		expressionChain2.addExpression(customVariable2);
 		expressionChain2.addExpression(new ExpressionOperatorMath(AvailableOperator.ASSIGNATION));
-		expressionChain2.addExpression(new ExpressionValueTreeObjectReference(elementsMap.get("InsertDate"),
-				QuestionDateUnit.YEARS));
+		expressionChain2.addExpression(new ExpressionValueTreeObjectReference(elementsMap.get("InsertDate"), QuestionDateUnit.YEARS));
 		expressionsMap.put("Expression2", expressionChain2);
 
 		return expressionsMap;
 	}
 
-	public static Map<String, TableRule> addFormTableRules(Map<String, TreeObject> elementsMap,
-			Map<String, CustomVariable> variableMap) {
+	public static Map<String, TableRule> addFormTableRules(Map<String, TreeObject> elementsMap, Map<String, CustomVariable> variableMap) {
 		Map<String, TableRule> tablesMap = new HashMap<>();
 
 		TableRule tableRule = new TableRule();
@@ -337,23 +330,19 @@ public class FormUtils {
 		TableRuleRow tableRuleRow1 = new TableRuleRow();
 		// Question1=Answer1 -> Category1.score=Category1.score+1;
 		ExpressionChain expressionChain = new ExpressionChain();
-		ExpressionValueTreeObjectReference questionReference = new ExpressionValueTreeObjectReference(
-				elementsMap.get("ChooseOne"));
+		ExpressionValueTreeObjectReference questionReference = new ExpressionValueTreeObjectReference(elementsMap.get("ChooseOne"));
 		expressionChain.addExpression(questionReference);
 		expressionChain.addExpression(new ExpressionOperatorMath(AvailableOperator.ASSIGNATION));
-		ExpressionValueTreeObjectReference answerReference = new ExpressionValueTreeObjectReference(
-				elementsMap.get("Answer1"));
+		ExpressionValueTreeObjectReference answerReference = new ExpressionValueTreeObjectReference(elementsMap.get("Answer1"));
 		expressionChain.addExpression(answerReference);
 		tableRuleRow1.getConditions().addExpression(expressionChain);
 
-		ExpressionValueCustomVariable customVariable = new ExpressionValueCustomVariable(elementsMap.get("Category1"),
-				variableMap.get("cScore"));
+		ExpressionValueCustomVariable customVariable = new ExpressionValueCustomVariable(elementsMap.get("Category1"), variableMap.get("cScore"));
 		// Category1.score=Category1.score+1;
 		expressionChain = new ExpressionChain();
 		expressionChain.addExpression(customVariable);
 		expressionChain.addExpression(new ExpressionOperatorMath(AvailableOperator.ASSIGNATION));
-		expressionChain.addExpression(new ExpressionValueCustomVariable(elementsMap.get("Category1"), variableMap
-				.get("cScore")));
+		expressionChain.addExpression(new ExpressionValueCustomVariable(elementsMap.get("Category1"), variableMap.get("cScore")));
 		expressionChain.addExpression(new ExpressionOperatorMath(AvailableOperator.PLUS));
 		expressionChain.addExpression(new ExpressionValueNumber(1d));
 		tableRuleRow1.getAction().addExpression(expressionChain);
@@ -375,11 +364,10 @@ public class FormUtils {
 		int i = 1;
 		for (TableRuleRow tableRuleRow : tableRule.getRules()) {
 			// Question1=AnswerX
-			((ExpressionValueTreeObjectReference) ((ExpressionChain) tableRuleRow.getConditions().getExpressions()
-					.get(0)).getExpressions().get(2)).setReference(elementsMap.get("Answer" + i));
+			((ExpressionValueTreeObjectReference) ((ExpressionChain) tableRuleRow.getConditions().getExpressions().get(0)).getExpressions().get(2))
+					.setReference(elementsMap.get("Answer" + i));
 			// Category1.score=Category1.score+X;
-			((ExpressionValueNumber) ((ExpressionChain) tableRuleRow.getAction().getExpressions().get(0))
-					.getExpressions().get(4)).setValue(Double.valueOf(i));
+			((ExpressionValueNumber) ((ExpressionChain) tableRuleRow.getAction().getExpressions().get(0)).getExpressions().get(4)).setValue(Double.valueOf(i));
 			i++;
 		}
 
@@ -388,8 +376,7 @@ public class FormUtils {
 		return tablesMap;
 	}
 
-	public static Map<String, Rule> addFormRules(Map<String, TreeObject> elementsMap,
-			Map<String, CustomVariable> variableMap) {
+	public static Map<String, Rule> addFormRules(Map<String, TreeObject> elementsMap, Map<String, CustomVariable> variableMap) {
 		Map<String, Rule> rulesMap = new HashMap<>();
 
 		Rule rule = new Rule();
@@ -397,24 +384,20 @@ public class FormUtils {
 
 		// Condition Question1=Answer1
 		ExpressionChain expressionChain = new ExpressionChain();
-		ExpressionValueTreeObjectReference questionReference = new ExpressionValueTreeObjectReference(
-				elementsMap.get("ChooseOne"));
+		ExpressionValueTreeObjectReference questionReference = new ExpressionValueTreeObjectReference(elementsMap.get("ChooseOne"));
 		expressionChain.addExpression(questionReference);
 		expressionChain.addExpression(new ExpressionOperatorMath(AvailableOperator.ASSIGNATION));
-		ExpressionValueTreeObjectReference answerReference = new ExpressionValueTreeObjectReference(
-				elementsMap.get("Answer1"));
+		ExpressionValueTreeObjectReference answerReference = new ExpressionValueTreeObjectReference(elementsMap.get("Answer1"));
 		expressionChain.addExpression(answerReference);
 		rule.setConditions(expressionChain);
 
 		// Action Category1.score=Category1.score+1;
-		ExpressionValueCustomVariable customVariable = new ExpressionValueCustomVariable(elementsMap.get("Category1"),
-				variableMap.get("cScore"));
+		ExpressionValueCustomVariable customVariable = new ExpressionValueCustomVariable(elementsMap.get("Category1"), variableMap.get("cScore"));
 		// Category1.score=Category1.score+1;
 		expressionChain = new ExpressionChain();
 		expressionChain.addExpression(customVariable);
 		expressionChain.addExpression(new ExpressionOperatorMath(AvailableOperator.ASSIGNATION));
-		expressionChain.addExpression(new ExpressionValueCustomVariable(elementsMap.get("Category1"), variableMap
-				.get("cScore")));
+		expressionChain.addExpression(new ExpressionValueCustomVariable(elementsMap.get("Category1"), variableMap.get("cScore")));
 		expressionChain.addExpression(new ExpressionOperatorMath(AvailableOperator.PLUS));
 		expressionChain.addExpression(new ExpressionValueNumber(1d));
 		rule.setActions(expressionChain);
@@ -430,9 +413,8 @@ public class FormUtils {
 	 * 
 	 * @param form
 	 */
-	public static Map<String, Diagram> createComplexDiagram(Map<String, TreeObject> elementsMap,
-			Map<String, CustomVariable> variableMap, Map<String, ExpressionChain> expressionsMap,
-			Map<String, TableRule> tablesMap, Map<String, Rule> rulesMap) {
+	public static Map<String, Diagram> createComplexDiagram(Map<String, TreeObject> elementsMap, Map<String, CustomVariable> variableMap,
+			Map<String, ExpressionChain> expressionsMap, Map<String, TableRule> tablesMap, Map<String, Rule> rulesMap) {
 		Map<String, Diagram> diagramsMap = new HashMap<>();
 
 		Diagram diagram = new Diagram("diagram1");
@@ -446,8 +428,7 @@ public class FormUtils {
 		diagram.addDiagramObject(startNode);
 
 		DiagramFork forkNode = new DiagramFork();
-		ExpressionValueTreeObjectReference questionReference = new ExpressionValueTreeObjectReference(
-				elementsMap.get("ChooseOne"));
+		ExpressionValueTreeObjectReference questionReference = new ExpressionValueTreeObjectReference(elementsMap.get("ChooseOne"));
 		forkNode.setReference(questionReference);
 		forkNode.setJointjsId(IdGenerator.createId());
 		forkNode.setSize(new Size(2, 2));

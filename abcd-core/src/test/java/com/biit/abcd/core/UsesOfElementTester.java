@@ -1,7 +1,6 @@
 package com.biit.abcd.core;
 
-import junit.framework.Assert;
-
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import com.biit.abcd.core.utils.UsesOfElement;
@@ -16,8 +15,8 @@ import com.biit.persistence.entity.exceptions.FieldTooLongException;
 public class UsesOfElementTester {
 
 	@Test
-	public void countElements() throws FieldTooLongException, NotValidChildException, CharacterNotAllowedException,
-			InvalidAnswerFormatException, ElementIsReadOnly {
+	public void countElements()
+			throws FieldTooLongException, NotValidChildException, CharacterNotAllowedException, InvalidAnswerFormatException, ElementIsReadOnly {
 		Form form = FormUtils.createCompleteForm();
 		UsesOfElement useOfElement = new UsesOfElement(form);
 
