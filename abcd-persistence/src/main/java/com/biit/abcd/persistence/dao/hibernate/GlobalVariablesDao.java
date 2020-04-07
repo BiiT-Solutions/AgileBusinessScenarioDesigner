@@ -44,7 +44,7 @@ public class GlobalVariablesDao extends AnnotatedGenericDao<GlobalVariable, Long
 
 		List<Long> ids = new ArrayList<>();
 		for (GlobalVariable globalVariable : globalVariables) {
-			if (globalVariable.getId() != null) {
+			if (globalVariable!=null && globalVariable.getId() != null) {
 				ids.add(globalVariable.getId());
 			}
 		}
