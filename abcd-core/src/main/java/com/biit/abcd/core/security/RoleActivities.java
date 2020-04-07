@@ -129,8 +129,8 @@ public class RoleActivities implements IRoleActivities {
 			activities.addAll(readOnlyPermissions);
 			break;
 		case APPLICATION_ADMIN:
-			activities.addAll(readOnlyPermissions);
 			activities.addAll(applicationAdministratorPermissions);
+			activities.addAll(readOnlyPermissions);
 			break;
 		case WEB_SERVICE_USER:
 			activities.addAll(webServiceUserPermissions);
