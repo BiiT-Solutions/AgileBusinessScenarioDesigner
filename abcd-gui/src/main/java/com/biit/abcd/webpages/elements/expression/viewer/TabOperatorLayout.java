@@ -271,6 +271,16 @@ public class TabOperatorLayout extends TabLayout {
 						addFunctionExpression(AvailableFunction.CONCAT);
 					}
 				});
+		
+		Button concatCommaButton = createButton(ServerTranslate.translate(LanguageCodes.EXPRESSION_BUTTON_CONCAT_COMMA),
+				new ClickListener() {
+					private static final long serialVersionUID = 3549151891823532732L;
+
+					@Override
+					public void buttonClick(ClickEvent event) {
+						addFunctionExpression(AvailableFunction.CONCAT_SEPARATOR);
+					}
+				});
 
 		layout.addComponent(maxButton);
 		layout.addComponent(minimumButton);
@@ -280,6 +290,7 @@ public class TabOperatorLayout extends TabLayout {
 		layout.addComponent(pmtButton);
 		layout.addComponent(logButton);
 		layout.addComponent(concatButton);
+		layout.addComponent(concatCommaButton);
 	}
 
 	private void createLogicalFunctionsOperators(AbstractLayout layout) {

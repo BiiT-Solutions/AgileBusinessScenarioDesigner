@@ -421,6 +421,7 @@ public enum LanguageCodes {
 	EXPRESSION_BUTTON_SUM("expression.button.sum"),
 	EXPRESSION_BUTTON_LOG("expression.button.log"),
 	EXPRESSION_BUTTON_CONCAT("expression.button.concat"),
+	EXPRESSION_BUTTON_CONCAT_COMMA("expression.button.concat.comma"),
 	EXPRESSION_BUTTON_ELEMENT_XPATH("expression.button.element.xpath"),
 	EXPRESSION_BUTTON_ELEMENT_PATH("expression.button.element.path"),
 	EXPRESSION_BUTTON_ELEMENT_NAME("expression.button.element.name"),

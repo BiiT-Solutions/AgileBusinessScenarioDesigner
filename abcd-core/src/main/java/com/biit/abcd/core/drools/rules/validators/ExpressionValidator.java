@@ -212,6 +212,7 @@ public class ExpressionValidator {
 		case ELEMENT_XPATH:
 			break;
 		case CONCAT:
+		case CONCAT_SEPARATOR:
 			if (!leftVariableFormat.equals(ValueType.TEXT) && !parameterType.equals(ValueType.TEXT)) {
 				throw new InvalidExpressionException("Invalid expression '" + prattExpressionChain + "':" + leftVariableFormat + " <-> " + parameterType);
 			}

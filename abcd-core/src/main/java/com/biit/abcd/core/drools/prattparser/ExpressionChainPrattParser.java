@@ -44,6 +44,7 @@ public class ExpressionChainPrattParser extends PrattParser {
 		register(ExpressionTokenType.AVG, new CallParselet());
 		register(ExpressionTokenType.SUM, new CallParselet());
 		register(ExpressionTokenType.CONCAT, new CallParselet());
+		register(ExpressionTokenType.CONCAT_SEPARATOR, new CallParselet());
 		register(ExpressionTokenType.ELEMENT_ID, new CallParselet());
 		register(ExpressionTokenType.ELEMENT_NAME, new CallParselet());
 		register(ExpressionTokenType.ELEMENT_PATH, new CallParselet());

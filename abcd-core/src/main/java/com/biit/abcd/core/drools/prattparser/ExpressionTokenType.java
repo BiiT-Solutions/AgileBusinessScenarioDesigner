@@ -34,6 +34,8 @@ public enum ExpressionTokenType {
 
 	CONCAT("CONCAT("),
 	
+	CONCAT_SEPARATOR("CONCAT_SEP("),
+	
 	ELEMENT_XPATH("ELEMENT_XPATH("),
 	
 	ELEMENT_PATH("ELEMENT_PATH("),

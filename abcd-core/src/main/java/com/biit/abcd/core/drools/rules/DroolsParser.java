@@ -133,6 +133,9 @@ public class DroolsParser {
 			case CONCAT:
 				ruleCore += "RulesOperators.concatenateStringsFunction(variablesList));\n";
 				break;
+			case CONCAT_SEPARATOR:
+				ruleCore += "RulesOperators.concatenateStringsSeaparatedFunction(variablesList));\n";
+				break;
 			default:
 				throw new DroolsRuleCreationException("Error parsing an Action. Function '" + function.getValue() + "' not found.", actions);
 			}
@@ -1174,6 +1177,7 @@ public class DroolsParser {
 					case PMT:
 					case LOG:
 					case CONCAT:
+					case CONCAT_SEPARATOR:
 						return assignationFunctionAction(prattParserResultExpressionChain);
 					case ELEMENT_ID:
 					case ELEMENT_NAME:
