@@ -21,3 +21,5 @@ release.properties
 *.out
 *.error
 *.orig
+.idea
+*.iml
