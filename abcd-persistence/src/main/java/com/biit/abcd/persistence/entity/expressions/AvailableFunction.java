@@ -32,7 +32,15 @@ public enum AvailableFunction {
 
 	SUM("SUM("),
 	
-	CONCAT("CONCAT(");
+	CONCAT("CONCAT("),
+	
+	ELEMENT_XPATH("ELEMENT_XPATH("),
+	
+	ELEMENT_PATH("ELEMENT_PATH("),
+	
+	ELEMENT_NAME("ELEMENT_NAME("),
+	
+	ELEMENT_ID("ELEMENT_ID(");
 
 	private String value;
 

@@ -59,6 +59,11 @@ public class TabOperatorLayout extends TabLayout {
 		createLogicalOperators(logicalLayout);
 		createLogicalFunctionsOperators(logicalLayout);
 		accordion.addTab(logicalLayout, ServerTranslate.translate(LanguageCodes.EXPRESSION_PROPERTIES_LOGICAL), true);
+		
+		GridLayout elementLayout = new GridLayout(GRID_COLUMNS, 4);
+		elementLayout.setWidth("100%");
+		createElementFunctionsOperators(elementLayout);
+		accordion.addTab(elementLayout, ServerTranslate.translate(LanguageCodes.EXPRESSION_PROPERTIES_ELEMENT_FUNCTIONS), true);
 
 		addComponent(accordion);
 		setComponentAlignment(accordion, Alignment.MIDDLE_CENTER);
@@ -140,6 +145,50 @@ public class TabOperatorLayout extends TabLayout {
 		layout.addComponent(minusButton);
 		layout.addComponent(multButton);
 		layout.addComponent(divButton);
+	}
+	
+	private void createElementFunctionsOperators(AbstractLayout layout) {
+		Button elementIdButton = createButton(ServerTranslate.translate(LanguageCodes.EXPRESSION_BUTTON_ELEMENT_ID),
+				new ClickListener() {
+					private static final long serialVersionUID = 7946874047359391810L;
+
+					@Override
+					public void buttonClick(ClickEvent event) {
+						addFunctionExpression(AvailableFunction.ELEMENT_ID);
+					}
+				});
+		
+		Button elementNameButton = createButton(ServerTranslate.translate(LanguageCodes.EXPRESSION_BUTTON_ELEMENT_NAME),
+				new ClickListener() {
+					private static final long serialVersionUID = -4499820943085894872L;
+
+					@Override
+					public void buttonClick(ClickEvent event) {
+						addFunctionExpression(AvailableFunction.ELEMENT_NAME);
+					}
+				});
+		Button elementPathButton = createButton(ServerTranslate.translate(LanguageCodes.EXPRESSION_BUTTON_ELEMENT_PATH),
+				new ClickListener() {
+					private static final long serialVersionUID = 1662562854936910692L;
+
+					@Override
+					public void buttonClick(ClickEvent event) {
+						addFunctionExpression(AvailableFunction.ELEMENT_PATH);
+					}
+				});
+		Button elementXPathButton = createButton(ServerTranslate.translate(LanguageCodes.EXPRESSION_BUTTON_ELEMENT_XPATH),
+				new ClickListener() {
+					private static final long serialVersionUID = -1443022112946269077L;
+
+					@Override
+					public void buttonClick(ClickEvent event) {
+						addFunctionExpression(AvailableFunction.ELEMENT_XPATH);
+					}
+				});
+		layout.addComponent(elementIdButton);
+		layout.addComponent(elementNameButton);
+		layout.addComponent(elementPathButton);
+		layout.addComponent(elementXPathButton);
 	}
 
 	private void createMathFunctionsOperators(AbstractLayout layout) {

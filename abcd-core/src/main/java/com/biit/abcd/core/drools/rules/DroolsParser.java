@@ -131,6 +131,18 @@ public class DroolsParser {
 			case LOG:
 				ruleCore += "RulesOperators.calculateLogarithmFunction(variablesList));\n";
 				break;
+			case ELEMENT_PATH:
+				ruleCore += leftExpressionCustomVariable.getReference().getPathName()+");\n";
+				break;
+			case ELEMENT_XPATH:
+				ruleCore += leftExpressionCustomVariable.getReference().getXPath()+");\n";
+				break;
+			case ELEMENT_NAME:
+				ruleCore += leftExpressionCustomVariable.getReference().getName()+");\n";
+				break;
+			case ELEMENT_ID:
+				ruleCore += leftExpressionCustomVariable.getReference().getId()+");\n";
+				break;
 			case CONCAT:
 				ruleCore += "RulesOperators.concatenateStringsFunction(variablesList));\n";
 				break;
