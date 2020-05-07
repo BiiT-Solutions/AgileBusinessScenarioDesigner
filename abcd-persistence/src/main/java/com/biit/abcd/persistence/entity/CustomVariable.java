@@ -53,7 +53,8 @@ public class CustomVariable extends StorableObject implements Comparable<CustomV
 		super();
 	}
 
-	public CustomVariable(Form form, String name, CustomVariableType type, CustomVariableScope scope, String defaultValue) {
+	public CustomVariable(Form form, String name, CustomVariableType type, CustomVariableScope scope,
+			String defaultValue) {
 		this(form, name, type, scope);
 		this.defaultValue = defaultValue;
 	}
@@ -88,7 +89,9 @@ public class CustomVariable extends StorableObject implements Comparable<CustomV
 
 	public void setType(CustomVariableType type) {
 		this.type = type;
-		this.defaultValue = type.getDefaultValue();
+		if (defaultValue == null) {
+			defaultValue = type.getDefaultValue();
+		}
 	}
 
 	public Form getForm() {

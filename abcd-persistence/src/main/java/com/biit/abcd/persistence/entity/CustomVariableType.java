@@ -3,9 +3,9 @@ package com.biit.abcd.persistence.entity;
 public enum CustomVariableType {
 	STRING("class.String", " "),
 
-	NUMBER("class.Number", "0"),
+	NUMBER("class.Number", null),
 
-	DATE("class.Date", "01/01/1970");
+	DATE("class.Date", null);
 
 	private final String translation;
 
