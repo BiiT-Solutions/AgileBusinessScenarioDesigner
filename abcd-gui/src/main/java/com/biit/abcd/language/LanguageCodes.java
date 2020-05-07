@@ -106,6 +106,7 @@ public enum LanguageCodes {
 	FORM_MANAGER_REMOVE_FORM("formManager.form.remove"),
 	FORM_MANAGER_NEW_FORM_VERSION("formManager.form.new.version"),
 	FORM_MANAGER_EXPORT_RULES("formManager.export.rules"),
+	FORM_MANAGER_TEST_SCENARIOS("formManager.test.scenarios"),
 	FORM_MANAGER_CREATE_TEST_SCENARIOS("formManager.create.test.scenarios"),
 	FORM_MANAGER_LAUNCH_TEST_SCENARIOS("formManager.launch.test.scenarios"),
 
@@ -575,6 +576,7 @@ public enum LanguageCodes {
 	CAPTION_IMPORT_JSON_FORM("caption.import.json.form"),  
 	TOOLTIP_IMPORT_JSON_FORM("tooltip.import.json.form"),
 	
+	FORM_MANAGER_EXPORT("export"),
 	FORM_MANAGER_EXPORT_FORM("export.form"),
 	TITLE_DOWNLOAD_FILE("title.download.file"),
 	CAPTION_GENERATING_FILE("caption.generating.file"),

@@ -49,7 +49,7 @@ import com.vaadin.ui.VerticalLayout;
 
 public abstract class UpperMenu extends SecuredMenu {
 	private static final long serialVersionUID = 3501103183357307175L;
-	public static final String BUTTON_WIDTH = "100px";
+	public static final String BUTTON_WIDTH = "110px";
 	public static final String MENU_HEIGHT = "70px";
 	public static final String SEPARATOR_WIDTH = "10px";
 

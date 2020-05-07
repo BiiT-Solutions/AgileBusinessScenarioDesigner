@@ -184,6 +184,8 @@ public enum ThemeIcon {
 
 	FORM_VARIABLE_REMOVE("appbar.notification.remove.svg"),
 	
+	TEST_SCENARIOS("form.tests.svg"),
+	
 	FORM_TEST_PAGE("page.form.tests.svg"),
 	
 	FORM_TEST_LAUNCH("form.tests.launch.svg"),
@@ -215,6 +217,8 @@ public enum ThemeIcon {
 	CREATE_PDF("pdf.svg"),
 	
 	FORM_MANAGER_EXPORT_FORM("file.json.svg"),
+	
+	FORM_MANAGER_EXPORT("form.export.svg"),
 	
 	;
 	

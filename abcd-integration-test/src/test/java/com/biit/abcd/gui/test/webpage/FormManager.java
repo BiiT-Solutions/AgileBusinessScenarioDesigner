@@ -18,6 +18,8 @@ public class FormManager extends AbcdCommonWebpage {
 	private static final Integer FORM_ROW = 1;
 
 	private final static String TEST_SCENARIO_CREATOR_CAPTION = "Create Tests";
+	private final static String TEST_SCENARIO_CAPTION = "Tests Scenarios";
+	
 
 	private final NewFormWindow newFormWindow;
 
@@ -136,6 +138,7 @@ public class FormManager extends AbcdCommonWebpage {
 	}
 
 	public void goToTestScenarioCreator() {
+		$(ButtonElement.class).caption(TEST_SCENARIO_CAPTION).first().click();
 		$(ButtonElement.class).caption(TEST_SCENARIO_CREATOR_CAPTION).first().click();
 	}
 
