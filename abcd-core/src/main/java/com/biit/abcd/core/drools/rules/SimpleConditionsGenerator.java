@@ -31,8 +31,8 @@ public class SimpleConditionsGenerator {
 	}
 
 	/**
-	 * Returns the simple conditions that look for a treeObject in the drools
-	 * memory and assign it to a variable
+	 * Returns the simple conditions that look for a treeObject in the drools memory
+	 * and assign it to a variable
 	 * 
 	 * @param treeObject
 	 * @return a trign with the condition.
@@ -119,8 +119,8 @@ public class SimpleConditionsGenerator {
 	}
 
 	/**
-	 * Returns the conditions that look for a treeObject in the drools memory
-	 * and assign it to a variable.<br>
+	 * Returns the conditions that look for a treeObject in the drools memory and
+	 * assign it to a variable.<br>
 	 * Also checks if the treeObject has a custom variable with value set.
 	 * 
 	 * @param expressionValueCustomVariable
@@ -132,9 +132,9 @@ public class SimpleConditionsGenerator {
 	 * @throws TreeObjectParentNotValidException
 	 */
 	public static String getTreeObjectCustomVariableConditions(
-			ExpressionValueCustomVariable expressionValueCustomVariable) throws NullCustomVariableException,
-			NullTreeObjectException, NullExpressionValueException, TreeObjectInstanceNotRecognizedException,
-			TreeObjectParentNotValidException {
+			ExpressionValueCustomVariable expressionValueCustomVariable)
+			throws NullCustomVariableException, NullTreeObjectException, NullExpressionValueException,
+			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException {
 		if (expressionValueCustomVariable != null) {
 			TreeObject treeObject = expressionValueCustomVariable.getReference();
 			if (treeObject != null) {
@@ -198,7 +198,8 @@ public class SimpleConditionsGenerator {
 	}
 
 	private static String simpleCategoryCustomVariableConditions(TreeObject treeObject, CustomVariable customVariable)
-			throws NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException {
+			throws NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
+			TreeObjectParentNotValidException {
 		TreeObject parent = treeObject.getParent();
 		if (parent != null) {
 			if (parent instanceof Form) {
@@ -233,10 +234,10 @@ public class SimpleConditionsGenerator {
 	}
 
 	/**
-	 * Returns the conditions that look for a treeObject in the drools memory
-	 * and assign it to a variable.<br>
-	 * This method receives a custom variable but does not make the search for
-	 * the custom variable value set in the tree object.
+	 * Returns the conditions that look for a treeObject in the drools memory and
+	 * assign it to a variable.<br>
+	 * This method receives a custom variable but does not make the search for the
+	 * custom variable value set in the tree object.
 	 * 
 	 * @param expressionValueCustomVariable
 	 * @return a string with the conditions.
@@ -247,9 +248,9 @@ public class SimpleConditionsGenerator {
 	 * @throws TreeObjectParentNotValidException
 	 */
 	public static String getTreeObjectCustomVariableConditionsWithoutScoreCheck(
-			ExpressionValueCustomVariable expressionValueCustomVariable) throws NullCustomVariableException,
-			NullTreeObjectException, NullExpressionValueException, TreeObjectInstanceNotRecognizedException,
-			TreeObjectParentNotValidException {
+			ExpressionValueCustomVariable expressionValueCustomVariable)
+			throws NullCustomVariableException, NullTreeObjectException, NullExpressionValueException,
+			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException {
 		if (expressionValueCustomVariable != null) {
 			TreeObject treeObject = expressionValueCustomVariable.getReference();
 			if (treeObject != null) {
