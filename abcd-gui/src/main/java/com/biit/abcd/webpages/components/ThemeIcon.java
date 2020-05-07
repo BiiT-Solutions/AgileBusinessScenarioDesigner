@@ -212,7 +212,11 @@ public enum ThemeIcon {
 	
 	FORM_MANAGER_IMPORT_JSON_FORM("file.json.svg"), 
 	
-	CREATE_PDF("pdf.svg");
+	CREATE_PDF("pdf.svg"),
+	
+	FORM_MANAGER_EXPORT_FORM("file.json.svg"),
+	
+	;
 	
 
 	private String value;

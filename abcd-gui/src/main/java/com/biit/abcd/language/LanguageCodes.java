@@ -574,6 +574,13 @@ public enum LanguageCodes {
 	INVALID_JSON_CODE_DESCRIPTION("invalid.json.code.description"), 
 	CAPTION_IMPORT_JSON_FORM("caption.import.json.form"),  
 	TOOLTIP_IMPORT_JSON_FORM("tooltip.import.json.form"),
+	
+	FORM_MANAGER_EXPORT_FORM("export.form"),
+	TITLE_DOWNLOAD_FILE("title.download.file"),
+	CAPTION_GENERATING_FILE("caption.generating.file"),
+	CAPTION_GENERATED_FILE("caption.generated.file"),
+	CAPTION_DOWNLOAD_FILE("caption.download.file"),
+	TOOLTIP_DOWNLOAD_FILE("caption.download.file.description"),
 	;
 
 	private String value;

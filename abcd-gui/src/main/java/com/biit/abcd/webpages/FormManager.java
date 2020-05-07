@@ -29,8 +29,8 @@ import com.biit.abcd.webpages.components.FormWebPageComponent;
 import com.biit.abcd.webpages.components.IFormSelectedListener;
 import com.biit.abcd.webpages.elements.form.designer.RootForm;
 import com.biit.abcd.webpages.elements.form.manager.FormManagerUpperMenu;
-import com.biit.abcd.webpages.elements.form.manager.WindowImportJson;
 import com.biit.abcd.webpages.elements.form.manager.FormManagerUpperMenu.IFormRemove;
+import com.biit.abcd.webpages.elements.form.manager.WindowImportJson;
 import com.biit.abcd.webpages.elements.form.table.FormsVersionsTreeTable;
 import com.biit.abcd.webpages.elements.form.table.FormsVersionsTreeTable.IFormStatusChange;
 import com.biit.form.exceptions.CharacterNotAllowedException;
@@ -153,6 +153,7 @@ public class FormManager extends FormWebPageComponent {
 		upperMenu.updateButtons(enableFormButtons);
 		upperMenu.updateNewVersionButton(formTable.getValue());
 		upperMenu.updateRemoveFormButton(formTable.getValue());
+		upperMenu.updateExportJsonFormButton(formTable.getValue());
 	}
 
 	private FormManagerUpperMenu createUpperMenu() {
@@ -263,10 +264,8 @@ public class FormManager extends FormWebPageComponent {
 				// Impossible.
 				AbcdLogger.errorMessage(this.getClass().getName(), e);
 			}
-			AbcdLogger.info(
-					this.getClass().getName(),
-					"User '" + UserSessionHandler.getUser().getEmailAddress() + "' has removed form '" + selectedForm.getLabel() + "' (version "
-							+ selectedForm.getVersion() + ").");
+			AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress() + "' has removed form '"
+					+ selectedForm.getLabel() + "' (version " + selectedForm.getVersion() + ").");
 			formTable.refreshFormTable();
 		}
 	}

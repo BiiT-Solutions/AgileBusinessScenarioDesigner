@@ -28,7 +28,9 @@ public class RoleActivities implements IRoleActivities {
 
 	AbcdActivity.FORM_VERSION,
 
-	AbcdActivity.FORM_STATUS_UPGRADE
+	AbcdActivity.FORM_STATUS_UPGRADE,	
+	
+	AbcdActivity.FORM_EXPORT
 
 	};
 
@@ -51,7 +53,7 @@ public class RoleActivities implements IRoleActivities {
 
 	AbcdActivity.FORM_STATUS_DOWNGRADE,
 
-	AbcdActivity.FORM_REMOVE
+	AbcdActivity.FORM_REMOVE,
 
 	};
 

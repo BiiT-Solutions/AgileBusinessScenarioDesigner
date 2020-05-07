@@ -67,8 +67,8 @@ import com.vaadin.ui.Button.ClickListener;
 
 public class FormManagerUpperMenu extends UpperMenu {
 	private static final long serialVersionUID = 504419812975550794L;
-	private IconButton newButton, newFormButton, newVersion, exportToDrools, createTestScenario, launchTestScenario,
-			removeForm, createPdf, importJson;
+	private IconButton newButton, newFormButton, newVersion, exportToDrools, createTestScenario, launchTestScenario, removeForm, createPdf, importJson,
+			exportJson;
 	private FormManager parent;
 	private List<IFormSelectedListener> formSelectedListeners;
 	private Form form;
@@ -93,14 +93,13 @@ public class FormManagerUpperMenu extends UpperMenu {
 
 	private void defineMenu() {
 		List<IconButton> settingsButtonsList = createNewFormButtons();
-		newButton = addSubMenu(ThemeIcon.FORM_MANAGER_NEW, LanguageCodes.FORM_MANAGER_FORM,
-				LanguageCodes.FORM_MANAGER_FORM, settingsButtonsList);
+		newButton = addSubMenu(ThemeIcon.FORM_MANAGER_NEW, LanguageCodes.FORM_MANAGER_FORM, LanguageCodes.FORM_MANAGER_FORM, settingsButtonsList);
 		newButton.setHeight("100%");
 		newButton.setWidth(BUTTON_WIDTH);
 		addIconButton(newButton);
 
-		removeForm = new IconButton(LanguageCodes.FORM_MANAGER_REMOVE_FORM, ThemeIcon.FORM_MANAGER_REMOVE_FORM,
-				LanguageCodes.FORM_MANAGER_REMOVE_FORM, IconSize.MEDIUM, new ClickListener() {
+		removeForm = new IconButton(LanguageCodes.FORM_MANAGER_REMOVE_FORM, ThemeIcon.FORM_MANAGER_REMOVE_FORM, LanguageCodes.FORM_MANAGER_REMOVE_FORM,
+				IconSize.MEDIUM, new ClickListener() {
 					private static final long serialVersionUID = -3126160822538614928L;
 
 					@Override
@@ -110,9 +109,19 @@ public class FormManagerUpperMenu extends UpperMenu {
 				});
 		addIconButton(removeForm);
 
+		exportJson = new SaveAsButton(LanguageCodes.FORM_MANAGER_EXPORT_FORM, ThemeIcon.FORM_MANAGER_EXPORT_FORM, LanguageCodes.FORM_MANAGER_EXPORT_FORM,
+				IconSize.MEDIUM, new SaveAsJsonAction());
+		((SaveAsButton) exportJson).addSaveActionListener(new SaveActionListener() {
+			@Override
+			public void saveAction() {
+				launchListeners();
+			}
+		});
+		addIconButton(exportJson);
+
 		// Create rules and launch drools engine
-		exportToDrools = new SaveAsButton(LanguageCodes.FORM_MANAGER_EXPORT_RULES, ThemeIcon.FORM_MANAGER_EXPORT_RULES,
-				LanguageCodes.FORM_MANAGER_EXPORT_RULES, IconSize.MEDIUM, new SaveDroolsRulesAction());
+		exportToDrools = new SaveAsButton(LanguageCodes.FORM_MANAGER_EXPORT_RULES, ThemeIcon.FORM_MANAGER_EXPORT_RULES, LanguageCodes.FORM_MANAGER_EXPORT_RULES,
+				IconSize.MEDIUM, new SaveDroolsRulesAction());
 		((SaveAsButton) exportToDrools).addSaveActionListener(new SaveActionListener() {
 			@Override
 			public void saveAction() {
@@ -135,15 +144,13 @@ public class FormManagerUpperMenu extends UpperMenu {
 				});
 
 		// Launch test scenario
-		launchTestScenario = new IconButton(LanguageCodes.FORM_MANAGER_LAUNCH_TEST_SCENARIOS,
-				ThemeIcon.FORM_TEST_LAUNCH, LanguageCodes.FORM_MANAGER_LAUNCH_TEST_SCENARIOS, IconSize.MEDIUM,
-				new ClickListener() {
+		launchTestScenario = new IconButton(LanguageCodes.FORM_MANAGER_LAUNCH_TEST_SCENARIOS, ThemeIcon.FORM_TEST_LAUNCH,
+				LanguageCodes.FORM_MANAGER_LAUNCH_TEST_SCENARIOS, IconSize.MEDIUM, new ClickListener() {
 					private static final long serialVersionUID = 2538065448920025133L;
 
 					@Override
 					public void buttonClick(ClickEvent event) {
-						final WindowLaunchTestScenario launchTestScenarioWindow = new WindowLaunchTestScenario(
-								parent.getForm());
+						final WindowLaunchTestScenario launchTestScenarioWindow = new WindowLaunchTestScenario(parent.getForm());
 						launchTestScenarioWindow.addAcceptActionListener(new AcceptActionListener() {
 							@Override
 							public void acceptAction(AcceptCancelWindow window) {
@@ -151,8 +158,7 @@ public class FormManagerUpperMenu extends UpperMenu {
 								Long testScenarioId = launchTestScenarioWindow.getSelectedTestScenarioId();
 								if ((formId != null) && (testScenarioId != null)) {
 									parent.setFormById(formId);
-									TestScenario testScenarioDB = UserSessionHandler.getTestScenariosController()
-											.getTestScenarioById(testScenarioId);
+									TestScenario testScenarioDB = UserSessionHandler.getTestScenariosController().getTestScenarioById(testScenarioId);
 									final FormToDroolsExporter droolsExporter = new FormToDroolsExporter();
 
 									try {
@@ -160,11 +166,9 @@ public class FormManagerUpperMenu extends UpperMenu {
 										// the test scenario
 										TestScenarioDroolsSubmittedForm testAnswerImporter = new TestScenarioDroolsSubmittedForm();
 										final ISubmittedForm generatedSumbittedForm = testAnswerImporter
-												.createSubmittedForm(UserSessionHandler.getFormController().getForm(),
-														testScenarioDB.getTestScenarioForm());
+												.createSubmittedForm(UserSessionHandler.getFormController().getForm(), testScenarioDB.getTestScenarioForm());
 										try {
-											AbcdLogger.debug(this.getClass().getName(),
-													"Form Answers:\n" + generatedSumbittedForm.toJson());
+											AbcdLogger.debug(this.getClass().getName(), "Form Answers:\n" + generatedSumbittedForm.toJson());
 										} catch (Exception e) {
 											AbcdLogger.debug(this.getClass().getName(), "Form Answers: null");
 										}
@@ -178,18 +182,15 @@ public class FormManagerUpperMenu extends UpperMenu {
 											windowAccept.addAcceptActionListener(new AcceptActionListener() {
 												@Override
 												public void acceptAction(AcceptCancelWindow window) {
-													acceptActionTestScenarioReportWindow(droolsExporter,
-															generatedSumbittedForm);
+													acceptActionTestScenarioReportWindow(droolsExporter, generatedSumbittedForm);
 													windowAccept.close();
 													launchTestScenarioWindow.close();
 												}
 											});
 											windowAccept.showCentered();
 										} else {
-											resultsFromDrools = droolsExporter.processForm(
-													UserSessionHandler.getFormController().getForm(), UserSessionHandler
-															.getGlobalVariablesController().getGlobalVariables(),
-													generatedSumbittedForm);
+											resultsFromDrools = droolsExporter.processForm(UserSessionHandler.getFormController().getForm(),
+													UserSessionHandler.getGlobalVariablesController().getGlobalVariables(), generatedSumbittedForm);
 											if (resultsFromDrools instanceof DroolsForm) {
 												logTestForms(resultsFromDrools);
 												final DroolsSubmittedFormResultWindow droolsResultWindow = new DroolsSubmittedFormResultWindow(
@@ -205,29 +206,23 @@ public class FormManagerUpperMenu extends UpperMenu {
 											}
 											launchTestScenarioWindow.close();
 										}
-									} catch (DroolsRuleGenerationException | RuleNotImplementedException
-											| ExpressionInvalidException | NullTreeObjectException
-											| TreeObjectInstanceNotRecognizedException
-											| TreeObjectParentNotValidException | NullCustomVariableException
-											| NullExpressionValueException | BetweenFunctionInvalidException
-											| DateComparisonNotPossibleException | PluginInvocationException
-											| DroolsRuleCreationException | PrattParserException
-											| ActionNotImplementedException | InvalidExpressionException e) {
+									} catch (DroolsRuleGenerationException | RuleNotImplementedException | ExpressionInvalidException | NullTreeObjectException
+											| TreeObjectInstanceNotRecognizedException | TreeObjectParentNotValidException | NullCustomVariableException
+											| NullExpressionValueException | BetweenFunctionInvalidException | DateComparisonNotPossibleException
+											| PluginInvocationException | DroolsRuleCreationException | PrattParserException | ActionNotImplementedException
+											| InvalidExpressionException e) {
 										AbcdLogger.errorMessage(SettingsWindow.class.getName(), e);
-										MessageManager.showError(LanguageCodes.ERROR_TITLE,
-												LanguageCodes.DROOLS_RULES_GENERATION_EXCEPTION);
+										MessageManager.showError(LanguageCodes.ERROR_TITLE, LanguageCodes.DROOLS_RULES_GENERATION_EXCEPTION);
 									} catch (InvalidRuleException e) {
 										AbcdLogger.errorMessage(SettingsWindow.class.getName(), e);
-										MessageManager.showError(LanguageCodes.ERROR_TITLE,
-												LanguageCodes.DROOLS_RULE_INVALID,
+										MessageManager.showError(LanguageCodes.ERROR_TITLE, LanguageCodes.DROOLS_RULE_INVALID,
 												((InvalidRuleException) e).getRuleName());
 									} catch (DroolsRuleExecutionException e) {
 										AbcdLogger.errorMessage(SettingsWindow.class.getName(), e);
-										MessageManager.showError(LanguageCodes.ERROR_TITLE,
-												LanguageCodes.DROOLS_RULES_EXECUTION_EXCEPTION);
+										MessageManager.showError(LanguageCodes.ERROR_TITLE, LanguageCodes.DROOLS_RULES_EXECUTION_EXCEPTION);
 									} catch (NotCompatibleTypeException ncte) {
-										MessageManager.showError(LanguageCodes.DROOLS_RULES_GENERATION_EXCEPTION,
-												LanguageCodes.ERROR_DESCRIPTION, ncte.getDescription());
+										MessageManager.showError(LanguageCodes.DROOLS_RULES_GENERATION_EXCEPTION, LanguageCodes.ERROR_DESCRIPTION,
+												ncte.getDescription());
 									}
 								}
 							}
@@ -236,8 +231,8 @@ public class FormManagerUpperMenu extends UpperMenu {
 					}
 				});
 
-		createPdf = new SaveAsButton(LanguageCodes.CAPTION_CREATE_PDF, ThemeIcon.CREATE_PDF,
-				LanguageCodes.TOOLTIP_CREATE_PDF, IconSize.MEDIUM, new SaveAsPdfAction());
+		createPdf = new SaveAsButton(LanguageCodes.CAPTION_CREATE_PDF, ThemeIcon.CREATE_PDF, LanguageCodes.TOOLTIP_CREATE_PDF, IconSize.MEDIUM,
+				new SaveAsPdfAction());
 		((SaveAsButton) createPdf).addSaveActionListener(new SaveActionListener() {
 			@Override
 			public void saveAction() {
@@ -255,8 +250,7 @@ public class FormManagerUpperMenu extends UpperMenu {
 
 	private void logTestForms(final ISubmittedForm generatedSumbittedForm) {
 		try {
-			AbcdLogger.debug(this.getClass().getName(),
-					"Original Form:\n" + UserSessionHandler.getFormController().getForm().toJson());
+			AbcdLogger.debug(this.getClass().getName(), "Original Form:\n" + UserSessionHandler.getFormController().getForm().toJson());
 		} catch (Exception e) {
 			AbcdLogger.debug(this.getClass().getName(), "Original Form: null");
 		}
@@ -271,8 +265,7 @@ public class FormManagerUpperMenu extends UpperMenu {
 			AbcdLogger.debug(this.getClass().getName(), "Submitted Form: null");
 		}
 		try {
-			AbcdLogger.debug(this.getClass().getName(),
-					"Drools Submitted Form:\n" + ((DroolsForm) resultsFromDrools).getDroolsSubmittedForm().toJson());
+			AbcdLogger.debug(this.getClass().getName(), "Drools Submitted Form:\n" + ((DroolsForm) resultsFromDrools).getDroolsSubmittedForm().toJson());
 		} catch (Exception e) {
 			AbcdLogger.debug(this.getClass().getName(), "Drools Submitted Form: null");
 		}
@@ -281,8 +274,8 @@ public class FormManagerUpperMenu extends UpperMenu {
 	private List<IconButton> createNewFormButtons() {
 		List<IconButton> iconButtonList = new ArrayList<IconButton>();
 		// Add new Form
-		newFormButton = new IconButton(LanguageCodes.FORM_MANAGER_NEW_FORM, ThemeIcon.FORM_MANAGER_NEW_FORM,
-				LanguageCodes.BOTTOM_MENU_FORM_MANAGER, IconSize.MEDIUM, new ClickListener() {
+		newFormButton = new IconButton(LanguageCodes.FORM_MANAGER_NEW_FORM, ThemeIcon.FORM_MANAGER_NEW_FORM, LanguageCodes.BOTTOM_MENU_FORM_MANAGER,
+				IconSize.MEDIUM, new ClickListener() {
 					private static final long serialVersionUID = 6053447189295644721L;
 
 					@Override
@@ -295,21 +288,17 @@ public class FormManagerUpperMenu extends UpperMenu {
 
 							@Override
 							public void acceptAction(AcceptCancelWindow window) {
-								if (newFormWindow.getValue() == null || newFormWindow.getValue().isEmpty()
-										|| !newFormWindow.isValid()) {
+								if (newFormWindow.getValue() == null || newFormWindow.getValue().isEmpty() || !newFormWindow.isValid()) {
 									return;
 								}
-								if (!formDao.exists(newFormWindow.getValue(),
-										newFormWindow.getOrganization().getUniqueId())) {
+								if (!formDao.exists(newFormWindow.getValue(), newFormWindow.getOrganization().getUniqueId())) {
 									form = new Form();
 									try {
 										form.setLabel(newFormWindow.getValue());
 									} catch (FieldTooLongException e) {
-										MessageManager.showWarning(LanguageCodes.WARNING_NAME_TOO_LONG,
-												LanguageCodes.WARNING_NAME_TOO_LONG_DESCRIPTION);
+										MessageManager.showWarning(LanguageCodes.WARNING_NAME_TOO_LONG, LanguageCodes.WARNING_NAME_TOO_LONG_DESCRIPTION);
 										try {
-											form.setLabel(newFormWindow.getValue().substring(0,
-													StorableObject.MAX_UNIQUE_COLUMN_LENGTH));
+											form.setLabel(newFormWindow.getValue().substring(0, StorableObject.MAX_UNIQUE_COLUMN_LENGTH));
 										} catch (FieldTooLongException e1) {
 											// Impossible.
 										}
@@ -319,10 +308,8 @@ public class FormManagerUpperMenu extends UpperMenu {
 									form.setUpdatedBy(UserSessionHandler.getUser());
 									form.setOrganizationId(newFormWindow.getOrganization().getUniqueId());
 									((FormManager) parent).addNewForm(form);
-									AbcdLogger.info(this.getClass().getName(),
-											"User '" + UserSessionHandler.getUser().getEmailAddress()
-													+ "' has created a " + form.getClass() + " with 'Name: "
-													+ form.getName() + "'.");
+									AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress() + "' has created a "
+											+ form.getClass() + " with 'Name: " + form.getName() + "'.");
 									newFormWindow.close();
 								} else {
 									MessageManager.showError(LanguageCodes.ERROR_REPEATED_FORM_NAME);
@@ -336,15 +323,13 @@ public class FormManagerUpperMenu extends UpperMenu {
 		newFormButton.setWidth(BUTTON_WIDTH);
 		iconButtonList.add(newFormButton);
 
-		newVersion = new IconButton(LanguageCodes.FORM_MANAGER_NEW_FORM_VERSION,
-				ThemeIcon.FORM_MANAGER_FORM_NEW_VERSION, LanguageCodes.FORM_MANAGER_NEW_FORM_VERSION, IconSize.MEDIUM,
-				new ClickListener() {
+		newVersion = new IconButton(LanguageCodes.FORM_MANAGER_NEW_FORM_VERSION, ThemeIcon.FORM_MANAGER_FORM_NEW_VERSION,
+				LanguageCodes.FORM_MANAGER_NEW_FORM_VERSION, IconSize.MEDIUM, new ClickListener() {
 					private static final long serialVersionUID = 8916936867106777144L;
 
 					@Override
 					public void buttonClick(ClickEvent event) {
-						final AlertMessageWindow windowAccept = new AlertMessageWindow(
-								LanguageCodes.WARNING_NEW_VERSION);
+						final AlertMessageWindow windowAccept = new AlertMessageWindow(LanguageCodes.WARNING_NEW_VERSION);
 						windowAccept.addAcceptActionListener(new AcceptActionListener() {
 							@Override
 							public void acceptAction(AcceptCancelWindow window) {
@@ -361,8 +346,8 @@ public class FormManagerUpperMenu extends UpperMenu {
 		newVersion.setWidth(BUTTON_WIDTH);
 		iconButtonList.add(newVersion);
 
-		importJson = new IconButton(LanguageCodes.CAPTION_IMPORT_JSON_FORM, ThemeIcon.FORM_MANAGER_IMPORT_JSON_FORM,
-				LanguageCodes.TOOLTIP_IMPORT_JSON_FORM, IconSize.MEDIUM);
+		importJson = new IconButton(LanguageCodes.CAPTION_IMPORT_JSON_FORM, ThemeIcon.FORM_MANAGER_IMPORT_JSON_FORM, LanguageCodes.TOOLTIP_IMPORT_JSON_FORM,
+				IconSize.MEDIUM);
 		importJson.setHeight("100%");
 		importJson.setWidth(BUTTON_WIDTH);
 		iconButtonList.add(importJson);
@@ -370,8 +355,7 @@ public class FormManagerUpperMenu extends UpperMenu {
 		return iconButtonList;
 	}
 
-	private void acceptActionTestScenarioReportWindow(FormToDroolsExporter droolsExporter,
-			ISubmittedForm generatedSumbittedForm) {
+	private void acceptActionTestScenarioReportWindow(FormToDroolsExporter droolsExporter, ISubmittedForm generatedSumbittedForm) {
 		try {
 			resultsFromDrools = droolsExporter.processForm(UserSessionHandler.getFormController().getForm(),
 					UserSessionHandler.getGlobalVariablesController().getGlobalVariables(), generatedSumbittedForm);
@@ -379,8 +363,7 @@ public class FormManagerUpperMenu extends UpperMenu {
 			if (resultsFromDrools instanceof DroolsForm) {
 				logTestForms(resultsFromDrools);
 				final DroolsSubmittedFormResultWindow droolsResultWindow = new DroolsSubmittedFormResultWindow(
-						((DroolsForm) resultsFromDrools).getDroolsSubmittedForm(),
-						UserSessionHandler.getFormController().getForm());
+						((DroolsForm) resultsFromDrools).getDroolsSubmittedForm(), UserSessionHandler.getFormController().getForm());
 				droolsResultWindow.addAcceptActionListener(new AcceptActionListener() {
 					@Override
 					public void acceptAction(AcceptCancelWindow window) {
@@ -389,10 +372,9 @@ public class FormManagerUpperMenu extends UpperMenu {
 				});
 				droolsResultWindow.showCentered();
 			}
-		} catch (DroolsRuleGenerationException | RuleNotImplementedException | ExpressionInvalidException
-				| NullTreeObjectException | TreeObjectInstanceNotRecognizedException | TreeObjectParentNotValidException
-				| NullCustomVariableException | NullExpressionValueException | BetweenFunctionInvalidException
-				| DateComparisonNotPossibleException | PluginInvocationException | DroolsRuleCreationException
+		} catch (DroolsRuleGenerationException | RuleNotImplementedException | ExpressionInvalidException | NullTreeObjectException
+				| TreeObjectInstanceNotRecognizedException | TreeObjectParentNotValidException | NullCustomVariableException | NullExpressionValueException
+				| BetweenFunctionInvalidException | DateComparisonNotPossibleException | PluginInvocationException | DroolsRuleCreationException
 				| PrattParserException | ActionNotImplementedException | InvalidExpressionException e) {
 			// This is a generic exception for everything related with the
 			// rules generation
@@ -402,21 +384,18 @@ public class FormManagerUpperMenu extends UpperMenu {
 			MessageManager.showError(LanguageCodes.ERROR_TITLE, LanguageCodes.DROOLS_RULES_GENERATION_EXCEPTION);
 		} catch (InvalidRuleException e) {
 			AbcdLogger.errorMessage(SettingsWindow.class.getName(), e);
-			MessageManager.showError(LanguageCodes.ERROR_TITLE, LanguageCodes.DROOLS_RULE_INVALID,
-					((InvalidRuleException) e).getRuleName());
+			MessageManager.showError(LanguageCodes.ERROR_TITLE, LanguageCodes.DROOLS_RULE_INVALID, ((InvalidRuleException) e).getRuleName());
 		} catch (DroolsRuleExecutionException e) {
 			AbcdLogger.errorMessage(SettingsWindow.class.getName(), e.getGeneratedException());
 			MessageManager.showError(LanguageCodes.ERROR_TITLE, LanguageCodes.DROOLS_RULES_EXECUTION_EXCEPTION);
 		} catch (NotCompatibleTypeException ncte) {
-			MessageManager.showError(LanguageCodes.DROOLS_RULES_GENERATION_EXCEPTION, LanguageCodes.ERROR_DESCRIPTION,
-					ncte.getDescription());
+			MessageManager.showError(LanguageCodes.DROOLS_RULES_GENERATION_EXCEPTION, LanguageCodes.ERROR_DESCRIPTION, ncte.getDescription());
 		}
 	}
 
 	public void setEnabledButtons() {
 		try {
-			newFormButton.setEnabled(getSecurityService()
-					.isUserAuthorizedInAnyOrganization(UserSessionHandler.getUser(), AbcdActivity.FORM_CREATE));
+			newFormButton.setEnabled(getSecurityService().isUserAuthorizedInAnyOrganization(UserSessionHandler.getUser(), AbcdActivity.FORM_CREATE));
 		} catch (UserManagementException e) {
 			AbcdLogger.errorMessage(this.getClass().getName(), e);
 		}
@@ -451,8 +430,7 @@ public class FormManagerUpperMenu extends UpperMenu {
 	public void updateNewVersionButton(SimpleFormView selected) {
 		if (selected != null && !(selected instanceof RootForm)) {
 			newVersion.setEnabled(selected.isLastVersion() && selected.getStatus().equals(FormWorkStatus.FINAL_DESIGN)
-					&& getSecurityService().isAuthorizedToForm(selected.getOrganizationId(),
-							UserSessionHandler.getUser())
+					&& getSecurityService().isAuthorizedToForm(selected.getOrganizationId(), UserSessionHandler.getUser())
 					&& !getSecurityService().isFormAlreadyInUse(selected.getId(), UserSessionHandler.getUser()));
 		} else {
 			newVersion.setEnabled(false);
@@ -462,15 +440,25 @@ public class FormManagerUpperMenu extends UpperMenu {
 	public void updateRemoveFormButton(SimpleFormView selected) {
 		// Only some users can remove forms.
 		try {
-			removeForm.setVisible(getSecurityService().isUserAuthorizedInAnyOrganization(UserSessionHandler.getUser(),
-					AbcdActivity.FORM_REMOVE));
+			removeForm.setVisible(getSecurityService().isUserAuthorizedInAnyOrganization(UserSessionHandler.getUser(), AbcdActivity.FORM_REMOVE));
 		} catch (UserManagementException e) {
 			removeForm.setVisible(false);
 		}
 		// When visible, enabled when can delete an element.
-		removeForm.setEnabled(
-				selected != null && !(selected instanceof RootForm) && getSecurityService().isAuthorizedActivity(
-						UserSessionHandler.getUser(), selected.getOrganizationId(), AbcdActivity.FORM_REMOVE));
+		removeForm.setEnabled(selected != null && !(selected instanceof RootForm)
+				&& getSecurityService().isAuthorizedActivity(UserSessionHandler.getUser(), selected.getOrganizationId(), AbcdActivity.FORM_REMOVE));
+	}
+
+	public void updateExportJsonFormButton(SimpleFormView selected) {
+		// Only some users can remove forms.
+		try {
+			exportJson.setVisible(getSecurityService().isUserAuthorizedInAnyOrganization(UserSessionHandler.getUser(), AbcdActivity.FORM_EXPORT));
+		} catch (UserManagementException e) {
+			exportJson.setVisible(false);
+		}
+		// When visible, enabled when can delete an element.
+		exportJson.setEnabled(selected != null && !(selected instanceof RootForm)
+				&& getSecurityService().isAuthorizedActivity(UserSessionHandler.getUser(), selected.getOrganizationId(), AbcdActivity.FORM_EXPORT));
 	}
 
 	@Override
@@ -490,6 +478,10 @@ public class FormManagerUpperMenu extends UpperMenu {
 
 	public void addImportJsonListener(ClickListener listener) {
 		importJson.addClickListener(listener);
+	}
+
+	public void addExportAbcdListener(ClickListener listener) {
+		exportJson.addClickListener(listener);
 	}
 
 }
