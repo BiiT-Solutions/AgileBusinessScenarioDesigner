@@ -58,7 +58,11 @@ public class WindowLaunchTestScenario extends AcceptCancelWindow {
 		initializeTestScenarioData(formView);
 		for (SimpleTestScenarioView testScenarioView : testScenarioData) {
 			testScenario.addItem(testScenarioView);
-			testScenario.setItemCaption(testScenarioView, testScenarioView.getName() + " (v" + testScenarioView.getFormVersion() + ")");
+			testScenario.setItemCaption(testScenarioView,
+					testScenarioView.getName() + " (v" + testScenarioView.getFormVersion() + ")");
+		}
+		if (!testScenarioData.isEmpty()) {
+			testScenario.setValue(testScenarioData.get(0));
 		}
 
 		formVersion.setValue(formView);
@@ -80,15 +84,16 @@ public class WindowLaunchTestScenario extends AcceptCancelWindow {
 	}
 
 	/**
-	 * This function loads from database all form elements with the specified
-	 * name . At the end it orders each form list by version number.
+	 * This function loads from database all form elements with the specified name .
+	 * At the end it orders each form list by version number.
 	 * 
 	 * @return
 	 * @throws NotConnectedToDatabaseException
 	 */
 	private void initializeFormData(SimpleFormView formView) {
 		if (formView != null) {
-			formData = simpleFormViewDao.getSimpleFormViewByLabelAndOrganization(formView.getLabel(), formView.getOrganizationId());
+			formData = simpleFormViewDao.getSimpleFormViewByLabelAndOrganization(formView.getLabel(),
+					formView.getOrganizationId());
 		} else {
 			formData = new ArrayList<>();
 		}

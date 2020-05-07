@@ -9,6 +9,7 @@ import java.util.List;
 import com.biit.abcd.core.drools.prattparser.exceptions.PrattParserException;
 import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
 import com.biit.abcd.core.drools.rules.DroolsRulesGenerator;
+import com.biit.abcd.core.drools.rules.TreeObjectDroolsIdMap;
 import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.BetweenFunctionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.DateComparisonNotPossibleException;
@@ -127,6 +128,7 @@ public class FormToDroolsExporter {
 			BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException,
 			InvalidRuleException, ActionNotImplementedException, InvalidExpressionException {
 		// Generate all drools rules.
+		TreeObjectDroolsIdMap.clearMap();
 		DroolsRulesGenerator rulesGenerator = generateDroolRules(form, globalVariables);
 		// Obtain results
 		if ((rulesGenerator != null) && (submittedForm != null)) {
