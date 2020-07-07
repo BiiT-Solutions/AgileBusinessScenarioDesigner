@@ -148,7 +148,7 @@ public class PluginsTest extends KidsFormCreator {
 	/**
 	 * Difficult to mantain as the article ID changes between servers. 
 	 */
-	@Test(groups = { "pluginsTest" }
+	@Test(groups = { "pluginsTest" })
 	public void liferayKnowledgeBasePlugin() throws FieldTooLongException, CharacterNotAllowedException, NotValidChildException, InvalidAnswerFormatException,
 			NotValidTypeInVariableData, ElementIsReadOnly, DroolsRuleGenerationException, DocumentException, IOException, DroolsRuleExecutionException,
 			RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
