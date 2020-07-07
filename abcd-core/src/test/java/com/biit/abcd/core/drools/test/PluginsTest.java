@@ -71,10 +71,10 @@ public class PluginsTest extends KidsFormCreator {
 	private final static String DROOLS_PLUGIN_METHOD = "methodSumParameters";
 	private final static String LIFERAY_PLUGIN_NAME = "liferay-article";
 	private final static String LIFERAY_PLUGIN_METHOD = "methodGetLatestArticleContent";
-	private final static Double LIFERAY_ARTICLE_RESOURCE_PRIMARY_KEY = 24518d;
+	private final static Double LIFERAY_ARTICLE_RESOURCE_PRIMARY_KEY = 21582d;
 	private final static String LIFERAY_PLUGIN_METHOD_BY_PROPERTY = "methodGetLatestArticleContentByProperty";
 	private final static String LIFERAY_PLUGIN_METHOD_GET_PROPERTIES_SOURCES = "methodGetPropertiesSources";
-	private final static String LIFERAY_ARTICLE_PROPERTY = "Appendix-Antropometrie";
+	private final static String LIFERAY_ARTICLE_PROPERTY = "fat-goal-description";
 	private final static String LIFERAY_RESULT = "Basis Sportmedisch OnderzoekWhy to read this article...only if you want to know everything about the Basic Examination...";
 	private final static String LIFERAY_RESULT2 = "A short description to explain the graphics below and what is this intended to achieve.";
 	private final static String LIFERAY_CONFIG_FILE = "abcd-core/src/test/resources/plugins/liferay-article-plugin-jar-with-dependencies.conf";
@@ -145,7 +145,10 @@ public class PluginsTest extends KidsFormCreator {
 		Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT), 8.);
 	}
 
-	@Test(groups = { "pluginsTest" })
+	/**
+	 * Difficult to mantain as the article ID changes between servers. 
+	 */
+	@Test(groups = { "pluginsTest" }
 	public void liferayKnowledgeBasePlugin() throws FieldTooLongException, CharacterNotAllowedException, NotValidChildException, InvalidAnswerFormatException,
 			NotValidTypeInVariableData, ElementIsReadOnly, DroolsRuleGenerationException, DocumentException, IOException, DroolsRuleExecutionException,
 			RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
@@ -167,6 +170,9 @@ public class PluginsTest extends KidsFormCreator {
 		Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT), LIFERAY_RESULT);
 	}
 
+	/**
+	 * Difficult to mantain as the article ID changes between servers. 
+	 */
 	@Test(groups = { "pluginsTest" })
 	public void liferayKnowledgeBasePluginBySettings() throws FieldTooLongException, CharacterNotAllowedException, NotValidChildException,
 			InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly, DroolsRuleGenerationException, DocumentException, IOException,
