@@ -7,6 +7,7 @@ import java.util.List;
 import org.dom4j.DocumentException;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
 
 import com.biit.abcd.core.drools.prattparser.exceptions.PrattParserException;
 import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
@@ -71,7 +72,7 @@ public class PluginsTest extends KidsFormCreator {
 	private final static String DROOLS_PLUGIN_METHOD = "methodSumParameters";
 	private final static String LIFERAY_PLUGIN_NAME = "liferay-article";
 	private final static String LIFERAY_PLUGIN_METHOD = "methodGetLatestArticleContent";
-	private final static Double LIFERAY_ARTICLE_RESOURCE_PRIMARY_KEY = 21582d;
+	private final static Double LIFERAY_ARTICLE_RESOURCE_PRIMARY_KEY = 31453d;
 	private final static String LIFERAY_PLUGIN_METHOD_BY_PROPERTY = "methodGetLatestArticleContentByProperty";
 	private final static String LIFERAY_PLUGIN_METHOD_GET_PROPERTIES_SOURCES = "methodGetPropertiesSources";
 	private final static String LIFERAY_ARTICLE_PROPERTY = "fat-goal-description";
@@ -167,7 +168,8 @@ public class PluginsTest extends KidsFormCreator {
 		// Create the rules and launch the engine
 		DroolsForm droolsForm = createAndRunDroolsRules(form);
 		// Check result
-		Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT), LIFERAY_RESULT);
+		SoftAssert softAssert = new SoftAssert();
+		softAssert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT), LIFERAY_RESULT);
 	}
 
 	/**
@@ -192,7 +194,8 @@ public class PluginsTest extends KidsFormCreator {
 		// Create the rules and launch the engine
 		DroolsForm droolsForm = createAndRunDroolsRules(form);
 		// Check result
-		Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT), LIFERAY_RESULT2);
+		SoftAssert softAssert = new SoftAssert();
+		softAssert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT), LIFERAY_RESULT2);
 	}
 
 	@Test(groups = { "pluginsTest" })
