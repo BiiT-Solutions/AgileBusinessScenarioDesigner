@@ -77,10 +77,12 @@ public class WindowLaunchTestScenario extends AcceptCancelWindow {
 	 * Loads all the test scenarios related with all the form versions
 	 */
 	private void initializeTestScenarioData(SimpleFormView formView) {
-		testScenarioData = new ArrayList<SimpleTestScenarioView>();
-		testScenarioData.addAll(simpleTestScenarioViewDao.getSimpleTestScenariosByFormId(formView.getId()));
-		// To show first the newer versions
-		Collections.reverse(testScenarioData);
+		if (formView != null) {
+			testScenarioData = new ArrayList<SimpleTestScenarioView>();
+			testScenarioData.addAll(simpleTestScenarioViewDao.getSimpleTestScenariosByFormId(formView.getId()));
+			// To show first the newer versions
+			Collections.reverse(testScenarioData);
+		}
 	}
 
 	/**
