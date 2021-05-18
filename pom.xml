@@ -31,8 +31,8 @@
 	</distributionManagement>
 
 	<scm>
-		<connection>scm:git:git.biit-solutions.com:AgileBusinessScenarioDesigner.git</connection>
-		<developerConnection>scm:git:git.biit-solutions.com:AgileBusinessScenarioDesigner.git</developerConnection>
+		<connection>scm:git:git.biit-solutions.com:BiiT/AgileBusinessScenarioDesigner.git</connection>
+		<connection>scm:git:git.biit-solutions.com:BiiT/AgileBusinessScenarioDesigner.git</developerConnection>
 		<tag>abcd-tool-1.5.278</tag>
 	</scm>
 
