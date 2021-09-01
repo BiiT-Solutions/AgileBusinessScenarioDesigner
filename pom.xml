@@ -39,7 +39,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.8</java.version>
-		<jetty-maven-plugin.version>9.2.7.v20150116</jetty-maven-plugin.version>
+		<jetty-maven-plugin.version>9.4.43.v20210629</jetty-maven-plugin.version>
 		<maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
 		<maven-resources-plugin.version>2.7</maven-resources-plugin.version>
 		<maven-antrun-plugin.version>1.8</maven-antrun-plugin.version>
@@ -48,7 +48,7 @@
 		<exec-maven-plugin.version>1.6.0</exec-maven-plugin.version>
 		<org.testng.version>6.14.3</org.testng.version>
 		<commons-io.version>2.4</commons-io.version>
-		<vaadin.version>7.3.10</vaadin.version>
+		<vaadin.version>7.6.2</vaadin.version>
 		<vaadin-testbench.version>4.0.3</vaadin-testbench.version>
 		<vaadin.plugin.version>${vaadin.version}</vaadin.plugin.version>
 		<vaadin-toolkit.version>LATEST</vaadin-toolkit.version>
@@ -59,7 +59,7 @@
 		<slf4j-api.version>1.7.7</slf4j-api.version>
 		<slf4j-log4j12.version>1.7.7</slf4j-log4j12.version>
 		<hibernate.version>5.2.17.Final</hibernate.version>
-		<itext.version>2.1.7</itext.version>
+		<openpdf.version>1.3.26</openpdf.version>
 		<jointjs-widget.version>0.1.3-WIDGET</jointjs-widget.version>
 		<jexeval.version>1.0.4</jexeval.version>
 		<apache-poi.version>3.10.1</apache-poi.version>
