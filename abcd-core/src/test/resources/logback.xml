@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- For assistance related to logback-translator or configuration  -->
+<!-- files in general, please contact the logback user mailing list -->
+<!-- at http://www.qos.ch/mailman/listinfo/logback-user             -->
+<!--                                                                -->
+<!-- For professional support please see                            -->
+<!--    http://www.qos.ch/shop/products/professionalSupport         -->
+<!--                                                                -->
+<configuration>
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%-5p %d{yyyy-MM-dd HH:mm:ss.SSS 'GMT'Z} %c{1} [%t] - %m%n</pattern>
+        </encoder>
+    </appender>
+    <appender name="DAILY" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--See http://logback.qos.ch/manual/appenders.html#RollingFileAppender-->
+        <!--and http://logback.qos.ch/manual/appenders.html#TimeBasedRollingPolicy-->
+        <!--for further documentation-->
+        <File>${catalina.home}/logs/Abcd.log</File>
+        <encoder>
+            <pattern>%-5p %d{yyyy-MM-dd HH:mm:ss.SSS 'GMT'Z} %c{1} [%t] - %m%n</pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <maxHistory>10</maxHistory>
+            <!-- daily rollover -->
+            <fileNamePattern>/logs/Abcd.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <!-- or whenever the file size reaches 100MB -->
+                <maxFileSize>100MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+    </appender>
+    <logger name="com.mchange.v2.resourcepool" level="ERROR">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="DAILY"/>
+    </logger>
+    <logger name="org.hibernate.SQL" additivity="false" level="ERROR">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="DAILY"/>
+    </logger>
+    <logger name="net.sf.ehcache.code" additivity="false" level="ERROR">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="DAILY"/>
+    </logger>
+    <logger name="com.biit.liferay.log.LiferayClientLogger" additivity="false" level="ERROR">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="DAILY"/>
+    </logger>
+    <logger name="com.biit.abcd.logger.AbcdLogger" additivity="false" level="DEBUG">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="DAILY"/>
+    </logger>
+    <logger name="com.biit.drools.logger.DroolsRulesLogger" additivity="false" level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="DAILY"/>
+    </logger>
+    <logger name="com.biit.drools.logger.DroolsEngineLogger" additivity="false" level="ERROR">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="DAILY"/>
+    </logger>
+    <logger name="com.biit.abcd.logger.BasicLogging" additivity="false" level="DEBUG">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="DAILY"/>
+    </logger>
+    <logger name="com.biit.plugins.logger.PluginManagerLogger" additivity="false" level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="DAILY"/>
+    </logger>
+    <logger name="net.sf.ehcache" additivity="false" level="ERROR">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="DAILY"/>
+    </logger>
+    <logger name="org.hibernate.cache" additivity="false" level="ERROR">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="DAILY"/>
+    </logger>
+    <logger name="net.sf.ehcache.config" additivity="false" level="ERROR">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="DAILY"/>
+    </logger>
+    <logger name="com.biit.logger.BiitLogger" additivity="false" level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="DAILY"/>
+    </logger>
+    <logger name="org.hibernate.jdbc" additivity="false" level="ERROR">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="DAILY"/>
+    </logger>
+    <logger name="org.hibernate" additivity="false" level="ERROR">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="DAILY"/>
+    </logger>
+    <logger name="com.mchange.v2.c3p0" level="ERROR">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="DAILY"/>
+    </logger>
+    <logger name="org.hibernate.type" additivity="false" level="ERROR">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="DAILY"/>
+    </logger>
+    <logger name="org.springframework" additivity="false" level="ERROR">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="DAILY"/>
+    </logger>
+    <logger name="com.biit.logger.BiitCommonLogger" additivity="false" level="ERROR">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="DAILY"/>
+    </logger>
+    <logger name="com.biit.drools.plugin.log.LiferaryArticlePluginLogger" additivity="false" level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="DAILY"/>
+    </logger>
+    <logger name="org.hibernate.tool.hbm2ddl" additivity="false" level="WARN">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="DAILY"/>
+    </logger>
+    <logger name="org.hibernate.hql.ast.AST" additivity="false" level="ERROR">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="DAILY"/>
+    </logger>
+    <logger name="com.liferay.portal.log.SecurityLogger" additivity="false" level="ERROR">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="DAILY"/>
+    </logger>
+    <logger name="org.biit.liferay.client" level="ERROR">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="DAILY"/>
+    </logger>
+    <logger name="org.hibernate.hql" additivity="false" level="ERROR">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="DAILY"/>
+    </logger>
+    <logger name="org.hibernate.engine.internal.StatisticalLoggingSessionEventListener" additivity="false" level="ERROR">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="DAILY"/>
+    </logger>
+    <logger name="net.sf.ehcache.distribution" additivity="false" level="ERROR">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="DAILY"/>
+    </logger>
+    <root level="ERROR">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="DAILY"/>
+    </root>
+</configuration>
