@@ -39,7 +39,7 @@
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="DAILY"/>
     </logger>
-    <logger name="net.sf.ehcache.code" additivity="false" level="ERROR">
+    <logger name="org.ehcache.code" additivity="false" level="ERROR">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="DAILY"/>
     </logger>
@@ -67,7 +67,7 @@
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="DAILY"/>
     </logger>
-    <logger name="net.sf.ehcache" additivity="false" level="ERROR">
+    <logger name="org.ehcache" additivity="false" level="ERROR">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="DAILY"/>
     </logger>
@@ -75,7 +75,7 @@
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="DAILY"/>
     </logger>
-    <logger name="net.sf.ehcache.config" additivity="false" level="ERROR">
+    <logger name="org.ehcache.config" additivity="false" level="ERROR">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="DAILY"/>
     </logger>
@@ -135,7 +135,7 @@
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="DAILY"/>
     </logger>
-    <logger name="net.sf.ehcache.distribution" additivity="false" level="ERROR">
+    <logger name="org.ehcache.distribution" additivity="false" level="ERROR">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="DAILY"/>
     </logger>

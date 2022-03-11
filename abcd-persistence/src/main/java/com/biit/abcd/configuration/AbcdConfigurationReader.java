@@ -1,6 +1,6 @@
 package com.biit.abcd.configuration;
 
-import net.sf.ehcache.util.FindBugsSuppressWarnings;
+import org.ehcache.util.FindBugsSuppressWarnings;
 
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.utils.configuration.ConfigurationReader;

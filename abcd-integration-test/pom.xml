@@ -61,14 +61,12 @@
 		<dependency>
 			<groupId>com.biit.security</groupId>
 			<artifactId>DES-encryption</artifactId>
-			<version>${DES-encryption.version}</version>
 		</dependency>
 		<!-- Vaadin plugins -->
 		<!-- JointJs Calendar Widget -->
 		<dependency>
 			<groupId>com.biit.vaadin</groupId>
 			<artifactId>jointjs-diagram-builder</artifactId>
-			<version>${jointjs-widget.version}</version>
 		</dependency>
 		<!-- Core -->
 		<dependency>
@@ -121,22 +119,18 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
-			<version>${org.springframework.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-orm</artifactId>
-			<version>${org.springframework.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-aspects</artifactId>
-			<version>${org.springframework.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
-			<version>${org.springframework.version}</version>
 		</dependency>
 		<!-- Vaadin TestBench (Requires license) -->
 		<dependency>

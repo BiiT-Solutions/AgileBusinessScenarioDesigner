@@ -76,14 +76,12 @@
 		<dependency>
 			<groupId>com.biit.security</groupId>
 			<artifactId>DES-encryption</artifactId>
-			<version>${DES-encryption.version}</version>
 		</dependency>
 		<!-- Vaadin plugins -->
 		<!-- JointJs Calendar Widget -->
 		<dependency>
 			<groupId>com.biit.vaadin</groupId>
 			<artifactId>jointjs-diagram-builder</artifactId>
-			<version>${jointjs-widget.version}</version>
 		</dependency>
 		<!-- Core -->
 		<dependency>
@@ -135,40 +133,33 @@
 		<dependency>
 			<groupId>org.testng</groupId>
 			<artifactId>testng</artifactId>
-			<version>${org.testng.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<!-- Spring MVC framework -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
-			<version>${org.springframework.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-orm</artifactId>
-			<version>${org.springframework.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-aspects</artifactId>
-			<version>${org.springframework.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
-			<version>${org.springframework.version}</version>
 		</dependency>
 		<!-- EhCache Logging -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
-			<version>${slf4j.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
-			<version>${slf4j.version}</version>
 		</dependency>
 	</dependencies>
 	<build>
@@ -191,7 +182,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-deploy-plugin</artifactId>
-				<version>${maven-deploy-plugin.version}</version>
 				<configuration>
 					<skip>true</skip>
 				</configuration>

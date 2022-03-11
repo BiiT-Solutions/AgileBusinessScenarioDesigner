@@ -6,7 +6,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import net.sf.ehcache.CacheManager;
+import org.ehcache.CacheManager;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -79,18 +79,5 @@ public abstract class AnnotatedGenericDao<EntityClass, PrimaryKeyClass extends S
 		// Clear first level cache.
 		getEntityManager().clear();
 		super.evictAllCache();
-	}
-
-	public void printCacheStatistics() {
-		SessionFactory sessionFactory = getEntityManager().unwrap(Session.class).getSessionFactory();
-		AbcdLogger.debug(this.getClass().getName(), sessionFactory.getStatistics().toString());
-		// Spring cache.
-		CacheManager cacheManager = CacheManager.getInstance();
-		String[] cacheNames = cacheManager.getCacheNames();
-		for (int i = 0; i < cacheNames.length; i++) {
-			String cacheName = cacheNames[i];
-			AbcdLogger.debug(this.getClass().getName(), cacheName + ": "
-					+ cacheManager.getCache(cacheName).getStatistics().toString());
-		}
 	}
 }

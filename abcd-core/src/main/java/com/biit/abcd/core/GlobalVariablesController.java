@@ -1,18 +1,17 @@
 package com.biit.abcd.core;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import net.sf.ehcache.util.FindBugsSuppressWarnings;
-
 import com.biit.abcd.core.exceptions.DuplicatedVariableException;
+import com.biit.abcd.core.utils.FindBugsSuppressWarnings;
 import com.biit.abcd.persistence.dao.IGlobalVariablesDao;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
 import com.biit.persistence.dao.exceptions.ElementCannotBePersistedException;
 import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
 import com.biit.persistence.entity.exceptions.ElementCannotBeRemovedException;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class GlobalVariablesController {
 	private List<GlobalVariable> globalVariables = null;
