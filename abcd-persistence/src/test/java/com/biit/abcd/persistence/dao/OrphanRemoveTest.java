@@ -1,19 +1,6 @@
 package com.biit.abcd.persistence.dao;
 
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
-import org.springframework.test.context.transaction.TransactionConfiguration;
-import org.testng.Assert;
-import org.testng.annotations.Test;
-
-import com.biit.abcd.persistence.entity.Answer;
-import com.biit.abcd.persistence.entity.Category;
-import com.biit.abcd.persistence.entity.Form;
-import com.biit.abcd.persistence.entity.Group;
-import com.biit.abcd.persistence.entity.Question;
+import com.biit.abcd.persistence.entity.*;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.entity.diagram.DiagramFork;
 import com.biit.abcd.persistence.entity.diagram.DiagramLink;
@@ -28,6 +15,14 @@ import com.biit.persistence.dao.exceptions.ElementCannotBePersistedException;
 import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
 import com.biit.persistence.entity.exceptions.ElementCannotBeRemovedException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
+import org.testng.Assert;
+import org.testng.annotations.Test;
 
 /**
  * Test that one to one entities are removed correctly using orphanremove=true
@@ -35,7 +30,7 @@ import com.biit.persistence.entity.exceptions.FieldTooLongException;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:applicationContextTest.xml" })
-@TransactionConfiguration(defaultRollback = true)
+@Rollback(value = false)
 @Test(groups = { "orphan" })
 public class OrphanRemoveTest extends AbstractTransactionalTestNGSpringContextTests {
 	private final static String DUMMY_FORM = "Dummy Form with Orphan";

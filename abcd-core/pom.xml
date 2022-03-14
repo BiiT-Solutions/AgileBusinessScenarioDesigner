@@ -130,7 +130,7 @@
                     <useFile>false</useFile>
                     <trimStackTrace>false</trimStackTrace>
                     <suiteXmlFiles>
-                        <suiteXmlFile>src/test/resource/testng.xml</suiteXmlFile>
+                        <suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>
                     </suiteXmlFiles>
                     <useSystemClassLoader>false</useSystemClassLoader>
                     <argLine>-Xms512m -Xmx2048M -Xss1024k -XX:MaxPermSize=512M</argLine>

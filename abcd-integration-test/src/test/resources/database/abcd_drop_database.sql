@@ -3,7 +3,7 @@ SET group_concat_max_len=25000;
 SET @tables = NULL;
 SELECT GROUP_CONCAT(table_schema, '.', table_name) INTO @tables
   FROM information_schema.tables 
-  WHERE table_schema = 'usmotest'; 
+  WHERE table_schema = 'abcdtest';
 
 SET @tables = CONCAT('DROP TABLE IF EXISTS ', @tables, ';');
 PREPARE stmt FROM @tables;

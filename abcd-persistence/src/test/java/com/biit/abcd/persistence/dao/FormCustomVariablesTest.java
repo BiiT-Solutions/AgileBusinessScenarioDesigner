@@ -1,16 +1,5 @@
 package com.biit.abcd.persistence.dao;
 
-import java.util.Iterator;
-
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
-import org.springframework.test.context.transaction.TransactionConfiguration;
-import org.testng.Assert;
-import org.testng.annotations.Test;
-
 import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.CustomVariableScope;
 import com.biit.abcd.persistence.entity.CustomVariableType;
@@ -21,11 +10,21 @@ import com.biit.persistence.dao.exceptions.ElementCannotBePersistedException;
 import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
 import com.biit.persistence.entity.exceptions.ElementCannotBeRemovedException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
+import org.testng.Assert;
+import org.testng.annotations.Test;
+
+import java.util.Iterator;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:applicationContextTest.xml" })
 @Test(groups = { "formCustomVariablesDao" })
-@TransactionConfiguration(defaultRollback = false)
+@Rollback(value = false)
 public class FormCustomVariablesTest extends AbstractTransactionalTestNGSpringContextTests {
 	private final static String DUMMY_FORM = "Form with custom variables";
 

@@ -1,24 +1,17 @@
 package com.biit.abcd.persistence.dao.hibernate;
 
-import java.io.Serializable;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
-import org.ehcache.CacheManager;
-
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
+import com.biit.persistence.dao.IJpaGenericDao;
+import com.biit.persistence.dao.jpa.GenericDao;
+import com.biit.persistence.entity.exceptions.ElementCannotBeRemovedException;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.biit.abcd.logger.AbcdLogger;
-import com.biit.persistence.dao.IJpaGenericDao;
-import com.biit.persistence.dao.jpa.GenericDao;
-import com.biit.persistence.entity.exceptions.ElementCannotBeRemovedException;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import java.io.Serializable;
+import java.util.List;
 
 public abstract class AnnotatedGenericDao<EntityClass, PrimaryKeyClass extends Serializable> extends
 		GenericDao<EntityClass, PrimaryKeyClass> implements IJpaGenericDao<EntityClass, PrimaryKeyClass> {

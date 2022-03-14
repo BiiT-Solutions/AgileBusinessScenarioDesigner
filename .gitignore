@@ -27,3 +27,4 @@ release.properties
 *BASE*.xml
 *LOCAL*.xml
 *REMOTE*.xml
+*.log

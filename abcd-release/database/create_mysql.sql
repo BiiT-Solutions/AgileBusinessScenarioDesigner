@@ -566,36 +566,6 @@
 
     insert into hibernate_sequence values ( 1 );
 
-    insert into hibernate_sequence values ( 1 );
-
-    insert into hibernate_sequence values ( 1 );
-
-    insert into hibernate_sequence values ( 1 );
-
-    insert into hibernate_sequence values ( 1 );
-
-    insert into hibernate_sequence values ( 1 );
-
-    insert into hibernate_sequence values ( 1 );
-
-    insert into hibernate_sequence values ( 1 );
-
-    insert into hibernate_sequence values ( 1 );
-
-    insert into hibernate_sequence values ( 1 );
-
-    insert into hibernate_sequence values ( 1 );
-
-    insert into hibernate_sequence values ( 1 );
-
-    insert into hibernate_sequence values ( 1 );
-
-    insert into hibernate_sequence values ( 1 );
-
-    insert into hibernate_sequence values ( 1 );
-
-    insert into hibernate_sequence values ( 1 );
-
     create table rule (
        id bigint not null,
         comparation_id varchar(190) not null,
