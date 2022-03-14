@@ -49,6 +49,16 @@
             <artifactId>xmlgraphics-commons</artifactId>
             <version>${xmlgraphics-commons.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.dom4j</groupId>
+            <artifactId>dom4j</artifactId>
+            <version>${dom4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>jaxen</groupId>
+            <artifactId>jaxen</artifactId>
+            <version>${jaxen.version}</version>
+        </dependency>
         <!-- PDF generation -->
         <dependency>
             <groupId>com.github.librepdf</groupId>
