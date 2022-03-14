@@ -144,6 +144,11 @@
 			<artifactId>mybatis</artifactId>
 			<version>${mybatis.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.glassfish.jersey.inject</groupId>
+			<artifactId>jersey-hk2</artifactId>
+			<version>${jersey-hk2.version}</version>
+		</dependency>
 	</dependencies>
 
 	<build>
