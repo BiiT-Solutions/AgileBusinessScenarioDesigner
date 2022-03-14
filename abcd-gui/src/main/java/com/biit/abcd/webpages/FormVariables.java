@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 
-import com.biit.abcd.core.utils.FindBugsSuppressWarnings;
+import com.biit.utils.annotations.FindBugsSuppressWarnings;
 import org.hibernate.exception.ConstraintViolationException;
 
 import com.biit.abcd.ApplicationFrame;

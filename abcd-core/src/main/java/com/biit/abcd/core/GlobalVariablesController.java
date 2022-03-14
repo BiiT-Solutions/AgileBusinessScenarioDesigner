@@ -1,7 +1,6 @@
 package com.biit.abcd.core;
 
 import com.biit.abcd.core.exceptions.DuplicatedVariableException;
-import com.biit.abcd.core.utils.FindBugsSuppressWarnings;
 import com.biit.abcd.persistence.dao.IGlobalVariablesDao;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
 import com.biit.persistence.dao.exceptions.ElementCannotBePersistedException;
@@ -27,7 +26,6 @@ public class GlobalVariablesController {
 	 * @return the list of variables.
 	 * @throws UnexpectedDatabaseException
 	 */
-	@FindBugsSuppressWarnings("DC_DOUBLECHECK")
 	public List<GlobalVariable> getGlobalVariables() {
 		if (globalVariables == null) {
 			synchronized (GlobalVariablesController.class) {

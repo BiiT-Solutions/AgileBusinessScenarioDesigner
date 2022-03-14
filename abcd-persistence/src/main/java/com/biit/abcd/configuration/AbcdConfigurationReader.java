@@ -1,10 +1,10 @@
 package com.biit.abcd.configuration;
 import com.biit.abcd.logger.AbcdLogger;
+import com.biit.utils.annotations.FindBugsSuppressWarnings;
 import com.biit.utils.configuration.ConfigurationReader;
 import com.biit.utils.configuration.PropertiesSourceFile;
 import com.biit.utils.configuration.SystemVariablePropertiesSourceFile;
 import com.biit.utils.configuration.exceptions.PropertyNotFoundException;
-import net.sf.ehcache.util.FindBugsSuppressWarnings;
 
 public class AbcdConfigurationReader extends ConfigurationReader {
 

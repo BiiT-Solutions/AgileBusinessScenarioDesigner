@@ -10,7 +10,6 @@ import com.biit.abcd.core.FormController;
 import com.biit.abcd.core.GlobalVariablesController;
 import com.biit.abcd.core.SpringContextHelper;
 import com.biit.abcd.core.testscenarios.TestScenarioController;
-import com.biit.abcd.core.utils.FindBugsSuppressWarnings;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.Form;
@@ -161,7 +160,6 @@ public class UserSessionHandler {
         userLastPage.remove(user.getUniqueId());
     }
 
-    @FindBugsSuppressWarnings("DC_DOUBLECHECK")
     public static GlobalVariablesController getGlobalVariablesController() {
         if (globalVariablesController == null) {
             synchronized (UserSessionHandler.class) {
@@ -174,7 +172,6 @@ public class UserSessionHandler {
         return globalVariablesController;
     }
 
-    @FindBugsSuppressWarnings("DC_DOUBLECHECK")
     public static TestScenarioController getTestScenariosController() {
         if (testScenariosController == null) {
             synchronized (UserSessionHandler.class) {
