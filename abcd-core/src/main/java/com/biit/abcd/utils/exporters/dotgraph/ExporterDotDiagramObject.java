@@ -87,6 +87,6 @@ public class ExporterDotDiagramObject extends ExporterDot<DiagramObject> {
 	}
 
 	private String getIconsFolder() {
-		return DotImageCreator.ICON_TEMP_FOLDER.toString();
+		return DotImageCreator.getIconFolder().toString();
 	}
 }

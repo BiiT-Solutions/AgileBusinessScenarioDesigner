@@ -1,5 +1,7 @@
 package com.biit.abcd.webpages.elements.decisiontable;
 
+import java.nio.charset.StandardCharsets;
+
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
 import com.biit.abcd.language.LanguageCodes;
@@ -42,7 +44,7 @@ public class SaveTableToCsvAction implements SaveAction {
 					tableRuleString += actionChain.getRepresentation(false) + ";";
 					tableRuleString += "\n";
 				}
-				return tableRuleString.getBytes();
+				return tableRuleString.getBytes(StandardCharsets.UTF_8);
 			}
 		} catch (Exception e) {
 			MessageManager.showError(LanguageCodes.ERROR_UNEXPECTED_ERROR);

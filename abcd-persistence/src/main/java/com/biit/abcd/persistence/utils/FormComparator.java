@@ -262,14 +262,14 @@ public class FormComparator {
 		if (object1 == null && object2 == null) {
 			return;
 		}
-
-		if (object1 == null || object2 == null) {
-			throw new ExpressionNotEqualsException("Cannot compare '" + object1 + "' with '" + object2 + "'.");
-		}
-
+		
 		if ((object1 != null && object2 == null) || (object1 == null && object2 != null)) {
 			throw new ExpressionNotEqualsException(
 					"Value fields are different: '" + object1 + "' and '" + object2 + "'");
+		}
+
+		if (object1 == null || object2 == null) {
+			throw new ExpressionNotEqualsException("Cannot compare '" + object1 + "' with '" + object2 + "'.");
 		}
 		// Hibernate replace arrays. Check if it is the case.
 		if (!object1.getClass().getName().equals("org.hibernate.collection.internal.PersistentBag")

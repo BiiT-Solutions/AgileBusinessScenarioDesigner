@@ -16,7 +16,7 @@ import com.vaadin.ui.VerticalLayout;
 public class PropertiesComponent extends CustomComponent implements Component.Focusable {
 
 	private static final long serialVersionUID = -4459509560858677005L;
-	public static String CLASSNAME = "v-properties-container";
+	public static final String CLASSNAME = "v-properties-container";
 	private VerticalLayout rootLayout;
 	private HashMap<Class<?>, PropertiesForClassComponent<?>> propertiesComponents;
 	private List<PropertieUpdateListener> propertyUpdateListeners;
