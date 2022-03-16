@@ -138,6 +138,16 @@
 			<artifactId>vaadin-testbench</artifactId>
 			<version>${vaadin-testbench.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-remote-driver</artifactId>
+			<version>${selenium-remote-driver.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-java</artifactId>
+			<version>${selenium-remote-driver.version}</version>
+		</dependency>
 		<!-- ScriptRunner -->
 		<dependency>
 			<groupId>org.mybatis</groupId>
