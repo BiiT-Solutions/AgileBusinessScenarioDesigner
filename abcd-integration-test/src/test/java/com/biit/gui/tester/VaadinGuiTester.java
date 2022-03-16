@@ -13,10 +13,10 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.apache.ibatis.jdbc.ScriptRunner;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -61,9 +61,7 @@ public class VaadinGuiTester extends TestBenchTestCase {
         } else {
             FirefoxProfile profile = new FirefoxProfile();
             profile.setPreference(FIREFOX_LANGUAGE_PROPERTY, FIREFOX_LANGUAGE_VALUE);
-            FirefoxOptions options = new FirefoxOptions();
-            options.setProfile(profile);
-            setDriver(TestBench.createDriver(new FirefoxDriver(options)));
+            setDriver(TestBench.createDriver(new FirefoxDriver(profile)));
         }
         getDriver().manage().window().setSize(new Dimension(WIDTH, HEIGHT));
         for (VaadinGuiWebpage webpage : webpages) {
