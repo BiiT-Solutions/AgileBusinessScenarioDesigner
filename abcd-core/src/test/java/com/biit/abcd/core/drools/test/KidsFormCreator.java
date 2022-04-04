@@ -1,70 +1,15 @@
 package com.biit.abcd.core.drools.test;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.PrintStream;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import org.dom4j.DocumentException;
-import org.junit.Assert;
-import org.testng.annotations.Test;
-
 import com.biit.abcd.core.drools.FormToDroolsExporter;
 import com.biit.abcd.core.drools.prattparser.exceptions.PrattParserException;
 import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
 import com.biit.abcd.core.drools.rules.DroolsRulesGenerator;
-import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
-import com.biit.abcd.core.drools.rules.exceptions.BetweenFunctionInvalidException;
-import com.biit.abcd.core.drools.rules.exceptions.DateComparisonNotPossibleException;
-import com.biit.abcd.core.drools.rules.exceptions.DroolsRuleCreationException;
-import com.biit.abcd.core.drools.rules.exceptions.DroolsRuleGenerationException;
-import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
-import com.biit.abcd.core.drools.rules.exceptions.InvalidRuleException;
-import com.biit.abcd.core.drools.rules.exceptions.NullCustomVariableException;
-import com.biit.abcd.core.drools.rules.exceptions.NullExpressionValueException;
-import com.biit.abcd.core.drools.rules.exceptions.NullTreeObjectException;
-import com.biit.abcd.core.drools.rules.exceptions.PluginInvocationException;
-import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
-import com.biit.abcd.core.drools.rules.exceptions.TreeObjectInstanceNotRecognizedException;
-import com.biit.abcd.core.drools.rules.exceptions.TreeObjectParentNotValidException;
+import com.biit.abcd.core.drools.rules.exceptions.*;
 import com.biit.abcd.core.drools.rules.validators.InvalidExpressionException;
 import com.biit.abcd.core.drools.utils.RuleGenerationUtils;
-import com.biit.abcd.persistence.entity.Answer;
-import com.biit.abcd.persistence.entity.AnswerFormat;
-import com.biit.abcd.persistence.entity.AnswerType;
-import com.biit.abcd.persistence.entity.Category;
-import com.biit.abcd.persistence.entity.CustomVariable;
-import com.biit.abcd.persistence.entity.CustomVariableScope;
-import com.biit.abcd.persistence.entity.CustomVariableType;
-import com.biit.abcd.persistence.entity.Form;
-import com.biit.abcd.persistence.entity.Group;
-import com.biit.abcd.persistence.entity.Question;
-import com.biit.abcd.persistence.entity.diagram.Diagram;
-import com.biit.abcd.persistence.entity.diagram.DiagramChild;
-import com.biit.abcd.persistence.entity.diagram.DiagramElement;
-import com.biit.abcd.persistence.entity.diagram.DiagramExpression;
-import com.biit.abcd.persistence.entity.diagram.DiagramLink;
-import com.biit.abcd.persistence.entity.diagram.DiagramObjectType;
-import com.biit.abcd.persistence.entity.diagram.DiagramRule;
-import com.biit.abcd.persistence.entity.diagram.DiagramSink;
-import com.biit.abcd.persistence.entity.diagram.DiagramSource;
-import com.biit.abcd.persistence.entity.diagram.DiagramTable;
-import com.biit.abcd.persistence.entity.diagram.Node;
-import com.biit.abcd.persistence.entity.expressions.AvailableOperator;
-import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
-import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorMath;
-import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
-import com.biit.abcd.persistence.entity.expressions.ExpressionValueNumber;
-import com.biit.abcd.persistence.entity.expressions.ExpressionValueString;
-import com.biit.abcd.persistence.entity.expressions.Rule;
+import com.biit.abcd.persistence.entity.*;
+import com.biit.abcd.persistence.entity.diagram.*;
+import com.biit.abcd.persistence.entity.expressions.*;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
 import com.biit.abcd.persistence.entity.globalvariables.VariableData;
 import com.biit.abcd.persistence.entity.rules.TableRule;
@@ -82,8 +27,27 @@ import com.biit.form.exceptions.InvalidAnswerFormatException;
 import com.biit.form.exceptions.NotValidChildException;
 import com.biit.form.submitted.ISubmittedForm;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
+import org.dom4j.DocumentException;
+import org.junit.Assert;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
+import org.testng.annotations.Test;
 
-public class KidsFormCreator {
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+@ContextConfiguration(locations = { "classpath:applicationContextTest.xml" })
+public class KidsFormCreator extends AbstractTestNGSpringContextTests {
 
 	private static final String APP = "Application1";
 	public static final String CATEGORY_NAME = "Algemeen";

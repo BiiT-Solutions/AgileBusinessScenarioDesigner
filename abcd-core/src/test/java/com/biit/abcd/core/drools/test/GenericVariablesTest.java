@@ -1,41 +1,11 @@
 package com.biit.abcd.core.drools.test;
 
-import java.io.IOException;
-
-import org.dom4j.DocumentException;
-import org.testng.annotations.Test;
-
 import com.biit.abcd.core.drools.prattparser.exceptions.PrattParserException;
 import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
-import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
-import com.biit.abcd.core.drools.rules.exceptions.BetweenFunctionInvalidException;
-import com.biit.abcd.core.drools.rules.exceptions.DateComparisonNotPossibleException;
-import com.biit.abcd.core.drools.rules.exceptions.DroolsRuleCreationException;
-import com.biit.abcd.core.drools.rules.exceptions.DroolsRuleGenerationException;
-import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
-import com.biit.abcd.core.drools.rules.exceptions.InvalidRuleException;
-import com.biit.abcd.core.drools.rules.exceptions.NullCustomVariableException;
-import com.biit.abcd.core.drools.rules.exceptions.NullExpressionValueException;
-import com.biit.abcd.core.drools.rules.exceptions.NullTreeObjectException;
-import com.biit.abcd.core.drools.rules.exceptions.PluginInvocationException;
-import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
-import com.biit.abcd.core.drools.rules.exceptions.TreeObjectInstanceNotRecognizedException;
-import com.biit.abcd.core.drools.rules.exceptions.TreeObjectParentNotValidException;
+import com.biit.abcd.core.drools.rules.exceptions.*;
 import com.biit.abcd.core.drools.rules.validators.InvalidExpressionException;
-import com.biit.abcd.persistence.entity.CustomVariable;
-import com.biit.abcd.persistence.entity.CustomVariableScope;
-import com.biit.abcd.persistence.entity.CustomVariableType;
-import com.biit.abcd.persistence.entity.Form;
-import com.biit.abcd.persistence.entity.GenericTreeObjectType;
-import com.biit.abcd.persistence.entity.expressions.AvailableFunction;
-import com.biit.abcd.persistence.entity.expressions.AvailableOperator;
-import com.biit.abcd.persistence.entity.expressions.AvailableSymbol;
-import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
-import com.biit.abcd.persistence.entity.expressions.ExpressionFunction;
-import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorMath;
-import com.biit.abcd.persistence.entity.expressions.ExpressionSymbol;
-import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
-import com.biit.abcd.persistence.entity.expressions.ExpressionValueGenericCustomVariable;
+import com.biit.abcd.persistence.entity.*;
+import com.biit.abcd.persistence.entity.expressions.*;
 import com.biit.drools.engine.exceptions.DroolsRuleExecutionException;
 import com.biit.drools.global.variables.exceptions.NotValidTypeInVariableData;
 import com.biit.form.exceptions.CharacterNotAllowedException;
@@ -43,7 +13,13 @@ import com.biit.form.exceptions.ElementIsReadOnly;
 import com.biit.form.exceptions.InvalidAnswerFormatException;
 import com.biit.form.exceptions.NotValidChildException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
+import org.dom4j.DocumentException;
+import org.springframework.test.context.ContextConfiguration;
+import org.testng.annotations.Test;
 
+import java.io.IOException;
+
+@ContextConfiguration(locations = { "classpath:applicationContextTest.xml" })
 public class GenericVariablesTest extends KidsFormCreator {
 
 	private final static String FORM_SCORE = "formScore";

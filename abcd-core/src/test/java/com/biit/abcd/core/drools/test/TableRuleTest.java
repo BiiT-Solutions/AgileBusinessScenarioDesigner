@@ -1,48 +1,12 @@
 package com.biit.abcd.core.drools.test;
 
-import java.io.IOException;
-
-import org.dom4j.DocumentException;
-import org.junit.Assert;
-import org.testng.annotations.Test;
-
 import com.biit.abcd.core.drools.prattparser.exceptions.PrattParserException;
 import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
-import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
-import com.biit.abcd.core.drools.rules.exceptions.BetweenFunctionInvalidException;
-import com.biit.abcd.core.drools.rules.exceptions.DateComparisonNotPossibleException;
-import com.biit.abcd.core.drools.rules.exceptions.DroolsRuleCreationException;
-import com.biit.abcd.core.drools.rules.exceptions.DroolsRuleGenerationException;
-import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
-import com.biit.abcd.core.drools.rules.exceptions.InvalidRuleException;
-import com.biit.abcd.core.drools.rules.exceptions.NullCustomVariableException;
-import com.biit.abcd.core.drools.rules.exceptions.NullExpressionValueException;
-import com.biit.abcd.core.drools.rules.exceptions.NullTreeObjectException;
-import com.biit.abcd.core.drools.rules.exceptions.PluginInvocationException;
-import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
-import com.biit.abcd.core.drools.rules.exceptions.TreeObjectInstanceNotRecognizedException;
-import com.biit.abcd.core.drools.rules.exceptions.TreeObjectParentNotValidException;
+import com.biit.abcd.core.drools.rules.exceptions.*;
 import com.biit.abcd.core.drools.rules.validators.InvalidExpressionException;
-import com.biit.abcd.persistence.entity.Category;
-import com.biit.abcd.persistence.entity.CustomVariable;
-import com.biit.abcd.persistence.entity.CustomVariableScope;
-import com.biit.abcd.persistence.entity.CustomVariableType;
-import com.biit.abcd.persistence.entity.Form;
-import com.biit.abcd.persistence.entity.diagram.Diagram;
-import com.biit.abcd.persistence.entity.diagram.DiagramLink;
-import com.biit.abcd.persistence.entity.diagram.DiagramObjectType;
-import com.biit.abcd.persistence.entity.diagram.DiagramSink;
-import com.biit.abcd.persistence.entity.diagram.DiagramSource;
-import com.biit.abcd.persistence.entity.diagram.DiagramTable;
-import com.biit.abcd.persistence.entity.diagram.Node;
-import com.biit.abcd.persistence.entity.expressions.AvailableOperator;
-import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
-import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorLogic;
-import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorMath;
-import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
-import com.biit.abcd.persistence.entity.expressions.ExpressionValueNumber;
-import com.biit.abcd.persistence.entity.expressions.ExpressionValueString;
-import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
+import com.biit.abcd.persistence.entity.*;
+import com.biit.abcd.persistence.entity.diagram.*;
+import com.biit.abcd.persistence.entity.expressions.*;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.biit.abcd.persistence.utils.IdGenerator;
@@ -59,11 +23,18 @@ import com.biit.form.submitted.exceptions.CategoryDoesNotExistException;
 import com.biit.form.submitted.exceptions.GroupDoesNotExistException;
 import com.biit.form.submitted.exceptions.QuestionDoesNotExistException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
+import org.dom4j.DocumentException;
+import org.junit.Assert;
+import org.springframework.test.context.ContextConfiguration;
+import org.testng.annotations.Test;
+
+import java.io.IOException;
 
 /**
  * Checks the correct creation and execution of table rules <br>
  * Also checks the correct loading in memory of the submitted form from orbeon
  */
+@ContextConfiguration(locations = { "classpath:applicationContextTest.xml" })
 public class TableRuleTest extends KidsFormCreator {
 
 	private final static String GENDER_MALE = "male";

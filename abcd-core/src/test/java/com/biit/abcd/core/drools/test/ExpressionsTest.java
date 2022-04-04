@@ -1,5 +1,29 @@
 package com.biit.abcd.core.drools.test;
 
+import com.biit.abcd.core.drools.prattparser.exceptions.PrattParserException;
+import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
+import com.biit.abcd.core.drools.rules.exceptions.*;
+import com.biit.abcd.core.drools.rules.validators.InvalidExpressionException;
+import com.biit.abcd.logger.AbcdLogger;
+import com.biit.abcd.persistence.entity.CustomVariable;
+import com.biit.abcd.persistence.entity.CustomVariableScope;
+import com.biit.abcd.persistence.entity.CustomVariableType;
+import com.biit.abcd.persistence.entity.Form;
+import com.biit.abcd.persistence.entity.expressions.*;
+import com.biit.drools.engine.exceptions.DroolsRuleExecutionException;
+import com.biit.drools.form.*;
+import com.biit.drools.global.variables.exceptions.NotValidTypeInVariableData;
+import com.biit.drools.utils.DroolsDateUtils;
+import com.biit.form.exceptions.*;
+import com.biit.form.submitted.ISubmittedCategory;
+import com.biit.form.submitted.ISubmittedGroup;
+import com.biit.form.submitted.ISubmittedQuestion;
+import com.biit.persistence.entity.exceptions.FieldTooLongException;
+import org.dom4j.DocumentException;
+import org.springframework.test.context.ContextConfiguration;
+import org.testng.Assert;
+import org.testng.annotations.Test;
+
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -7,57 +31,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.dom4j.DocumentException;
-import org.testng.Assert;
-import org.testng.annotations.Test;
-
-import com.biit.abcd.core.drools.prattparser.exceptions.PrattParserException;
-import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
-import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
-import com.biit.abcd.core.drools.rules.exceptions.BetweenFunctionInvalidException;
-import com.biit.abcd.core.drools.rules.exceptions.DateComparisonNotPossibleException;
-import com.biit.abcd.core.drools.rules.exceptions.DroolsRuleCreationException;
-import com.biit.abcd.core.drools.rules.exceptions.DroolsRuleGenerationException;
-import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
-import com.biit.abcd.core.drools.rules.exceptions.InvalidRuleException;
-import com.biit.abcd.core.drools.rules.exceptions.NullCustomVariableException;
-import com.biit.abcd.core.drools.rules.exceptions.NullExpressionValueException;
-import com.biit.abcd.core.drools.rules.exceptions.NullTreeObjectException;
-import com.biit.abcd.core.drools.rules.exceptions.PluginInvocationException;
-import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
-import com.biit.abcd.core.drools.rules.exceptions.TreeObjectInstanceNotRecognizedException;
-import com.biit.abcd.core.drools.rules.exceptions.TreeObjectParentNotValidException;
-import com.biit.abcd.core.drools.rules.validators.InvalidExpressionException;
-import com.biit.abcd.logger.AbcdLogger;
-import com.biit.abcd.persistence.entity.CustomVariable;
-import com.biit.abcd.persistence.entity.CustomVariableScope;
-import com.biit.abcd.persistence.entity.CustomVariableType;
-import com.biit.abcd.persistence.entity.Form;
-import com.biit.abcd.persistence.entity.expressions.AvailableOperator;
-import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
-import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorMath;
-import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
-import com.biit.abcd.persistence.entity.expressions.ExpressionValueString;
-import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
-import com.biit.abcd.persistence.entity.expressions.QuestionDateUnit;
-import com.biit.drools.engine.exceptions.DroolsRuleExecutionException;
-import com.biit.drools.form.DroolsForm;
-import com.biit.drools.form.DroolsSubmittedCategory;
-import com.biit.drools.form.DroolsSubmittedForm;
-import com.biit.drools.form.DroolsSubmittedGroup;
-import com.biit.drools.form.DroolsSubmittedQuestion;
-import com.biit.drools.global.variables.exceptions.NotValidTypeInVariableData;
-import com.biit.drools.utils.DroolsDateUtils;
-import com.biit.form.exceptions.CharacterNotAllowedException;
-import com.biit.form.exceptions.ChildrenNotFoundException;
-import com.biit.form.exceptions.ElementIsReadOnly;
-import com.biit.form.exceptions.InvalidAnswerFormatException;
-import com.biit.form.exceptions.NotValidChildException;
-import com.biit.form.submitted.ISubmittedCategory;
-import com.biit.form.submitted.ISubmittedGroup;
-import com.biit.form.submitted.ISubmittedQuestion;
-import com.biit.persistence.entity.exceptions.FieldTooLongException;
-
+@ContextConfiguration(locations = { "classpath:applicationContextTest.xml" })
 public class ExpressionsTest extends KidsFormCreator {
 	private final static String FORM_TEXT = "formText";
 	private final static String CATEGORY_TEXT = "categoryText";
