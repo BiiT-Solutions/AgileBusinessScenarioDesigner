@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.biit.abcd.core.drools.prattparser.exceptions.PrattParserException;
@@ -31,111 +32,110 @@ import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
 import com.biit.drools.engine.DroolsRulesEngine;
 import com.biit.drools.engine.exceptions.DroolsRuleExecutionException;
+import com.biit.drools.global.variables.interfaces.IGlobalVariable;
 import com.biit.form.submitted.ISubmittedForm;
 
 public class FormToDroolsExporter {
 
-	/**
-	 * Parses the abcd form and loads the rules generated in the drools engine. <br>
-	 * If this method doesn't fails it means that the drools rules are correctly
-	 * defined. <br>
-	 * 
-	 * @param form
-	 *            form to be parsed
-	 * @param globalVariables
-	 *            array with the global constants to be created
-	 * @throws DroolsRuleGenerationException
-	 * @throws ActionNotImplementedException
-	 * @throws InvalidRuleException
-	 * @throws PrattParserException
-	 * @throws DroolsRuleCreationException
-	 * @throws PluginInvocationException
-	 * @throws DateComparisonNotPossibleException
-	 * @throws BetweenFunctionInvalidException
-	 * @throws NullExpressionValueException
-	 * @throws NullCustomVariableException
-	 * @throws TreeObjectParentNotValidException
-	 * @throws TreeObjectInstanceNotRecognizedException
-	 * @throws NullTreeObjectException
-	 * @throws ExpressionInvalidException
-	 * @throws NotCompatibleTypeException
-	 * @throws RuleNotImplementedException
-	 * @throws InvalidExpressionException
-	 */
-	public DroolsRulesGenerator generateDroolRules(Form form, List<GlobalVariable> globalVariables) throws DroolsRuleGenerationException,
-			RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
-			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
-			BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException,
-			InvalidRuleException, ActionNotImplementedException, InvalidExpressionException {
-		if (form != null && form.getChildren() != null && !form.getChildren().isEmpty()) {
-			DroolsRulesGenerator formRules;
+    /**
+     * Parses the abcd form and loads the rules generated in the drools engine. <br>
+     * If this method doesn't fails it means that the drools rules are correctly
+     * defined. <br>
+     *
+     * @param form            form to be parsed
+     * @param globalVariables array with the global constants to be created
+     * @throws DroolsRuleGenerationException
+     * @throws ActionNotImplementedException
+     * @throws InvalidRuleException
+     * @throws PrattParserException
+     * @throws DroolsRuleCreationException
+     * @throws PluginInvocationException
+     * @throws DateComparisonNotPossibleException
+     * @throws BetweenFunctionInvalidException
+     * @throws NullExpressionValueException
+     * @throws NullCustomVariableException
+     * @throws TreeObjectParentNotValidException
+     * @throws TreeObjectInstanceNotRecognizedException
+     * @throws NullTreeObjectException
+     * @throws ExpressionInvalidException
+     * @throws NotCompatibleTypeException
+     * @throws RuleNotImplementedException
+     * @throws InvalidExpressionException
+     */
+    public DroolsRulesGenerator generateDroolRules(Form form, List<GlobalVariable> globalVariables) throws DroolsRuleGenerationException,
+            RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
+            TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
+            BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException,
+            InvalidRuleException, ActionNotImplementedException, InvalidExpressionException {
+        if (form != null && form.getChildren() != null && !form.getChildren().isEmpty()) {
+            DroolsRulesGenerator formRules;
 
-			// Creation of the rules
-			formRules = new DroolsRulesGenerator(form, globalVariables);
-			try {
-				Files.write(Paths.get(System.getProperty("java.io.tmpdir") + File.separator + "generatedRules.drl"), formRules.getRules().getBytes("UTF-8"));
-			} catch (IOException e) {
-				AbcdLogger.errorMessage(this.getClass().getName(), e);
-			}
-			return formRules;
+            // Creation of the rules
+            formRules = new DroolsRulesGenerator(form, globalVariables);
+            try {
+                Files.write(Paths.get(System.getProperty("java.io.tmpdir") + File.separator + "generatedRules.drl"), formRules.getRules().getBytes("UTF-8"));
+            } catch (IOException e) {
+                AbcdLogger.errorMessage(this.getClass().getName(), e);
+            }
+            return formRules;
 
-		}
-		return null;
-	}
+        }
+        return null;
+    }
 
-	public String getDroolRules(Form form, List<GlobalVariable> globalVariables) throws DroolsRuleGenerationException, RuleNotImplementedException,
-			NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
-			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException, BetweenFunctionInvalidException,
-			DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException, InvalidRuleException,
-			ActionNotImplementedException, InvalidExpressionException {
-		if (form != null && form.getChildren() != null && !form.getChildren().isEmpty()) {
-			DroolsRulesGenerator formRules;
-			// Creation of the rules
-			formRules = new DroolsRulesGenerator(form, globalVariables);
-			return formRules.getRules();
-		}
-		return null;
-	}
+    public String getDroolRules(Form form, List<GlobalVariable> globalVariables) throws DroolsRuleGenerationException, RuleNotImplementedException,
+            NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
+            TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException, BetweenFunctionInvalidException,
+            DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException, InvalidRuleException,
+            ActionNotImplementedException, InvalidExpressionException {
+        if (form != null && form.getChildren() != null && !form.getChildren().isEmpty()) {
+            DroolsRulesGenerator formRules;
+            // Creation of the rules
+            formRules = new DroolsRulesGenerator(form, globalVariables);
+            return formRules.getRules();
+        }
+        return null;
+    }
 
-	/**
-	 * Process the test scenario. Orbeon not needed.
-	 * 
-	 * @param form
-	 * @param globalVariables
-	 * @return the submitted form.
-	 * @throws DroolsRuleGenerationException
-	 * @throws DroolsRuleExecutionException
-	 * @throws ActionNotImplementedException
-	 * @throws InvalidRuleException
-	 * @throws PrattParserException
-	 * @throws DroolsRuleCreationException
-	 * @throws PluginInvocationException
-	 * @throws DateComparisonNotPossibleException
-	 * @throws BetweenFunctionInvalidException
-	 * @throws NullExpressionValueException
-	 * @throws NullCustomVariableException
-	 * @throws TreeObjectParentNotValidException
-	 * @throws TreeObjectInstanceNotRecognizedException
-	 * @throws NullTreeObjectException
-	 * @throws ExpressionInvalidException
-	 * @throws NotCompatibleTypeException
-	 * @throws RuleNotImplementedException
-	 * @throws InvalidExpressionException
-	 */
-	public ISubmittedForm processForm(Form form, List<GlobalVariable> globalVariables, ISubmittedForm submittedForm) throws DroolsRuleGenerationException,
-			DroolsRuleExecutionException, RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
-			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
-			BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException,
-			InvalidRuleException, ActionNotImplementedException, InvalidExpressionException {
-		// Generate all drools rules.
-		TreeObjectDroolsIdMap.clearMap();
-		DroolsRulesGenerator rulesGenerator = generateDroolRules(form, globalVariables);
-		// Obtain results
-		if ((rulesGenerator != null) && (submittedForm != null)) {
-			DroolsRulesEngine droolsEngine = new DroolsRulesEngine();
-			return droolsEngine.applyDrools(submittedForm, rulesGenerator.getRules(),
-					RuleGenerationUtils.convertGlobalVariablesToDroolsGlobalVariables(globalVariables));
-		} else
-			return null;
-	}
+    /**
+     * Process the test scenario. Orbeon not needed.
+     *
+     * @param form
+     * @param globalVariables
+     * @return the submitted form.
+     * @throws DroolsRuleGenerationException
+     * @throws DroolsRuleExecutionException
+     * @throws ActionNotImplementedException
+     * @throws InvalidRuleException
+     * @throws PrattParserException
+     * @throws DroolsRuleCreationException
+     * @throws PluginInvocationException
+     * @throws DateComparisonNotPossibleException
+     * @throws BetweenFunctionInvalidException
+     * @throws NullExpressionValueException
+     * @throws NullCustomVariableException
+     * @throws TreeObjectParentNotValidException
+     * @throws TreeObjectInstanceNotRecognizedException
+     * @throws NullTreeObjectException
+     * @throws ExpressionInvalidException
+     * @throws NotCompatibleTypeException
+     * @throws RuleNotImplementedException
+     * @throws InvalidExpressionException
+     */
+    public ISubmittedForm processForm(Form form, List<GlobalVariable> globalVariables, ISubmittedForm submittedForm) throws DroolsRuleGenerationException,
+            DroolsRuleExecutionException, RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
+            TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
+            BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException,
+            InvalidRuleException, ActionNotImplementedException, InvalidExpressionException {
+        // Generate all drools rules.
+        TreeObjectDroolsIdMap.clearMap();
+        DroolsRulesGenerator rulesGenerator = generateDroolRules(form, globalVariables);
+        // Obtain results
+        if ((rulesGenerator != null) && (submittedForm != null)) {
+            DroolsRulesEngine droolsEngine = new DroolsRulesEngine();
+            return droolsEngine.applyDrools(submittedForm, rulesGenerator.getRules(),
+                    new ArrayList<>(RuleGenerationUtils.convertGlobalVariablesToDroolsGlobalVariables(globalVariables)));
+        } else
+            return null;
+    }
 }

@@ -91,7 +91,7 @@ public class KidsFormCreator extends AbstractTestNGSpringContextTests {
 		// Test the rules with the submitted form and returns a DroolsForm
 		DroolsRulesEngine droolsEngine = new DroolsRulesEngine();
 		return droolsEngine.applyDrools(getSubmittedForm(), droolsRules,
-				RuleGenerationUtils.convertGlobalVariablesToDroolsGlobalVariables(getGlobalVariables()));
+				new ArrayList<>(RuleGenerationUtils.convertGlobalVariablesToDroolsGlobalVariables(getGlobalVariables())));
 	}
 
 	public DroolsForm createAndRunDroolsRules(Form form) throws DroolsRuleGenerationException, DocumentException, IOException, DroolsRuleExecutionException,
@@ -205,7 +205,7 @@ public class KidsFormCreator extends AbstractTestNGSpringContextTests {
 	/**
 	 * Adds a new expression element to the diagram
 	 * 
-	 * @param tableRule
+	 * @param expressionChain
 	 */
 	protected void createExpressionNode(ExpressionChain expressionChain) {
 		DiagramExpression diagramExpression = new DiagramExpression();
