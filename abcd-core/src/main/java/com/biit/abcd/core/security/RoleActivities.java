@@ -30,7 +30,9 @@ public class RoleActivities implements IRoleActivities {
 
 	AbcdActivity.FORM_STATUS_UPGRADE,	
 	
-	AbcdActivity.FORM_EXPORT
+	AbcdActivity.FORM_EXPORT,
+
+	AbcdActivity.PUBLISH_TO_KNOWLEDGE_MANAGER
 
 	};
 

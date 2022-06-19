@@ -864,6 +864,12 @@
         primary key (id)
     ) engine=InnoDB;
 
+    create table user_tokens (
+       userId bigint not null,
+        knowledge_manager_token varchar(255),
+        primary key (userId)
+    ) engine=InnoDB;
+
     alter table custom_variables 
        add constraint UK_m5lcv2lfe2ndoj4jbynogd5wh unique (comparation_id);
 

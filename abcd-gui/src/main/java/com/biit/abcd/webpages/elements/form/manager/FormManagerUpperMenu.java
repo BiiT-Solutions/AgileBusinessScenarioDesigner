@@ -33,6 +33,7 @@ import com.biit.abcd.core.testscenarios.TestScenarioDroolsSubmittedForm;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.dao.IFormDao;
+import com.biit.abcd.persistence.dao.IUserTokenDao;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.FormWorkStatus;
 import com.biit.abcd.persistence.entity.SimpleFormView;
@@ -68,13 +69,14 @@ import com.vaadin.ui.Button.ClickListener;
 public class FormManagerUpperMenu extends UpperMenu {
 	private static final long serialVersionUID = 504419812975550794L;
 	private IconButton newButton, newFormButton, newVersion, export, exportToDrools, testScenarios, createTestScenario,
-			launchTestScenario, removeForm, createPdf, importJson, exportJson;
+			launchTestScenario, removeForm, createPdf, importJson, exportJson, publishKnowledgeManager;
 	private FormManager parent;
 	private List<IFormSelectedListener> formSelectedListeners;
 	private Form form;
 	private IFormDao formDao;
 	private ISubmittedForm resultsFromDrools;
 	private List<IFormRemove> removeFormListeners;
+
 
 	public interface IFormRemove {
 		void removeButtonPressed();
@@ -277,6 +279,10 @@ public class FormManagerUpperMenu extends UpperMenu {
 				});
 		addIconButton(removeForm);
 
+		publishKnowledgeManager = new IconButton(LanguageCodes.PUBLISH_KNOWLEDGE_MANAGER_CAPTION, ThemeIcon.FORM_MANAGER_EXPORT_RULES,
+				LanguageCodes.PUBLISH_KNOWLEDGE_MANAGER_TOOLTIP);
+		addIconButton(publishKnowledgeManager);
+
 	}
 
 	private void logTestForms(final ISubmittedForm generatedSumbittedForm) {
@@ -475,6 +481,9 @@ public class FormManagerUpperMenu extends UpperMenu {
 		if (export != null) {
 			export.setEnabled(enableFormButtons);
 		}
+		if(publishKnowledgeManager != null) {
+			publishKnowledgeManager.setEnabled(enableFormButtons);
+		}
 	}
 
 	public void updateNewVersionButton(SimpleFormView selected) {
@@ -516,6 +525,14 @@ public class FormManagerUpperMenu extends UpperMenu {
 						UserSessionHandler.getUser(), selected.getOrganizationId(), AbcdActivity.FORM_EXPORT));
 	}
 
+	public void updatePublishToKnowledgeManagerButton() {
+		try {
+			publishKnowledgeManager.setVisible(getSecurityService().isUserAuthorizedInAnyOrganization(UserSessionHandler.getUser(),
+					AbcdActivity.PUBLISH_TO_KNOWLEDGE_MANAGER));
+		} catch (UserManagementException e) {
+			publishKnowledgeManager.setVisible(false);
+		}
+	}
 	@Override
 	public Set<Button> getSecuredButtons() {
 		return new HashSet<Button>();
@@ -535,8 +552,14 @@ public class FormManagerUpperMenu extends UpperMenu {
 		importJson.addClickListener(listener);
 	}
 
+	public void addPublishKnowledgeManagerListener(ClickListener listener) {
+		publishKnowledgeManager.addClickListener(listener);
+	}
+
 	public void addExportAbcdListener(ClickListener listener) {
 		exportJson.addClickListener(listener);
 	}
+
+
 
 }

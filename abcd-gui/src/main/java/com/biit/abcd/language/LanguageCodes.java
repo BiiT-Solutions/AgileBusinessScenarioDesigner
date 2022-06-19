@@ -583,6 +583,14 @@ public enum LanguageCodes {
 	CAPTION_GENERATED_FILE("caption.generated.file"),
 	CAPTION_DOWNLOAD_FILE("caption.download.file"),
 	TOOLTIP_DOWNLOAD_FILE("caption.download.file.description"),
+	PUBLISH_KNOWLEDGE_MANAGER_CAPTION("caption.publish.knowledge.manager"),
+	PUBLISH_KNOWLEDGE_MANAGER_TOOLTIP("tooltip.publish.knowledge.manager"),
+	WINDOW_LOGIN_KNOWLEDGE_MANAGER_USERNAME_LABEL_CONTENT("window.login.knowledge.manager.username"),
+	WINDOW_LOGIN_KNOWLEDGE_MANAGER_PASSWORD_LABEL_CONTENT("window.login.knowledge.manager.password"),
+	SUCCESS_PUBLISH_KNOWLEDGE_MANAGER("caption.success.publish.knowledge.manager"),
+	CAPTION_BAD_LOGIN_KNOWLEDGE_MANAGER("caption.bad.login.knowledge.manager"),
+	CAPTION_ERROR_LOGIN_KNOWLEDGE_MANAGER("caption.error.login.knowledge.manager"),
+	CAPTION_SUCCESS_LOGIN_KNOWLEDGE_MANAGER("caption.success.login.knowledge.manager"),
 	;
 
 	private String value;
