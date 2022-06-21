@@ -355,6 +355,7 @@ public class FormManager extends FormWebPageComponent {
 				if (response.getStatusLine().getStatusCode() >= 200 && response.getStatusLine().getStatusCode() <= 300) {
 					AbcdLogger.info(FormManager.class.toString(),
 							LanguageCodes.SUCCESS_PUBLISH_KNOWLEDGE_MANAGER.translate());
+					MessageManager.showInfo(LanguageCodes.SUCCESS_PUBLISH_KNOWLEDGE_MANAGER);
 				} else if (response.getStatusLine().getStatusCode() >= 400 && response.getStatusLine().getStatusCode() <= 404) {
 					AbcdLogger.debug(FormManager.class.toString(),
 							"Unauthorized token");

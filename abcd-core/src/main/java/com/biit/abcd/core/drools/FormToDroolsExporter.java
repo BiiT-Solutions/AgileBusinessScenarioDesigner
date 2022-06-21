@@ -88,9 +88,6 @@ public class FormToDroolsExporter {
             TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException, BetweenFunctionInvalidException,
             DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException, InvalidRuleException,
             ActionNotImplementedException, InvalidExpressionException {
-        System.out.println(form);
-        System.out.println(form.getChildren());
-        System.out.println(form.getChildren().isEmpty());
         if (form != null && form.getChildren() != null && !form.getChildren().isEmpty()) {
             DroolsRulesGenerator formRules;
             // Creation of the rules
