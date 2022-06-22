@@ -1,5 +1,6 @@
 package com.biit.abcd.core.rest;
 
+import com.biit.abcd.core.drools.FormToDroolsExporter;
 import com.biit.abcd.core.drools.prattparser.exceptions.PrattParserException;
 import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
 import com.biit.abcd.core.drools.rules.DroolsZipGenerator;
@@ -36,9 +37,9 @@ public class RulesService {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces("application/zip")
     @Path("/zip")
-    public Response getForm(String petition) {
+    public Response getFormZip(String petition) {
         FormDescription parsedPetition;
-        AbcdLogger.info(RulesService.class.getName(), "Requesting Form using endpoint '/forms/rules' with payload '{}'.", petition);
+        AbcdLogger.info(RulesService.class.getName(), "Requesting Form using endpoint '/forms/rules/zip' with payload '{}'.", petition);
         try {
             parsedPetition = parsePetition(petition);
             Form form = formDao.get(parsedPetition.formName, parsedPetition.getVersion(), parsedPetition.getOrganizationId());
@@ -66,8 +67,43 @@ public class RulesService {
             return Response.status(Response.Status.BAD_REQUEST).entity("{\"error\":\"Error generating the rules. " +
                     "Check the logs for extra information.\"}").build();
         }
+    }
 
-
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.TEXT_PLAIN)
+    @Path("/drl")
+    public Response getFormRules(String petition) {
+        FormDescription parsedPetition;
+        AbcdLogger.info(RulesService.class.getName(), "Requesting Form using endpoint '/forms/rules/drl' with payload '{}'.", petition);
+        try {
+            parsedPetition = parsePetition(petition);
+            Form form = formDao.get(parsedPetition.formName, parsedPetition.getVersion(), parsedPetition.getOrganizationId());
+            if (form == null) {
+                return Response.status(Response.Status.NOT_FOUND).entity("{\"error\":\"Unknown form with name '" + parsedPetition.getFormName() +
+                        "' and version '" + parsedPetition.getVersion() + "' in organization '" + parsedPetition.getOrganizationId() + "'.\"}").build();
+            }
+            FormToDroolsExporter droolsExporter = new FormToDroolsExporter();
+            String rules = droolsExporter.getDroolRules(form, globalVariablesDao.getAll());
+            AbcdLogger.debug(RulesService.class.getName(), "Rules retrieved successfully!");
+            return Response.ok(rules, MediaType.APPLICATION_JSON).build();
+        } catch (JsonSyntaxException ex) {
+            AbcdLogger.errorMessage(this.getClass().getName(), ex);
+            return Response.status(Response.Status.BAD_REQUEST).entity("{\"error\":\"Rules error\"}").build();
+        } catch (MultiplesFormsFoundException e) {
+            AbcdLogger.errorMessage(this.getClass().getName(), e);
+            return Response.status(Response.Status.BAD_REQUEST).entity("{\"error\":\"Multiples forms match the search criteria. " +
+                    "Please define some extra parameters\"}").build();
+        } catch (TreeObjectInstanceNotRecognizedException | ExpressionInvalidException | DroolsRuleGenerationException
+                | BetweenFunctionInvalidException | DroolsRuleCreationException | DateComparisonNotPossibleException |
+                InvalidRuleException | NullExpressionValueException | NullTreeObjectException | PrattParserException |
+                PluginInvocationException | RuleNotImplementedException | NullCustomVariableException |
+                TreeObjectParentNotValidException | NotCompatibleTypeException | ActionNotImplementedException |
+                InvalidExpressionException e) {
+            AbcdLogger.errorMessage(this.getClass().getName(), e);
+            return Response.status(Response.Status.BAD_REQUEST).entity("{\"error\":\"Error generating the rules. " +
+                    "Check the logs for extra information.\"}").build();
+        }
     }
 
     private FormDescription parsePetition(String petition) throws JsonSyntaxException {
