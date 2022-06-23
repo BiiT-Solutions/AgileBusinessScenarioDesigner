@@ -25,7 +25,7 @@ import javax.ws.rs.core.Response;
 import java.io.IOException;
 
 @Component
-@Path("/form/rules")
+@Path("/forms/rules")
 public class RulesService {
     @Autowired
     private IFormDao formDao;

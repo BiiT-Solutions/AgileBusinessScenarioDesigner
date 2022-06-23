@@ -10,7 +10,6 @@ import org.testng.ITestListener;
 import org.testng.ITestResult;
 
 import java.io.File;
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -68,7 +67,8 @@ public class TestListener implements ITestListener {
             FileUtils.copyFile(scrFile,
                     new File(System.getProperty("java.io.tmpdir") + File.separator + screenshotName + "_" + dtf.format(LocalDateTime.now()) + SCREENSHOT_TYPE),
                     true);
-        } catch (Exception ignored) {
+        } catch (Exception e) {
+            IntegrationTestLogging.severe(this.getClass().getName(), e.getMessage());
         }
     }
 }
