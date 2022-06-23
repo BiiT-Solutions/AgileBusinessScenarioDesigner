@@ -72,7 +72,7 @@ public class RulesService {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
-    @Path("/drl")
+    @Path("/")
     public Response getFormRules(String petition) {
         FormDescription parsedPetition;
         AbcdLogger.info(RulesService.class.getName(), "Requesting Form using endpoint '/forms/rules/drl' with payload '{}'.", petition);
