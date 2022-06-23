@@ -62,13 +62,13 @@ public class TestListener implements ITestListener {
      * @param screenshotName
      */
     public void takeScreenshot(WebDriver driver, String screenshotName) {
-        File scrFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         try {
+            File scrFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             FileUtils.copyFile(scrFile,
                     new File(System.getProperty("java.io.tmpdir") + File.separator + screenshotName + "_" + dtf.format(LocalDateTime.now()) + SCREENSHOT_TYPE),
                     true);
-        } catch (IOException e) {
+        } catch (Exception ignored) {
         }
     }
 }
