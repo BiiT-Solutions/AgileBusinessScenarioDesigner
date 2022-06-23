@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.biit.abcd.logger.AbcdLogger;
 import org.apache.ibatis.jdbc.ScriptRunner;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -24,11 +25,12 @@ import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 
-import com.biit.abcd.logger.AbcdLogger;
 import com.vaadin.testbench.TestBench;
 import com.vaadin.testbench.TestBenchTestCase;
 import com.vaadin.testbench.elements.NotificationElement;
+import org.testng.annotations.Listeners;
 
+@Listeners({TestListener.class})
 public class VaadinGuiTester extends TestBenchTestCase {
 
     private static final String FIREFOX_LANGUAGE_PROPERTY = "intl.accept_languages";
