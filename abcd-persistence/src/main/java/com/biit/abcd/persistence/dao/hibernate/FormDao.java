@@ -1,16 +1,11 @@
 package com.biit.abcd.persistence.dao.hibernate;
 
-import java.sql.Timestamp;
-import java.util.List;
-
-import javax.persistence.NoResultException;
-import javax.persistence.Query;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-import javax.persistence.metamodel.EntityType;
-import javax.persistence.metamodel.Metamodel;
-
+import com.biit.abcd.persistence.dao.IFormDao;
+import com.biit.abcd.persistence.dao.exceptions.MultiplesFormsFoundException;
+import com.biit.abcd.persistence.entity.Form;
+import com.biit.abcd.persistence.entity.FormWorkStatus;
+import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
+import com.biit.persistence.entity.exceptions.ElementCannotBeRemovedException;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -20,11 +15,17 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.biit.abcd.persistence.dao.IFormDao;
-import com.biit.abcd.persistence.entity.Form;
-import com.biit.abcd.persistence.entity.FormWorkStatus;
-import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
-import com.biit.persistence.entity.exceptions.ElementCannotBeRemovedException;
+import javax.persistence.NoResultException;
+import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import javax.persistence.metamodel.EntityType;
+import javax.persistence.metamodel.Metamodel;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 @Repository
 public class FormDao extends AnnotatedGenericDao<Form, Long> implements IFormDao {
@@ -75,6 +76,45 @@ public class FormDao extends AnnotatedGenericDao<Form, Long> implements IFormDao
 			form.initializeSets();
 		}
 		return form;
+	}
+
+	@Override
+	@Transactional(value = "abcdTransactionManager", propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = true)
+	public Form get(String label, Integer version, Long organizationId) throws MultiplesFormsFoundException {
+		CriteriaBuilder criteriaBuilder = getEntityManager().getCriteriaBuilder();
+		CriteriaQuery<Form> criteriaQuery = criteriaBuilder.createQuery(Form.class);
+		// Metamodel of the entity table
+		Metamodel metamodel = getEntityManager().getMetamodel();
+		EntityType<Form> formMetamodel = metamodel.entity(Form.class);
+		Root<Form> typesRoot = criteriaQuery.from(Form.class);
+
+		final List<Predicate> predicates = new ArrayList<>();
+		predicates.add(criteriaBuilder.equal(typesRoot.get(formMetamodel.getSingularAttribute("label", String.class)), label));
+
+		if (version != null) {
+			predicates.add(criteriaBuilder.equal(typesRoot.get(formMetamodel.getSingularAttribute("version", Integer.class)), version));
+		}
+
+		if (organizationId != null) {
+			predicates.add(criteriaBuilder.equal(typesRoot.get(formMetamodel.getSingularAttribute("organizationId", Long.class)), organizationId));
+		}
+
+		criteriaQuery.where(criteriaBuilder.and(predicates.toArray(new Predicate[]{})));
+
+		try {
+			List<Form> resultForms = getEntityManager().createQuery(criteriaQuery).getResultList();
+
+			if (resultForms.size() > 1) {
+				throw new MultiplesFormsFoundException();
+			} else if (resultForms.isEmpty()) {
+				return null;
+			}
+			Form form = resultForms.get(0);
+			form.initializeSets();
+			return form;
+		} catch (NoResultException e) {
+			return null;
+		}
 	}
 
 	@Override
