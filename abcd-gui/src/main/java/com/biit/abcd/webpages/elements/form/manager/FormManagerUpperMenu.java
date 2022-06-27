@@ -1,5 +1,10 @@
 package com.biit.abcd.webpages.elements.form.manager;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import com.biit.abcd.ApplicationFrame;
 import com.biit.abcd.MessageManager;
 import com.biit.abcd.authentication.UserSessionHandler;
@@ -8,7 +13,20 @@ import com.biit.abcd.core.SpringContextHelper;
 import com.biit.abcd.core.drools.FormToDroolsExporter;
 import com.biit.abcd.core.drools.prattparser.exceptions.PrattParserException;
 import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
-import com.biit.abcd.core.drools.rules.exceptions.*;
+import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
+import com.biit.abcd.core.drools.rules.exceptions.BetweenFunctionInvalidException;
+import com.biit.abcd.core.drools.rules.exceptions.DateComparisonNotPossibleException;
+import com.biit.abcd.core.drools.rules.exceptions.DroolsRuleCreationException;
+import com.biit.abcd.core.drools.rules.exceptions.DroolsRuleGenerationException;
+import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
+import com.biit.abcd.core.drools.rules.exceptions.InvalidRuleException;
+import com.biit.abcd.core.drools.rules.exceptions.NullCustomVariableException;
+import com.biit.abcd.core.drools.rules.exceptions.NullExpressionValueException;
+import com.biit.abcd.core.drools.rules.exceptions.NullTreeObjectException;
+import com.biit.abcd.core.drools.rules.exceptions.PluginInvocationException;
+import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
+import com.biit.abcd.core.drools.rules.exceptions.TreeObjectInstanceNotRecognizedException;
+import com.biit.abcd.core.drools.rules.exceptions.TreeObjectParentNotValidException;
 import com.biit.abcd.core.drools.rules.validators.InvalidExpressionException;
 import com.biit.abcd.core.security.AbcdActivity;
 import com.biit.abcd.core.testscenarios.TestScenarioDroolsSubmittedForm;
@@ -21,8 +39,17 @@ import com.biit.abcd.persistence.entity.SimpleFormView;
 import com.biit.abcd.persistence.entity.testscenarios.TestScenario;
 import com.biit.abcd.webpages.FormManager;
 import com.biit.abcd.webpages.WebMap;
-import com.biit.abcd.webpages.components.*;
+import com.biit.abcd.webpages.components.AcceptCancelWindow;
 import com.biit.abcd.webpages.components.AcceptCancelWindow.AcceptActionListener;
+import com.biit.abcd.webpages.components.AlertMessageWindow;
+import com.biit.abcd.webpages.components.IFormSelectedListener;
+import com.biit.abcd.webpages.components.IconButton;
+import com.biit.abcd.webpages.components.IconSize;
+import com.biit.abcd.webpages.components.SaveActionListener;
+import com.biit.abcd.webpages.components.SaveAsButton;
+import com.biit.abcd.webpages.components.SettingsWindow;
+import com.biit.abcd.webpages.components.ThemeIcon;
+import com.biit.abcd.webpages.components.UpperMenu;
 import com.biit.abcd.webpages.elements.drools.results.DroolsSubmittedFormResultWindow;
 import com.biit.abcd.webpages.elements.form.designer.RootForm;
 import com.biit.abcd.webpages.elements.testscenario.ValidationReportWindow;
@@ -37,11 +64,6 @@ import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 public class FormManagerUpperMenu extends UpperMenu {
 	private static final long serialVersionUID = 504419812975550794L;
@@ -103,7 +125,12 @@ public class FormManagerUpperMenu extends UpperMenu {
 		// Create rules and launch drools engine
 		exportToDrools = new SaveAsButton(LanguageCodes.FORM_MANAGER_EXPORT_RULES, ThemeIcon.FORM_MANAGER_EXPORT_RULES,
 				LanguageCodes.FORM_MANAGER_EXPORT_RULES, IconSize.MEDIUM, new SaveDroolsRulesAction());
-		((SaveAsButton) exportToDrools).addSaveActionListener(this::launchListeners);
+		((SaveAsButton) exportToDrools).addSaveActionListener(new SaveActionListener() {
+			@Override
+			public void saveAction() {
+				launchListeners();
+			}
+		});
 		exportButtons.add(exportToDrools);
 
 		export = addSubMenu(ThemeIcon.FORM_MANAGER_EXPORT, LanguageCodes.FORM_MANAGER_EXPORT,

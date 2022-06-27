@@ -28,9 +28,7 @@ import org.testng.annotations.BeforeClass;
 import com.vaadin.testbench.TestBench;
 import com.vaadin.testbench.TestBenchTestCase;
 import com.vaadin.testbench.elements.NotificationElement;
-import org.testng.annotations.Listeners;
 
-@Listeners({TestListener.class})
 public class VaadinGuiTester extends TestBenchTestCase {
 
     private static final String FIREFOX_LANGUAGE_PROPERTY = "intl.accept_languages";
