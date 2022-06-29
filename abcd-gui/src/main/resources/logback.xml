@@ -55,7 +55,7 @@
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="DAILY"/>
     </logger>
-    <logger name="com.biit.drools.logger.DroolsEngineLogger" additivity="false" level="ERROR">
+    <logger name="com.biit.drools.logger.DroolsEngineLogger" additivity="false" level="INFO">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="DAILY"/>
     </logger>

@@ -30,7 +30,6 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>abcd-persistence</artifactId>
             <version>${project.version}</version>
-            <type>jar</type>
         </dependency>
         <!-- Convert SVG to PNG -->
         <dependency>

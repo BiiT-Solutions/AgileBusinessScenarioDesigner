@@ -29,6 +29,10 @@ public class AbcdConfigurationReader extends ConfigurationReader {
 	private static final String DEFAULT_ISSUE_MANAGER_URL = null;
 	private static final String DEFAULT_PDF_CREATOR_FEATURE = "false";
 	private static final String DEFAULT_GRAPHVIZ_PATH = "/usr/bin/dot";
+	private static final String KNOWLEDGE_MANAGER_SERVICE_PUBLISH_URL = "knowledge-manager.publish.url";
+	private static final String KNOWLEDGE_MANAGER_SERVICE_LOGIN_URL = "knowledge-manager.login.url";
+	private static final String DEFAULT_KNOWLEDGE_MANAGER_SERVICE_PUBLISH_URL = "http://localhost:8085/knowledge-manager/forms/add-form";
+	private static final String DEFAULT_KNOWLEDGE_MANAGER_SERVICE_LOGIN_URL = "http://localhost:8085/knowledge-manager/api/public/login";
 
 	private static AbcdConfigurationReader instance;
 
@@ -41,6 +45,8 @@ public class AbcdConfigurationReader extends ConfigurationReader {
 		addProperty(ID_ISSUE_MANAGER_URL, DEFAULT_ISSUE_MANAGER_URL);
 		addProperty(PDF_CREATOR_FEATURE, DEFAULT_PDF_CREATOR_FEATURE);
 		addProperty(ID_GRAPHVIZ_PATH, DEFAULT_GRAPHVIZ_PATH);
+		addProperty(KNOWLEDGE_MANAGER_SERVICE_LOGIN_URL, DEFAULT_KNOWLEDGE_MANAGER_SERVICE_LOGIN_URL);
+		addProperty(KNOWLEDGE_MANAGER_SERVICE_PUBLISH_URL, DEFAULT_KNOWLEDGE_MANAGER_SERVICE_PUBLISH_URL);
 
 		addPropertiesSource(new PropertiesSourceFile(DATABASE_CONFIG_FILE));
 		addPropertiesSource(new SystemVariablePropertiesSourceFile(ABCD_SYSTEM_VARIABLE_CONFIG, DATABASE_CONFIG_FILE));
@@ -95,5 +101,13 @@ public class AbcdConfigurationReader extends ConfigurationReader {
 	
 	public String getGraphvizBinPath() {
 		return getPropertyLogException(ID_GRAPHVIZ_PATH);
+	}
+
+	public String getKnowledgeManagerServiceLoginUrl() {
+		return getPropertyLogException(KNOWLEDGE_MANAGER_SERVICE_LOGIN_URL);
+	}
+
+	public String getKnowledgeManagerServicePublishUrl() {
+		return getPropertyLogException(KNOWLEDGE_MANAGER_SERVICE_PUBLISH_URL);
 	}
 }
