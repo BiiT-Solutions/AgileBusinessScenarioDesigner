@@ -51,11 +51,11 @@
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="DAILY"/>
     </logger>
-    <logger name="com.biit.drools.logger.DroolsRulesLogger" additivity="false" level="DEBUG">
+    <logger name="com.biit.drools.logger.DroolsRulesLogger" additivity="false" level="INFO">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="DAILY"/>
     </logger>
-    <logger name="com.biit.drools.logger.DroolsEngineLogger" additivity="false" level="DEBUG">
+    <logger name="com.biit.drools.logger.DroolsEngineLogger" additivity="false" level="INFO">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="DAILY"/>
     </logger>
@@ -107,7 +107,7 @@
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="DAILY"/>
     </logger>
-    <logger name="com.biit.drools.plugin.log.LiferaryArticlePluginLogger" additivity="false" level="DEBUG">
+    <logger name="com.biit.drools.plugin.log.LiferaryArticlePluginLogger" additivity="false" level="INFO">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="DAILY"/>
     </logger>
