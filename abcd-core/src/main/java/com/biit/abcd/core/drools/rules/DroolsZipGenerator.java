@@ -16,7 +16,7 @@ import java.util.List;
 
 public class DroolsZipGenerator {
 
-    public static byte[] getInformationData(Form form, List<GlobalVariable> globalVariables) throws IOException,
+    public byte[] getInformationData(Form form, List<GlobalVariable> globalVariables) throws IOException,
             TreeObjectInstanceNotRecognizedException, ExpressionInvalidException, DroolsRuleGenerationException,
             BetweenFunctionInvalidException, DroolsRuleCreationException, DateComparisonNotPossibleException,
             InvalidRuleException, NullExpressionValueException, NullTreeObjectException, PrattParserException,

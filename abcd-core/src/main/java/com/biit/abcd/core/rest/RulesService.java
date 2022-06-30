@@ -47,7 +47,7 @@ public class RulesService {
                 return Response.status(Response.Status.NOT_FOUND).entity("{\"error\":\"Unknown form with name '" + parsedPetition.getFormName() +
                         "' and version '" + parsedPetition.getVersion() + "' in organization '" + parsedPetition.getOrganizationId() + "'.\"}").build();
             }
-            byte[] rulesZip = DroolsZipGenerator.getInformationData(form, globalVariablesDao.getAll());
+            byte[] rulesZip = new DroolsZipGenerator().getInformationData(form, globalVariablesDao.getAll());
             AbcdLogger.debug(RulesService.class.getName(), "Rules retrieved successfully!");
             return Response.ok(rulesZip, MediaType.APPLICATION_JSON).build();
         } catch (JsonSyntaxException ex) {
