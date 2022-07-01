@@ -52,43 +52,6 @@ public class SaveDroolsRulesAction implements SaveAction {
         return null;
     }
 
-//    @Override
-//    public byte[] getInformationData() {
-//        try {
-//            List<String> filesToZip = new ArrayList<>();
-//            List<String> namesOfFiles = new ArrayList<>();
-//            FormToDroolsExporter droolsExporter = new FormToDroolsExporter();
-//            String rules = droolsExporter.getDroolRules(UserSessionHandler.getFormController().getForm(), UserSessionHandler.getGlobalVariablesController()
-//                    .getGlobalVariables());
-//            filesToZip.add(rules);
-//            Integer formVersion = UserSessionHandler.getFormController().getForm().getVersion();
-//            String formName = UserSessionHandler.getFormController().getForm().getLabel();
-//            namesOfFiles.add(formName + "_v" + formVersion + ".drl");
-//            String variables = AbcdGlobalVariablesToJson.toJson(UserSessionHandler.getGlobalVariablesController().getGlobalVariables());
-//            filesToZip.add(variables);
-//            namesOfFiles.add(formName + "_globalVariables_v" + formVersion + ".json");
-//
-//            try {
-//                return ZipUtils.createZipFile(filesToZip, namesOfFiles);
-//            } catch (IOException e) {
-//                MessageManager.showError(LanguageCodes.ZIP_FILE_NOT_GENERATED);
-//                AbcdLogger.errorMessage(SettingsWindow.class.getName(), e);
-//            }
-//        } catch (DroolsRuleGenerationException | RuleNotImplementedException | ExpressionInvalidException | NullTreeObjectException
-//                | TreeObjectInstanceNotRecognizedException | TreeObjectParentNotValidException | NullCustomVariableException | NullExpressionValueException
-//                | BetweenFunctionInvalidException | DateComparisonNotPossibleException | PluginInvocationException | DroolsRuleCreationException
-//                | PrattParserException | ActionNotImplementedException | InvalidExpressionException e) {
-//            AbcdLogger.errorMessage(SettingsWindow.class.getName(), e);
-//            MessageManager.showError(LanguageCodes.ERROR_TITLE, LanguageCodes.DROOLS_RULES_GENERATION_EXCEPTION);
-//        } catch (NotCompatibleTypeException ncte) {
-//            MessageManager.showError(LanguageCodes.DROOLS_RULES_GENERATION_EXCEPTION, LanguageCodes.ERROR_DESCRIPTION, ncte.getDescription());
-//        } catch (InvalidRuleException e) {
-//            AbcdLogger.errorMessage(SettingsWindow.class.getName(), e);
-//            MessageManager.showError(LanguageCodes.ERROR_TITLE, LanguageCodes.DROOLS_RULE_INVALID, ((InvalidRuleException) e).getRuleName());
-//        }
-//        return null;
-//    }
-
     @Override
     public boolean isValid() {
         return true;
