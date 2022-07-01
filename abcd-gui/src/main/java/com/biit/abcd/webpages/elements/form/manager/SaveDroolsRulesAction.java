@@ -45,6 +45,9 @@ public class SaveDroolsRulesAction implements SaveAction {
         } catch (InvalidRuleException e) {
             AbcdLogger.errorMessage(SettingsWindow.class.getName(), e);
             MessageManager.showError(LanguageCodes.ERROR_TITLE, LanguageCodes.DROOLS_RULE_INVALID, e.getRuleName());
+        } catch (Exception e) {
+            AbcdLogger.errorMessage(SettingsWindow.class.getName(), e);
+            MessageManager.showError(LanguageCodes.ERROR_TITLE, LanguageCodes.ERROR_UNEXPECTED_ERROR);
         }
         return null;
     }
