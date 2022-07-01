@@ -333,6 +333,7 @@ public class RuleExpressionTests extends AbcdTester {
 		createGlobalVariables();
 		
 		login(ABCD_FORM_ADMIN_BIIT1);
+		removeForms();
 		getFormManager().createNewForm(FORM_1);
 
 		createSampleForm();
@@ -359,6 +360,7 @@ public class RuleExpressionTests extends AbcdTester {
 		createGlobalVariables();
 		
 		login(ABCD_FORM_ADMIN_BIIT1);
+		removeForms();
 		getFormManager().createNewForm(FORM_1);
 
 		createSampleForm();
