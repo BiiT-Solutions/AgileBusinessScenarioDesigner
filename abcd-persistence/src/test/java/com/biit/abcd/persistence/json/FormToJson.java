@@ -33,123 +33,123 @@ import com.biit.persistence.entity.exceptions.FieldTooLongException;
 import com.biit.utils.file.FileReader;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "classpath:applicationContextTest.xml" })
+@ContextConfiguration(locations = {"classpath:applicationContextTest.xml"})
 public class FormToJson extends AbstractTransactionalTestNGSpringContextTests {
 
-	private final static String FULL_FORM = "Complete Form";
-	private final static String JSON_FORM_NAME = "\"label\": \"Complete Form\"";
+    private final static String FULL_FORM = "Complete Form";
+    private final static String JSON_FORM_NAME = "\"label\": \"Complete Form\"";
 
-	@Autowired
-	private IFormDao formDao;
+    @Autowired
+    private IFormDao formDao;
 
-	@Autowired
-	private ISimpleFormViewDao simpleFormViewDao;
+    @Autowired
+    private ISimpleFormViewDao simpleFormViewDao;
 
-	@Test(groups = { "abcdToJson" })
-	public void createJsonForm() throws NotValidChildException, FieldTooLongException, CharacterNotAllowedException, UnexpectedDatabaseException,
-			ElementCannotBePersistedException, ElementIsReadOnly, ElementCannotBeRemovedException, InvalidAnswerFormatException {
-		String jsonForm = createForm(FULL_FORM).toJson();
-		Assert.assertEquals(jsonForm.contains(JSON_FORM_NAME), true);
-	}
+    @Test(groups = {"abcdToJson"})
+    public void createJsonForm() throws NotValidChildException, FieldTooLongException, CharacterNotAllowedException, UnexpectedDatabaseException,
+            ElementCannotBePersistedException, ElementIsReadOnly, ElementCannotBeRemovedException, InvalidAnswerFormatException {
+        String jsonForm = createForm(FULL_FORM).toJson();
+        Assert.assertEquals(jsonForm.contains(JSON_FORM_NAME), true);
+    }
 
-	@Test(groups = { "abcdToJson" })
-	public void createJsonSimpleForm() throws NotValidChildException, FieldTooLongException, CharacterNotAllowedException, UnexpectedDatabaseException,
-			ElementCannotBePersistedException, ElementIsReadOnly, ElementCannotBeRemovedException, InvalidAnswerFormatException {
+    @Test(groups = {"abcdToJson"})
+    public void createJsonSimpleForm() throws NotValidChildException, FieldTooLongException, CharacterNotAllowedException, UnexpectedDatabaseException,
+            ElementCannotBePersistedException, ElementIsReadOnly, ElementCannotBeRemovedException, InvalidAnswerFormatException {
 
-		for (int i = 0; i < 10; i++) {
-			Form form = createForm(FULL_FORM + "_" + i);
-			formDao.makePersistent(form);
-		}
+        for (int i = 0; i < 10; i++) {
+            Form form = createForm(FULL_FORM + "_" + i);
+            formDao.makePersistent(form);
+        }
 
-		List<SimpleFormView> views = simpleFormViewDao.getAll();
-		for (int i = 0; i < views.size(); i++) {
-			String jsonForm = views.get(i).toJson();
-			String formName = JSON_FORM_NAME.substring(0, JSON_FORM_NAME.length() - 1);
-			Assert.assertEquals(jsonForm.contains(formName + "_" + i + "\""), true);
-		}
-	}
+        List<SimpleFormView> views = simpleFormViewDao.getAll();
+        for (int i = 0; i < views.size(); i++) {
+            String jsonForm = views.get(i).toJson();
+            String formName = JSON_FORM_NAME.substring(0, JSON_FORM_NAME.length() - 1);
+            Assert.assertEquals(jsonForm.contains(formName + "_" + i + "\""), true);
+        }
+    }
 
-	@Test(groups = { "abcdToJson" }, expectedExceptions = { NullPointerException.class })
-	public void importWebform() throws FileNotFoundException, ClassNotFoundException {
-		String jsonContent = FileReader.getResource("InvalidForm.json", Charset.defaultCharset());
-		System.out.println("-------------------- EXPECTED EXCEPTIONS --------------------");
-		try {
-			Form form = Form.fromJson(jsonContent);
-			Assert.assertNotNull(form);
-			Assert.assertEquals(form.getChildren().size(), 2);
-		} finally {
-			System.out.println("----------------- END OF EXPECTED EXCEPTIONS -----------------");
-		}
-	}
+    @Test(groups = {"abcdToJson"}, expectedExceptions = {NullPointerException.class})
+    public void importWebform() throws FileNotFoundException {
+        String jsonContent = FileReader.getResource("InvalidForm.json", Charset.defaultCharset());
+        System.out.println("-------------------- EXPECTED EXCEPTIONS --------------------");
+        try {
+            Form form = Form.fromJson(jsonContent);
+            Assert.assertNotNull(form);
+            Assert.assertEquals(form.getChildren().size(), 2);
+        } finally {
+            System.out.println("----------------- END OF EXPECTED EXCEPTIONS -----------------");
+        }
+    }
 
-	@Test(groups = { "abcdToJson" })
-	public void importForm() throws FileNotFoundException, ClassNotFoundException {
-		String jsonContent = FileReader.getResource("ValidForm.json", Charset.defaultCharset());
-		Form form = Form.fromJson(jsonContent);
-		Assert.assertNotNull(form);
-		Assert.assertEquals(form.getChildren().size(), 2);
-	}
+    @Test(groups = {"abcdToJson"})
+    public void importForm() throws FileNotFoundException, ClassNotFoundException {
+        String jsonContent = FileReader.getResource("ValidForm.json", Charset.defaultCharset());
+        Form form = Form.fromJson(jsonContent);
+        Assert.assertNotNull(form);
+        Assert.assertEquals(form.getChildren().size(), 2);
+    }
 
-	private Form createForm(String formName) throws NotValidChildException, FieldTooLongException, CharacterNotAllowedException, UnexpectedDatabaseException,
-			ElementCannotBePersistedException, ElementIsReadOnly, ElementCannotBeRemovedException, InvalidAnswerFormatException {
-		Form form = new Form();
-		form.setOrganizationId(0l);
-		form.setCreatedBy(1l);
-		form.setUpdatedBy(1l);
-		form.setLabel(formName);
+    private Form createForm(String formName) throws NotValidChildException, FieldTooLongException, CharacterNotAllowedException, UnexpectedDatabaseException,
+            ElementCannotBePersistedException, ElementIsReadOnly, ElementCannotBeRemovedException, InvalidAnswerFormatException {
+        Form form = new Form();
+        form.setOrganizationId(0L);
+        form.setCreatedBy(1L);
+        form.setUpdatedBy(1L);
+        form.setLabel(formName);
 
-		Category category = new Category();
-		category.setName("Category1");
-		form.addChild(category);
+        Category category = new Category();
+        category.setName("Category1");
+        form.addChild(category);
 
-		Category category2 = new Category();
-		category2.setName("Category2");
-		form.addChild(category2);
+        Category category2 = new Category();
+        category2.setName("Category2");
+        form.addChild(category2);
 
-		Category category3 = new Category();
-		category3.setName("Category3");
-		form.addChild(category3);
+        Category category3 = new Category();
+        category3.setName("Category3");
+        form.addChild(category3);
 
-		Group group1 = new Group();
-		group1.setName("Group1");
-		category2.addChild(group1);
+        Group group1 = new Group();
+        group1.setName("Group1");
+        category2.addChild(group1);
 
-		Group group2 = new Group();
-		group2.setName("Group2");
-		category2.addChild(group2);
+        Group group2 = new Group();
+        group2.setName("Group2");
+        category2.addChild(group2);
 
-		Group group3 = new Group();
-		group3.setName("Group3");
-		group3.setRepeatable(true);
-		category2.addChild(group3);
+        Group group3 = new Group();
+        group3.setName("Group3");
+        group3.setRepeatable(true);
+        category2.addChild(group3);
 
-		Question question1 = new Question();
-		question1.setName("Question1");
-		question1.setAnswerType(AnswerType.MULTI_CHECKBOX);
-		group2.addChild(question1);
+        Question question1 = new Question();
+        question1.setName("Question1");
+        question1.setAnswerType(AnswerType.MULTI_CHECKBOX);
+        group2.addChild(question1);
 
-		Question question2 = new Question();
-		question2.setName("Question2");
-		question2.setAnswerType(AnswerType.RADIO);
-		group2.addChild(question2);
+        Question question2 = new Question();
+        question2.setName("Question2");
+        question2.setAnswerType(AnswerType.RADIO);
+        group2.addChild(question2);
 
-		Question question3 = new Question();
-		question3.setName("Question3");
-		question3.setAnswerType(AnswerType.INPUT);
-		question3.setAnswerFormat(AnswerFormat.TEXT);
-		group2.addChild(question3);
+        Question question3 = new Question();
+        question3.setName("Question3");
+        question3.setAnswerType(AnswerType.INPUT);
+        question3.setAnswerFormat(AnswerFormat.TEXT);
+        group2.addChild(question3);
 
-		Answer answer1 = new Answer();
-		answer1.setName("Answer1");
-		question2.addChild(answer1);
+        Answer answer1 = new Answer();
+        answer1.setName("Answer1");
+        question2.addChild(answer1);
 
-		Answer answer2 = new Answer();
-		answer2.setName("Answer2");
-		question2.addChild(answer2);
+        Answer answer2 = new Answer();
+        answer2.setName("Answer2");
+        question2.addChild(answer2);
 
-		Answer answer3 = new Answer();
-		answer3.setName("Answer3");
-		question2.addChild(answer3);
-		return form;
-	}
+        Answer answer3 = new Answer();
+        answer3.setName("Answer3");
+        question2.addChild(answer3);
+        return form;
+    }
 }
