@@ -71,7 +71,7 @@ public class RuleExpression extends LeftTreeTableWebpage {
 	public void removeRule(int row) {
 		selectRow(row);
 		getRemoveButton().click();
-		getProceed().clickAccept();
+		getProceedWindow().clickAccept();
 	}
 
 	public NewRuleExpressionWindow getNewRuleExpressionWindow() {

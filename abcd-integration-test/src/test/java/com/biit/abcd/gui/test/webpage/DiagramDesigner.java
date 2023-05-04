@@ -25,7 +25,7 @@ public class DiagramDesigner extends LeftTreeTableWebpage {
 	public void removeDiagram(int row){
 		selectRow(row);
 		getRemoveButton().click();
-		getProceed().clickAccept();
+		getProceedWindow().clickAccept();
 	}
 
 	@Override

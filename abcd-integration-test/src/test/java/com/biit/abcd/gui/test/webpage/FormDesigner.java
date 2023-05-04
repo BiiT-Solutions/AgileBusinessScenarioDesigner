@@ -2,7 +2,7 @@ package com.biit.abcd.gui.test.webpage;
 
 import org.testng.Assert;
 
-import com.biit.abcd.gui.test.window.Proceed;
+import com.biit.abcd.gui.test.window.ProceedWindow;
 import com.vaadin.testbench.TestBenchElement;
 import com.vaadin.testbench.elements.ButtonElement;
 import com.vaadin.testbench.elements.ComboBoxElement;
@@ -52,11 +52,11 @@ public class FormDesigner extends AbcdCommonWebpage {
 		}
 	}
 
-	private final Proceed proceed;
+	private final ProceedWindow proceed;
 
 	public FormDesigner() {
 		super();
-		proceed = new Proceed();
+		proceed = new ProceedWindow();
 		addWindow(proceed);
 	}
 
@@ -273,7 +273,7 @@ public class FormDesigner extends AbcdCommonWebpage {
 	public void remove(int row) {
 		clickInTableRow(row);
 		clickRemoveButton();
-		getProceed().clickAccept();
+		getProceedWindow().clickAccept();
 	}
 
 	public void clickMoveUp() {

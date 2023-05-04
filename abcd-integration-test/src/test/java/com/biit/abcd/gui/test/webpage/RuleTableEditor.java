@@ -59,7 +59,7 @@ public class RuleTableEditor extends LeftTreeTableWebpage {
 		selectRow(row);
 		getRemoveTableButton().click();
 		getRemoveTableButton().waitForVaadin();
-		getProceed().clickAccept();
+		getProceedWindow().clickAccept();
 	}
 
 	private TestBenchElement getRemoveTableButton() {
