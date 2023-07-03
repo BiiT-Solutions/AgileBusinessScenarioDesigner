@@ -7,11 +7,46 @@ import com.biit.abcd.core.drools.prattparser.visitor.ITreeElement;
 import com.biit.abcd.core.drools.prattparser.visitor.TreeElementGroupEndRuleConditionCreatorVisitor;
 import com.biit.abcd.core.drools.prattparser.visitor.TreeElementMathExpressionVisitor;
 import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
-import com.biit.abcd.core.drools.rules.exceptions.*;
+import com.biit.abcd.core.drools.rules.exceptions.BetweenFunctionInvalidException;
+import com.biit.abcd.core.drools.rules.exceptions.DateComparisonNotPossibleException;
+import com.biit.abcd.core.drools.rules.exceptions.DroolsRuleCreationException;
+import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
+import com.biit.abcd.core.drools.rules.exceptions.NullCustomVariableException;
+import com.biit.abcd.core.drools.rules.exceptions.NullExpressionValueException;
+import com.biit.abcd.core.drools.rules.exceptions.NullTreeObjectException;
+import com.biit.abcd.core.drools.rules.exceptions.PluginInvocationException;
+import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
+import com.biit.abcd.core.drools.rules.exceptions.TreeObjectInstanceNotRecognizedException;
+import com.biit.abcd.core.drools.rules.exceptions.TreeObjectParentNotValidException;
 import com.biit.abcd.core.drools.utils.RuleGenerationUtils;
 import com.biit.abcd.logger.AbcdLogger;
-import com.biit.abcd.persistence.entity.*;
-import com.biit.abcd.persistence.entity.expressions.*;
+import com.biit.abcd.persistence.entity.Answer;
+import com.biit.abcd.persistence.entity.AnswerFormat;
+import com.biit.abcd.persistence.entity.AnswerType;
+import com.biit.abcd.persistence.entity.CustomVariable;
+import com.biit.abcd.persistence.entity.CustomVariableType;
+import com.biit.abcd.persistence.entity.Form;
+import com.biit.abcd.persistence.entity.Group;
+import com.biit.abcd.persistence.entity.Question;
+import com.biit.abcd.persistence.entity.expressions.AvailableFunction;
+import com.biit.abcd.persistence.entity.expressions.AvailableOperator;
+import com.biit.abcd.persistence.entity.expressions.AvailableSymbol;
+import com.biit.abcd.persistence.entity.expressions.Expression;
+import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
+import com.biit.abcd.persistence.entity.expressions.ExpressionFunction;
+import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorLogic;
+import com.biit.abcd.persistence.entity.expressions.ExpressionPluginMethod;
+import com.biit.abcd.persistence.entity.expressions.ExpressionSymbol;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValue;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueGlobalVariable;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueNumber;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValuePostalCode;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueString;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueTimestamp;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
+import com.biit.abcd.persistence.entity.expressions.QuestionDateUnit;
+import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
 import com.biit.drools.engine.DroolsHelper;
 import com.biit.drools.form.DroolsQuestionFormat;
@@ -21,7 +56,6 @@ import com.biit.plugins.exceptions.DuplicatedPluginFoundException;
 import com.biit.plugins.interfaces.IPlugin;
 import com.biit.plugins.interfaces.exceptions.NoPluginFoundException;
 
-import java.lang.reflect.InvocationTargetException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -578,7 +612,14 @@ public class DroolsParser {
         droolsConditions.append("	$").append(question.getUniqueNameReadable()).append(" : ");
         droolsConditions.append("DroolsSubmittedQuestion(");
         droolsConditions.append(RuleGenerationUtils.returnSimpleTreeObjectNameFunction(question)).append("', ");
-        droolsConditions.append("getAnswer('").append(getTreeObjectAnswerType(question)).append("') ");
+        droolsConditions.append("getAnswer('").append(getTreeObjectAnswerType(question)).append("')");
+        // String based answers need toString() now for working.
+        if (isStringBased(getTreeObjectAnswerType(question))) {
+            droolsConditions.append(".toString() ");
+        } else {
+            droolsConditions.append(" ");
+        }
+
         // Text DroolsSubmittedQuestion returns a Set, then is not equals, is a
         // "contains".
         if (getTreeObjectAnswerType(question).equals(DroolsQuestionFormat.MULTI_TEXT)) {
@@ -597,6 +638,13 @@ public class DroolsParser {
         droolsConditions.append("\n");
 
         return droolsConditions.toString();
+    }
+
+    private static boolean isStringBased(DroolsQuestionFormat format) {
+        if (format == null) {
+            return false;
+        }
+        return format.equals(DroolsQuestionFormat.TEXT) || format.equals(DroolsQuestionFormat.MULTI_TEXT) || format.equals(DroolsQuestionFormat.POSTAL_CODE);
     }
 
     /**
