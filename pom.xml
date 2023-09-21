@@ -38,8 +38,8 @@
     </distributionManagement>
 
     <scm>
-        <connection>scm:git:git.biit-solutions.com:BiiT/AgileBusinessScenarioDesigner.git</connection>
-        <developerConnection>scm:git:git.biit-solutions.com:BiiT/AgileBusinessScenarioDesigner.git</developerConnection>
+        <connection>scm:git:git.biit-solutions.com:Java/AgileBusinessScenarioDesigner.git</connection>
+        <developerConnection>scm:git:git.biit-solutions.com:Java/AgileBusinessScenarioDesigner.git</developerConnection>
         <tag>abcd-tool</tag>
     </scm>
 
