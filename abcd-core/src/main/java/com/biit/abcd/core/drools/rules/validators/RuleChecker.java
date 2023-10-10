@@ -50,8 +50,7 @@ public class RuleChecker {
 	/**
 	 * Checks if the rule is valid<br>
 	 * Invalid rules throw an exception
-	 * 
-	 * @throws InvalidRuleException
+	 *
 	 * @throws NotCompatibleTypeException
 	 * @throws InvalidExpressionException
 	 * @throws PrattParserException

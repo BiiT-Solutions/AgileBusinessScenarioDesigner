@@ -35,7 +35,6 @@ public class TableRuleToDroolsRule {
 	 * @throws ExpressionInvalidException
 	 * @throws RuleNotImplementedException
 	 * @throws ActionNotImplementedException
-	 * @throws InvalidRuleException
 	 * @throws NotCompatibleTypeException
 	 * @throws InvalidExpressionException
 	 * @throws PrattParserException

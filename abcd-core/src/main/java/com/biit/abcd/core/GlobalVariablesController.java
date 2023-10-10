@@ -24,7 +24,6 @@ public class GlobalVariablesController {
 	 * Read all global variables from database. This method is synchronized.
 	 * 
 	 * @return the list of variables.
-	 * @throws UnexpectedDatabaseException
 	 */
 	public List<GlobalVariable> getGlobalVariables() {
 		if (globalVariables == null) {

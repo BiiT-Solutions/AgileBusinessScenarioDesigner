@@ -202,7 +202,6 @@ public class FormDao extends AnnotatedGenericDao<Form, Long> implements IFormDao
 	 * @param organizationId the organization id.
 	 * @param validTo        the date until this element is valid.
 	 * @return the number of entities updated.
-	 * @throws UnexpectedDatabaseException error in the database.
 	 */
 	@CacheEvict(value = "springFormCache", key = "#form.label, #form.organizationId")
 	@Transactional(value = "abcdTransactionManager", propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, readOnly = false)
