@@ -164,6 +164,7 @@ public class DroolsRuleEditor extends FormWebPageComponent {
             public void buttonClick(ClickEvent event) {
                 Rule rule = tableSelectRule.getSelectedRule();
                 if (rule != null) {
+                    rule = rule.generateCopy();
                     rule.setName(rule.getName() + " - Copy");
                     rule.resetIds();
                     UserSessionHandler.getFormController().getForm().getRules().add(rule);
