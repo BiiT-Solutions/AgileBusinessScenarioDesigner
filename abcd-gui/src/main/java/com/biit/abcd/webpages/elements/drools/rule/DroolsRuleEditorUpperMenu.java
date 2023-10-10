@@ -11,7 +11,7 @@ import com.vaadin.ui.Button;
 
 public class DroolsRuleEditorUpperMenu extends UpperMenu {
 	private static final long serialVersionUID = 4790116559655965919L;
-	private IconButton saveButton, newRule, removeRule;
+	private IconButton saveButton, newRule, removeRule, copyRule;
 
 	public DroolsRuleEditorUpperMenu() {
 		super();
@@ -25,10 +25,13 @@ public class DroolsRuleEditorUpperMenu extends UpperMenu {
 				LanguageCodes.MENU_RULE_ADD_TOOLTIP);
 		removeRule = new IconButton(LanguageCodes.MENU_RULE_REMOVE_CAPTION, ThemeIcon.RULE_REMOVE,
 				LanguageCodes.MENU_RULE_REMOVE_TOOLTIP);
+		copyRule = new IconButton(LanguageCodes.MENU_RULE_DUPLICATE_CAPTION,
+				ThemeIcon.COPY_ROW, LanguageCodes.MENU_RULE_DUPLICATE_TOOLTIP);
 
 		addIconButton(saveButton);
 		addIconButton(newRule);
 		addIconButton(removeRule);
+		addIconButton(copyRule);
 
 		for (Button button : getDisabledButtons()) {
 			button.setEnabled(false);
@@ -63,6 +66,12 @@ public class DroolsRuleEditorUpperMenu extends UpperMenu {
 
 	public void removeRemoveRuleButtonClickListener(Button.ClickListener listener) {
 		removeRule.removeClickListener(listener);
+	}
+
+	public void addCopyRuleButtonClickListener(Button.ClickListener listener) {
+		if (!getDisabledButtons().contains(copyRule)) {
+			copyRule.addClickListener(listener);
+		}
 	}
 
 	@Override

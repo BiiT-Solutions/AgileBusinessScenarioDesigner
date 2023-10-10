@@ -212,6 +212,8 @@ public enum LanguageCodes {
 	MENU_RULE_ADD_TOOLTIP("menu.rule.add.tooltip"),
 	MENU_RULE_REMOVE_CAPTION("menu.rule.remove.caption"),
 	MENU_RULE_REMOVE_TOOLTIP("menu.rule.remove.tooltip"),
+	MENU_RULE_DUPLICATE_CAPTION("menu.rule.duplicate.caption"),
+	MENU_RULE_DUPLICATE_TOOLTIP("menu.rule.duplicate.tooltip"),
 
 	ERROR_USER_PERMISSION("error.user.permission"),
 	ERROR_USER_NOACCESS("error.user.noaccess"),
