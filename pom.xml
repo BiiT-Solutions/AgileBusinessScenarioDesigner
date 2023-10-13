@@ -4,7 +4,7 @@
     <groupId>com.biit</groupId>
     <artifactId>abcd-tool</artifactId>
     <packaging>pom</packaging>
-    <version>1.10.30-SNAPSHOT</version>
+    <version>1.10.31-SNAPSHOT</version>
     <name>Agile Business sCenario Designer Tool</name>
     <description>Rules Designer</description>
 
