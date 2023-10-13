@@ -12,7 +12,7 @@ import com.vaadin.ui.Button;
 public class ExpressionEditorUpperMenu extends UpperMenu {
 	private static final long serialVersionUID = 102598701730431578L;
 
-	private IconButton saveButton, newExpression, removeExpression;
+	private IconButton saveButton, newExpression, removeExpression, copyExpression;
 
 	public ExpressionEditorUpperMenu() {
 		super();
@@ -26,10 +26,13 @@ public class ExpressionEditorUpperMenu extends UpperMenu {
 				LanguageCodes.MENU_EXPRESSIONS_ADD);
 		removeExpression = new IconButton(LanguageCodes.MENU_EXPRESSIONS_REMOVE, ThemeIcon.EXPRESSION_REMOVE,
 				LanguageCodes.MENU_EXPRESSIONS_REMOVE);
+		copyExpression = new IconButton(LanguageCodes.MENU_RULE_DUPLICATE_CAPTION,
+				ThemeIcon.COPY_ROW, LanguageCodes.MENU_RULE_DUPLICATE_TOOLTIP);
 
 		addIconButton(saveButton);
 		addIconButton(newExpression);
 		addIconButton(removeExpression);
+		addIconButton(copyExpression);
 
 		for (Button button : getDisabledButtons()) {
 			button.setEnabled(false);
@@ -62,12 +65,18 @@ public class ExpressionEditorUpperMenu extends UpperMenu {
 		}
 	}
 
+	public void addCopyExpressionButtonClickListener(Button.ClickListener listener) {
+		if (!getDisabledButtons().contains(copyExpression)) {
+			copyExpression.addClickListener(listener);
+		}
+	}
+
 	public void removeRemoveExpressionButtonClickListener(Button.ClickListener listener) {
 		removeExpression.removeClickListener(listener);
 	}
 
 	@Override
 	public Set<Button> getSecuredButtons() {
-		return new HashSet<Button>();
+		return new HashSet<>();
 	}
 }

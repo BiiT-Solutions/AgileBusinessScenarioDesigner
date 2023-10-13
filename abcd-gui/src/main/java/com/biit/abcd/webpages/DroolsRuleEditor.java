@@ -157,20 +157,16 @@ public class DroolsRuleEditor extends FormWebPageComponent {
             }
         });
 
-        droolsRuleEditorUpperMenu.addCopyRuleButtonClickListener(new ClickListener() {
-            private static final long serialVersionUID = 377976184801431863L;
-
-            @Override
-            public void buttonClick(ClickEvent event) {
-                Rule rule = tableSelectRule.getSelectedRule();
-                if (rule != null) {
-                    rule = rule.generateCopy();
-                    rule.setName(rule.getName() + " - Copy");
-                    rule.resetIds();
-                    UserSessionHandler.getFormController().getForm().getRules().add(rule);
-                    addRulefromWindow(rule);
-                    sortTableMenu();
-                }
+        droolsRuleEditorUpperMenu.addCopyRuleButtonClickListener((ClickListener) event -> {
+            Rule rule = tableSelectRule.getSelectedRule();
+            if (rule != null) {
+                rule = rule.generateCopy();
+                rule.setName(rule.getName() + " - Copy");
+                rule.resetIds();
+                rule.setCreatedBy(UserSessionHandler.getUser().getUniqueId());
+                UserSessionHandler.getFormController().getForm().getRules().add(rule);
+                addRulefromWindow(rule);
+                sortTableMenu();
             }
         });
 

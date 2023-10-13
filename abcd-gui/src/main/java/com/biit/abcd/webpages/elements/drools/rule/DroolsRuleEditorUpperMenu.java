@@ -76,7 +76,7 @@ public class DroolsRuleEditorUpperMenu extends UpperMenu {
 
 	@Override
 	public Set<Button> getSecuredButtons() {
-		return new HashSet<Button>();
+		return new HashSet<>();
 	}
 
 }

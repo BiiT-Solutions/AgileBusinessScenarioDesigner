@@ -170,6 +170,19 @@ public class ExpressionEditor extends FormWebPageComponent {
 			}
 		});
 
+		decisionTableEditorUpperMenu.addCopyExpressionButtonClickListener((ClickListener) event -> {
+            ExpressionChain expression = tableSelectExpression.getSelectedExpression();
+            if (expression != null) {
+                expression = (ExpressionChain) expression.generateCopy();
+                expression.setName(expression.getName() + " - Copy");
+                expression.resetIds();
+                expression.setCreatedBy(UserSessionHandler.getUser().getUniqueId());
+                UserSessionHandler.getFormController().getForm().getExpressionChains().add(expression);
+                addExpressionToMenu(expression);
+                sortTableMenu();
+            }
+        });
+
 		setUpperMenu(decisionTableEditorUpperMenu);
 	}
 

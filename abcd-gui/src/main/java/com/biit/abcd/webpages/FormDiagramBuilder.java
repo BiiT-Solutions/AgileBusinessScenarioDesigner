@@ -45,7 +45,7 @@ import com.vaadin.ui.UI;
 
 public class FormDiagramBuilder extends FormWebPageComponent {
 	private static final long serialVersionUID = 3237410805898133935L;
-	private static final List<AbcdActivity> activityPermissions = new ArrayList<AbcdActivity>(
+	private static final List<AbcdActivity> activityPermissions = new ArrayList<>(
 			Arrays.asList(AbcdActivity.READ));
 	private SelectDiagramTable diagramBuilderTable;
 	private AbcdDiagramBuilder diagramBuilder;
