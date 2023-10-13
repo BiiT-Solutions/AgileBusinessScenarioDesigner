@@ -63,6 +63,7 @@ public class SelectTableRuleTable extends Table {
 		for (TableRule tableRule : form.getTableRules()) {
 			addRow(tableRule);
 		}
+		this.sort();
 	}
 
 	public TableRule getSelectedTableRule() {

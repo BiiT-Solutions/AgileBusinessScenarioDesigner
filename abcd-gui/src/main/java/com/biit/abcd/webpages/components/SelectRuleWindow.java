@@ -49,12 +49,13 @@ public class SelectRuleWindow extends AcceptCancelWindow {
 
 	private void initializeFormQuestionTable() {
 		formRuleTable = new SelectDroolsRule();
-		formRuleTable.setCaption("TODO - Form element");
+		formRuleTable.setCaption("Rules");
 		formRuleTable.setSizeFull();
 		formRuleTable.setSelectable(true);
 		for (Rule rule : UserSessionHandler.getFormController().getForm().getRules()) {
 			formRuleTable.addRow(rule);
 		}
+		formRuleTable.sort();
 	}
 
 	public Rule getValue() {
