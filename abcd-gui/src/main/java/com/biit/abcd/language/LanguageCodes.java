@@ -93,6 +93,8 @@ public enum LanguageCodes {
 	WARNING_FORM_READ_ONLY("warning.form.read.only"),
 	WARNING_FORM_READ_ONLY_DESCRIPTION("warning.form.read.only.description"),
 	WARNING_NEW_VERSION("warning.new.version"),
+	WARNING_COPY_FORM("warning.copy.form"),
+	COPY_FORM_INPUT("copy.form.input"),
 	WARNING_CLEAR_CACHE("warning.clear.cache"),
 	WARNING_TEST_SCENARIOS_LINKED("warning.test.scenarios.linked"),
 	WARNING_TEST_SCENARIOS_CLEAR_ID("warning.test.scenarios.clear.id"),
@@ -105,6 +107,8 @@ public enum LanguageCodes {
 	FORM_MANAGER_NEW_FORM("formManager.form.new"),
 	FORM_MANAGER_REMOVE_FORM("formManager.form.remove"),
 	FORM_MANAGER_NEW_FORM_VERSION("formManager.form.new.version"),
+
+	FORM_MANAGER_COPY_FORM("formManager.form.copy"),
 	FORM_MANAGER_EXPORT_RULES("formManager.export.rules"),
 	FORM_MANAGER_TEST_SCENARIOS("formManager.test.scenarios"),
 	FORM_MANAGER_CREATE_TEST_SCENARIOS("formManager.create.test.scenarios"),
