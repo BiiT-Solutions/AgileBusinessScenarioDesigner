@@ -157,6 +157,8 @@ public enum LanguageCodes {
 	WINDOW_NEWFORM_SAVEBUTTON_LABEL("windowNewForm.savebutton.label"),
 	WINDOW_NEWFORM_SAVEBUTTON_TOOLTIP("windowNewForm.savebutton.tooltip"),
 	WINDOW_NEWFORM_CANCELBUTTON_LABEL("windowNewForm.cancelbutton.label"),
+
+	WINDOW_COPYFORM_LABEL("window.copy.form.label"),
 	
 	FORM_NAME("form.name"),
 	FORM_GROUP("form.group"),

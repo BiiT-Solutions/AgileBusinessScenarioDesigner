@@ -41,10 +41,10 @@ import com.biit.abcd.webpages.components.AlertMessageWindow;
 import com.biit.abcd.webpages.components.IFormSelectedListener;
 import com.biit.abcd.webpages.components.IconButton;
 import com.biit.abcd.webpages.components.IconSize;
+import com.biit.abcd.webpages.components.InputWindow;
 import com.biit.abcd.webpages.components.SaveActionListener;
 import com.biit.abcd.webpages.components.SaveAsButton;
 import com.biit.abcd.webpages.components.SettingsWindow;
-import com.biit.abcd.webpages.components.StringInputWindow;
 import com.biit.abcd.webpages.components.ThemeIcon;
 import com.biit.abcd.webpages.components.UpperMenu;
 import com.biit.abcd.webpages.elements.drools.results.DroolsSubmittedFormResultWindow;
@@ -384,14 +384,13 @@ public class FormManagerUpperMenu extends UpperMenu {
         copyForm = new IconButton(LanguageCodes.FORM_MANAGER_COPY_FORM,
                 ThemeIcon.COPY_ROW, LanguageCodes.FORM_MANAGER_COPY_FORM, IconSize.MEDIUM,
                 (ClickListener) event -> {
-                    final StringInputWindow stringInputWindow = new StringInputWindow();
-                    stringInputWindow.setCaption(ServerTranslate
-                            .translate(LanguageCodes.WARNING_COPY_FORM));
-                    stringInputWindow.addAcceptActionListener(window -> {
-                        parent.copyForm(stringInputWindow.getValue());
-                        stringInputWindow.close();
+                    final InputWindow inputWindow = new InputWindow(ServerTranslate.translate(LanguageCodes.WINDOW_COPYFORM_LABEL));
+                    inputWindow.setCaption(ServerTranslate.translate(LanguageCodes.WARNING_COPY_FORM));
+                    inputWindow.addAcceptActionListener(window -> {
+                        parent.copyForm(inputWindow.getInputValue());
+                        inputWindow.close();
                     });
-                    stringInputWindow.showCentered();
+                    inputWindow.showCentered();
                 });
 
         copyForm.setHeight("100%");
