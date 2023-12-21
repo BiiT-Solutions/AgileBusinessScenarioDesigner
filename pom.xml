@@ -4,7 +4,7 @@
     <groupId>com.biit</groupId>
     <artifactId>abcd-tool</artifactId>
     <packaging>pom</packaging>
-    <version>1.10.34-SNAPSHOT</version>
+    <version>1.10.34</version>
     <name>Agile Business sCenario Designer Tool</name>
     <description>Rules Designer</description>
 
@@ -40,7 +40,7 @@
     <scm>
         <connection>scm:git:git.biit-solutions.com:Java/AgileBusinessScenarioDesigner.git</connection>
         <developerConnection>scm:git:git.biit-solutions.com:Java/AgileBusinessScenarioDesigner.git</developerConnection>
-        <tag>abcd-tool</tag>
+        <tag>abcd-tool-1.10.34</tag>
     </scm>
 
     <dependencies>
