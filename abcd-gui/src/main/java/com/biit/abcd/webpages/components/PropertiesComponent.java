@@ -24,9 +24,9 @@ public class PropertiesComponent extends CustomComponent implements Component.Fo
 	private boolean fireListeners;
 
 	public PropertiesComponent() {
-		propertiesComponents = new HashMap<Class<?>, PropertiesForClassComponent<?>>();
-		propertyUpdateListeners = new ArrayList<PropertieUpdateListener>();
-		elementAddedListener = new ArrayList<ElementAddedListener>();
+		propertiesComponents = new HashMap<>();
+		propertyUpdateListeners = new ArrayList<>();
+		elementAddedListener = new ArrayList<>();
 		fireListeners = true;
 
 		rootLayout = new VerticalLayout();
@@ -62,19 +62,8 @@ public class PropertiesComponent extends CustomComponent implements Component.Fo
 			try {
 				PropertiesForClassComponent<?> newInstance = baseObject.getClass().newInstance();
 				newInstance.setElement(value);
-				newInstance.addPropertyUpdateListener(new PropertieUpdateListener() {
-					@Override
-					public void propertyUpdate(Object element) {
-						firePropertyUpdateListener(element);
-					}
-				});
-				newInstance.addNewElementListener(new ElementAddedListener() {
-
-					@Override
-					public void elementAdded(Object newElement) {
-						fireElementAddedListener(newElement);
-					}
-				});
+				newInstance.addPropertyUpdateListener(this::firePropertyUpdateListener);
+				newInstance.addNewElementListener(this::fireElementAddedListener);
 				rootLayout.addComponent(newInstance);
 				rootLayout.markAsDirty();
 			} catch (InstantiationException | IllegalAccessException e) {

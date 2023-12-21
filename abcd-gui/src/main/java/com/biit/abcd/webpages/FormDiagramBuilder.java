@@ -156,27 +156,23 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 			}
 		});
 
-		diagramBuilder.addDiagramObjectAddedListener(new DiagramObjectAddedListener() {
-
-			@Override
-			public void elementAdded(DiagramObject diagramObject) {
-				// A link must obtain the diagram source for the expressions.
-				if (diagramObject instanceof DiagramLink) {
-					DiagramLink diagramLink = (DiagramLink) diagramObject;
-					if (diagramLink.getSourceElement() instanceof DiagramFork) {
-						updateForkChanges(((DiagramFork) diagramLink.getSourceElement()));
-						if (diagramLink.getSourceElement() != null
-								&& ((DiagramFork) diagramLink.getSourceElement()).getReference() != null) {
-							Expression expression = ((DiagramFork) diagramLink.getSourceElement()).getReference()
-									.generateCopy();
-							expression.resetIds();
-							expression.setEditable(false);
-							diagramLink.replaceExpressions(expression);
-						}
-					}
-				}
-			}
-		});
+		diagramBuilder.addDiagramObjectAddedListener(diagramObject -> {
+            // A link must obtain the diagram source for the expressions.
+            if (diagramObject instanceof DiagramLink) {
+                DiagramLink diagramLink = (DiagramLink) diagramObject;
+                if (diagramLink.getSourceElement() instanceof DiagramFork) {
+                    updateForkChanges(((DiagramFork) diagramLink.getSourceElement()));
+                    if (diagramLink.getSourceElement() != null
+                            && ((DiagramFork) diagramLink.getSourceElement()).getReference() != null) {
+                        Expression expression = ((DiagramFork) diagramLink.getSourceElement()).getReference()
+                                .generateCopy();
+                        expression.resetIds();
+                        expression.setEditable(false);
+                        diagramLink.replaceExpressions(expression);
+                    }
+                }
+            }
+        });
 
 		diagramBuilder.addDiagramObjectUpdatedListener(new DiagramObjectUpdatedListener() {
 			@Override

@@ -10,9 +10,6 @@ public class SelectRuleWindow extends AcceptCancelWindow {
 
 	private static final long serialVersionUID = -493933078596849550L;
 
-	private HorizontalLayout rootLayout;
-	private VerticalLayout firstComponent;
-
 	private SelectDroolsRule formRuleTable;
 
 	public SelectRuleWindow() {
@@ -26,13 +23,13 @@ public class SelectRuleWindow extends AcceptCancelWindow {
 	}
 
 	public Component generateComponent() {
-		rootLayout = new HorizontalLayout();
+		HorizontalLayout rootLayout = new HorizontalLayout();
 		rootLayout.setSizeFull();
 		rootLayout.setMargin(true);
 		rootLayout.setSpacing(true);
 		rootLayout.setImmediate(true);
 
-		firstComponent = new VerticalLayout();
+		VerticalLayout firstComponent = new VerticalLayout();
 		firstComponent.setSizeFull();
 		firstComponent.setImmediate(true);
 
@@ -43,6 +40,7 @@ public class SelectRuleWindow extends AcceptCancelWindow {
 
 		// Initialize value of formQuestionTable.
 		formRuleTable.setValue(UserSessionHandler.getFormController().getForm().getRules());
+		formRuleTable.sort();
 
 		return rootLayout;
 	}
