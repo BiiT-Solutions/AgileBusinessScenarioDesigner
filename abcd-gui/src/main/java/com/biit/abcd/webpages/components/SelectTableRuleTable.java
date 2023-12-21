@@ -39,7 +39,7 @@ public class SelectTableRuleTable extends Table {
 		this.setColumnExpandRatio(MenuProperties.TABLE_NAME, 1);
 		this.setColumnExpandRatio(MenuProperties.UPDATE_TIME, 1);
 		
-		setSortContainerPropertyId(MenuProperties.UPDATE_TIME);
+		setSortContainerPropertyId(MenuProperties.TABLE_NAME);
 		setSortAscending(false);
 		sort();
 	}
