@@ -39,7 +39,7 @@ public class SelectDroolsRule extends Table {
 		this.setColumnExpandRatio(MenuProperties.RULE_NAME, 1);
 		this.setColumnExpandRatio(MenuProperties.UPDATE_TIME, 1);
 
-		setSortContainerPropertyId(MenuProperties.UPDATE_TIME);
+		setSortContainerPropertyId(MenuProperties.RULE_NAME);
 		setSortAscending(false);
 		sort();
 	}
