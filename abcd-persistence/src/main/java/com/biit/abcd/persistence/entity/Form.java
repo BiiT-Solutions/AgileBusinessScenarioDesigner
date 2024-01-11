@@ -15,30 +15,22 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectRef
 import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
-import com.biit.abcd.persistence.entity.serialization.AnswerDeserializer;
-import com.biit.abcd.persistence.entity.serialization.AnswerSerializer;
-import com.biit.abcd.persistence.entity.serialization.BaseRepeatableGroupDeserializer;
-import com.biit.abcd.persistence.entity.serialization.BaseRepeatableGroupSerializer;
-import com.biit.abcd.persistence.entity.serialization.FormDeserializer;
-import com.biit.abcd.persistence.entity.serialization.FormSerializer;
-import com.biit.abcd.persistence.entity.serialization.QuestionDeserializer;
-import com.biit.abcd.persistence.entity.serialization.QuestionSerializer;
-import com.biit.abcd.persistence.entity.serialization.StorableObjectDeserializer;
-import com.biit.abcd.persistence.entity.serialization.TreeObjectDeserializer;
-import com.biit.abcd.persistence.entity.serialization.TreeObjectSerializer;
+import com.biit.abcd.serialization.FormDeserializer;
+import com.biit.abcd.serialization.FormSerializer;
 import com.biit.form.entity.BaseForm;
 import com.biit.form.entity.TreeObject;
 import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.ChildrenNotFoundException;
 import com.biit.form.exceptions.ElementIsReadOnly;
 import com.biit.form.exceptions.NotValidChildException;
-import com.biit.form.json.serialization.hibernate.HibernateProxyTypeAdapter;
+import com.biit.form.jackson.serialization.ObjectMapperFactory;
 import com.biit.persistence.entity.StorableObject;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 import com.biit.usermanager.entity.IUser;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.Cacheable;
@@ -65,6 +57,8 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
+@JsonDeserialize(using = FormDeserializer.class)
+@JsonSerialize(using = FormSerializer.class)
 @Table(name = "tree_forms", uniqueConstraints = {@UniqueConstraint(columnNames = {"label", "version",
         "organization_id"})})
 @AttributeOverride(name = "label", column = @Column(length = StorableObject.MAX_UNIQUE_COLUMN_LENGTH, columnDefinition = "varchar("
@@ -323,7 +317,7 @@ public class Form extends BaseForm {
      * Replace all references to existing objects in the hashmaps.
      *
      * @param storableObjects
-     * @param formTableRules
+     * @param formDiagrams
      */
     private void updateDiagramDiagramReferences(Set<StorableObject> storableObjects, Map<String, Diagram> formDiagrams) {
         for (StorableObject child : storableObjects) {
@@ -346,7 +340,7 @@ public class Form extends BaseForm {
      * Replace all references to existing objects in the hashmaps.
      *
      * @param storableObjects
-     * @param formTableRules
+     * @param formExpressionChains
      */
     private void updateDiagramExpressionReferences(Set<StorableObject> storableObjects,
                                                    Map<String, ExpressionChain> formExpressionChains) {
@@ -372,7 +366,7 @@ public class Form extends BaseForm {
      * Replace all references to existing objects in the hashmaps.
      *
      * @param storableObjects
-     * @param formTableRules
+     * @param formRules
      */
     private void updateDiagramRuleReferences(Set<StorableObject> storableObjects, Map<String, Rule> formRules) {
         for (StorableObject child : storableObjects) {
@@ -419,7 +413,6 @@ public class Form extends BaseForm {
      *
      * @param storableObjects
      * @param formElements
-     * @param formVariables
      */
     private void updateTreeObjectReferences(Set<StorableObject> storableObjects, Map<String, TreeObject> formElements) {
         for (StorableObject child : storableObjects) {
@@ -444,7 +437,6 @@ public class Form extends BaseForm {
      * Replace all references to existing objects in the hashmaps.
      *
      * @param storableObjects
-     * @param formElements
      * @param formVariables
      */
     private void updateVariablesReferences(Set<StorableObject> storableObjects,
@@ -802,35 +794,20 @@ public class Form extends BaseForm {
      * @return the json representation.
      */
     public String toJson() {
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        gsonBuilder.setPrettyPrinting();
-        gsonBuilder.registerTypeAdapterFactory(HibernateProxyTypeAdapter.FACTORY);
-        gsonBuilder.registerTypeAdapter(Form.class, new FormSerializer());
-        gsonBuilder.registerTypeAdapter(SimpleFormView.class, new FormSerializer());
-        gsonBuilder.registerTypeAdapter(Category.class, new TreeObjectSerializer<Category>());
-        gsonBuilder.registerTypeAdapter(Group.class, new BaseRepeatableGroupSerializer<Group>());
-        gsonBuilder.registerTypeAdapter(Question.class, new QuestionSerializer());
-        gsonBuilder.registerTypeAdapter(Answer.class, new AnswerSerializer());
-        Gson gson = gsonBuilder.create();
-        return gson.toJson(this);
+        try {
+            return ObjectMapperFactory.getObjectMapper().writeValueAsString(this);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public static Form fromJson(String jsonString) {
-        return getFormDeserializer().fromJson(jsonString, Form.class);
+    public static BaseForm getFromJson(String jsonString) throws JsonProcessingException {
+        final BaseForm baseForm = ObjectMapperFactory.getObjectMapper().readValue(jsonString, Form.class);
+        baseForm.getChildren(CustomVariable.class);
+        return baseForm;
     }
 
-    public static Form[] fromJsonList(String jsonString) {
-        return getFormDeserializer().fromJson(jsonString, Form[].class);
-    }
-
-    private static Gson getFormDeserializer() {
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        gsonBuilder.registerTypeAdapter(TreeObject.class, new StorableObjectDeserializer<TreeObject>());
-        gsonBuilder.registerTypeAdapter(Form.class, new FormDeserializer());
-        gsonBuilder.registerTypeAdapter(Category.class, new TreeObjectDeserializer<Category>(Category.class));
-        gsonBuilder.registerTypeAdapter(Group.class, new BaseRepeatableGroupDeserializer<Group>(Group.class));
-        gsonBuilder.registerTypeAdapter(Question.class, new QuestionDeserializer());
-        gsonBuilder.registerTypeAdapter(Answer.class, new AnswerDeserializer());
-        return gsonBuilder.create();
+    public static Form[] fromJsonList(String jsonString) throws JsonProcessingException {
+        return ObjectMapperFactory.getObjectMapper().readValue(jsonString, Form[].class);
     }
 }

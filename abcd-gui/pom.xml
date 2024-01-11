@@ -249,7 +249,6 @@
 					<draftCompile>false</draftCompile>
 					<compileReport>false</compileReport>
 					<style>OBF</style>
-					<strict>true</strict>
 					<runTarget>http://localhost:8080/</runTarget>
 					<gwtSdkFirstInClasspath>true</gwtSdkFirstInClasspath>
 				</configuration>

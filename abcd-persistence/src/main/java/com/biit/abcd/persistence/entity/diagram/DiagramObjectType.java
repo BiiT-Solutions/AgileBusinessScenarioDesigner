@@ -24,9 +24,9 @@ public enum DiagramObjectType {
 		return jsonTypeName;
 	}
 	
-	public static DiagramObjectType getFromJsonType(String jsonType){
+	public static DiagramObjectType get(String jsonType){
 		for(DiagramObjectType value: values()){
-			if(value.jsonTypeName.equals(jsonType)){
+			if(value.jsonTypeName.equalsIgnoreCase(jsonType)){
 				return value;
 			}
 		}

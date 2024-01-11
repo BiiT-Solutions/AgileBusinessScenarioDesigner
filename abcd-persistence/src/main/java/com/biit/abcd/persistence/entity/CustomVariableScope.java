@@ -4,34 +4,43 @@ import com.biit.form.entity.TreeObject;
 
 public enum CustomVariableScope {
 
-	FORM(Form.class, "class.Form", "Form"),
+    FORM(Form.class, "class.Form", "Form"),
 
-	CATEGORY(Category.class, "class.Category", "Category"),
+    CATEGORY(Category.class, "class.Category", "Category"),
 
-	GROUP(Group.class, "class.Group", "Group"),
+    GROUP(Group.class, "class.Group", "Group"),
 
-	QUESTION(Question.class, "class.Question", "Question");
+    QUESTION(Question.class, "class.Question", "Question");
 
-	private Class<? extends TreeObject> scope;
-	private String translation;
-	private String name;
+    private Class<? extends TreeObject> scope;
+    private String translation;
+    private String name;
 
-	private CustomVariableScope(Class<? extends TreeObject> scope, String translation, String name) {
-		this.scope = scope;
-		this.translation = translation;
-		this.name = name;
-	}
+    private CustomVariableScope(Class<? extends TreeObject> scope, String translation, String name) {
+        this.scope = scope;
+        this.translation = translation;
+        this.name = name;
+    }
 
-	public Class<? extends TreeObject> getScope() {
-		return scope;
-	}
+    public Class<? extends TreeObject> getScope() {
+        return scope;
+    }
 
-	public String getTranslationCode() {
-		return translation;
-	}
+    public String getTranslationCode() {
+        return translation;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
+
+    public static CustomVariableScope get(String scope) {
+        for (CustomVariableScope customVariableScope : CustomVariableScope.values()) {
+            if (customVariableScope.name().equalsIgnoreCase(scope)) {
+                return customVariableScope;
+            }
+        }
+        return null;
+    }
 
 }

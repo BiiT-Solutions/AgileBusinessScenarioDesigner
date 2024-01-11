@@ -26,7 +26,7 @@ public class DiagramElementDeserializer implements JsonDeserializer<DiagramEleme
 			throws JsonParseException {
 
 		final JsonObject jsonObject = json.getAsJsonObject();
-		DiagramObjectType diagramObjectType = DiagramObjectType.getFromJsonType(jsonObject.get("type").getAsString());
+		DiagramObjectType diagramObjectType = DiagramObjectType.get(jsonObject.get("type").getAsString());
 
 		switch (diagramObjectType) {
 		case CALCULATION:

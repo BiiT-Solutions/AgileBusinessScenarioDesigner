@@ -28,7 +28,7 @@ public class DiagramObjectDeserializerCommon<T extends DiagramElement> {
 		}
 
 		diagramElement.setJointjsId(JsonUtils.getStringValue(jsonObject, "id"));
-		diagramElement.setType(DiagramObjectType.getFromJsonType(JsonUtils.getStringValue(jsonObject, "type")));
+		diagramElement.setType(DiagramObjectType.get(JsonUtils.getStringValue(jsonObject, "type")));
 		diagramElement.setEmbeds(JsonUtils.getStringValue(jsonObject, "embeds"));
 		diagramElement.setZ(JsonUtils.getIntValue(jsonObject, "z"));
 

@@ -8,12 +8,20 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import com.biit.abcd.serialization.diagram.DiagramTextDeserializer;
+import com.biit.abcd.serialization.diagram.DiagramTextSerializer;
+import com.biit.abcd.serialization.diagram.NodeDeserializer;
+import com.biit.abcd.serialization.diagram.NodeSerializer;
 import com.biit.persistence.entity.StorableObject;
 import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 @Entity
+@JsonDeserialize(using = DiagramTextDeserializer.class)
+@JsonSerialize(using = DiagramTextSerializer.class)
 @Table(name = "diagram_text")
 @Cacheable(true)
 public class DiagramText extends StorableObject {

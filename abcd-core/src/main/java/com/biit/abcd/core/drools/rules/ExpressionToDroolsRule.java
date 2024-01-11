@@ -69,10 +69,10 @@ public class ExpressionToDroolsRule {
 
 	private static List<DroolsRule> createExpressionDroolsRuleSet(DroolsRule droolsRule) {
 
-		List<DroolsRule> droolsRules = new ArrayList<DroolsRule>();
+		List<DroolsRule> droolsRules = new ArrayList<>();
 		ExpressionValueGenericCustomVariable expressionValueGenericCustomVariable = (ExpressionValueGenericCustomVariable) droolsRule.getActions()
 				.getExpressions().get(0);
-		List<TreeObject> treeObjects = new ArrayList<TreeObject>();
+		List<TreeObject> treeObjects = new ArrayList<>();
 		switch (expressionValueGenericCustomVariable.getType()) {
 		case CATEGORY:
 			treeObjects.addAll(expressionValueGenericCustomVariable.getVariable().getForm().getChildren());
