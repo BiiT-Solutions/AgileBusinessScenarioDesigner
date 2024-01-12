@@ -7,7 +7,7 @@ import com.fasterxml.jackson.core.JsonGenerator;
 
 import java.io.IOException;
 
-public class DiagramSourceSerializer extends CustomSerializer<DiagramSource> {
+public class DiagramSourceSerializer extends DiagramElementSerializer<DiagramSource> {
 
     @Override
     public void serialize(DiagramSource src, JsonGenerator jgen) throws IOException {

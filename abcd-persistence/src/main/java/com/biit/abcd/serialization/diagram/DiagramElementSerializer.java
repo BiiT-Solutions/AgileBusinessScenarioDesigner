@@ -6,10 +6,10 @@ import com.fasterxml.jackson.core.JsonGenerator;
 
 import java.io.IOException;
 
-public class DiagramElementSerializer extends CustomSerializer<DiagramElement> {
+public class DiagramElementSerializer<T extends DiagramElement> extends CustomSerializer<T> {
 
     @Override
-    public void serialize(DiagramElement src, JsonGenerator jgen) throws IOException {
+    public void serialize(T src, JsonGenerator jgen) throws IOException {
         super.serialize(src, jgen);
         jgen.writeStringField("tooltip", src.getTooltip());
         jgen.writeObjectField("size", src.getSize());

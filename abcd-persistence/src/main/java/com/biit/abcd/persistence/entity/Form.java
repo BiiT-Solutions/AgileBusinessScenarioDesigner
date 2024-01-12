@@ -24,6 +24,7 @@ import com.biit.form.exceptions.ChildrenNotFoundException;
 import com.biit.form.exceptions.ElementIsReadOnly;
 import com.biit.form.exceptions.NotValidChildException;
 import com.biit.form.jackson.serialization.ObjectMapperFactory;
+import com.biit.form.result.FormResult;
 import com.biit.persistence.entity.StorableObject;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
@@ -801,10 +802,14 @@ public class Form extends BaseForm {
         }
     }
 
-    public static BaseForm getFromJson(String jsonString) throws JsonProcessingException {
-        final BaseForm baseForm = ObjectMapperFactory.getObjectMapper().readValue(jsonString, Form.class);
+    public static Form getFromJson(String jsonString) throws JsonProcessingException {
+        final Form baseForm = ObjectMapperFactory.getObjectMapper().readValue(jsonString, Form.class);
         baseForm.getChildren(CustomVariable.class);
         return baseForm;
+    }
+
+    public static Form fromJson(String jsonString) throws JsonProcessingException {
+        return ObjectMapperFactory.getObjectMapper().readValue(jsonString, Form.class);
     }
 
     public static Form[] fromJsonList(String jsonString) throws JsonProcessingException {

@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 import java.io.IOException;
 
-public class DiagramSourceDeserializer extends CustomDeserializer<DiagramSource> {
+public class DiagramSourceDeserializer extends DiagramElementDeserializer<DiagramSource> {
 
     @Override
     public void deserialize(DiagramSource element, JsonNode jsonObject, DeserializationContext context) throws IOException {

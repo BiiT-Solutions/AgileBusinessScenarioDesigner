@@ -1,17 +1,5 @@
 package com.biit.abcd.persistence.json;
 
-import java.io.FileNotFoundException;
-import java.nio.charset.Charset;
-import java.util.List;
-
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
-import org.testng.Assert;
-import org.testng.annotations.Test;
-
 import com.biit.abcd.persistence.dao.IFormDao;
 import com.biit.abcd.persistence.dao.ISimpleFormViewDao;
 import com.biit.abcd.persistence.entity.Answer;
@@ -31,6 +19,18 @@ import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
 import com.biit.persistence.entity.exceptions.ElementCannotBeRemovedException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 import com.biit.utils.file.FileReader;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
+import org.testng.Assert;
+import org.testng.annotations.Test;
+
+import java.io.FileNotFoundException;
+import java.nio.charset.Charset;
+import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:applicationContextTest.xml"})
@@ -69,7 +69,7 @@ public class FormToJson extends AbstractTransactionalTestNGSpringContextTests {
         }
     }
 
-    @Test(groups = {"abcdToJson"}, expectedExceptions = {NullPointerException.class})
+    @Test(groups = {"abcdToJson"}, expectedExceptions = {RuntimeException.class})
     public void importWebform() throws FileNotFoundException {
         String jsonContent = FileReader.getResource("InvalidForm.json", Charset.defaultCharset());
         System.out.println("-------------------- EXPECTED EXCEPTIONS --------------------");
@@ -77,13 +77,15 @@ public class FormToJson extends AbstractTransactionalTestNGSpringContextTests {
             Form form = Form.fromJson(jsonContent);
             Assert.assertNotNull(form);
             Assert.assertEquals(form.getChildren().size(), 2);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
         } finally {
             System.out.println("----------------- END OF EXPECTED EXCEPTIONS -----------------");
         }
     }
 
     @Test(groups = {"abcdToJson"})
-    public void importForm() throws FileNotFoundException, ClassNotFoundException {
+    public void importForm() throws FileNotFoundException, JsonProcessingException {
         String jsonContent = FileReader.getResource("ValidForm.json", Charset.defaultCharset());
         Form form = Form.fromJson(jsonContent);
         Assert.assertNotNull(form);
@@ -91,7 +93,7 @@ public class FormToJson extends AbstractTransactionalTestNGSpringContextTests {
     }
 
     private Form createForm(String formName) throws NotValidChildException, FieldTooLongException, CharacterNotAllowedException, UnexpectedDatabaseException,
-            ElementCannotBePersistedException, ElementIsReadOnly, ElementCannotBeRemovedException, InvalidAnswerFormatException {
+            ElementIsReadOnly, InvalidAnswerFormatException {
         Form form = new Form();
         form.setOrganizationId(0L);
         form.setCreatedBy(1L);

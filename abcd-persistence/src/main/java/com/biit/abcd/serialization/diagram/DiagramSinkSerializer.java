@@ -6,7 +6,7 @@ import com.fasterxml.jackson.core.JsonGenerator;
 
 import java.io.IOException;
 
-public class DiagramSinkSerializer extends CustomSerializer<DiagramSink> {
+public class DiagramSinkSerializer extends DiagramElementSerializer<DiagramSink> {
 
     @Override
     public void serialize(DiagramSink src, JsonGenerator jgen) throws IOException {

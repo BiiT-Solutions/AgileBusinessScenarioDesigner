@@ -1,76 +1,81 @@
 package com.biit.abcd.persistence.entity.diagram;
 
-import java.util.HashSet;
-import java.util.Set;
+import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
+import com.biit.abcd.serialization.diagram.DiagramExpressionDeserializer;
+import com.biit.abcd.serialization.diagram.DiagramExpressionSerializer;
+import com.biit.persistence.entity.StorableObject;
+import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
-import com.biit.persistence.entity.StorableObject;
-import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
+@JsonDeserialize(using = DiagramExpressionDeserializer.class)
+@JsonSerialize(using = DiagramExpressionSerializer.class)
 @Table(name = "diagram_expression")
 public class DiagramExpression extends DiagramElement {
-	private static final long serialVersionUID = 406552071357685928L;
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name="expression")
-	private ExpressionChain expression;
+    private static final long serialVersionUID = 406552071357685928L;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "expression")
+    private ExpressionChain expression;
 
-	public DiagramExpression() {
-		super();
-		DiagramText biitText = new DiagramText();
-		biitText.setText("Calculation");
-		setText(biitText);
-	}
+    public DiagramExpression() {
+        super();
+        DiagramText biitText = new DiagramText();
+        biitText.setText("Calculation");
+        setText(biitText);
+    }
 
-	public ExpressionChain getExpression() {
-		return expression;
-	}
+    public ExpressionChain getExpression() {
+        return expression;
+    }
 
-	public void setExpression(ExpressionChain expression) {
-		this.expression = expression;
-	}
+    public void setExpression(ExpressionChain expression) {
+        this.expression = expression;
+    }
 
-	@Override
-	public void resetIds() {
-		super.resetIds();
-		if (expression != null) {
-			expression.resetIds();
-		}
-	}
+    @Override
+    public void resetIds() {
+        super.resetIds();
+        if (expression != null) {
+            expression.resetIds();
+        }
+    }
 
-	/**
-	 * Has no inner elements. Returns an empty set.
-	 */
-	@Override
-	public Set<StorableObject> getAllInnerStorableObjects() {
-		Set<StorableObject> innerStorableObjects = new HashSet<>();
-		if (expression != null) {
-			innerStorableObjects.add(expression);
-			innerStorableObjects.addAll(expression.getAllInnerStorableObjects());
-		}
-		return innerStorableObjects;
-	}
+    /**
+     * Has no inner elements. Returns an empty set.
+     */
+    @Override
+    public Set<StorableObject> getAllInnerStorableObjects() {
+        Set<StorableObject> innerStorableObjects = new HashSet<>();
+        if (expression != null) {
+            innerStorableObjects.add(expression);
+            innerStorableObjects.addAll(expression.getAllInnerStorableObjects());
+        }
+        return innerStorableObjects;
+    }
 
-	@Override
-	public void copyData(StorableObject object) throws NotValidStorableObjectException {
-		if (object instanceof DiagramExpression) {
-			super.copyData(object);
-			DiagramExpression diagramCalculation = (DiagramExpression) object;
+    @Override
+    public void copyData(StorableObject object) throws NotValidStorableObjectException {
+        if (object instanceof DiagramExpression) {
+            super.copyData(object);
+            DiagramExpression diagramCalculation = (DiagramExpression) object;
 
-			if (diagramCalculation.getExpression() != null) {
-				ExpressionChain formExpression = new ExpressionChain();
-				formExpression.copyData(diagramCalculation.getExpression());
-				setExpression(formExpression);
-			}
-		} else {
-			throw new NotValidStorableObjectException("Object '" + object
-					+ "' is not an instance of DiagramCalculation.");
-		}
-	}
+            if (diagramCalculation.getExpression() != null) {
+                ExpressionChain formExpression = new ExpressionChain();
+                formExpression.copyData(diagramCalculation.getExpression());
+                setExpression(formExpression);
+            }
+        } else {
+            throw new NotValidStorableObjectException("Object '" + object
+                    + "' is not an instance of DiagramCalculation.");
+        }
+    }
 }

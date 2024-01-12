@@ -1,10 +1,17 @@
 package com.biit.abcd.persistence.entity.diagram;
 
-import java.sql.Timestamp;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import com.biit.abcd.persistence.entity.expressions.Expression;
+import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
+import com.biit.abcd.serialization.diagram.DiagramLinkDeserializer;
+import com.biit.abcd.serialization.diagram.DiagramLinkSerializer;
+import com.biit.form.jackson.serialization.ObjectMapperFactory;
+import com.biit.persistence.entity.StorableObject;
+import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
+import com.biit.usermanager.entity.IUser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.google.gson.annotations.Expose;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -13,392 +20,389 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
-import com.biit.abcd.gson.utils.DiagramLinkSerializer;
-import com.biit.abcd.persistence.entity.expressions.Expression;
-import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
-import com.biit.persistence.entity.StorableObject;
-import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
-import com.biit.usermanager.entity.IUser;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.annotations.Expose;
+import java.sql.Timestamp;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
+@JsonDeserialize(using = DiagramLinkDeserializer.class)
+@JsonSerialize(using = DiagramLinkSerializer.class)
 @Table(name = "diagram_links")
 public class DiagramLink extends DiagramObject {
-	private static final long serialVersionUID = 5533529349122059755L;
+    private static final long serialVersionUID = 5533529349122059755L;
 
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
-	@JoinColumn(name = "expression_chain")
-	private ExpressionChain expressionChain;
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    @JoinColumn(name = "expression_chain")
+    private ExpressionChain expressionChain;
 
-	@Expose
-	@OneToOne(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
-	@JoinColumn(name="source")
-	private Node source;
+    @Expose
+    @OneToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    @JoinColumn(name = "source")
+    private Node source;
 
-	@Expose
-	@OneToOne(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
-	@JoinColumn(name="target")
-	private Node target;
+    @Expose
+    @OneToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    @JoinColumn(name = "target")
+    private Node target;
 
-	private String text;
+    private String text;
 
-	@Expose
-	private boolean smooth;
-	
-	@Expose
-	private boolean manhattan;
+    @Expose
+    private boolean smooth;
 
-	@Column(length = 1000000)
-	private String attrs;
-	
-	@Column(length = 1000000)
-	private String vertices;
+    @Expose
+    private boolean manhattan;
 
-	public DiagramLink() {
-		super();
-		expressionChain = new ExpressionChain();
-	}
+    @Column(length = 1000000)
+    private String attrs;
 
-	public DiagramLink(Node source, Node target) {
-		super();
-		expressionChain = new ExpressionChain();
-		setSource(source);
-		setTarget(target);
-	}
+    @Column(length = 1000000)
+    private String vertices;
 
-	@Override
-	public void resetIds() {
-		super.resetIds();
-		expressionChain.resetIds();
-		if (source != null) {
-			source.resetIds();
-		}
-		if (target != null) {
-			target.resetIds();
-		}
-	}
+    public DiagramLink() {
+        super();
+        expressionChain = new ExpressionChain();
+    }
 
-	public Node getSource() {
-		return source;
-	}
+    public DiagramLink(Node source, Node target) {
+        super();
+        expressionChain = new ExpressionChain();
+        setSource(source);
+        setTarget(target);
+    }
 
-	public DiagramElement getSourceElement() {
-		if (getParent() == null) {
-			throw new RuntimeException("Diagram Link getSourceElement used without diagram.");
-		}
-		String jointJsId = source.getJointjsId();
-		return (DiagramElement) getParent().findDiagramObjectByJointJsId(jointJsId);
-	}
+    @Override
+    public void resetIds() {
+        super.resetIds();
+        expressionChain.resetIds();
+        if (source != null) {
+            source.resetIds();
+        }
+        if (target != null) {
+            target.resetIds();
+        }
+    }
 
-	public void setSource(Node source) {
-		this.source = source;
-	}
+    public Node getSource() {
+        return source;
+    }
 
-	public DiagramElement getTargetElement() {
-		if (getParent() == null) {
-			throw new RuntimeException("Diagram Link getTargetElement used without diagram.");
-		}
-		String jointJsId = target.getJointjsId();
-		return (DiagramElement) getParent().findDiagramObjectByJointJsId(jointJsId);
-	}
+    public DiagramElement getSourceElement() {
+        if (getParent() == null) {
+            throw new RuntimeException("Diagram Link getSourceElement used without diagram.");
+        }
+        String jointJsId = source.getJointjsId();
+        return (DiagramElement) getParent().findDiagramObjectByJointJsId(jointJsId);
+    }
 
-	public Node getTarget() {
-		return target;
-	}
+    public void setSource(Node source) {
+        this.source = source;
+    }
 
-	public void setTarget(Node target) {
-		this.target = target;
-	}
+    public DiagramElement getTargetElement() {
+        if (getParent() == null) {
+            throw new RuntimeException("Diagram Link getTargetElement used without diagram.");
+        }
+        String jointJsId = target.getJointjsId();
+        return (DiagramElement) getParent().findDiagramObjectByJointJsId(jointJsId);
+    }
 
-	public boolean isSmooth() {
-		return smooth;
-	}
+    public Node getTarget() {
+        return target;
+    }
 
-	public void setSmooth(boolean smooth) {
-		this.smooth = smooth;
-	}
+    public void setTarget(Node target) {
+        this.target = target;
+    }
 
-	public boolean isManhattan() {
-		return manhattan;
-	}
+    public boolean isSmooth() {
+        return smooth;
+    }
 
-	public void setManhattan(boolean manhattan) {
-		this.manhattan = manhattan;
-	}
+    public void setSmooth(boolean smooth) {
+        this.smooth = smooth;
+    }
 
-	public String getAttrs() {
-		return attrs;
-	}
+    public boolean isManhattan() {
+        return manhattan;
+    }
 
-	public void setAttrs(String attrs) {
-		this.attrs = attrs;
-	}
+    public void setManhattan(boolean manhattan) {
+        this.manhattan = manhattan;
+    }
 
-	public String getText() {
-		return text;
-	}
+    public String getAttrs() {
+        return attrs;
+    }
 
-	public void setText(String text) {
-		this.text = text;
-	}
+    public void setAttrs(String attrs) {
+        this.attrs = attrs;
+    }
 
-	public void setVertices(String vertices) {
-		this.vertices = vertices;
-	}
+    public String getText() {
+        return text;
+    }
 
-	public String getVertices() {
-		return vertices;
-	}
+    public void setText(String text) {
+        this.text = text;
+    }
 
-	@Override
-	public String toJson() {
-		GsonBuilder gsonBuilder = new GsonBuilder().excludeFieldsWithoutExposeAnnotation();
-		gsonBuilder.registerTypeAdapter(DiagramLink.class, new DiagramLinkSerializer());
-		Gson gson = gsonBuilder.create();
-		String json = gson.toJson(this);
-		return json;
-	}
+    public void setVertices(String vertices) {
+        this.vertices = vertices;
+    }
 
-	public boolean hasSourceFork() {
-		if (getSourceElement() instanceof DiagramFork) {
-			return true;
-		}
-		return false;
-	}
+    public String getVertices() {
+        return vertices;
+    }
 
-	public boolean isOthers() {
-		DiagramElement source = getSourceElement();
-		if (source instanceof DiagramFork) {
-			DiagramFork forkSource = (DiagramFork) source;
-			if (!isAnswerEmpty()) {
-				return false;
-			}
+    @Override
+    public String toJson() {
+        try {
+            return ObjectMapperFactory.getObjectMapper().writeValueAsString(this);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
-			if (getParent() == null) {
-				throw new RuntimeException("Diagram Link isOthers used without diagram.");
-			}
+    public boolean hasSourceFork() {
+        if (getSourceElement() instanceof DiagramFork) {
+            return true;
+        }
+        return false;
+    }
 
-			List<DiagramLink> links = getParent().getOutgoingLinks(forkSource);
-			if (links.size() == 1) {
-				return false;
-			}
-			int numOfEmptyLinks = 0;
-			for (DiagramLink link : links) {
-				if (link.isAnswerEmpty()) {
-					numOfEmptyLinks++;
-				}
-			}
-			if (numOfEmptyLinks > 1) {
-				return false;
-			} else {
-				return true;
-			}
-		} else {
-			return false;
-		}
-	}
+    public boolean isOthers() {
+        DiagramElement source = getSourceElement();
+        if (source instanceof DiagramFork) {
+            DiagramFork forkSource = (DiagramFork) source;
+            if (!isAnswerEmpty()) {
+                return false;
+            }
 
-	private boolean isAnswerEmpty() {
-		if ((expressionChain == null) || expressionChain.getExpressions().isEmpty()) {
-			return true;
-		} else if (hasSourceFork()) {
-			if (expressionChain.getExpressions().size() <= 1) {
-				return true;
-			}
-		}
-		return false;
-	}
+            if (getParent() == null) {
+                throw new RuntimeException("Diagram Link isOthers used without diagram.");
+            }
 
-	public String getCorrectedText() {
-		if (hasSourceFork()) {
-			// Source is Fork
-			if (isAnswerEmpty()) {
-				if (isOthers()) {
-					return "others";
-				} else {
-					return "";
-				}
-			} else {
-				if (expressionChain != null) {
-					return getTextWithoutFirstExpression();
-					// return expressionChain.getExpression();
-				} else {
-					return "";
-				}
-			}
-		} else {
-			return getText();
-		}
-	}
+            List<DiagramLink> links = getParent().getOutgoingLinks(forkSource);
+            if (links.size() == 1) {
+                return false;
+            }
+            int numOfEmptyLinks = 0;
+            for (DiagramLink link : links) {
+                if (link.isAnswerEmpty()) {
+                    numOfEmptyLinks++;
+                }
+            }
+            if (numOfEmptyLinks > 1) {
+                return false;
+            } else {
+                return true;
+            }
+        } else {
+            return false;
+        }
+    }
 
-	public void clear() {
-		expressionChain = null;
-		setText("");
-	}
+    private boolean isAnswerEmpty() {
+        if ((expressionChain == null) || expressionChain.getExpressions().isEmpty()) {
+            return true;
+        } else if (hasSourceFork()) {
+            if (expressionChain.getExpressions().size() <= 1) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-	@Override
-	public void setCreatedBy(IUser<Long> user) {
-		super.setCreatedBy(user);
-		if (source != null) {
-			source.setCreatedBy(user);
-		}
-		if (target != null) {
-			target.setCreatedBy(user);
-		}
-	}
+    public String getCorrectedText() {
+        if (hasSourceFork()) {
+            // Source is Fork
+            if (isAnswerEmpty()) {
+                if (isOthers()) {
+                    return "others";
+                } else {
+                    return "";
+                }
+            } else {
+                if (expressionChain != null) {
+                    return getTextWithoutFirstExpression();
+                    // return expressionChain.getExpression();
+                } else {
+                    return "";
+                }
+            }
+        } else {
+            return getText();
+        }
+    }
 
-	@Override
-	public void setUpdatedBy(IUser<Long> user) {
-		super.setUpdatedBy(user);
-		if (source != null) {
-			source.setUpdatedBy(user);
-		}
-		if (target != null) {
-			target.setUpdatedBy(user);
-		}
-	}
+    public void clear() {
+        expressionChain = null;
+        setText("");
+    }
 
-	@Override
-	public void setUpdateTime(Timestamp dateUpdated) {
-		super.setUpdateTime(dateUpdated);
-		if (source != null) {
-			source.setUpdateTime(dateUpdated);
-		}
-		if (target != null) {
-			target.setUpdateTime(dateUpdated);
-		}
-	}
+    @Override
+    public void setCreatedBy(IUser<Long> user) {
+        super.setCreatedBy(user);
+        if (source != null) {
+            source.setCreatedBy(user);
+        }
+        if (target != null) {
+            target.setCreatedBy(user);
+        }
+    }
 
-	@Override
-	public void update(DiagramObject object, IUser<Long> user) {
-		super.update(object, user);
-		if (object instanceof DiagramLink) {
-			DiagramLink link = (DiagramLink) object;
+    @Override
+    public void setUpdatedBy(IUser<Long> user) {
+        super.setUpdatedBy(user);
+        if (source != null) {
+            source.setUpdatedBy(user);
+        }
+        if (target != null) {
+            target.setUpdatedBy(user);
+        }
+    }
 
-			if (!link.expressionChain.getExpressions().isEmpty()) {
-				expressionChain = link.expressionChain;
-			}
+    @Override
+    public void setUpdateTime(Timestamp dateUpdated) {
+        super.setUpdateTime(dateUpdated);
+        if (source != null) {
+            source.setUpdateTime(dateUpdated);
+        }
+        if (target != null) {
+            target.setUpdateTime(dateUpdated);
+        }
+    }
 
-			if (source == null) {
-				source = new Node();
-			}
-			source.update(link.getSource());
+    @Override
+    public void update(DiagramObject object, IUser<Long> user) {
+        super.update(object, user);
+        if (object instanceof DiagramLink) {
+            DiagramLink link = (DiagramLink) object;
 
-			if (target == null) {
-				target = new Node();
-			}
-			target.update(link.getTarget());
+            if (!link.expressionChain.getExpressions().isEmpty()) {
+                expressionChain = link.expressionChain;
+            }
 
-			if (link.getText() != null) {
-				text = new String(link.getText());
-			}
-			smooth = link.isSmooth();
-			manhattan = link.isManhattan();
-			if (link.getAttrs() != null) {
-				attrs = new String(link.getAttrs());
-			}
-			if (link.getVertices() != null) {
-				vertices = new String(link.getVertices());
-			}
-		}
-	}
+            if (source == null) {
+                source = new Node();
+            }
+            source.update(link.getSource());
 
-	public ExpressionChain getExpressionChain() {
-		return expressionChain;
-	}
+            if (target == null) {
+                target = new Node();
+            }
+            target.update(link.getTarget());
 
-	/**
-	 * Avoid this method. Expression chain is a OneToOne relationship and
-	 * currently Hibernate doesn't handle correctly the Orphan removal. Use
-	 * setExpressions of ExpressionChain.
-	 * 
-	 * @param expressionChain the expression
-	 */
-	public void setExpressionChain(ExpressionChain expressionChain) {
-		this.expressionChain = expressionChain;
-	}
+            if (link.getText() != null) {
+                text = new String(link.getText());
+            }
+            smooth = link.isSmooth();
+            manhattan = link.isManhattan();
+            if (link.getAttrs() != null) {
+                attrs = new String(link.getAttrs());
+            }
+            if (link.getVertices() != null) {
+                vertices = new String(link.getVertices());
+            }
+        }
+    }
 
-	/**
-	 * Replace any existing expressions with this expression.
-	 * 
-	 * @param expression the expression
-	 */
-	public void replaceExpressions(Expression expression) {
-		getExpressionChain().setExpressions(Arrays.asList(expression));
-	}
+    public ExpressionChain getExpressionChain() {
+        return expressionChain;
+    }
 
-	public String getTextWithoutFirstExpression() {
-		List<Expression> auxExps = expressionChain.getExpressions();
-		if (auxExps.size() > 0) {
-			List<Expression> expressions = auxExps.subList(1, auxExps.size());
-			if (expressions.isEmpty()) {
-				if (isOthers()) {
-					return "others";
-				} else {
-					return "";
-				}
-			}
-			String result = "";
-			for (Expression expression : expressions) {
-				result += expression.getRepresentation(true) + " ";
-			}
-			return result.trim();
-		}
-		return "";
-	}
+    /**
+     * Avoid this method. Expression chain is a OneToOne relationship and
+     * currently Hibernate doesn't handle correctly the Orphan removal. Use
+     * setExpressions of ExpressionChain.
+     *
+     * @param expressionChain the expression
+     */
+    public void setExpressionChain(ExpressionChain expressionChain) {
+        this.expressionChain = expressionChain;
+    }
 
-	@Override
-	public Set<StorableObject> getAllInnerStorableObjects() {
-		Set<StorableObject> innerStorableObjects = new HashSet<>();
-		if (source != null) {
-			innerStorableObjects.add(source);
-			innerStorableObjects.addAll(source.getAllInnerStorableObjects());
-		}
-		if (target != null) {
-			innerStorableObjects.add(target);
-			innerStorableObjects.addAll(target.getAllInnerStorableObjects());
-		}
-		if (expressionChain != null) {
-			innerStorableObjects.add(expressionChain);
-			innerStorableObjects.addAll(expressionChain.getAllInnerStorableObjects());
-		}
-		return innerStorableObjects;
-	}
+    /**
+     * Replace any existing expressions with this expression.
+     *
+     * @param expression the expression
+     */
+    public void replaceExpressions(Expression expression) {
+        getExpressionChain().setExpressions(Arrays.asList(expression));
+    }
 
-	@Override
-	public void copyData(StorableObject object) throws NotValidStorableObjectException {
-		if (object instanceof DiagramLink) {
-			super.copyData(object);
-			DiagramLink diagramLink = (DiagramLink) object;
+    public String getTextWithoutFirstExpression() {
+        List<Expression> auxExps = expressionChain.getExpressions();
+        if (auxExps.size() > 0) {
+            List<Expression> expressions = auxExps.subList(1, auxExps.size());
+            if (expressions.isEmpty()) {
+                if (isOthers()) {
+                    return "others";
+                } else {
+                    return "";
+                }
+            }
+            String result = "";
+            for (Expression expression : expressions) {
+                result += expression.getRepresentation(true) + " ";
+            }
+            return result.trim();
+        }
+        return "";
+    }
 
-			if (diagramLink.getExpressionChain() != null) {
-				ExpressionChain expressionChain = new ExpressionChain();
-				expressionChain.copyData(diagramLink.getExpressionChain());
-				setExpressionChain(expressionChain);
-			}
+    @Override
+    public Set<StorableObject> getAllInnerStorableObjects() {
+        Set<StorableObject> innerStorableObjects = new HashSet<>();
+        if (source != null) {
+            innerStorableObjects.add(source);
+            innerStorableObjects.addAll(source.getAllInnerStorableObjects());
+        }
+        if (target != null) {
+            innerStorableObjects.add(target);
+            innerStorableObjects.addAll(target.getAllInnerStorableObjects());
+        }
+        if (expressionChain != null) {
+            innerStorableObjects.add(expressionChain);
+            innerStorableObjects.addAll(expressionChain.getAllInnerStorableObjects());
+        }
+        return innerStorableObjects;
+    }
 
-			if (diagramLink.getSource() != null) {
-				Node source = new Node();
-				source.copyData(diagramLink.getSource());
-				setSource(source);
-			}
+    @Override
+    public void copyData(StorableObject object) throws NotValidStorableObjectException {
+        if (object instanceof DiagramLink) {
+            super.copyData(object);
+            DiagramLink diagramLink = (DiagramLink) object;
 
-			if (diagramLink.getTarget() != null) {
-				Node target = new Node();
-				target.copyData(diagramLink.getTarget());
-				setTarget(target);
-			}
+            if (diagramLink.getExpressionChain() != null) {
+                ExpressionChain expressionChain = new ExpressionChain();
+                expressionChain.copyData(diagramLink.getExpressionChain());
+                setExpressionChain(expressionChain);
+            }
 
-			text = diagramLink.getText();
-			manhattan = diagramLink.isManhattan();
-			smooth = diagramLink.isSmooth();
-			vertices = diagramLink.getVertices();
-			attrs = diagramLink.getAttrs();
-		} else {
-			throw new NotValidStorableObjectException("Object '" + object + "' is not an instance of DiagramLink.");
-		}
-	}
+            if (diagramLink.getSource() != null) {
+                Node source = new Node();
+                source.copyData(diagramLink.getSource());
+                setSource(source);
+            }
+
+            if (diagramLink.getTarget() != null) {
+                Node target = new Node();
+                target.copyData(diagramLink.getTarget());
+                setTarget(target);
+            }
+
+            text = diagramLink.getText();
+            manhattan = diagramLink.isManhattan();
+            smooth = diagramLink.isSmooth();
+            vertices = diagramLink.getVertices();
+            attrs = diagramLink.getAttrs();
+        } else {
+            throw new NotValidStorableObjectException("Object '" + object + "' is not an instance of DiagramLink.");
+        }
+    }
 }
