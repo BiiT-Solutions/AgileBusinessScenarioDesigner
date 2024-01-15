@@ -1,8 +1,12 @@
 package com.biit.abcd.persistence.entity.expressions;
 
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import com.biit.abcd.serialization.expressions.ExpressionValueTreeObjectReferenceDeserializer;
+import com.biit.abcd.serialization.expressions.ExpressionValueTreeObjectReferenceSerializer;
+import com.biit.form.entity.TreeObject;
+import com.biit.persistence.entity.StorableObject;
+import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -11,12 +15,14 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import com.biit.form.entity.TreeObject;
-import com.biit.persistence.entity.StorableObject;
-import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
+import javax.persistence.Transient;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 
 @Entity
+@JsonDeserialize(using = ExpressionValueTreeObjectReferenceDeserializer.class)
+@JsonSerialize(using = ExpressionValueTreeObjectReferenceSerializer.class)
 @Table(name = "expression_value_tree_object_reference")
 public class ExpressionValueTreeObjectReference extends ExpressionValue<TreeObject> {
     private static final long serialVersionUID = 3933694492937877414L;
@@ -27,6 +33,10 @@ public class ExpressionValueTreeObjectReference extends ExpressionValue<TreeObje
 
     @Enumerated(EnumType.STRING)
     private QuestionDateUnit unit = null;
+
+    //For helping jackson
+    @Transient
+    private transient String referenceId;
 
     public ExpressionValueTreeObjectReference() {
         super();
@@ -57,6 +67,14 @@ public class ExpressionValueTreeObjectReference extends ExpressionValue<TreeObje
 
     public synchronized void setUnit(QuestionDateUnit unit) {
         this.unit = unit;
+    }
+
+    public String getReferenceId() {
+        return referenceId;
+    }
+
+    public void setReferenceId(String referenceId) {
+        this.referenceId = referenceId;
     }
 
     @Override
@@ -100,6 +118,7 @@ public class ExpressionValueTreeObjectReference extends ExpressionValue<TreeObje
             super.copyData(object);
             ExpressionValueTreeObjectReference expressionValueTreeObjectReference = (ExpressionValueTreeObjectReference) object;
             setUnit(expressionValueTreeObjectReference.getUnit());
+            setReferenceId(expressionValueTreeObjectReference.getReferenceId());
             // Rule tables can have empty expressions with null inside
             if (expressionValueTreeObjectReference.getValue() != null) {
                 // Later the reference must be updated with current
@@ -111,5 +130,4 @@ public class ExpressionValueTreeObjectReference extends ExpressionValue<TreeObje
                     + "' is not an instance of ExpressionValueTreeObjectReference.");
         }
     }
-
 }
