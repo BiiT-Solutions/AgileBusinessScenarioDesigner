@@ -1,5 +1,7 @@
 package com.biit.abcd.persistence.entity.expressions;
 
+import com.biit.abcd.persistence.entity.AnswerFormat;
+
 /**
  * Already defined functions. Used in JExVal.
  *
@@ -52,6 +54,15 @@ public enum AvailableFunction {
 
 	public String getValue() {
 		return value;
+	}
+
+	public static AvailableFunction get(String availableFunction) {
+		for (AvailableFunction function : AvailableFunction.values()) {
+			if (function.name().equalsIgnoreCase(availableFunction)) {
+				return function;
+			}
+		}
+		return null;
 	}
 
 	@Override

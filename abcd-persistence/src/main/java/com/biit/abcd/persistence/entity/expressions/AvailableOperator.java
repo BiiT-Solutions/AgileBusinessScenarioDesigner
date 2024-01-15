@@ -57,7 +57,16 @@ public enum AvailableOperator {
 
 	public static AvailableOperator getOperator(String value) {
 		for (AvailableOperator operator : AvailableOperator.values()) {
-			if (operator.caption.equals(value)) {
+			if (operator.caption.equalsIgnoreCase(value)) {
+				return operator;
+			}
+		}
+		return null;
+	}
+
+	public static AvailableOperator get(String value) {
+		for (AvailableOperator operator : AvailableOperator.values()) {
+			if (operator.name().equalsIgnoreCase(value)) {
 				return operator;
 			}
 		}

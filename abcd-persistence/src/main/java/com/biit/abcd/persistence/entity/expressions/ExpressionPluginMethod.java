@@ -1,105 +1,110 @@
 package com.biit.abcd.persistence.entity.expressions;
 
-import java.util.HashSet;
-import java.util.Set;
+import com.biit.abcd.serialization.expressions.ExpressionPluginMethodDeserializer;
+import com.biit.abcd.serialization.expressions.ExpressionPluginMethodSerializer;
+import com.biit.persistence.entity.StorableObject;
+import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-
-import com.biit.persistence.entity.StorableObject;
-import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
+@JsonDeserialize(using = ExpressionPluginMethodDeserializer.class)
+@JsonSerialize(using = ExpressionPluginMethodSerializer.class)
 @Table(name = "expression_plugin_method")
 public class ExpressionPluginMethod extends Expression {
-	private static final long serialVersionUID = -1357787104083039897L;
-	
-	@Column(name="plugin_interface")
-	private Class<?> pluginInterface = null;
-	
-	@Column(name="plugin_name")
-	private String pluginName = null;
-	
-	@Column(name="plugin_method_name")
-	private String pluginMethodName = null;
+    private static final long serialVersionUID = -1357787104083039897L;
 
-	public ExpressionPluginMethod() {
-		super();
-	}
+    @Column(name = "plugin_interface")
+    private Class<?> pluginInterface = null;
 
-	public ExpressionPluginMethod(Class<?> pluginInterface, String pluginName, String pluginMethodName) {
-		super();
-		setPluginInterface(pluginInterface);
-		setPluginName(pluginName);
-		setPluginMethodName(pluginMethodName);
-	}
+    @Column(name = "plugin_name")
+    private String pluginName = null;
 
-	public Class<?> getPluginInterface() {
-		return pluginInterface;
-	}
+    @Column(name = "plugin_method_name")
+    private String pluginMethodName = null;
 
-	public void setPluginInterface(Class<?> pluginInterface) {
-		this.pluginInterface = pluginInterface;
-	}
+    public ExpressionPluginMethod() {
+        super();
+    }
 
-	public String getPluginName() {
-		return pluginName;
-	}
+    public ExpressionPluginMethod(Class<?> pluginInterface, String pluginName, String pluginMethodName) {
+        super();
+        setPluginInterface(pluginInterface);
+        setPluginName(pluginName);
+        setPluginMethodName(pluginMethodName);
+    }
 
-	public void setPluginName(String pluginName) {
-		this.pluginName = pluginName;
-	}
+    public Class<?> getPluginInterface() {
+        return pluginInterface;
+    }
 
-	public String getPluginMethodName() {
-		return pluginMethodName;
-	}
+    public void setPluginInterface(Class<?> pluginInterface) {
+        this.pluginInterface = pluginInterface;
+    }
 
-	public void setPluginMethodName(String pluginMethodName) {
-		this.pluginMethodName = pluginMethodName;
-	}
+    public String getPluginName() {
+        return pluginName;
+    }
 
-	@Override
-	protected String getExpression() {
-		if (getPluginName() != null && getPluginMethodName() != null) {
-			return getPluginName() + "." + getPluginMethodName().substring(6) + "(";
-		} else {
-			return "";
-		}
-	}
+    public void setPluginName(String pluginName) {
+        this.pluginName = pluginName;
+    }
 
-	@Override
-	public String getRepresentation(boolean showWhiteCharacter) {
-		if (getPluginName() != null && getPluginMethodName() != null) {
-			return getPluginName() + "." + getPluginMethodName().substring(6) + "(";
-		} else {
-			return "";
-		}
-	}
+    public String getPluginMethodName() {
+        return pluginMethodName;
+    }
 
-	@Override
-	public Object getValue() {
-		return null;
-	}
+    public void setPluginMethodName(String pluginMethodName) {
+        this.pluginMethodName = pluginMethodName;
+    }
 
-	@Override
-	public Set<StorableObject> getAllInnerStorableObjects() {
-		Set<StorableObject> innerStorableObjects = new HashSet<>();
-		return innerStorableObjects;
-	}
+    @Override
+    protected String getExpression() {
+        if (getPluginName() != null && getPluginMethodName() != null) {
+            return getPluginName() + "." + getPluginMethodName().substring(6) + "(";
+        } else {
+            return "";
+        }
+    }
 
-	@Override
-	public void copyData(StorableObject object) throws NotValidStorableObjectException {
-		if (object instanceof ExpressionPluginMethod) {
-			ExpressionPluginMethod expressionMethod = (ExpressionPluginMethod) object;
-			super.copyData(expressionMethod);
-			setPluginInterface(expressionMethod.getPluginInterface());
-			setPluginName(expressionMethod.getPluginName());
-			setPluginMethodName(expressionMethod.getPluginMethodName());
-		} else {
-			throw new NotValidStorableObjectException("Object '" + object
-					+ "' is not an instance of ExpressionPluginMethod.");
-		}
-	}
+    @Override
+    public String getRepresentation(boolean showWhiteCharacter) {
+        if (getPluginName() != null && getPluginMethodName() != null) {
+            return getPluginName() + "." + getPluginMethodName().substring(6) + "(";
+        } else {
+            return "";
+        }
+    }
+
+    @Override
+    public Object getValue() {
+        return null;
+    }
+
+    @Override
+    public Set<StorableObject> getAllInnerStorableObjects() {
+        Set<StorableObject> innerStorableObjects = new HashSet<>();
+        return innerStorableObjects;
+    }
+
+    @Override
+    public void copyData(StorableObject object) throws NotValidStorableObjectException {
+        if (object instanceof ExpressionPluginMethod) {
+            ExpressionPluginMethod expressionMethod = (ExpressionPluginMethod) object;
+            super.copyData(expressionMethod);
+            setPluginInterface(expressionMethod.getPluginInterface());
+            setPluginName(expressionMethod.getPluginName());
+            setPluginMethodName(expressionMethod.getPluginMethodName());
+        } else {
+            throw new NotValidStorableObjectException("Object '" + object
+                    + "' is not an instance of ExpressionPluginMethod.");
+        }
+    }
 
 }

@@ -1,80 +1,84 @@
 package com.biit.abcd.persistence.entity.expressions;
 
-import java.util.HashSet;
-import java.util.Set;
+import com.biit.abcd.serialization.expressions.ExpressionValueBooleanDeserializer;
+import com.biit.abcd.serialization.expressions.ExpressionValueBooleanSerializer;
+import com.biit.persistence.entity.StorableObject;
+import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-
-import com.biit.persistence.entity.StorableObject;
-import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Defines boolean values.
- * 
  */
 @Entity
+@JsonDeserialize(using = ExpressionValueBooleanDeserializer.class)
+@JsonSerialize(using = ExpressionValueBooleanSerializer.class)
 @Table(name = "expression_value_boolean")
 public class ExpressionValueBoolean extends ExpressionValue<Boolean> {
-	private static final long serialVersionUID = 4438705376703075628L;
+    private static final long serialVersionUID = 4438705376703075628L;
 
-	@Column(name = "expression_value")
-	private Boolean value;
+    @Column(name = "expression_value")
+    private Boolean value;
 
-	protected ExpressionValueBoolean() {
-		super();
-		value = true;
-	}
+    protected ExpressionValueBoolean() {
+        super();
+        value = true;
+    }
 
-	public ExpressionValueBoolean(Boolean value) {
-		super();
-		setValue(value);
-	}
+    public ExpressionValueBoolean(Boolean value) {
+        super();
+        setValue(value);
+    }
 
-	@Override
-	public String getRepresentation(boolean showWhiteCharacter) {
-		return value.toString();
-	}
+    @Override
+    public String getRepresentation(boolean showWhiteCharacter) {
+        return value.toString();
+    }
 
-	// public T getValue() {
-	// return value;
-	// }
+    // public T getValue() {
+    // return value;
+    // }
 
-	@Override
-	public Boolean getValue() {
-		return value;
-	}
+    @Override
+    public Boolean getValue() {
+        return value;
+    }
 
-	@Override
-	public String getExpression() {
-		if (value) {
-			return "1";
-		} else {
-			return "0";
-		}
-	}
+    @Override
+    public String getExpression() {
+        if (value) {
+            return "1";
+        } else {
+            return "0";
+        }
+    }
 
-	@Override
-	public void setValue(Boolean value) {
-		this.value = value;
-	}
+    @Override
+    public void setValue(Boolean value) {
+        this.value = value;
+    }
 
-	@Override
-	public Set<StorableObject> getAllInnerStorableObjects() {
-		Set<StorableObject> innerStorableObjects = new HashSet<>();
-		return innerStorableObjects;
-	}
+    @Override
+    public Set<StorableObject> getAllInnerStorableObjects() {
+        Set<StorableObject> innerStorableObjects = new HashSet<>();
+        return innerStorableObjects;
+    }
 
-	@Override
-	public void copyData(StorableObject object) throws NotValidStorableObjectException {
-		if (object instanceof ExpressionValueBoolean) {
-			super.copyData(object);
-			ExpressionValueBoolean expressionValueBoolean = (ExpressionValueBoolean) object;
-			this.setValue(expressionValueBoolean.getValue());
-		} else {
-			throw new NotValidStorableObjectException("Object '" + object + "' is not an instance of ExpressionValueBoolean.");
-		}
-	}
+    @Override
+    public void copyData(StorableObject object) throws NotValidStorableObjectException {
+        if (object instanceof ExpressionValueBoolean) {
+            super.copyData(object);
+            ExpressionValueBoolean expressionValueBoolean = (ExpressionValueBoolean) object;
+            this.setValue(expressionValueBoolean.getValue());
+        } else {
+            throw new NotValidStorableObjectException("Object '" + object + "' is not an instance of ExpressionValueBoolean.");
+        }
+    }
 
 }
