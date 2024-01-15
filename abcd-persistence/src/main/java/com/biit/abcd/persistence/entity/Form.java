@@ -106,6 +106,9 @@ public class Form extends BaseForm {
     @Enumerated(EnumType.STRING)
     private FormWorkStatus status = FormWorkStatus.DESIGN;
 
+    @Column(name = "json")
+    private String json;
+
     public Form() {
         super();
         diagrams = new HashSet<>();
@@ -813,5 +816,13 @@ public class Form extends BaseForm {
 
     public static Form[] fromJsonList(String jsonString) throws JsonProcessingException {
         return ObjectMapperFactory.getObjectMapper().readValue(jsonString, Form[].class);
+    }
+
+    public String getJson() {
+        return json;
+    }
+
+    public void setJson(String json) {
+        this.json = json;
     }
 }

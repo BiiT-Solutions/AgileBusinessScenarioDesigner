@@ -39,6 +39,7 @@ public class FormDao extends AnnotatedGenericDao<Form, Long> implements IFormDao
 	@CachePut(value = "springFormCache", key = "#form?.getId()", condition = "#form.getId() != null")
 	public Form makePersistent(Form form) {
 		form.updateChildrenSortSeqs();
+		form.setJson(form.getJson());
 		// Update previous versions validTo.
 		if (form.getVersion() > 0) {
 			// 84600000 milliseconds in a day
@@ -62,6 +63,7 @@ public class FormDao extends AnnotatedGenericDao<Form, Long> implements IFormDao
 	// @CachePut(value = "springFormCache", key = "#form.getId()", condition =
 	// "#form.getId() != null")
 	public Form merge(Form form) {
+		form.setJson(form.getJson());
 		return super.merge(form);
 	}
 

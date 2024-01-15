@@ -12,6 +12,7 @@ public interface ISimpleFormViewDao {
 	List<SimpleFormView> getAll();
 
 	List<SimpleFormView> getSimpleFormViewByLabelAndOrganization(String label, Long organizationId);
+	SimpleFormView getSimpleFormViewByLabelAndVersionAndOrganization(String label, Integer version, Long organizationId);
 
 	List<SimpleFormView> getSimpleFormViewByOrganization(Long organizationId);
 

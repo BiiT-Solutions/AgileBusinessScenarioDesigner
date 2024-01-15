@@ -33,6 +33,8 @@ public class SimpleFormView implements IBaseFormView, Comparable<SimpleFormView>
     private boolean isLastVersion;
     private FormWorkStatus status;
 
+    private String json;
+
     public SimpleFormView() {
 
     }
@@ -213,4 +215,11 @@ public class SimpleFormView implements IBaseFormView, Comparable<SimpleFormView>
         return getName().compareTo(simpleForm.getName());
     }
 
+    public String getJson() {
+        return json;
+    }
+
+    public void setJson(String json) {
+        this.json = json;
+    }
 }

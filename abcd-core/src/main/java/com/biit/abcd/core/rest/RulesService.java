@@ -4,13 +4,28 @@ import com.biit.abcd.core.drools.FormToDroolsExporter;
 import com.biit.abcd.core.drools.prattparser.exceptions.PrattParserException;
 import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
 import com.biit.abcd.core.drools.rules.DroolsZipGenerator;
-import com.biit.abcd.core.drools.rules.exceptions.*;
+import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
+import com.biit.abcd.core.drools.rules.exceptions.BetweenFunctionInvalidException;
+import com.biit.abcd.core.drools.rules.exceptions.DateComparisonNotPossibleException;
+import com.biit.abcd.core.drools.rules.exceptions.DroolsRuleCreationException;
+import com.biit.abcd.core.drools.rules.exceptions.DroolsRuleGenerationException;
+import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
+import com.biit.abcd.core.drools.rules.exceptions.InvalidRuleException;
+import com.biit.abcd.core.drools.rules.exceptions.NullCustomVariableException;
+import com.biit.abcd.core.drools.rules.exceptions.NullExpressionValueException;
+import com.biit.abcd.core.drools.rules.exceptions.NullTreeObjectException;
+import com.biit.abcd.core.drools.rules.exceptions.PluginInvocationException;
+import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
+import com.biit.abcd.core.drools.rules.exceptions.TreeObjectInstanceNotRecognizedException;
+import com.biit.abcd.core.drools.rules.exceptions.TreeObjectParentNotValidException;
 import com.biit.abcd.core.drools.rules.validators.InvalidExpressionException;
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.dao.IFormDao;
 import com.biit.abcd.persistence.dao.IGlobalVariablesDao;
-import com.biit.abcd.persistence.dao.exceptions.MultiplesFormsFoundException;
+import com.biit.abcd.persistence.dao.ISimpleFormViewDao;
 import com.biit.abcd.persistence.entity.Form;
+import com.biit.abcd.persistence.entity.SimpleFormView;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +46,9 @@ public class RulesService {
     private IFormDao formDao;
 
     @Autowired
+    private ISimpleFormViewDao simpleFormViewDao;
+
+    @Autowired
     private IGlobalVariablesDao globalVariablesDao;
 
     @POST
@@ -42,7 +60,7 @@ public class RulesService {
         AbcdLogger.info(RulesService.class.getName(), "Requesting Form using endpoint '/forms/rules/zip' with payload '{}'.", petition);
         try {
             parsedPetition = parsePetition(petition);
-            Form form = formDao.get(parsedPetition.formName, parsedPetition.getVersion(), parsedPetition.getOrganizationId());
+            Form form = getForm(parsedPetition.formName, parsedPetition.getVersion(), parsedPetition.getOrganizationId());
             if (form == null) {
                 return Response.status(Response.Status.NOT_FOUND).entity("{\"error\":\"Unknown form with name '" + parsedPetition.getFormName() +
                         "' and version '" + parsedPetition.getVersion() + "' in organization '" + parsedPetition.getOrganizationId() + "'.\"}").build();
@@ -53,16 +71,13 @@ public class RulesService {
         } catch (JsonSyntaxException ex) {
             AbcdLogger.errorMessage(this.getClass().getName(), ex);
             return Response.status(Response.Status.BAD_REQUEST).entity("{\"error\":\"Rules error\"}").build();
-        } catch (MultiplesFormsFoundException e) {
-            AbcdLogger.errorMessage(this.getClass().getName(), e);
-            return Response.status(Response.Status.BAD_REQUEST).entity("{\"error\":\"Multiples forms match the search criteria. " +
-                    "Please define some extra parameters\"}").build();
-        } catch (IOException | TreeObjectInstanceNotRecognizedException | ExpressionInvalidException | DroolsRuleGenerationException
-                | BetweenFunctionInvalidException | DroolsRuleCreationException | DateComparisonNotPossibleException |
-                InvalidRuleException | NullExpressionValueException | NullTreeObjectException | PrattParserException |
-                PluginInvocationException | RuleNotImplementedException | NullCustomVariableException |
-                TreeObjectParentNotValidException | NotCompatibleTypeException | ActionNotImplementedException |
-                InvalidExpressionException e) {
+        } catch (IOException | TreeObjectInstanceNotRecognizedException | ExpressionInvalidException |
+                 DroolsRuleGenerationException
+                 | BetweenFunctionInvalidException | DroolsRuleCreationException | DateComparisonNotPossibleException |
+                 InvalidRuleException | NullExpressionValueException | NullTreeObjectException | PrattParserException |
+                 PluginInvocationException | RuleNotImplementedException | NullCustomVariableException |
+                 TreeObjectParentNotValidException | NotCompatibleTypeException | ActionNotImplementedException |
+                 InvalidExpressionException e) {
             AbcdLogger.errorMessage(this.getClass().getName(), e);
             return Response.status(Response.Status.BAD_REQUEST).entity("{\"error\":\"Error generating the rules. " +
                     "Check the logs for extra information.\"}").build();
@@ -78,7 +93,7 @@ public class RulesService {
         AbcdLogger.info(RulesService.class.getName(), "Requesting Form using endpoint '/forms/rules/drl' with payload '{}'.", petition);
         try {
             parsedPetition = parsePetition(petition);
-            Form form = formDao.get(parsedPetition.formName, parsedPetition.getVersion(), parsedPetition.getOrganizationId());
+            Form form = getForm(parsedPetition.formName, parsedPetition.getVersion(), parsedPetition.getOrganizationId());
             if (form == null) {
                 return Response.status(Response.Status.NOT_FOUND).entity("{\"error\":\"Unknown form with name '" + parsedPetition.getFormName() +
                         "' and version '" + parsedPetition.getVersion() + "' in organization '" + parsedPetition.getOrganizationId() + "'.\"}").build();
@@ -90,16 +105,12 @@ public class RulesService {
         } catch (JsonSyntaxException ex) {
             AbcdLogger.errorMessage(this.getClass().getName(), ex);
             return Response.status(Response.Status.BAD_REQUEST).entity("{\"error\":\"Rules error\"}").build();
-        } catch (MultiplesFormsFoundException e) {
-            AbcdLogger.errorMessage(this.getClass().getName(), e);
-            return Response.status(Response.Status.BAD_REQUEST).entity("{\"error\":\"Multiples forms match the search criteria. " +
-                    "Please define some extra parameters\"}").build();
         } catch (TreeObjectInstanceNotRecognizedException | ExpressionInvalidException | DroolsRuleGenerationException
-                | BetweenFunctionInvalidException | DroolsRuleCreationException | DateComparisonNotPossibleException |
-                InvalidRuleException | NullExpressionValueException | NullTreeObjectException | PrattParserException |
-                PluginInvocationException | RuleNotImplementedException | NullCustomVariableException |
-                TreeObjectParentNotValidException | NotCompatibleTypeException | ActionNotImplementedException |
-                InvalidExpressionException e) {
+                 | BetweenFunctionInvalidException | DroolsRuleCreationException | DateComparisonNotPossibleException |
+                 InvalidRuleException | NullExpressionValueException | NullTreeObjectException | PrattParserException |
+                 PluginInvocationException | RuleNotImplementedException | NullCustomVariableException |
+                 TreeObjectParentNotValidException | NotCompatibleTypeException | ActionNotImplementedException |
+                 InvalidExpressionException e) {
             AbcdLogger.errorMessage(this.getClass().getName(), e);
             return Response.status(Response.Status.BAD_REQUEST).entity("{\"error\":\"Error generating the rules. " +
                     "Check the logs for extra information.\"}").build();
@@ -111,6 +122,26 @@ public class RulesService {
             throw new JsonSyntaxException("Empty parameter not allowed.");
         }
         return new Gson().fromJson(petition, FormDescription.class);
+    }
+
+    private Form getForm(String name, Integer version, Long organizationId) {
+        final SimpleFormView simpleFormView = simpleFormViewDao.getSimpleFormViewByLabelAndVersionAndOrganization(name, version, organizationId);
+        return getForm(simpleFormView);
+    }
+
+    private Form getForm(SimpleFormView simpleFormView) {
+        if (simpleFormView == null) {
+            return null;
+        }
+        if (simpleFormView.getJson() != null && !simpleFormView.getJson().isEmpty()) {
+            try {
+                return Form.fromJson(simpleFormView.getJson());
+            } catch (JsonProcessingException e) {
+                AbcdLogger.errorMessage(this.getClass().getName(), e);
+                return formDao.get(simpleFormView.getId());
+            }
+        }
+        return formDao.get(simpleFormView.getId());
     }
 
     static class FormDescription {
