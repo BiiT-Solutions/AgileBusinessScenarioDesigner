@@ -506,8 +506,8 @@ public class RuleGenerationUtils {
                             customVariablesList
                                     .addAll(lookForCustomVariableInExpressionChain(tableRuleRow.getConditions()));
                         }
-                        if (tableRuleRow.getAction() != null) {
-                            customVariablesList.addAll(lookForCustomVariableInExpressionChain(tableRuleRow.getAction()));
+                        if (tableRuleRow.getActions() != null) {
+                            customVariablesList.addAll(lookForCustomVariableInExpressionChain(tableRuleRow.getActions()));
                         }
                     }
                 }

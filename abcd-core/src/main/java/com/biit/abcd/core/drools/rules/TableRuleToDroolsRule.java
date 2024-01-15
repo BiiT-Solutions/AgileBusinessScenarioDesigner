@@ -7,7 +7,6 @@ import com.biit.abcd.core.drools.prattparser.exceptions.PrattParserException;
 import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
 import com.biit.abcd.core.drools.rules.exceptions.ActionNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
-import com.biit.abcd.core.drools.rules.exceptions.InvalidRuleException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
 import com.biit.abcd.core.drools.rules.validators.InvalidExpressionException;
 import com.biit.abcd.core.drools.rules.validators.RuleChecker;
@@ -47,8 +46,8 @@ public class TableRuleToDroolsRule {
 			String tableRuleName = tableRule.getName();
 			int i = 0;
 			for (TableRuleRow row : tableRule.getRules()) {
-				if (row.getAction() != null && row.getAction().getExpressions() != null
-						&& !row.getAction().getExpressions().isEmpty()) {
+				if (row.getActions() != null && row.getActions().getExpressions() != null
+						&& !row.getActions().getExpressions().isEmpty()) {
 					DroolsRule newRule = new DroolsRule();
 					ExpressionChain rowConditionExpression = convertTableRowToExpressionChain(row.getConditions());
 
@@ -56,7 +55,7 @@ public class TableRuleToDroolsRule {
 
 					newRule.setConditions(RuleGenerationUtils.flattenExpressionChain(rowConditionExpression));
 					newRule.addExtraConditions(extraConditions);
-					newRule.setActions(row.getAction());
+					newRule.setActions(row.getActions());
 					newRules.add(newRule);
 				}
 				i++;

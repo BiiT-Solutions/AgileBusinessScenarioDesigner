@@ -99,7 +99,7 @@ public class FormDeserializer extends BaseFormDeserializer<Form> {
     private void update(Form form, TableRule table) {
         for (TableRuleRow tableRuleRow : table.getRules()) {
             update(form, tableRuleRow.getConditions());
-            update(form, tableRuleRow.getAction());
+            update(form, tableRuleRow.getActions());
         }
     }
 

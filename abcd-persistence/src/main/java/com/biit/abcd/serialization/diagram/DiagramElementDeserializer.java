@@ -4,14 +4,14 @@ import com.biit.abcd.persistence.entity.diagram.DiagramElement;
 import com.biit.abcd.persistence.entity.diagram.DiagramText;
 import com.biit.abcd.persistence.entity.diagram.Point;
 import com.biit.abcd.persistence.entity.diagram.Size;
-import com.biit.form.jackson.serialization.CustomDeserializer;
 import com.biit.form.jackson.serialization.ObjectMapperFactory;
+import com.biit.form.jackson.serialization.StorableObjectDeserializer;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import java.io.IOException;
 
-public class DiagramElementDeserializer<T extends DiagramElement> extends CustomDeserializer<T> {
+public class DiagramElementDeserializer<T extends DiagramElement> extends StorableObjectDeserializer<T> {
 
     @Override
     public void deserialize(T element, JsonNode jsonObject, DeserializationContext context) throws IOException {

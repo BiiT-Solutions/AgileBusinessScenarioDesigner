@@ -84,35 +84,35 @@ public class NestedGroupsTest extends KidsFormCreator {
 		ruleRow.addCondition(new ExpressionValueTreeObjectReference(getTreeObject(form, "breakfast")));
 		ruleRow.addCondition(new ExpressionChain(new ExpressionOperatorLogic(AvailableOperator.EQUALS), new ExpressionValueTreeObjectReference(getAnswer(form,
 				"breakfast", "a"))));
-		ruleRow.setAction(new ExpressionChain(new ExpressionValueCustomVariable(getTreeObject(form, "breakfast"), questionVariable),
+		ruleRow.setActions(new ExpressionChain(new ExpressionValueCustomVariable(getTreeObject(form, "breakfast"), questionVariable),
 				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueString(QUESTION_NOT_EQUALS_ANSWER)));
 		tableRule.getRules().add(ruleRow);
 		ruleRow = new TableRuleRow();
 		ruleRow.addCondition(new ExpressionValueTreeObjectReference(getTreeObject(form, "breakfast")));
 		ruleRow.addCondition(new ExpressionChain(new ExpressionOperatorLogic(AvailableOperator.EQUALS), new ExpressionValueTreeObjectReference(getAnswer(form,
 				"breakfast", "b"))));
-		ruleRow.setAction(new ExpressionChain(new ExpressionValueCustomVariable(getTreeObject(form, "breakfast"), questionVariable),
+		ruleRow.setActions(new ExpressionChain(new ExpressionValueCustomVariable(getTreeObject(form, "breakfast"), questionVariable),
 				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueString(QUESTION_EQUALS_ANSWER)));
 		tableRule.getRules().add(ruleRow);
 		ruleRow = new TableRuleRow();
 		ruleRow.addCondition(new ExpressionValueTreeObjectReference(getTreeObject(form, "breakfast")));
 		ruleRow.addCondition(new ExpressionChain(new ExpressionOperatorLogic(AvailableOperator.EQUALS), new ExpressionValueTreeObjectReference(getAnswer(form,
 				"breakfast", "c"))));
-		ruleRow.setAction(new ExpressionChain(new ExpressionValueCustomVariable(getTreeObject(form, "breakfast"), questionVariable),
+		ruleRow.setActions(new ExpressionChain(new ExpressionValueCustomVariable(getTreeObject(form, "breakfast"), questionVariable),
 				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueString(QUESTION_NOT_EQUALS_ANSWER)));
 		tableRule.getRules().add(ruleRow);
 		ruleRow = new TableRuleRow();
 		ruleRow.addCondition(new ExpressionValueTreeObjectReference(getTreeObject(form, "breakfast")));
 		ruleRow.addCondition(new ExpressionChain(new ExpressionOperatorLogic(AvailableOperator.EQUALS), new ExpressionValueTreeObjectReference(getAnswer(form,
 				"breakfast", "d"))));
-		ruleRow.setAction(new ExpressionChain(new ExpressionValueCustomVariable(getTreeObject(form, "breakfast"), questionVariable),
+		ruleRow.setActions(new ExpressionChain(new ExpressionValueCustomVariable(getTreeObject(form, "breakfast"), questionVariable),
 				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueString(QUESTION_NOT_EQUALS_ANSWER)));
 		tableRule.getRules().add(ruleRow);
 		ruleRow = new TableRuleRow();
 		ruleRow.addCondition(new ExpressionValueTreeObjectReference(getTreeObject(form, "breakfast")));
 		ruleRow.addCondition(new ExpressionChain(new ExpressionOperatorLogic(AvailableOperator.EQUALS), new ExpressionValueTreeObjectReference(getAnswer(form,
 				"breakfast", "e"))));
-		ruleRow.setAction(new ExpressionChain(new ExpressionValueCustomVariable(getTreeObject(form, "breakfast"), questionVariable),
+		ruleRow.setActions(new ExpressionChain(new ExpressionValueCustomVariable(getTreeObject(form, "breakfast"), questionVariable),
 				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueString(QUESTION_NOT_EQUALS_ANSWER)));
 		tableRule.getRules().add(ruleRow);
 

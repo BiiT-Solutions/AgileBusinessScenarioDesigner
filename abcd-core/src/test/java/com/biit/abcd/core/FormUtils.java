@@ -345,7 +345,7 @@ public class FormUtils {
 		expressionChain.addExpression(new ExpressionValueCustomVariable(elementsMap.get("Category1"), variableMap.get("cScore")));
 		expressionChain.addExpression(new ExpressionOperatorMath(AvailableOperator.PLUS));
 		expressionChain.addExpression(new ExpressionValueNumber(1d));
-		tableRuleRow1.getAction().addExpression(expressionChain);
+		tableRuleRow1.getActions().addExpression(expressionChain);
 		tableRule.getRules().add(tableRuleRow1);
 
 		// Copy row (total 2 rows).
@@ -367,7 +367,7 @@ public class FormUtils {
 			((ExpressionValueTreeObjectReference) ((ExpressionChain) tableRuleRow.getConditions().getExpressions().get(0)).getExpressions().get(2))
 					.setReference(elementsMap.get("Answer" + i));
 			// Category1.score=Category1.score+X;
-			((ExpressionValueNumber) ((ExpressionChain) tableRuleRow.getAction().getExpressions().get(0)).getExpressions().get(4)).setValue(Double.valueOf(i));
+			((ExpressionValueNumber) ((ExpressionChain) tableRuleRow.getActions().getExpressions().get(0)).getExpressions().get(4)).setValue(Double.valueOf(i));
 			i++;
 		}
 

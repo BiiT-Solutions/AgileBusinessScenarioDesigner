@@ -72,7 +72,7 @@ public class UsesOfElement {
 
 	private void initializeTableRuleRowsUsing(TableRuleRow tableRuleRow) {
 		initializeExpressionChainUsing(tableRuleRow.getConditions());
-		initializeExpressionChainUsing(tableRuleRow.getAction());
+		initializeExpressionChainUsing(tableRuleRow.getActions());
 	}
 
 	private void initializeRuleUsing() {

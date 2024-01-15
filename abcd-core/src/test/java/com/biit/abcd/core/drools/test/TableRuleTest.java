@@ -142,13 +142,13 @@ public class TableRuleTest extends KidsFormCreator {
 		TableRuleRow ruleRow = new TableRuleRow();
 		ruleRow.addCondition(new ExpressionValueTreeObjectReference(getTreeObject(form, "gender")));
 		ruleRow.addCondition(new ExpressionChain(new ExpressionValueTreeObjectReference(getAnswer(form, "gender", "M"))));
-		ruleRow.setAction(new ExpressionChain(new ExpressionValueCustomVariable(form, genderVariable),
+		ruleRow.setActions(new ExpressionChain(new ExpressionValueCustomVariable(form, genderVariable),
 				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueString(GENDER_MALE)));
 		tableRule.getRules().add(ruleRow);
 		ruleRow = new TableRuleRow();
 		ruleRow.addCondition(new ExpressionValueTreeObjectReference(getTreeObject(form, "gender")));
 		ruleRow.addCondition(new ExpressionChain(new ExpressionValueTreeObjectReference(getAnswer(form, "gender", "F"))));
-		ruleRow.setAction(new ExpressionChain(new ExpressionValueCustomVariable(form, genderVariable),
+		ruleRow.setActions(new ExpressionChain(new ExpressionValueCustomVariable(form, genderVariable),
 				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueString(GENDER_FEMALE)));
 		tableRule.getRules().add(ruleRow);
 
@@ -171,14 +171,14 @@ public class TableRuleTest extends KidsFormCreator {
 		ruleRow.addCondition(new ExpressionValueCustomVariable(form, getFormNumberCustomVariable()));
 		ruleRow.addCondition(new ExpressionChain(new ExpressionOperatorLogic(AvailableOperator.EQUALS), new ExpressionValueNumber(
 				CUSTOM_VARIABLE_NUMBER_VALUE_ONE)));
-		ruleRow.setAction(new ExpressionChain(new ExpressionValueCustomVariable(form, customVariableResult), new ExpressionOperatorMath(
+		ruleRow.setActions(new ExpressionChain(new ExpressionValueCustomVariable(form, customVariableResult), new ExpressionOperatorMath(
 				AvailableOperator.ASSIGNATION), new ExpressionValueString(CUSTOM_VARIABLE_RESULT_VALUE_ONE)));
 		tableRule.getRules().add(ruleRow);
 		ruleRow = new TableRuleRow();
 		ruleRow.addCondition(new ExpressionValueCustomVariable(form, getFormNumberCustomVariable()));
 		ruleRow.addCondition(new ExpressionChain(new ExpressionOperatorLogic(AvailableOperator.EQUALS), new ExpressionValueNumber(
 				CUSTOM_VARIABLE_NUMBER_VALUE_TWO)));
-		ruleRow.setAction(new ExpressionChain(new ExpressionValueCustomVariable(form, customVariableResult), new ExpressionOperatorMath(
+		ruleRow.setActions(new ExpressionChain(new ExpressionValueCustomVariable(form, customVariableResult), new ExpressionOperatorMath(
 				AvailableOperator.ASSIGNATION), new ExpressionValueString(CUSTOM_VARIABLE_RESULT_VALUE_TWO)));
 		tableRule.getRules().add(ruleRow);
 		// Add the table rule to the form
@@ -201,14 +201,14 @@ public class TableRuleTest extends KidsFormCreator {
 		ruleRow.addCondition(new ExpressionValueCustomVariable(category, getCategoryNumberCustomVariable()));
 		ruleRow.addCondition(new ExpressionChain(new ExpressionOperatorLogic(AvailableOperator.EQUALS), new ExpressionValueNumber(
 				CUSTOM_VARIABLE_NUMBER_VALUE_ONE)));
-		ruleRow.setAction(new ExpressionChain(new ExpressionValueCustomVariable(form, customVariableResult), new ExpressionOperatorMath(
+		ruleRow.setActions(new ExpressionChain(new ExpressionValueCustomVariable(form, customVariableResult), new ExpressionOperatorMath(
 				AvailableOperator.ASSIGNATION), new ExpressionValueString(CUSTOM_VARIABLE_RESULT_VALUE_ONE)));
 		tableRule.getRules().add(ruleRow);
 		ruleRow = new TableRuleRow();
 		ruleRow.addCondition(new ExpressionValueCustomVariable(category, getCategoryNumberCustomVariable()));
 		ruleRow.addCondition(new ExpressionChain(new ExpressionOperatorLogic(AvailableOperator.EQUALS), new ExpressionValueNumber(
 				CUSTOM_VARIABLE_NUMBER_VALUE_TWO)));
-		ruleRow.setAction(new ExpressionChain(new ExpressionValueCustomVariable(form, customVariableResult), new ExpressionOperatorMath(
+		ruleRow.setActions(new ExpressionChain(new ExpressionValueCustomVariable(form, customVariableResult), new ExpressionOperatorMath(
 				AvailableOperator.ASSIGNATION), new ExpressionValueString(CUSTOM_VARIABLE_RESULT_VALUE_TWO)));
 		tableRule.getRules().add(ruleRow);
 		// Add the table rule to the form
@@ -233,14 +233,14 @@ public class TableRuleTest extends KidsFormCreator {
 		ruleRow.addCondition(new ExpressionValueCustomVariable(category, getCategoryNumberCustomVariable()));
 		ruleRow.addCondition(new ExpressionChain(new ExpressionOperatorLogic(AvailableOperator.EQUALS), new ExpressionValueNumber(
 				CUSTOM_VARIABLE_NUMBER_VALUE_ONE)));
-		ruleRow.setAction(new ExpressionChain(new ExpressionValueCustomVariable(form, customVariableResult), new ExpressionOperatorMath(
+		ruleRow.setActions(new ExpressionChain(new ExpressionValueCustomVariable(form, customVariableResult), new ExpressionOperatorMath(
 				AvailableOperator.ASSIGNATION), new ExpressionValueString(CUSTOM_VARIABLE_RESULT_VALUE_ONE)));
 		tableRule.getRules().add(ruleRow);
 		ruleRow = new TableRuleRow();
 		// Two columns test
 		ruleRow.addCondition(new ExpressionValueTreeObjectReference(getTreeObject(form, "gender")));
 		ruleRow.addCondition(new ExpressionChain(new ExpressionValueTreeObjectReference(getAnswer(form, "gender", "F"))));
-		ruleRow.setAction(new ExpressionChain(new ExpressionValueCustomVariable(form, customVariableResult), new ExpressionOperatorMath(
+		ruleRow.setActions(new ExpressionChain(new ExpressionValueCustomVariable(form, customVariableResult), new ExpressionOperatorMath(
 				AvailableOperator.ASSIGNATION), new ExpressionValueString(CUSTOM_VARIABLE_RESULT_VALUE_TWO)));
 		tableRule.getRules().add(ruleRow);
 		// Add the table rule to the form

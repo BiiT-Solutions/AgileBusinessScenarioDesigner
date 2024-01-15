@@ -12,15 +12,21 @@ import javax.persistence.Table;
 
 import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.utils.INameAttribute;
+import com.biit.abcd.serialization.expressions.RuleDeserializer;
+import com.biit.abcd.serialization.expressions.RuleSerializer;
 import com.biit.form.entity.TreeObject;
 import com.biit.persistence.entity.StorableObject;
 import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /**
  * Defines a drools rule.
  * 
  */
 @Entity
+@JsonDeserialize(using = RuleDeserializer.class)
+@JsonSerialize(using = RuleSerializer.class)
 @Table(name = "rule")
 public class Rule extends StorableObject implements INameAttribute {
 	private static final long serialVersionUID = -2371234972449375379L;

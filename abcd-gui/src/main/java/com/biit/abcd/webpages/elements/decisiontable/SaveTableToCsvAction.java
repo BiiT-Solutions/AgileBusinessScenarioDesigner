@@ -37,7 +37,7 @@ public class SaveTableToCsvAction implements SaveAction {
 			if (tableRule != null) {
 				for (TableRuleRow row : tableRule.getRules()) {
 					ExpressionChain conditionChain = row.getConditions();
-					ExpressionChain actionChain = row.getAction();
+					ExpressionChain actionChain = row.getActions();
 					for (Expression expression : conditionChain.getExpressions()) {
 						tableRuleString += expression.getRepresentation(false) + ";";
 					}

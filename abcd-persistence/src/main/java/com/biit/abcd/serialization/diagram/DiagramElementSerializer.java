@@ -2,11 +2,12 @@ package com.biit.abcd.serialization.diagram;
 
 import com.biit.abcd.persistence.entity.diagram.DiagramElement;
 import com.biit.form.jackson.serialization.CustomSerializer;
+import com.biit.form.jackson.serialization.StorableObjectSerializer;
 import com.fasterxml.jackson.core.JsonGenerator;
 
 import java.io.IOException;
 
-public class DiagramElementSerializer<T extends DiagramElement> extends CustomSerializer<T> {
+public class DiagramElementSerializer<T extends DiagramElement> extends StorableObjectSerializer<T> {
 
     @Override
     public void serialize(T src, JsonGenerator jgen) throws IOException {

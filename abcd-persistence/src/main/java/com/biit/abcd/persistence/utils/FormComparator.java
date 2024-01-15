@@ -450,7 +450,7 @@ public class FormComparator {
 		}
 
 		compare(object1.getConditions(), object2.getConditions());
-		compare(object1.getAction(), object2.getAction());
+		compare(object1.getActions(), object2.getActions());
 	}
 
 	private void compare(Rule object1, Rule object2)

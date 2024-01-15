@@ -145,7 +145,7 @@ public class MultiSelectAnswerTest extends KidsFormCreator {
 		if (getTreeObject(form, ANSWER1_NAME) != null) {
 			ruleRow.addCondition(new ExpressionValueTreeObjectReference(((Question) getTreeObject(form, QUESTION_NAME))));
 			ruleRow.addCondition(new ExpressionChain(new ExpressionValueTreeObjectReference(getTreeObject(form, ANSWER1_NAME))));
-			ruleRow.setAction(commonAction);
+			ruleRow.setActions(commonAction);
 			tableRule.getRules().add(ruleRow);
 		}
 
@@ -153,7 +153,7 @@ public class MultiSelectAnswerTest extends KidsFormCreator {
 			ruleRow = new TableRuleRow();
 			ruleRow.addCondition(new ExpressionValueTreeObjectReference(((Question) getTreeObject(form, QUESTION_NAME))));
 			ruleRow.addCondition(new ExpressionChain(new ExpressionValueTreeObjectReference(getTreeObject(form, ANSWER2_NAME))));
-			ruleRow.setAction(commonAction);
+			ruleRow.setActions(commonAction);
 			tableRule.getRules().add(ruleRow);
 		}
 
@@ -161,7 +161,7 @@ public class MultiSelectAnswerTest extends KidsFormCreator {
 			ruleRow = new TableRuleRow();
 			ruleRow.addCondition(new ExpressionValueTreeObjectReference(((Question) getTreeObject(form, QUESTION_NAME))));
 			ruleRow.addCondition(new ExpressionChain(new ExpressionValueTreeObjectReference(getTreeObject(form, ANSWER3_NAME))));
-			ruleRow.setAction(commonAction);
+			ruleRow.setActions(commonAction);
 			tableRule.getRules().add(ruleRow);
 		}
 

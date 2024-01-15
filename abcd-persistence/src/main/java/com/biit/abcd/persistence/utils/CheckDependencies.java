@@ -38,7 +38,7 @@ public class CheckDependencies {
 						// Check conditions of the table rule row
 						checkTreeObjectDependeciesInExpressionChain(tableRuleRow.getConditions(), treeObject);
 						// Check actions of the table rule row
-						checkTreeObjectDependeciesInExpressionChain(tableRuleRow.getAction(), treeObject);
+						checkTreeObjectDependeciesInExpressionChain(tableRuleRow.getActions(), treeObject);
 					}
 				}
 				// Check the rules
