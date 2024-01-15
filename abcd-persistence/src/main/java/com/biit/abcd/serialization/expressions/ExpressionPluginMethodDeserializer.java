@@ -13,7 +13,9 @@ public class ExpressionPluginMethodDeserializer extends ExpressionDeserializer<E
     public void deserialize(ExpressionPluginMethod element, JsonNode jsonObject, DeserializationContext context) throws IOException {
         super.deserialize(element, jsonObject, context);
         try {
-            element.setPluginInterface(Class.forName(jsonObject.get("pluginInterface").textValue()));
+            if (jsonObject.get("pluginInterface") != null) {
+                element.setPluginInterface(Class.forName(jsonObject.get("pluginInterface").textValue()));
+            }
         } catch (ClassNotFoundException e) {
             AbcdLogger.errorMessage(this.getClass().getName(), e);
             throw new RuntimeException(e);

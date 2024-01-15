@@ -16,6 +16,8 @@ public class TableRuleDeserializer extends StorableObjectDeserializer<TableRule>
     public void deserialize(TableRule element, JsonNode jsonObject, DeserializationContext context) throws IOException {
         super.deserialize(element, jsonObject, context);
         element.setName(parseString("name", jsonObject));
-        element.setRules(Arrays.asList(ObjectMapperFactory.getObjectMapper().readValue(jsonObject.get("rules").asText(), TableRuleRow[].class)));
+        if (jsonObject.get("rules") != null) {
+            element.setRules(Arrays.asList(ObjectMapperFactory.getObjectMapper().readValue(jsonObject.get("rules").asText(), TableRuleRow[].class)));
+        }
     }
 }

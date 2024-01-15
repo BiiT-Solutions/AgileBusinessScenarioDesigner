@@ -24,7 +24,9 @@ public class GlobalVariableDeserializer extends StorableObjectDeserializer<Globa
         } catch (FieldTooLongException e) {
             AbcdLogger.errorMessage(this.getClass().getName(), e);
         }
-        element.setFormat(AnswerFormat.get(jsonObject.get("answerFormat").textValue()));
+        if (jsonObject.get("answerFormat") != null) {
+            element.setFormat(AnswerFormat.get(jsonObject.get("answerFormat").textValue()));
+        }
 
         // Diagram objects deserialization
         final JsonNode variableData = jsonObject.get("variableData");

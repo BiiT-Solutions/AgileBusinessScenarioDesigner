@@ -15,7 +15,9 @@ public class ExpressionOperatorDeserializer<T extends ExpressionOperator> extend
     public void deserialize(T element, JsonNode jsonObject, DeserializationContext context) throws IOException {
         super.deserialize(element, jsonObject, context);
         try {
-            element.setValue(AvailableOperator.get(jsonObject.get("value").textValue()));
+            if (jsonObject.get("value") != null) {
+                element.setValue(AvailableOperator.get(jsonObject.get("value").textValue()));
+            }
         } catch (NotValidOperatorInExpression e) {
             AbcdLogger.errorMessage(this.getClass().getName(), e);
         }

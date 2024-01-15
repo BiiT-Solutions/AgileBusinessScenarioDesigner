@@ -15,8 +15,12 @@ public class CustomVariableDeserializer extends StorableObjectDeserializer<Custo
     public void deserialize(CustomVariable element, JsonNode jsonObject, DeserializationContext context) throws IOException {
         super.deserialize(element, jsonObject, context);
         element.setName(parseString("name", jsonObject));
-        element.setType(CustomVariableType.get(jsonObject.get("type").textValue()));
-        element.setScope(CustomVariableScope.get(jsonObject.get("scope").textValue()));
+        if (jsonObject.get("type") != null) {
+            element.setType(CustomVariableType.get(jsonObject.get("type").textValue()));
+        }
+        if (jsonObject.get("scope") != null) {
+            element.setScope(CustomVariableScope.get(jsonObject.get("scope").textValue()));
+        }
         element.setDefaultValue(parseString("defaultValue", jsonObject));
     }
 }

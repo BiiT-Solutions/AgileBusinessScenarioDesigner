@@ -1,6 +1,5 @@
 package com.biit.abcd.serialization.diagram;
 
-import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.entity.diagram.DiagramRule;
 import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.form.jackson.serialization.ObjectMapperFactory;
@@ -14,6 +13,8 @@ public class DiagramRuleDeserializer extends DiagramElementDeserializer<DiagramR
     @Override
     public void deserialize(DiagramRule element, JsonNode jsonObject, DeserializationContext context) throws IOException {
         super.deserialize(element, jsonObject, context);
-        element.setRule(ObjectMapperFactory.getObjectMapper().readValue(jsonObject.get("rule").textValue(), Rule.class));
+        if (jsonObject.get("rule") != null) {
+            element.setRule(ObjectMapperFactory.getObjectMapper().readValue(jsonObject.get("rule").textValue(), Rule.class));
+        }
     }
 }

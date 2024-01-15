@@ -17,9 +17,15 @@ public class DiagramElementDeserializer<T extends DiagramElement> extends Storab
     public void deserialize(T element, JsonNode jsonObject, DeserializationContext context) throws IOException {
         super.deserialize(element, jsonObject, context);
         element.setTooltip(parseString("tooltip", jsonObject));
-        element.setSize(ObjectMapperFactory.getObjectMapper().readValue(jsonObject.get("size").textValue(), Size.class));
-        element.setPosition(ObjectMapperFactory.getObjectMapper().readValue(jsonObject.get("position").textValue(), Point.class));
+        if (jsonObject.get("size") != null) {
+            element.setSize(ObjectMapperFactory.getObjectMapper().readValue(jsonObject.get("size").textValue(), Size.class));
+        }
+        if (jsonObject.get("position") != null) {
+            element.setPosition(ObjectMapperFactory.getObjectMapper().readValue(jsonObject.get("position").textValue(), Point.class));
+        }
         element.setAngle(parseFloat("angle", jsonObject));
-        element.setText(ObjectMapperFactory.getObjectMapper().readValue(jsonObject.get("text").textValue(), DiagramText.class));
+        if (jsonObject.get("text") != null) {
+            element.setText(ObjectMapperFactory.getObjectMapper().readValue(jsonObject.get("text").textValue(), DiagramText.class));
+        }
     }
 }

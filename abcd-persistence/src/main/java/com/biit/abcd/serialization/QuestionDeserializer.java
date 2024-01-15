@@ -15,11 +15,15 @@ public class QuestionDeserializer extends TreeObjectDeserializer<Question> {
 
     public void deserialize(Question element, JsonNode jsonObject, DeserializationContext context) throws IOException {
         super.deserialize(element, jsonObject, context);
-        element.setAnswerType(AnswerType.get(jsonObject.get("answerType").textValue()));
+        if (jsonObject.get("answerType") != null) {
+            element.setAnswerType(AnswerType.get(jsonObject.get("answerType").textValue()));
+        }
         try {
-            final String answerFormat = jsonObject.get("answerFormat").textValue();
-            if (answerFormat != null) {
-                element.setAnswerFormat(AnswerFormat.get(answerFormat));
+            if (jsonObject.get("answerFormat") != null) {
+                final String answerFormat = jsonObject.get("answerFormat").textValue();
+                if (answerFormat != null) {
+                    element.setAnswerFormat(AnswerFormat.get(answerFormat));
+                }
             }
         } catch (InvalidAnswerFormatException e) {
             throw new RuntimeException(e);

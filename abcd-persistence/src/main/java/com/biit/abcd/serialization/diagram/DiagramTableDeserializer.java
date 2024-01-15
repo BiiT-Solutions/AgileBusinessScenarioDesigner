@@ -13,6 +13,8 @@ public class DiagramTableDeserializer extends DiagramElementDeserializer<Diagram
     @Override
     public void deserialize(DiagramTable element, JsonNode jsonObject, DeserializationContext context) throws IOException {
         super.deserialize(element, jsonObject, context);
-        element.setTable(ObjectMapperFactory.getObjectMapper().readValue(jsonObject.get("table").textValue(), TableRule.class));
+        if (jsonObject.get("table") != null) {
+            element.setTable(ObjectMapperFactory.getObjectMapper().readValue(jsonObject.get("table").textValue(), TableRule.class));
+        }
     }
 }

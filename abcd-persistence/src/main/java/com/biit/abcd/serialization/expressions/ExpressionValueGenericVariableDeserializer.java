@@ -12,6 +12,8 @@ public class ExpressionValueGenericVariableDeserializer extends ExpressionValueD
     @Override
     public void deserialize(ExpressionValueGenericVariable element, JsonNode jsonObject, DeserializationContext context) throws IOException {
         super.deserialize(element, jsonObject, context);
-        element.setType(GenericTreeObjectType.get(jsonObject.get("type").textValue()));
+        if (jsonObject.get("type") != null) {
+            element.setType(GenericTreeObjectType.get(jsonObject.get("type").textValue()));
+        }
     }
 }

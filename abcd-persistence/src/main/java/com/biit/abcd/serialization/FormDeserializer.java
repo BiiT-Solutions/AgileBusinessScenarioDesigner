@@ -32,11 +32,21 @@ public class FormDeserializer extends BaseFormDeserializer<Form> {
 
         element.setAvailableFrom(parseTimestamp("availableFrom", jsonObject));
         element.setAvailableTo(parseTimestamp("availableTo", jsonObject));
-        element.setStatus(FormWorkStatus.getFromString(jsonObject.get("status").textValue()));
-        element.setDiagrams(new HashSet<>(Arrays.asList(ObjectMapperFactory.getObjectMapper().readValue(jsonObject.get("diagrams").asText(), Diagram[].class))));
-        element.setTableRules(Arrays.asList(ObjectMapperFactory.getObjectMapper().readValue(jsonObject.get("tableRules").asText(), TableRule[].class)));
-        element.setCustomVariables(new HashSet<>(Arrays.asList(ObjectMapperFactory.getObjectMapper().readValue(jsonObject.get("customVariables").asText(), CustomVariable[].class))));
-        element.setExpressionChains(new HashSet<>(Arrays.asList(ObjectMapperFactory.getObjectMapper().readValue(jsonObject.get("expressionChains").asText(), ExpressionChain[].class))));
+        if (jsonObject.get("status").textValue() != null) {
+            element.setStatus(FormWorkStatus.getFromString(jsonObject.get("status").textValue()));
+        }
+        if (jsonObject.get("diagrams") != null) {
+            element.setDiagrams(new HashSet<>(Arrays.asList(ObjectMapperFactory.getObjectMapper().readValue(jsonObject.get("diagrams").asText(), Diagram[].class))));
+        }
+        if (jsonObject.get("tableRules") != null) {
+            element.setTableRules(Arrays.asList(ObjectMapperFactory.getObjectMapper().readValue(jsonObject.get("tableRules").asText(), TableRule[].class)));
+        }
+        if (jsonObject.get("customVariables") != null) {
+            element.setCustomVariables(new HashSet<>(Arrays.asList(ObjectMapperFactory.getObjectMapper().readValue(jsonObject.get("customVariables").asText(), CustomVariable[].class))));
+        }
+        if (jsonObject.get("expressionChains") != null) {
+            element.setExpressionChains(new HashSet<>(Arrays.asList(ObjectMapperFactory.getObjectMapper().readValue(jsonObject.get("expressionChains").asText(), ExpressionChain[].class))));
+        }
 
         // Diagram objects deserialization
         final JsonNode diagramObjects = jsonObject.get("rules");

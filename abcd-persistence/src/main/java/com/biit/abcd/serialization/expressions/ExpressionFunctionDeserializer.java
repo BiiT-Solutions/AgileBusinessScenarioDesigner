@@ -12,6 +12,8 @@ public class ExpressionFunctionDeserializer extends ExpressionDeserializer<Expre
     @Override
     public void deserialize(ExpressionFunction element, JsonNode jsonObject, DeserializationContext context) throws IOException {
         super.deserialize(element, jsonObject, context);
-        element.setValue(AvailableFunction.get(jsonObject.get("value").textValue()));
+        if (jsonObject.get("value") != null) {
+            element.setValue(AvailableFunction.get(jsonObject.get("value").textValue()));
+        }
     }
 }

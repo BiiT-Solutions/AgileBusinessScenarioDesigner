@@ -13,7 +13,8 @@ public class ExpressionValueTreeObjectReferenceDeserializer extends ExpressionVa
     public void deserialize(ExpressionValueTreeObjectReference element, JsonNode jsonObject, DeserializationContext context) throws IOException {
         super.deserialize(element, jsonObject, context);
         element.setReferenceId(parseString("referenceId", jsonObject));
-        element.setUnit(QuestionDateUnit.get(jsonObject.get("unit").textValue()));
-
+        if (jsonObject.get("unit") != null) {
+            element.setUnit(QuestionDateUnit.get(jsonObject.get("unit").textValue()));
+        }
     }
 }

@@ -13,7 +13,8 @@ public class ExpressionValueGlobalVariableDeserializer extends ExpressionValueDe
     @Override
     public void deserialize(ExpressionValueGlobalVariable element, JsonNode jsonObject, DeserializationContext context) throws IOException {
         super.deserialize(element, jsonObject, context);
-        element.setValue(ObjectMapperFactory.getObjectMapper().readValue(jsonObject.get("globalVariable").textValue(), GlobalVariable.class));
-
+        if (jsonObject.get("globalVariable") != null) {
+            element.setValue(ObjectMapperFactory.getObjectMapper().readValue(jsonObject.get("globalVariable").textValue(), GlobalVariable.class));
+        }
     }
 }
