@@ -16,6 +16,7 @@ public class NodeDeserializer extends StorableObjectDeserializer<Node> {
     public void deserialize(Node element, JsonNode jsonObject, DeserializationContext context) throws IOException {
         super.deserialize(element, jsonObject, context);
         element.setJointjsId(parseString("id", jsonObject));
+        element.setId(parseLong("databaseId", jsonObject));
         element.setSelector(parseString("selector", jsonObject));
         element.setPort(parseString("port", jsonObject));
     }
