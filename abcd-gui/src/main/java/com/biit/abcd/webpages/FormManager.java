@@ -24,11 +24,11 @@ import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.TreeObjectInstanceNotRecognizedException;
 import com.biit.abcd.core.drools.rules.exceptions.TreeObjectParentNotValidException;
 import com.biit.abcd.core.drools.rules.validators.InvalidExpressionException;
+import com.biit.abcd.core.providers.FormProvider;
 import com.biit.abcd.core.rest.client.KnowledgeManagerService;
 import com.biit.abcd.core.security.AbcdActivity;
 import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.logger.AbcdLogger;
-import com.biit.abcd.persistence.dao.IFormDao;
 import com.biit.abcd.persistence.dao.ITestScenarioDao;
 import com.biit.abcd.persistence.dao.IUserTokenDao;
 import com.biit.abcd.persistence.entity.Form;
@@ -39,14 +39,12 @@ import com.biit.abcd.persistence.entity.testscenarios.TestScenario;
 import com.biit.abcd.security.IAbcdFormAuthorizationService;
 import com.biit.abcd.webpages.components.AlertMessageWindow;
 import com.biit.abcd.webpages.components.FormWebPageComponent;
-import com.biit.abcd.webpages.components.IFormSelectedListener;
 import com.biit.abcd.webpages.components.SettingsWindow;
 import com.biit.abcd.webpages.elements.form.designer.RootForm;
 import com.biit.abcd.webpages.elements.form.manager.FormManagerUpperMenu;
 import com.biit.abcd.webpages.elements.form.manager.WindowImportJson;
 import com.biit.abcd.webpages.elements.form.manager.WindowLoginKnowledgeManager;
 import com.biit.abcd.webpages.elements.form.table.FormsVersionsTreeTable;
-import com.biit.abcd.webpages.elements.form.table.FormsVersionsTreeTable.IFormStatusChange;
 import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.NotValidTreeObjectException;
 import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
@@ -57,33 +55,32 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.server.VaadinServlet;
-import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.ComboBox;
 import org.apache.http.client.methods.CloseableHttpResponse;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class FormManager extends FormWebPageComponent {
     private static final long serialVersionUID = 8306642137791826056L;
-    private static final List<AbcdActivity> activityPermissions = new ArrayList<AbcdActivity>(Arrays.asList(AbcdActivity.READ));
+    private static final List<AbcdActivity> activityPermissions = new ArrayList<AbcdActivity>(Collections.singletonList(AbcdActivity.READ));
     private FormsVersionsTreeTable formTable;
     private FormManagerUpperMenu upperMenu;
 
-    private IFormDao formDao;
-    private ITestScenarioDao testScenarioDao;
-    private IUserTokenDao userTokenDao;
+    private final FormProvider formProvider;
+    private final ITestScenarioDao testScenarioDao;
+    private final IUserTokenDao userTokenDao;
 
-    private IAbcdFormAuthorizationService securityService;
-    private KnowledgeManagerService knowledgeManagerService;
+    private final IAbcdFormAuthorizationService securityService;
+    private final KnowledgeManagerService knowledgeManagerService;
 
     public FormManager() {
         super();
         SpringContextHelper helper = new SpringContextHelper(VaadinServlet.getCurrent().getServletContext());
-        formDao = (IFormDao) helper.getBean("formDao");
+        formProvider = (FormProvider) helper.getBean("formProvider");
         testScenarioDao = (ITestScenarioDao) helper.getBean("testScenarioDao");
         securityService = (IAbcdFormAuthorizationService) helper.getBean("abcdSecurityService");
         userTokenDao = (IUserTokenDao) helper.getBean("userTokenDao");
@@ -95,7 +92,7 @@ public class FormManager extends FormWebPageComponent {
         this.upperMenu = createUpperMenu();
         upperMenu.addFormSelectedListener(() -> {
             if (formTable.getValue() != null) {
-                Form selectedForm = getForm(formTable.getValue());
+                Form selectedForm = formProvider.get(formTable.getValue());
                 selectedForm.setLastVersion(formTable.getValue().isLastVersion());
                 UserSessionHandler.setForm(selectedForm);
             }
@@ -111,20 +108,9 @@ public class FormManager extends FormWebPageComponent {
             }
         });
 
-        upperMenu.addPublishKnowledgeManagerListener(new ClickListener() {
-            @Override
-            public void buttonClick(ClickEvent event) {
-                publishToKnowledgeManager(getMetadata(), getDroolsRules());
-            }
-        });
-        upperMenu.addImportJsonListener(new ClickListener() {
-            private static final long serialVersionUID = 927805685681030688L;
-
-            @Override
-            public void buttonClick(ClickEvent event) {
-                importJsonForm();
-            }
-        });
+        upperMenu.addPublishKnowledgeManagerListener((ClickListener) event ->
+                publishToKnowledgeManager(getMetadata(), getDroolsRules()));
+        upperMenu.addImportJsonListener((ClickListener) event -> importJsonForm());
         setUpperMenu(upperMenu);
 
         formTable = createTreeTable();
@@ -132,25 +118,16 @@ public class FormManager extends FormWebPageComponent {
         formTable.selectLastUsedForm();
         updateButtons(!(getForm() instanceof RootForm) && getForm() != null);
 
-        getBottomMenu().addFormSelectedListener(new IFormSelectedListener() {
-            @Override
-            public void formSelected() {
-                if (formTable.getValue() != null) {
-                    Form form = formDao.get(formTable.getValue().getId());
-                    form.setLastVersion(formTable.getValue().isLastVersion());
-                    UserSessionHandler.setForm(form);
-                    UiAccesser.lockForm(form, UserSessionHandler.getUser());
-                }
+        getBottomMenu().addFormSelectedListener(() -> {
+            if (formTable.getValue() != null) {
+                Form form = formProvider.get(formTable.getValue());
+                form.setLastVersion(formTable.getValue().isLastVersion());
+                UserSessionHandler.setForm(form);
+                UiAccesser.lockForm(form, UserSessionHandler.getUser());
             }
         });
 
-        formTable.addFormStatusChangeListeners(new IFormStatusChange() {
-
-            @Override
-            public void comboBoxValueChanged(ComboBox statusComboBox) {
-                formStatusValueChanged(statusComboBox);
-            }
-        });
+        formTable.addFormStatusChangeListeners(this::formStatusValueChanged);
 
         UserSessionHandler.getFormController().clearUnsavedChangesChecker();
     }
@@ -195,7 +172,7 @@ public class FormManager extends FormWebPageComponent {
     }
 
     public void addNewForm(Form form) {
-        formDao.makePersistent(form);
+        formProvider.saveForm(form);
         SimpleFormView simpleView = new SimpleFormView(form);
         formTable.addForm(simpleView);
         formTable.selectForm(simpleView);
@@ -213,7 +190,7 @@ public class FormManager extends FormWebPageComponent {
 
 
     public void setFormById(Long formId) {
-        UserSessionHandler.setForm(formDao.get(formId));
+        UserSessionHandler.setForm(formProvider.get(formId));
     }
 
     public void newFormVersion() {
@@ -224,7 +201,7 @@ public class FormManager extends FormWebPageComponent {
             currentForm.setLastVersion(false);
             newForm = createNewFormVersion(currentForm);
             newForm.setLastVersion(true);
-            formDao.makePersistent(newForm);
+            formProvider.saveForm(newForm);
             formTable.refreshFormTable();
             formTable.selectForm(newForm);
         } catch (NotValidTreeObjectException e) {
@@ -246,7 +223,7 @@ public class FormManager extends FormWebPageComponent {
         try {
             SimpleFormView selectedForm = formTable.getValue();
             Form copiedForm = copyForm(selectedForm, label);
-            copiedForm = formDao.makePersistent(copiedForm);
+            copiedForm = formProvider.saveForm(copiedForm);
             formTable.refreshFormTable();
             formTable.selectForm(copiedForm);
         } catch (NotValidTreeObjectException | FieldTooLongException e) {
@@ -269,7 +246,7 @@ public class FormManager extends FormWebPageComponent {
 
         Form newFormVersion;
         try {
-            Form realForm = getForm(form);
+            Form realForm = formProvider.get(form);
             newFormVersion = realForm.createNewVersion(UserSessionHandler.getUser());
         } catch (CharacterNotAllowedException | NotValidStorableObjectException ex) {
             AbcdLogger.severe(this.getClass().getName(), "User: " + UserSessionHandler.getUser().getEmailAddress() + " createForm " + ex.getMessage());
@@ -285,7 +262,7 @@ public class FormManager extends FormWebPageComponent {
 
         Form copiedForm;
         try {
-            Form realForm = getForm(form);
+            Form realForm = formProvider.get(form);
             copiedForm = realForm.copy(UserSessionHandler.getUser(), label);
         } catch (CharacterNotAllowedException | NotValidStorableObjectException | FieldTooLongException ex) {
             AbcdLogger.severe(this.getClass().getName(), "User: " + UserSessionHandler.getUser().getEmailAddress() + " copiedForm " + ex.getMessage());
@@ -297,7 +274,7 @@ public class FormManager extends FormWebPageComponent {
     }
 
     private void removeSelectedForm() {
-        Form selectedForm = getForm(formTable.getValue());
+        Form selectedForm = formProvider.get(formTable.getValue());
         if (selectedForm != null) {
             // If it is the last form, remove all its tests.
             RootForm rootForm = formTable.getSelectedRootForm();
@@ -316,7 +293,7 @@ public class FormManager extends FormWebPageComponent {
             }
             // Remove the form.
             try {
-                formDao.makeTransient(selectedForm);
+                formProvider.deleteForm(selectedForm);
             } catch (ElementCannotBeRemovedException e) {
                 // Impossible.
                 AbcdLogger.errorMessage(this.getClass().getName(), e);
@@ -374,7 +351,7 @@ public class FormManager extends FormWebPageComponent {
                         + "' has not enought rights to change the status of form '" + form.getLabel() + "'!");
             }
             try {
-                formDao.updateFormStatus(form.getId(), value);
+                formProvider.updateFormStatus(form.getId(), value);
             } catch (UnexpectedDatabaseException e) {
                 MessageManager.showError(LanguageCodes.ERROR_ACCESSING_DATABASE, LanguageCodes.ERROR_ACCESSING_DATABASE_DESCRIPTION);
             }
@@ -388,22 +365,23 @@ public class FormManager extends FormWebPageComponent {
     public void publishToKnowledgeManager(String metadata, String rules) {
         UserToken userToken = userTokenDao.get(UserSessionHandler.getUser().getUniqueId());
         if (userToken != null && userToken.getKnowledgeManagerAuthToken() != null) {
-            Form formToExport = getForm(getForm());
+            Form formToExport = formProvider.get(getForm());
             try {
-                CloseableHttpResponse response = knowledgeManagerService.publishToKnowledgeManager(metadata, rules,
+                try (CloseableHttpResponse response = knowledgeManagerService.publishToKnowledgeManager(metadata, rules,
                         userToken.getKnowledgeManagerAuthToken(), UserSessionHandler.getUser().getEmailAddress(),
-                        formToExport.getLabel(), formToExport.getVersion().toString());
-                if (response.getStatusLine().getStatusCode() >= 200 && response.getStatusLine().getStatusCode() <= 300) {
-                    AbcdLogger.info(FormManager.class.toString(),
-                            LanguageCodes.SUCCESS_PUBLISH_KNOWLEDGE_MANAGER.translate());
-                    MessageManager.showInfo(LanguageCodes.SUCCESS_PUBLISH_KNOWLEDGE_MANAGER);
-                } else if (response.getStatusLine().getStatusCode() >= 400 && response.getStatusLine().getStatusCode() <= 404) {
-                    AbcdLogger.debug(FormManager.class.toString(),
-                            "Unauthorized token");
-                    openLoginKnowledgeManagerWindow();
-                } else {
-                    AbcdLogger.errorMessage(FormManager.class.toString(),
-                            "Knowledge Manager Service Internal Error");
+                        formToExport.getLabel(), formToExport.getVersion().toString())) {
+                    if (response.getStatusLine().getStatusCode() >= 200 && response.getStatusLine().getStatusCode() <= 300) {
+                        AbcdLogger.info(FormManager.class.toString(),
+                                LanguageCodes.SUCCESS_PUBLISH_KNOWLEDGE_MANAGER.translate());
+                        MessageManager.showInfo(LanguageCodes.SUCCESS_PUBLISH_KNOWLEDGE_MANAGER);
+                    } else if (response.getStatusLine().getStatusCode() >= 400 && response.getStatusLine().getStatusCode() <= 404) {
+                        AbcdLogger.debug(FormManager.class.toString(),
+                                "Unauthorized token");
+                        openLoginKnowledgeManagerWindow();
+                    } else {
+                        AbcdLogger.errorMessage(FormManager.class.toString(),
+                                "Knowledge Manager Service Internal Error");
+                    }
                 }
             } catch (IOException e) {
                 AbcdLogger.errorMessage(FormManager.class.toString(), e.toString());
@@ -422,7 +400,7 @@ public class FormManager extends FormWebPageComponent {
     private String getDroolsRules() {
         try {
             FormToDroolsExporter droolsExporter = new FormToDroolsExporter();
-            return droolsExporter.getDroolRules(getForm(getForm()), UserSessionHandler.getGlobalVariablesController().getGlobalVariables());
+            return droolsExporter.getDroolRules(formProvider.get(getForm()), UserSessionHandler.getGlobalVariablesController().getGlobalVariables());
         } catch (DroolsRuleGenerationException | RuleNotImplementedException | ExpressionInvalidException |
                  NullTreeObjectException
                  | TreeObjectInstanceNotRecognizedException | TreeObjectParentNotValidException |
@@ -436,28 +414,13 @@ public class FormManager extends FormWebPageComponent {
             MessageManager.showError(LanguageCodes.DROOLS_RULES_GENERATION_EXCEPTION, LanguageCodes.ERROR_DESCRIPTION, ncte.getDescription());
         } catch (InvalidRuleException e) {
             AbcdLogger.errorMessage(SettingsWindow.class.getName(), e);
-            MessageManager.showError(LanguageCodes.ERROR_TITLE, LanguageCodes.DROOLS_RULE_INVALID, ((InvalidRuleException) e).getRuleName());
+            MessageManager.showError(LanguageCodes.ERROR_TITLE, LanguageCodes.DROOLS_RULE_INVALID, e.getRuleName());
         }
         return "";
     }
 
     private String getMetadata() {
         return AbcdGlobalVariablesToJson.toJson(UserSessionHandler.getGlobalVariablesController().getGlobalVariables());
-    }
-
-    private Form getForm(SimpleFormView simpleFormView) {
-        if (simpleFormView == null) {
-            return null;
-        }
-        if (simpleFormView.getJson() != null && !simpleFormView.getJson().isEmpty()) {
-            try {
-                return Form.fromJson(simpleFormView.getJson());
-            } catch (JsonProcessingException e) {
-                AbcdLogger.errorMessage(this.getClass().getName(), e);
-                return formDao.get(simpleFormView.getId());
-            }
-        }
-        return formDao.get(simpleFormView.getId());
     }
 
 }
