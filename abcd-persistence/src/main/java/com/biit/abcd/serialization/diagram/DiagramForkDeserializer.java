@@ -1,9 +1,11 @@
 package com.biit.abcd.serialization.diagram;
 
 import com.biit.abcd.logger.AbcdLogger;
+import com.biit.abcd.persistence.entity.diagram.DiagramExpression;
 import com.biit.abcd.persistence.entity.diagram.DiagramFork;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.form.jackson.serialization.ObjectMapperFactory;
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -36,5 +38,10 @@ public class DiagramForkDeserializer extends DiagramElementDeserializer<DiagramF
                 element.setReferences(references);
             }
         }
+    }
+
+    @Override
+    public DiagramFork getObject() {
+        return new DiagramFork();
     }
 }

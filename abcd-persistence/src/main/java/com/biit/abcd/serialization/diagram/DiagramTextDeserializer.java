@@ -1,7 +1,10 @@
 package com.biit.abcd.serialization.diagram;
 
+import com.biit.abcd.persistence.entity.diagram.DiagramTable;
 import com.biit.abcd.persistence.entity.diagram.DiagramText;
+import com.biit.abcd.persistence.entity.diagram.Node;
 import com.biit.form.jackson.serialization.StorableObjectDeserializer;
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -19,5 +22,10 @@ public class DiagramTextDeserializer extends StorableObjectDeserializer<DiagramT
         element.setStroke(parseString("stroke", jsonObject));
         //As comes from jscript
         element.setStrokeWidth(parseString("stroke_width", jsonObject));
+    }
+
+    @Override
+    public DiagramText getObject() {
+        return new DiagramText();
     }
 }

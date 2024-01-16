@@ -14,7 +14,7 @@ public class DiagramChildDeserializer extends DiagramElementDeserializer<Diagram
     public void deserialize(DiagramChild element, JsonNode jsonObject, DeserializationContext context) throws IOException {
         super.deserialize(element, jsonObject, context);
         if (jsonObject.get("diagram") != null) {
-            element.setDiagram(ObjectMapperFactory.getObjectMapper().readValue(jsonObject.get("diagram").textValue(), Diagram.class));
+            element.setDiagram(ObjectMapperFactory.getObjectMapper().readValue(jsonObject.get("diagram").toString(), Diagram.class));
         }
     }
 }

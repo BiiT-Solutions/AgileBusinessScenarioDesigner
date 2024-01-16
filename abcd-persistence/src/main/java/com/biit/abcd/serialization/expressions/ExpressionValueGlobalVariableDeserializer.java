@@ -14,7 +14,7 @@ public class ExpressionValueGlobalVariableDeserializer extends ExpressionValueDe
     public void deserialize(ExpressionValueGlobalVariable element, JsonNode jsonObject, DeserializationContext context) throws IOException {
         super.deserialize(element, jsonObject, context);
         if (jsonObject.get("globalVariable") != null) {
-            element.setValue(ObjectMapperFactory.getObjectMapper().readValue(jsonObject.get("globalVariable").textValue(), GlobalVariable.class));
+            element.setValue(ObjectMapperFactory.getObjectMapper().readValue(jsonObject.get("globalVariable").toString(), GlobalVariable.class));
         }
     }
 }

@@ -1,7 +1,10 @@
 package com.biit.abcd.serialization.diagram;
 
+import com.biit.abcd.persistence.entity.diagram.DiagramText;
 import com.biit.abcd.persistence.entity.diagram.Node;
+import com.biit.abcd.persistence.entity.diagram.Point;
 import com.biit.form.jackson.serialization.StorableObjectDeserializer;
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -15,5 +18,10 @@ public class NodeDeserializer extends StorableObjectDeserializer<Node> {
         element.setJointjsId(parseString("id", jsonObject));
         element.setSelector(parseString("selector", jsonObject));
         element.setPort(parseString("port", jsonObject));
+    }
+
+    @Override
+    public Node getObject() {
+        return new Node();
     }
 }

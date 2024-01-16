@@ -18,7 +18,7 @@ public class ExpressionValueGenericCustomVariableDeserializer extends Expression
             element.setType(GenericTreeObjectType.get(jsonObject.get("type").textValue()));
         }
         if (jsonObject.get("variable") != null) {
-            element.setVariable(ObjectMapperFactory.getObjectMapper().readValue(jsonObject.get("variable").textValue(), CustomVariable.class));
+            element.setVariable(ObjectMapperFactory.getObjectMapper().readValue(jsonObject.get("variable").toString(), CustomVariable.class));
         }
     }
 }

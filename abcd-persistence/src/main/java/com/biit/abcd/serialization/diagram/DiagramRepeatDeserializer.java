@@ -1,7 +1,9 @@
 package com.biit.abcd.serialization.diagram;
 
+import com.biit.abcd.persistence.entity.diagram.DiagramLink;
 import com.biit.abcd.persistence.entity.diagram.DiagramRepeat;
 import com.biit.form.jackson.serialization.StorableObjectDeserializer;
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -12,5 +14,10 @@ public class DiagramRepeatDeserializer extends StorableObjectDeserializer<Diagra
     @Override
     public void deserialize(DiagramRepeat element, JsonNode jsonObject, DeserializationContext context) throws IOException {
         super.deserialize(element, jsonObject, context);
+    }
+
+    @Override
+    public DiagramRepeat getObject() {
+        return new DiagramRepeat();
     }
 }
