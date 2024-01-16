@@ -1,9 +1,10 @@
 package com.biit.abcd.persistence.entity;
 
-import com.biit.abcd.serialization.FormDeserializer;
-import com.biit.abcd.serialization.FormSerializer;
+import com.biit.abcd.serialization.SimpleFormViewDeserializer;
+import com.biit.abcd.serialization.SimpleFormViewSerializer;
 import com.biit.form.entity.IBaseFormView;
 import com.biit.form.jackson.serialization.ObjectMapperFactory;
+import com.biit.persistence.entity.BaseStorableObject;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -14,19 +15,13 @@ import java.sql.Timestamp;
 /**
  * As Lazy is not correctly configured, we use this class to show basic form information in the Form Manager.
  */
-@JsonDeserialize(using = SimpleFormDeserializer.class)
-@JsonSerialize(using = SimpleFormSerializer.class)
+@JsonDeserialize(using = SimpleFormViewDeserializer.class)
+@JsonSerialize(using = SimpleFormViewSerializer.class)
 @Cacheable(true)
-public class SimpleFormView implements IBaseFormView, Comparable<SimpleFormView> {
+public class SimpleFormView extends BaseStorableObject implements IBaseFormView, Comparable<SimpleFormView> {
     private String name;
     private String label;
     private Integer version;
-    private Long id;
-    private Timestamp creationTime;
-    private Long createdBy;
-    private Timestamp updateTime;
-    private Long updatedBy;
-    private String comparationId;
     private Timestamp availableFrom;
     private Timestamp availableTo;
     private long organizationId;
@@ -68,11 +63,11 @@ public class SimpleFormView implements IBaseFormView, Comparable<SimpleFormView>
             return false;
         }
         SimpleFormView other = (SimpleFormView) obj;
-        if (comparationId == null) {
-            if (other.comparationId != null) {
+        if (getComparationId() == null) {
+            if (other.getComparationId() != null) {
                 return false;
             }
-        } else if (!comparationId.equals(other.comparationId)) {
+        } else if (!getComparationId().equals(other.getComparationId())) {
             return false;
         }
         return true;
@@ -84,22 +79,6 @@ public class SimpleFormView implements IBaseFormView, Comparable<SimpleFormView>
 
     public Timestamp getAvailableTo() {
         return availableTo;
-    }
-
-    public String getComparationId() {
-        return comparationId;
-    }
-
-    public Long getCreatedBy() {
-        return createdBy;
-    }
-
-    public Timestamp getCreationTime() {
-        return creationTime;
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public String getLabel() {
@@ -118,14 +97,6 @@ public class SimpleFormView implements IBaseFormView, Comparable<SimpleFormView>
         return status;
     }
 
-    public Long getUpdatedBy() {
-        return updatedBy;
-    }
-
-    public Timestamp getUpdateTime() {
-        return updateTime;
-    }
-
     public Integer getVersion() {
         return version;
     }
@@ -134,7 +105,7 @@ public class SimpleFormView implements IBaseFormView, Comparable<SimpleFormView>
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = (prime * result) + ((comparationId == null) ? 0 : comparationId.hashCode());
+        result = (prime * result) + ((getComparationId() == null) ? 0 : getComparationId().hashCode());
         return result;
     }
 
@@ -148,22 +119,6 @@ public class SimpleFormView implements IBaseFormView, Comparable<SimpleFormView>
 
     public void setAvailableTo(Timestamp availableTo) {
         this.availableTo = availableTo;
-    }
-
-    public void setComparationId(String comparationId) {
-        this.comparationId = comparationId;
-    }
-
-    public void setCreatedBy(Long createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    public void setCreationTime(Timestamp creationTime) {
-        this.creationTime = creationTime;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public void setLabel(String label) {
@@ -184,14 +139,6 @@ public class SimpleFormView implements IBaseFormView, Comparable<SimpleFormView>
 
     public void setStatus(FormWorkStatus status) {
         this.status = status;
-    }
-
-    public void setUpdatedBy(Long updatedBy) {
-        this.updatedBy = updatedBy;
-    }
-
-    public void setUpdateTime(Timestamp updateTime) {
-        this.updateTime = updateTime;
     }
 
     public void setVersion(Integer version) {
