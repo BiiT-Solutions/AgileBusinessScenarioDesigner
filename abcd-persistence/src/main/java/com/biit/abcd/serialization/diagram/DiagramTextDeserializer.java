@@ -14,8 +14,10 @@ public class DiagramTextDeserializer extends StorableObjectDeserializer<DiagramT
         super.deserialize(element, jsonObject, context);
         element.setText(parseString("text", jsonObject));
         element.setFill(parseString("fill", jsonObject));
-        element.setFontSize(parseString("fontSize", jsonObject));
+        //As comes from jscript
+        element.setFontSize(parseString("font_size", jsonObject));
         element.setStroke(parseString("stroke", jsonObject));
-        element.setStrokeWidth(parseString("strokeWidth", jsonObject));
+        //As comes from jscript
+        element.setStrokeWidth(parseString("stroke_width", jsonObject));
     }
 }

@@ -13,8 +13,8 @@ public class DiagramObjectDeserializer<T extends DiagramObject> extends Storable
     @Override
     public void deserialize(T element, JsonNode jsonObject, DeserializationContext context) throws IOException {
         super.deserialize(element, jsonObject, context);
-        if (jsonObject.get("type" != null) {
-            element.setType(DiagramObjectType.get(jsonObject.get("type").textValue()));
+        if (jsonObject.get("type") != null) {
+            element.setType(DiagramObjectType.getByType(jsonObject.get("type").textValue()));
         }
         element.setJointjsId(parseString("jointjsId", jsonObject));
         element.setEmbeds(parseString("embeds", jsonObject));

@@ -1,5 +1,6 @@
 package com.biit.abcd.persistence.entity.diagram;
 
+import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.utils.INameAttribute;
 import com.biit.abcd.serialization.diagram.DiagramDeserializer;
 import com.biit.abcd.serialization.diagram.DiagramSerializer;
@@ -9,9 +10,6 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.annotations.SerializedName;
 import org.hibernate.annotations.BatchSize;
 
 import javax.persistence.Cacheable;
@@ -41,7 +39,6 @@ public class Diagram extends StorableObject implements INameAttribute {
 
     private String name;
 
-    @SerializedName("cells")
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     @JoinTable(name = "elements_of_diagram", joinColumns = @JoinColumn(name = "diagram", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "diagram_object", referencedColumnName = "id"))
     @BatchSize(size = 20)
@@ -67,12 +64,10 @@ public class Diagram extends StorableObject implements INameAttribute {
     }
 
     public static Diagram fromJson(String jsonString) {
-        if (jsonString != null) {
-            GsonBuilder gsonBuilder = new GsonBuilder().excludeFieldsWithoutExposeAnnotation();
-            gsonBuilder.registerTypeAdapter(Diagram.class, new DiagramDeserializer());
-            Gson gson = gsonBuilder.create();
-            Diagram object = gson.fromJson(jsonString, Diagram.class);
-            return object;
+        try {
+            return ObjectMapperFactory.getObjectMapper().readValue(jsonString, Diagram.class);
+        } catch (JsonProcessingException e) {
+            AbcdLogger.errorMessage(Diagram.class.getName(), e);
         }
         return null;
     }

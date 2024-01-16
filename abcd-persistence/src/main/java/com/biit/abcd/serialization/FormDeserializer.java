@@ -32,7 +32,7 @@ public class FormDeserializer extends BaseFormDeserializer<Form> {
 
         element.setAvailableFrom(parseTimestamp("availableFrom", jsonObject));
         element.setAvailableTo(parseTimestamp("availableTo", jsonObject));
-        if (jsonObject.get("status").textValue() != null) {
+        if (jsonObject.get("status") != null) {
             element.setStatus(FormWorkStatus.getFromString(jsonObject.get("status").textValue()));
         }
         if (jsonObject.get("diagrams") != null) {

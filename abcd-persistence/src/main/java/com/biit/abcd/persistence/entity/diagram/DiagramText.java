@@ -32,7 +32,6 @@ public class DiagramText extends StorableObject {
 	private String fill;
 
 	@Expose
-	@SerializedName("font_size")
 	@Column(name="font_size")
 	private String fontSize;
 
@@ -40,7 +39,6 @@ public class DiagramText extends StorableObject {
 	private String stroke;
 
 	@Expose
-	@SerializedName("stroke_width")
 	@Column(name="stroke_width")
 	private String strokeWidth;
 

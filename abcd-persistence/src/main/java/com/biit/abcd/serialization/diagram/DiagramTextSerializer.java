@@ -13,8 +13,10 @@ public class DiagramTextSerializer extends StorableObjectSerializer<DiagramText>
         super.serialize(src, jgen);
         jgen.writeStringField("text", String.valueOf(src.getText()));
         jgen.writeStringField("fill", String.valueOf(src.getFill()));
-        jgen.writeStringField("fontSize", String.valueOf(src.getFontSize()));
+        //As comes from jscript
+        jgen.writeStringField("font_size", String.valueOf(src.getFontSize()));
         jgen.writeStringField("stroke", String.valueOf(src.getStroke()));
-        jgen.writeStringField("strokeWidth", String.valueOf(src.getStrokeWidth()));
+        //As comes from jscript
+        jgen.writeStringField("stroke_width", String.valueOf(src.getStrokeWidth()));
     }
 }

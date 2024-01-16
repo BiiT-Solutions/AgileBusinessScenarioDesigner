@@ -24,7 +24,6 @@ import java.util.Set;
 public class Node extends StorableObject {
     private static final long serialVersionUID = -5481806008119969483L;
     @Expose
-    @SerializedName("id")
     @Column(name = "jointjs_id")
     private String jointjsId;
     @Expose

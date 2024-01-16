@@ -11,7 +11,7 @@ public class NodeSerializer extends StorableObjectSerializer<Node> {
     @Override
     public void serialize(Node src, JsonGenerator jgen) throws IOException {
         super.serialize(src, jgen);
-        jgen.writeStringField("jointjsId", src.getJointjsId());
+        jgen.writeStringField("id", src.getJointjsId());
         jgen.writeStringField("selector", src.getSelector());
         jgen.writeStringField("port", src.getPort());
     }

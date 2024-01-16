@@ -5,6 +5,7 @@ import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.entity.diagram.DiagramObject;
 import com.biit.form.jackson.serialization.ObjectMapperFactory;
 import com.biit.form.jackson.serialization.StorableObjectDeserializer;
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -18,7 +19,8 @@ public class DiagramDeserializer extends StorableObjectDeserializer<Diagram> {
         element.setName(parseString("name", jsonObject));
 
         // Diagram objects deserialization
-        final JsonNode diagramObjects = jsonObject.get("diagramObjects");
+        //'cells" as comes from jscript
+        final JsonNode diagramObjects = jsonObject.get("cells");
         if (diagramObjects != null) {
             //Handle children one by one.
             if (diagramObjects.isArray()) {
@@ -34,5 +36,13 @@ public class DiagramDeserializer extends StorableObjectDeserializer<Diagram> {
                 }
             }
         }
+    }
+
+    @Override
+    public Diagram deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
+        final JsonNode jsonObject = jsonParser.getCodec().readTree(jsonParser);
+        final Diagram diagram = new Diagram();
+        deserialize(diagram, jsonObject, deserializationContext);
+        return diagram;
     }
 }
