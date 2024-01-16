@@ -9,7 +9,6 @@ import com.biit.usermanager.entity.IUser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.google.gson.annotations.Expose;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -28,22 +27,19 @@ import java.util.Set;
 @Table(name = "diagram_elements")
 public abstract class DiagramElement extends DiagramObject {
     private static final long serialVersionUID = -2842225781954290086L;
-    @Expose
+
     private String tooltip;
-    @Expose
+
     @OneToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     @JoinColumn(name = "size")
     private Size size;
 
-    @Expose
     @OneToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     @JoinColumn(name = "position")
     private Point position;
 
-    @Expose
     private float angle;
 
-    @Expose
     @OneToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     @JoinColumn(name = "text")
     private DiagramText text;

@@ -6,7 +6,6 @@ import com.biit.persistence.entity.StorableObject;
 import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.google.gson.annotations.Expose;
 
 import javax.persistence.Cacheable;
 import javax.persistence.Entity;
@@ -21,9 +20,8 @@ import java.util.Set;
 @Cacheable(true)
 public class Size extends StorableObject {
     private static final long serialVersionUID = -6707522501849361356L;
-    @Expose
+
     private int width;
-    @Expose
     private int height;
 
     public Size() {

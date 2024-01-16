@@ -14,9 +14,7 @@ import com.biit.form.exceptions.CharacterNotAllowedException;
 import com.biit.form.exceptions.ElementIsReadOnly;
 import com.biit.form.exceptions.InvalidAnswerFormatException;
 import com.biit.form.exceptions.NotValidChildException;
-import com.biit.persistence.dao.exceptions.ElementCannotBePersistedException;
 import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
-import com.biit.persistence.entity.exceptions.ElementCannotBeRemovedException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 import com.biit.utils.file.FileReader;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -37,7 +35,7 @@ import java.util.List;
 public class FormToJson extends AbstractTransactionalTestNGSpringContextTests {
 
     private final static String FULL_FORM = "Complete Form";
-    private final static String JSON_FORM_NAME = "\"label\": \"Complete Form\"";
+    private final static String JSON_FORM_NAME = "\"label\" : \"Complete Form\"";
 
     @Autowired
     private IFormDao formDao;
@@ -47,14 +45,14 @@ public class FormToJson extends AbstractTransactionalTestNGSpringContextTests {
 
     @Test(groups = {"abcdToJson"})
     public void createJsonForm() throws NotValidChildException, FieldTooLongException, CharacterNotAllowedException, UnexpectedDatabaseException,
-            ElementCannotBePersistedException, ElementIsReadOnly, ElementCannotBeRemovedException, InvalidAnswerFormatException {
+            ElementIsReadOnly, InvalidAnswerFormatException {
         String jsonForm = createForm(FULL_FORM).toJson();
-        Assert.assertEquals(jsonForm.contains(JSON_FORM_NAME), true);
+        Assert.assertTrue(jsonForm.contains(JSON_FORM_NAME));
     }
 
     @Test(groups = {"abcdToJson"})
     public void createJsonSimpleForm() throws NotValidChildException, FieldTooLongException, CharacterNotAllowedException, UnexpectedDatabaseException,
-            ElementCannotBePersistedException, ElementIsReadOnly, ElementCannotBeRemovedException, InvalidAnswerFormatException {
+            ElementIsReadOnly, InvalidAnswerFormatException {
 
         for (int i = 0; i < 10; i++) {
             Form form = createForm(FULL_FORM + "_" + i);
@@ -65,7 +63,7 @@ public class FormToJson extends AbstractTransactionalTestNGSpringContextTests {
         for (int i = 0; i < views.size(); i++) {
             String jsonForm = views.get(i).toJson();
             String formName = JSON_FORM_NAME.substring(0, JSON_FORM_NAME.length() - 1);
-            Assert.assertEquals(jsonForm.contains(formName + "_" + i + "\""), true);
+            Assert.assertTrue(jsonForm.contains(formName + "_" + i + "\""));
         }
     }
 

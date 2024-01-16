@@ -6,7 +6,6 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 import com.biit.usermanager.entity.IUser;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.google.gson.annotations.Expose;
 
 import javax.persistence.Cacheable;
 import javax.persistence.Column;
@@ -34,18 +33,18 @@ public abstract class DiagramObject extends StorableObject {
     @JoinColumn(name = "parent")
     private Diagram parent;
 
-    @Expose
+
     @Enumerated(EnumType.STRING)
     private DiagramObjectType type;
 
-    @Expose
+
     @Column(name = "jointjs_id")
     private String jointjsId;
 
-    @Expose
+
     private String embeds;
 
-    @Expose
+
     private int z;
 
     public DiagramObjectType getType() {

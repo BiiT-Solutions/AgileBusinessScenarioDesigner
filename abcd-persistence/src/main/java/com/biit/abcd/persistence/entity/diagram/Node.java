@@ -6,8 +6,6 @@ import com.biit.persistence.entity.StorableObject;
 import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
 
 import javax.persistence.Cacheable;
 import javax.persistence.Column;
@@ -23,12 +21,12 @@ import java.util.Set;
 @Cacheable(true)
 public class Node extends StorableObject {
     private static final long serialVersionUID = -5481806008119969483L;
-    @Expose
+
     @Column(name = "jointjs_id")
     private String jointjsId;
-    @Expose
+
     private String selector;
-    @Expose
+
     private String port;
 
     public Node() {

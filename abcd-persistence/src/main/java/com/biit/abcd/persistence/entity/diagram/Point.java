@@ -6,7 +6,6 @@ import com.biit.persistence.entity.StorableObject;
 import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.google.gson.annotations.Expose;
 
 import javax.persistence.Cacheable;
 import javax.persistence.Entity;
@@ -21,9 +20,9 @@ import java.util.Set;
 @Cacheable(true)
 public class Point extends StorableObject {
     private static final long serialVersionUID = 5426903602493769403L;
-    @Expose
+
     private int x;
-    @Expose
+
     private int y;
 
     public Point() {

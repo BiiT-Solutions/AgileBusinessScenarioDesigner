@@ -11,7 +11,6 @@ import com.biit.usermanager.entity.IUser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.google.gson.annotations.Expose;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -37,22 +36,22 @@ public class DiagramLink extends DiagramObject {
     @JoinColumn(name = "expression_chain")
     private ExpressionChain expressionChain;
 
-    @Expose
+
     @OneToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     @JoinColumn(name = "source")
     private Node source;
 
-    @Expose
+
     @OneToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     @JoinColumn(name = "target")
     private Node target;
 
     private String text;
 
-    @Expose
+
     private boolean smooth;
 
-    @Expose
+
     private boolean manhattan;
 
     @Column(length = 1000000)

@@ -3,10 +3,10 @@ package com.biit.abcd.persistence.entity;
 import com.biit.abcd.serialization.FormDeserializer;
 import com.biit.abcd.serialization.FormSerializer;
 import com.biit.form.entity.IBaseFormView;
+import com.biit.form.jackson.serialization.ObjectMapperFactory;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import javax.persistence.Cacheable;
 import java.sql.Timestamp;
@@ -14,8 +14,8 @@ import java.sql.Timestamp;
 /**
  * As Lazy is not correctly configured, we use this class to show basic form information in the Form Manager.
  */
-@JsonDeserialize(using = FormDeserializer.class)
-@JsonSerialize(using = FormSerializer.class)
+@JsonDeserialize(using = SimpleFormDeserializer.class)
+@JsonSerialize(using = SimpleFormSerializer.class)
 @Cacheable(true)
 public class SimpleFormView implements IBaseFormView, Comparable<SimpleFormView> {
     private String name;
@@ -204,10 +204,11 @@ public class SimpleFormView implements IBaseFormView, Comparable<SimpleFormView>
     }
 
     public String toJson() {
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        gsonBuilder.setPrettyPrinting();
-        Gson gson = gsonBuilder.create();
-        return gson.toJson(this);
+        try {
+            return ObjectMapperFactory.getObjectMapper().writeValueAsString(this);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
