@@ -15,7 +15,7 @@ public class DiagramObjectSerializer<T extends DiagramObject> extends StorableOb
             jgen.writeStringField("type", src.getType().name());
         }
         if (src.getJointjsId() != null) {
-            jgen.writeStringField("jointjsId", src.getJointjsId());
+            jgen.writeStringField("id", src.getJointjsId());
         }
         if (src.getEmbeds() != null) {
             jgen.writeStringField("embeds", src.getEmbeds());

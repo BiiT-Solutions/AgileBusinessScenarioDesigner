@@ -30,6 +30,7 @@ public class DiagramLinkDeserializer extends DiagramObjectDeserializer<DiagramLi
         element.setManhattan(parseBoolean("manhattan", jsonObject));
         element.setAttrs(parseString("attrs", jsonObject));
         element.setVertices(parseString("vertices", jsonObject));
+        element.setSmooth(parseBoolean("smooth", jsonObject));
     }
 
     @Override

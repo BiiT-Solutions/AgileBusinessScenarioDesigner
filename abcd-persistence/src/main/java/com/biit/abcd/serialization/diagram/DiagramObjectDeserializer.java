@@ -29,7 +29,7 @@ public class DiagramObjectDeserializer<T extends DiagramObject> extends Storable
         if (jsonObject.get("type") != null) {
             element.setType(DiagramObjectType.getByType(jsonObject.get("type").textValue()));
         }
-        element.setJointjsId(parseString("jointjsId", jsonObject));
+        element.setJointjsId(parseString("id", jsonObject));
         element.setEmbeds(parseString("embeds", jsonObject));
         if (parseInteger("z", jsonObject) != null) {
             element.setZ(parseInteger("z", jsonObject));
