@@ -11,6 +11,8 @@ public class ExpressionValueGenericCustomVariableSerializer extends ExpressionVa
     public void serialize(ExpressionValueGenericCustomVariable src, JsonGenerator jgen) throws IOException {
         super.serialize(src, jgen);
         jgen.writeObjectField("type", src.getType().name());
-        jgen.writeObjectField("variable", src.getVariable());
+        if (src.getVariable() != null) {
+            jgen.writeObjectField("variableId", src.getVariable().getComparationId());
+        }
     }
 }

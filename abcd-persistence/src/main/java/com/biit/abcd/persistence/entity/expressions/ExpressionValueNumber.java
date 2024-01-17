@@ -27,7 +27,7 @@ public class ExpressionValueNumber extends ExpressionValue<Double> {
 	@Column(name = "expression_value")
 	private Double value;
 
-	protected ExpressionValueNumber() {
+	public ExpressionValueNumber() {
 		super();
 		value = 0d;
 	}

@@ -1,9 +1,7 @@
 package com.biit.abcd.serialization.expressions;
 
-import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.GenericTreeObjectType;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueGenericCustomVariable;
-import com.biit.form.jackson.serialization.ObjectMapperFactory;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -17,8 +15,8 @@ public class ExpressionValueGenericCustomVariableDeserializer extends Expression
         if (jsonObject.get("type") != null) {
             element.setType(GenericTreeObjectType.get(jsonObject.get("type").textValue()));
         }
-        if (jsonObject.get("variable") != null) {
-            element.setVariable(ObjectMapperFactory.getObjectMapper().readValue(jsonObject.get("variable").toString(), CustomVariable.class));
+        if (jsonObject.get("variableId") != null) {
+            element.setVariableId(parseString("variableId", jsonObject));
         }
     }
 }

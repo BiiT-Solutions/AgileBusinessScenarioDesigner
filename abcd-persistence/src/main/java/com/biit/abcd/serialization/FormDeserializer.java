@@ -11,6 +11,7 @@ import com.biit.abcd.persistence.entity.diagram.DiagramTable;
 import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueGenericCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.persistence.entity.rules.TableRule;
@@ -98,6 +99,7 @@ public class FormDeserializer extends BaseFormDeserializer<Form> {
     private void updateExpression(Form form, Expression expression) {
         updateExpressionValueTreeObjectReference(form, expression);
         updateExpressionValueCustomVariable(form, expression);
+        updateExpressionValueGenericCustomVariable(form, expression);
     }
 
     private void updateExpressionValueTreeObjectReference(Form form, Expression expression) {
@@ -111,6 +113,13 @@ public class FormDeserializer extends BaseFormDeserializer<Form> {
         if (expression instanceof ExpressionValueCustomVariable) {
             final ExpressionValueCustomVariable expressionValueCustomVariable = (ExpressionValueCustomVariable) expression;
             expressionValueCustomVariable.setVariable(form.getCustomVariableByComparationId(expressionValueCustomVariable.getVariableId()));
+        }
+    }
+
+    private void updateExpressionValueGenericCustomVariable(Form form, Expression expression) {
+        if (expression instanceof ExpressionValueGenericCustomVariable) {
+            final ExpressionValueGenericCustomVariable expressionValueGenericCustomVariable = (ExpressionValueGenericCustomVariable) expression;
+            expressionValueGenericCustomVariable.setVariable(form.getCustomVariableByComparationId(expressionValueGenericCustomVariable.getVariableId()));
         }
     }
 
