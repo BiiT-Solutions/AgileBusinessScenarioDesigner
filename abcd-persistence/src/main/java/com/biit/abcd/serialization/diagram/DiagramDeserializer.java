@@ -62,7 +62,7 @@ public class DiagramDeserializer extends StorableObjectDeserializer<Diagram> {
     }
 
     private Class<?> getNodeClass(JsonNode jsonObject) throws ClassNotFoundException {
-        final DiagramObjectType diagramObjectType = DiagramObjectType.getByType(jsonObject.get("type").textValue());
+        final DiagramObjectType diagramObjectType = DiagramObjectType.getByJsonType(jsonObject.get("type").textValue());
         final Class<?> classType;
         switch (diagramObjectType) {
             case LINK:

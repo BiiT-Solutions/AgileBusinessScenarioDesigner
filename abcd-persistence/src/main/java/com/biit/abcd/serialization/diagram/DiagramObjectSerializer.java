@@ -12,13 +12,15 @@ public class DiagramObjectSerializer<T extends DiagramObject> extends StorableOb
     public void serialize(T src, JsonGenerator jgen) throws IOException {
         super.serialize(src, jgen);
         if (src.getType() != null) {
-            jgen.writeStringField("type", src.getType().name());
+            jgen.writeStringField("type", src.getType().getJsonType());
         }
         if (src.getId() != null) {
             jgen.writeNumberField("databaseId", src.getId());
         }
         if (src.getJointjsId() != null) {
             jgen.writeStringField("id", src.getJointjsId());
+        } else {
+            jgen.writeStringField("id", src.getComparationId());
         }
         if (src.getEmbeds() != null) {
             jgen.writeStringField("embeds", src.getEmbeds());

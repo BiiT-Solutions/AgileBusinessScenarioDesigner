@@ -262,7 +262,7 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
 				setEnabled(true);
 			}
 			diagramElements = createMapOfDiagramObjects(diagram);
-			fromJson(diagram.toJson());
+			fromJson(diagram.toJoinJsJson());
 		} else {
 			setEnabled(false);
 		}

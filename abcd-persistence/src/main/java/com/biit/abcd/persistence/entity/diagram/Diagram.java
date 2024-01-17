@@ -86,6 +86,14 @@ public class Diagram extends StorableObject implements INameAttribute {
         }
     }
 
+    public String toJoinJsJson() {
+        try {
+            return ObjectMapperFactory.getObjectMapper().writeValueAsString(this);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     /**
      * Function to get the list of diagram object elements. Do not add elements
      * to this list, use the appropriate functions.

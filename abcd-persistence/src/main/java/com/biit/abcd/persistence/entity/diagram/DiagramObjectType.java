@@ -33,7 +33,7 @@ public enum DiagramObjectType {
         return null;
     }
 
-    public static DiagramObjectType getByType(String jsonType) {
+    public static DiagramObjectType getByJsonType(String jsonType) {
         for (DiagramObjectType value : values()) {
             if (value.jsonTypeName.equalsIgnoreCase(jsonType)) {
                 return value;

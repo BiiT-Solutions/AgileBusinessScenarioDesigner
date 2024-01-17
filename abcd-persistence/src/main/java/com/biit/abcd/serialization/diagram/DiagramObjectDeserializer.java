@@ -27,7 +27,7 @@ public class DiagramObjectDeserializer<T extends DiagramObject> extends Storable
     public void deserialize(T element, JsonNode jsonObject, DeserializationContext context) throws IOException {
         super.deserialize(element, jsonObject, context);
         if (jsonObject.get("type") != null) {
-            element.setType(DiagramObjectType.getByType(jsonObject.get("type").textValue()));
+            element.setType(DiagramObjectType.getByJsonType(jsonObject.get("type").textValue()));
         }
         element.setJointjsId(parseString("id", jsonObject));
         element.setId(parseLong("databaseId", jsonObject));
