@@ -3,6 +3,7 @@ package com.biit.abcd.serialization;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.FormWorkStatus;
 import com.biit.abcd.persistence.entity.SimpleFormView;
+import com.biit.abcd.persistence.entity.SimpleFormViewWithContent;
 import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
@@ -15,10 +16,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 import java.io.IOException;
 
-public class SimpleFormViewDeserializer extends BaseStorableObjectDeserializer<SimpleFormView> {
+public class SimpleFormViewWithContentDeserializer extends BaseStorableObjectDeserializer<SimpleFormViewWithContent> {
 
     @Override
-    public void deserialize(SimpleFormView element, JsonNode jsonObject, DeserializationContext context) throws IOException {
+    public void deserialize(SimpleFormViewWithContent element, JsonNode jsonObject, DeserializationContext context) throws IOException {
         super.deserialize(element, jsonObject, context);
 
         element.setName(parseString("name", jsonObject));
@@ -31,6 +32,7 @@ public class SimpleFormViewDeserializer extends BaseStorableObjectDeserializer<S
         if (jsonObject.get("status") != null) {
             element.setStatus(FormWorkStatus.getFromString(jsonObject.get("status").textValue()));
         }
+        element.setJson(parseString("json", jsonObject));
     }
 
     private void updateExpressionValueTreeObjectReference(Form form, Expression expression) {

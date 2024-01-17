@@ -51,7 +51,6 @@ import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
 import com.biit.persistence.entity.exceptions.ElementCannotBeRemovedException;
 import com.biit.persistence.entity.exceptions.FieldTooLongException;
 import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.server.VaadinServlet;
@@ -263,7 +262,7 @@ public class FormManager extends FormWebPageComponent {
         Form copiedForm;
         try {
             Form realForm = formProvider.get(form);
-            copiedForm = realForm.copy(UserSessionHandler.getUser(), label);
+            copiedForm = realForm.copy(UserSessionHandler.getUser() != null ? UserSessionHandler.getUser().getUniqueId() : null, label);
         } catch (CharacterNotAllowedException | NotValidStorableObjectException | FieldTooLongException ex) {
             AbcdLogger.severe(this.getClass().getName(), "User: " + UserSessionHandler.getUser().getEmailAddress() + " copiedForm " + ex.getMessage());
             throw ex;

@@ -1,8 +1,6 @@
 package com.biit.abcd.serialization.expressions;
 
-import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
-import com.biit.form.jackson.serialization.ObjectMapperFactory;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -14,7 +12,7 @@ public class ExpressionValueCustomVariableDeserializer extends ExpressionValueDe
     public void deserialize(ExpressionValueCustomVariable element, JsonNode jsonObject, DeserializationContext context) throws IOException {
         super.deserialize(element, jsonObject, context);
         if (jsonObject.get("variable") != null) {
-            element.setVariable(ObjectMapperFactory.getObjectMapper().readValue(jsonObject.get("variable").toString(), CustomVariable.class));
+            element.setVariableId(jsonObject.get("variable").toString());
         }
 
     }

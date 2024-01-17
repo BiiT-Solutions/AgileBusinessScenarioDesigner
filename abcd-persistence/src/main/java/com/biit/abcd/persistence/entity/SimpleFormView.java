@@ -28,8 +28,6 @@ public class SimpleFormView extends BaseStorableObject implements IBaseFormView,
     private boolean isLastVersion;
     private FormWorkStatus status;
 
-    private String json;
-
     public SimpleFormView() {
 
     }
@@ -163,11 +161,16 @@ public class SimpleFormView extends BaseStorableObject implements IBaseFormView,
         return getName().compareTo(simpleForm.getName());
     }
 
-    public String getJson() {
-        return json;
-    }
-
-    public void setJson(String json) {
-        this.json = json;
+    public static SimpleFormView get(Form form) {
+        final SimpleFormView simpleFormView = new SimpleFormView();
+        simpleFormView.setName(form.getName());
+        simpleFormView.setLabel(form.getLabel());
+        simpleFormView.setVersion(form.getVersion());
+        simpleFormView.setAvailableFrom(form.getAvailableFrom());
+        simpleFormView.setAvailableTo(form.getAvailableTo());
+        simpleFormView.setOrganizationId(form.getOrganizationId());
+        simpleFormView.setLastVersion(form.isLastVersion());
+        simpleFormView.setStatus(form.getStatus());
+        return simpleFormView;
     }
 }

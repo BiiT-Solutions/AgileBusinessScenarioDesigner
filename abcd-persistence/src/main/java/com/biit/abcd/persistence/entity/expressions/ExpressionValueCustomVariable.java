@@ -14,6 +14,7 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -30,6 +31,9 @@ public class ExpressionValueCustomVariable extends ExpressionValueTreeObjectRefe
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "custom_variable")
     private CustomVariable variable;
+
+    @Transient
+    private transient String variableId;
 
     public ExpressionValueCustomVariable() {
         super();
@@ -110,4 +114,11 @@ public class ExpressionValueCustomVariable extends ExpressionValueTreeObjectRefe
         }
     }
 
+    public String getVariableId() {
+        return variableId;
+    }
+
+    public void setVariableId(String variableId) {
+        this.variableId = variableId;
+    }
 }

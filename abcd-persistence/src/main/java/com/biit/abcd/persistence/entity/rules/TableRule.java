@@ -75,8 +75,8 @@ public class TableRule extends StorableObject implements INameAttribute {
     }
 
     public void setRules(List<TableRuleRow> rules) {
-        rules.clear();
-        rules.addAll(rules);
+        this.rules.clear();
+        this.rules.addAll(rules);
     }
 
     @Override

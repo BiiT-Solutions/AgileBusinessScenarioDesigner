@@ -17,10 +17,10 @@ public class RuleDeserializer<T extends Rule> extends StorableObjectDeserializer
         element.setName(parseString("name", jsonObject));
 
         if (jsonObject.get("conditions") != null) {
-            element.setConditions(ObjectMapperFactory.getObjectMapper().readValue(jsonObject.get("conditions").asText(), ExpressionChain.class));
+            element.setConditions(ObjectMapperFactory.getObjectMapper().readValue(jsonObject.get("conditions").toString(), ExpressionChain.class));
         }
         if (jsonObject.get("actions") != null) {
-            element.setActions(ObjectMapperFactory.getObjectMapper().readValue(jsonObject.get("actions").asText(), ExpressionChain.class));
+            element.setActions(ObjectMapperFactory.getObjectMapper().readValue(jsonObject.get("actions").toString(), ExpressionChain.class));
         }
     }
 }

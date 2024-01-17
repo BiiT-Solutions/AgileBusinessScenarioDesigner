@@ -135,7 +135,7 @@ public class FormsVersionsTreeTable extends TreeTable {
 	/**
 	 * This function adds a row to the table only if the list of forms is not empty.
 	 * 
-	 * @param forms
+	 * @param form
 	 */
 	private void addRow(SimpleFormView form) {
 		if (form != null) {
@@ -292,11 +292,10 @@ public class FormsVersionsTreeTable extends TreeTable {
 	 * by version number.
 	 * 
 	 * @return
-	 * @throws NotConnectedToDatabaseException
 	 */
 	private HashMap<String, List<SimpleFormView>> initializeFormData() {
 		HashMap<String, List<SimpleFormView>> formData = new HashMap<>();
-		List<SimpleFormView> forms = new ArrayList<>();
+		List<SimpleFormView> forms;
 
 		forms = simpleFormViewDao.getAll();
 		for (SimpleFormView form : forms) {

@@ -41,6 +41,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -106,6 +107,7 @@ public class Form extends BaseForm {
     @Enumerated(EnumType.STRING)
     private FormWorkStatus status = FormWorkStatus.DESIGN;
 
+    @Lob
     @Column(name = "json")
     private String json;
 
@@ -151,14 +153,14 @@ public class Form extends BaseForm {
         }
     }
 
-    public Form copy(IUser<Long> user, String label) throws CharacterNotAllowedException, NotValidStorableObjectException,
+    public Form copy(Long userId, String label) throws CharacterNotAllowedException, NotValidStorableObjectException,
             FieldTooLongException {
         Form copiedForm = (Form) generateCopy(false, true);
         copiedForm.setLabel(label);
         copiedForm.setVersion(1);
         copiedForm.resetIds();
-        copiedForm.setCreatedBy(user);
-        copiedForm.setUpdatedBy(user);
+        copiedForm.setCreatedBy(userId);
+        copiedForm.setUpdatedBy(userId);
         copiedForm.setCreationTime();
         copiedForm.setUpdateTime();
         return copiedForm;
@@ -166,7 +168,7 @@ public class Form extends BaseForm {
 
     public Form createNewVersion(IUser<Long> user) throws CharacterNotAllowedException, NotValidStorableObjectException {
         try {
-            Form newVersion = copy(user, this.getLabel());
+            Form newVersion = copy(user != null ? user.getUniqueId() : null, this.getLabel());
             newVersion.setVersion(getVersion() + 1);
             // Update ValidTo of current version: 84600000 milliseconds in a day
             long newValidTo = newVersion.getAvailableFrom().getTime() - 84600000;
@@ -824,5 +826,14 @@ public class Form extends BaseForm {
 
     public void setJson(String json) {
         this.json = json;
+    }
+
+    public CustomVariable getCustomVariableByComparationId(String comparationId) {
+        for (CustomVariable customVariable : getCustomVariables()) {
+            if (customVariable != null && Objects.equals(customVariable.getComparationId(), comparationId)) {
+                return customVariable;
+            }
+        }
+        return null;
     }
 }

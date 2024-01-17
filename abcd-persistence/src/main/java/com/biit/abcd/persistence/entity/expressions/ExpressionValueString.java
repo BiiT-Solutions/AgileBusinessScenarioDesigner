@@ -25,7 +25,7 @@ public class ExpressionValueString extends ExpressionValue<String> {
     @Column(columnDefinition = "TEXT")
     private String text = "";
 
-    protected ExpressionValueString() {
+    public ExpressionValueString() {
         super();
     }
 

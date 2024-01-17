@@ -1,16 +1,17 @@
 package com.biit.abcd.serialization;
 
 import com.biit.abcd.persistence.entity.SimpleFormView;
+import com.biit.abcd.persistence.entity.SimpleFormViewWithContent;
 import com.biit.form.jackson.serialization.BaseStorableObjectDeserializer;
 import com.biit.form.jackson.serialization.BaseStorableObjectSerializer;
 import com.fasterxml.jackson.core.JsonGenerator;
 
 import java.io.IOException;
 
-public class SimpleFormViewSerializer extends BaseStorableObjectSerializer<SimpleFormView> {
+public class SimpleFormViewWithContentSerializer extends BaseStorableObjectSerializer<SimpleFormViewWithContent> {
 
     @Override
-    public void serialize(SimpleFormView src, JsonGenerator jgen) throws IOException {
+    public void serialize(SimpleFormViewWithContent src, JsonGenerator jgen) throws IOException {
         super.serialize(src, jgen);
         if (src.getName() != null) {
             jgen.writeStringField("name", src.getName());
@@ -32,6 +33,9 @@ public class SimpleFormViewSerializer extends BaseStorableObjectSerializer<Simpl
         }
         if (src.getStatus() != null) {
             jgen.writeStringField("status", src.getStatus().name());
+        }
+        if (src.getJson() != null) {
+            jgen.writeStringField("json", src.getJson());
         }
     }
 }

@@ -31,8 +31,8 @@ public class SimpleFormViewTest extends AbstractTransactionalTestNGSpringContext
 	private ISimpleFormViewDao simpleFormViewDao;
 
 	@Test
-	public void getView() throws FieldTooLongException, CharacterNotAllowedException, UnexpectedDatabaseException,
-			ElementCannotBePersistedException, ElementCannotBeRemovedException {
+	public void getView() throws FieldTooLongException, UnexpectedDatabaseException,
+			ElementCannotBeRemovedException {
 		Form form = new Form();
 		form.setOrganizationId(0l);
 		form.setLabel(DUMMY_FORM);

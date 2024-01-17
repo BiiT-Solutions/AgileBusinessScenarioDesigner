@@ -19,7 +19,8 @@
 		as Spring beans. For example @Component, @Controller and @Service. Make sure 
 		to set the correct base-package -->
 	<context:component-scan base-package="com.biit.abcd.persistence, com.biit.abcd.core.security, com.biit.abcd.security,
-	com.biit.liferay.security,  com.biit.liferay.access, com.biit.abcd.core.rest, com.biit.plugins, com.biit.abcd.core.rest.client" />
+	com.biit.liferay.security,  com.biit.liferay.access, com.biit.abcd.core.rest, com.biit.plugins, com.biit.abcd.core.rest.client,
+	com.biit.abcd.core.providers" />
 
 	<!-- Object mapper -->
 	<bean id="objectMapper" class="com.fasterxml.jackson.databind.ObjectMapper"/>
@@ -152,7 +153,7 @@
 	<cache:annotation-driven />
 	<bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager" p:cache-manager-ref="ehcache" />
 	<bean id="ehcache" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean" p:configLocation="classpath:ehcache.xml" p:shared="true" />
-	
+
 	<!-- User Managment -->	
 	<bean id="authenticationService" class="com.biit.liferay.security.AuthenticationService" />	
 	<bean id="authorizationService" class="com.biit.liferay.security.AuthorizationService">

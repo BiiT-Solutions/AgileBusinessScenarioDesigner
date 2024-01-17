@@ -24,7 +24,7 @@ import com.biit.abcd.persistence.dao.IFormDao;
 import com.biit.abcd.persistence.dao.IGlobalVariablesDao;
 import com.biit.abcd.persistence.dao.ISimpleFormViewDao;
 import com.biit.abcd.persistence.entity.Form;
-import com.biit.abcd.persistence.entity.SimpleFormView;
+import com.biit.abcd.persistence.entity.SimpleFormViewWithContent;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -125,11 +125,11 @@ public class RulesService {
     }
 
     private Form getForm(String name, Integer version, Long organizationId) {
-        final SimpleFormView simpleFormView = simpleFormViewDao.getSimpleFormViewByLabelAndVersionAndOrganization(name, version, organizationId);
+        final SimpleFormViewWithContent simpleFormView = simpleFormViewDao.getSimpleFormViewByLabelAndVersionAndOrganization(name, version, organizationId);
         return getForm(simpleFormView);
     }
 
-    private Form getForm(SimpleFormView simpleFormView) {
+    private Form getForm(SimpleFormViewWithContent simpleFormView) {
         if (simpleFormView == null) {
             return null;
         }

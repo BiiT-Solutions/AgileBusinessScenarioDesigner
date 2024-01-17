@@ -4,6 +4,7 @@ import com.biit.abcd.persistence.dao.ISimpleFormViewDao;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.FormWorkStatus;
 import com.biit.abcd.persistence.entity.SimpleFormView;
+import com.biit.abcd.persistence.entity.SimpleFormViewWithContent;
 import com.biit.persistence.dao.exceptions.UnexpectedDatabaseException;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
@@ -50,7 +51,7 @@ public class SimpleFormViewDao implements ISimpleFormViewDao {
     @SuppressWarnings("unchecked")
     @Override
     public List<SimpleFormView> getAll() {
-        Query query = entityManager.createNativeQuery("SELECT tf.id, tf.name, tf.label, tf.version, tf.creation_time, tf.created_by, tf.update_time, tf.updated_by, tf.comparation_id, tf.available_from, tf.available_to, tf.organization_id, max.maxversion, tf.status, tf.json "
+        Query query = entityManager.createNativeQuery("SELECT tf.id, tf.name, tf.label, tf.version, tf.creation_time, tf.created_by, tf.update_time, tf.updated_by, tf.comparation_id, tf.available_from, tf.available_to, tf.organization_id, max.maxversion, tf.status "
                 + "FROM tree_forms tf INNER JOIN "
                 + "(SELECT MAX(version) AS maxversion, label, organization_id FROM tree_forms "
                 + "GROUP BY label, organization_id) AS max  ON max.label = tf.label and max.organization_id = tf.organization_id "
@@ -82,9 +83,9 @@ public class SimpleFormViewDao implements ISimpleFormViewDao {
                 formView.setStatus(FormWorkStatus.getFromString((String) row[13]));
             }
 
-            if (row[14] != null) {
-                formView.setJson((String) row[14]);
-            }
+//            if (row[14] != null) {
+//                formView.setJson((String) row[14]);
+//            }
 
             formViews.add(formView);
         }
@@ -95,7 +96,7 @@ public class SimpleFormViewDao implements ISimpleFormViewDao {
     @SuppressWarnings("unchecked")
     @Override
     public List<SimpleFormView> getSimpleFormViewByLabelAndOrganization(String label, Long organizationId) {
-        Query query = entityManager.createNativeQuery("SELECT tf.id, tf.name, tf.label, tf.version, tf.creation_time, tf.created_by, tf.update_time, tf.updated_by, tf.comparation_id, tf.available_from, tf.available_to, tf.organization_id, max.maxversion, tf.status, tf.json"
+        Query query = entityManager.createNativeQuery("SELECT tf.id, tf.name, tf.label, tf.version, tf.creation_time, tf.created_by, tf.update_time, tf.updated_by, tf.comparation_id, tf.available_from, tf.available_to, tf.organization_id, max.maxversion, tf.status "
                 + "FROM tree_forms tf INNER JOIN "
                 + "(SELECT MAX(version) AS maxversion, label, organization_id FROM tree_forms "
                 + "GROUP BY label, organization_id) AS max  ON max.label = tf.label and max.organization_id = tf.organization_id "
@@ -130,16 +131,13 @@ public class SimpleFormViewDao implements ISimpleFormViewDao {
             if (row[13] != null) {
                 formView.setStatus(FormWorkStatus.getFromString((String) row[13]));
             }
-            if (row[14] != null) {
-                formView.setJson((String) row[14]);
-            }
             formViews.add(formView);
         }
         return formViews;
     }
 
     @Override
-    public SimpleFormView getSimpleFormViewByLabelAndVersionAndOrganization(
+    public SimpleFormViewWithContent getSimpleFormViewByLabelAndVersionAndOrganization(
             String label, Integer version, Long organizationId) {
         Query query = entityManager.createNativeQuery("SELECT tf.id, tf.name, tf.label, tf.version, tf.creation_time, tf.created_by, tf.update_time, tf.updated_by, tf.comparation_id, tf.available_from, tf.available_to, tf.organization_id, max.maxversion, tf.status, tf.json"
                 + "FROM tree_forms tf INNER JOIN "
@@ -155,7 +153,7 @@ public class SimpleFormViewDao implements ISimpleFormViewDao {
 
 
         Object[] row = (Object[]) query.getSingleResult();
-        SimpleFormView formView = new SimpleFormView();
+        SimpleFormViewWithContent formView = new SimpleFormViewWithContent();
         formView.setId(((BigInteger) row[0]).longValue());
         formView.setName((String) row[1]);
         formView.setLabel((String) row[2]);
@@ -185,7 +183,7 @@ public class SimpleFormViewDao implements ISimpleFormViewDao {
     @SuppressWarnings("unchecked")
     @Override
     public List<SimpleFormView> getSimpleFormViewByOrganization(Long organizationId) {
-        Query query = entityManager.createNativeQuery("SELECT tf.id, tf.name, tf.label, tf.version, tf.creation_time, tf.created_by, tf.update_time, tf.updated_by, tf.comparation_id, tf.available_from, tf.available_to, tf.organization_id, max.maxversion, tf.status, tf.json "
+        Query query = entityManager.createNativeQuery("SELECT tf.id, tf.name, tf.label, tf.version, tf.creation_time, tf.created_by, tf.update_time, tf.updated_by, tf.comparation_id, tf.available_from, tf.available_to, tf.organization_id, max.maxversion, tf.status "
                 + "FROM tree_forms tf INNER JOIN "
                 + "(SELECT MAX(version) AS maxversion, label, organization_id FROM tree_forms "
                 + "GROUP BY label, organization_id) AS max  ON max.label = tf.label and max.organization_id = tf.organization_id "
@@ -218,16 +216,13 @@ public class SimpleFormViewDao implements ISimpleFormViewDao {
             if (row[13] != null) {
                 formView.setStatus(FormWorkStatus.getFromString((String) row[13]));
             }
-            if (row[14] != null) {
-                formView.setJson((String) row[14]);
-            }
             formViews.add(formView);
         }
         return formViews;
     }
 
     @Override
-    public SimpleFormView get(Long id) {
+    public SimpleFormViewWithContent get(Long id) {
         Query query = entityManager.createNativeQuery("SELECT tf.id, tf.name, tf.label, tf.version, tf.creation_time, tf.created_by, tf.update_time, tf.updated_by, tf.comparation_id, tf.available_from, tf.available_to, tf.organization_id, max.maxversion, tf.status, tf.json "
                 + "FROM tree_forms tf INNER JOIN "
                 + "(SELECT MAX(version) AS maxversion, label, organization_id FROM tree_forms "
@@ -238,7 +233,7 @@ public class SimpleFormViewDao implements ISimpleFormViewDao {
 
 
         Object[] row = (Object[]) query.getSingleResult();
-        SimpleFormView formView = new SimpleFormView();
+        SimpleFormViewWithContent formView = new SimpleFormViewWithContent();
         formView.setId(((BigInteger) row[0]).longValue());
         formView.setName((String) row[1]);
         formView.setLabel((String) row[2]);

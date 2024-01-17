@@ -40,7 +40,7 @@ public class ExpressionChain extends Expression implements INameAttribute {
 
     private String name;
 
-    // Orderby not works correctly but help the 2nd level cache to not unsort
+    // Order by not works correctly but help the 2nd level cache to not unsort
     // elements.
     @OrderBy(value = "sortSeq ASC")
     @BatchSize(size = 500)
