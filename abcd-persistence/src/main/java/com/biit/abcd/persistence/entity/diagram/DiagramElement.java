@@ -212,13 +212,17 @@ public abstract class DiagramElement extends DiagramObject {
             text = new DiagramText();
             text.copyData(diagramSource.getText());
 
-            Size size = new Size();
-            size.copyData(diagramSource.getSize());
-            setSize(size);
+            if (diagramSource.getSize() != null) {
+                Size size = new Size();
+                size.copyData(diagramSource.getSize());
+                setSize(size);
+            }
 
-            Point point = new Point();
-            point.copyData(diagramSource.getPosition());
-            setPosition(point);
+            if (diagramSource.getPosition() != null) {
+                Point point = new Point();
+                point.copyData(diagramSource.getPosition());
+                setPosition(point);
+            }
         } else {
             throw new NotValidStorableObjectException("Object '" + object + "' is not an instance of DiagramElement.");
         }

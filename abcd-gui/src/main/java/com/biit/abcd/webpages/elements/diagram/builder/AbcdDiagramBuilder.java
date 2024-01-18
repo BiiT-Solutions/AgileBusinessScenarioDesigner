@@ -202,7 +202,7 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
 	/**
 	 * Add a new Diagram object to the diagram if it doesn't exist.
 	 * 
-	 * @param element
+	 * @param jsonString
 	 */
 	private DiagramObject addObjectToDiagram(String jsonString) {
 		DiagramObject element = DiagramObject.fromJson(jsonString);

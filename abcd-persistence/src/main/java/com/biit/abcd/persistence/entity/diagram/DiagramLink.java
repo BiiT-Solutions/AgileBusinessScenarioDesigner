@@ -92,6 +92,9 @@ public class DiagramLink extends DiagramObject {
         if (getParent() == null) {
             throw new RuntimeException("Diagram Link getSourceElement used without diagram.");
         }
+        if (source == null) {
+            return null;
+        }
         String jointJsId = source.getJointjsId();
         return (DiagramElement) getParent().findDiagramObjectByJointJsId(jointJsId);
     }
