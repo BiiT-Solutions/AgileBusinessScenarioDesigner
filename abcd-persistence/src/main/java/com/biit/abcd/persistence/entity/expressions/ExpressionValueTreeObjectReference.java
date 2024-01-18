@@ -130,4 +130,12 @@ public class ExpressionValueTreeObjectReference extends ExpressionValue<TreeObje
                     + "' is not an instance of ExpressionValueTreeObjectReference.");
         }
     }
+
+    @Override
+    public String toString() {
+        if (getReference() != null) {
+            return getReference().getName();
+        }
+        return super.toString();
+    }
 }

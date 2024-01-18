@@ -121,4 +121,12 @@ public class ExpressionValueCustomVariable extends ExpressionValueTreeObjectRefe
     public void setVariableId(String variableId) {
         this.variableId = variableId;
     }
+
+    @Override
+    public String toString() {
+        if (getVariable() != null) {
+            return getVariable().getName();
+        }
+        return super.toString();
+    }
 }

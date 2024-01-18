@@ -13,5 +13,8 @@ public class ExpressionValueCustomVariableSerializer extends ExpressionValueSeri
         if (src.getVariable() != null) {
             jgen.writeStringField("variableId", src.getVariable().getComparationId());
         }
+        if (src.getReference() != null) {
+            jgen.writeStringField("referenceId", src.getReference().getComparationId());
+        }
     }
 }

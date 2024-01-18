@@ -108,6 +108,7 @@ public class FormDeserializer extends BaseFormDeserializer<Form> {
     }
 
     private void updateExpressionValueTreeObjectReference(Form form, Expression expression) {
+        //For ExpressionValueTreeObjectReference and ExpressionValueCustomVariable
         if (expression instanceof ExpressionValueTreeObjectReference) {
             final ExpressionValueTreeObjectReference expressionValueTreeObjectReference = (ExpressionValueTreeObjectReference) expression;
             expressionValueTreeObjectReference.setReference(form.getChildByComparationId(expressionValueTreeObjectReference.getReferenceId()));

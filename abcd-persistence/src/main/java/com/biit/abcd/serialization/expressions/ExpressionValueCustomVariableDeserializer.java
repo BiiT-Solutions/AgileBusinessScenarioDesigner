@@ -14,6 +14,8 @@ public class ExpressionValueCustomVariableDeserializer extends ExpressionValueDe
         if (jsonObject.get("variableId") != null) {
             element.setVariableId(parseString("variableId", jsonObject));
         }
-
+        if (jsonObject.get("referenceId") != null) {
+            element.setReferenceId(parseString("referenceId", jsonObject));
+        }
     }
 }
