@@ -10,6 +10,8 @@ public class DiagramRuleSerializer extends DiagramElementSerializer<DiagramRule>
     @Override
     public void serialize(DiagramRule src, JsonGenerator jgen) throws IOException {
         super.serialize(src, jgen);
-        jgen.writeObjectField("rule", src.getRule());
+        if (src.getRule() != null) {
+            jgen.writeObjectField("ruleId", src.getRule().getComparationId());
+        }
     }
 }

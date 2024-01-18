@@ -211,13 +211,7 @@ public class FormDesigner extends FormWebPageComponent {
 
         upperMenu.addNewCategoryButtonButtonClickListener((ClickListener) event -> addCategory());
 
-        upperMenu.addNewGroupButtonClickListener(new ClickListener() {
-
-            @Override
-            public void buttonClick(ClickEvent event) {
-                addGroup();
-            }
-        });
+        upperMenu.addNewGroupButtonClickListener((ClickListener) event -> addGroup());
 
         upperMenu.addNewQuestionButtonClickListener((ClickListener) event -> addQuestion());
 
@@ -244,12 +238,9 @@ public class FormDesigner extends FormWebPageComponent {
                 if ((selected != null) && (selected.getParent() != null)) {
                     final AlertMessageWindow windowAccept = new AlertMessageWindow(
                             LanguageCodes.WARNING_REMOVE_ELEMENT);
-                    windowAccept.addAcceptActionListener(new AcceptActionListener() {
-                        @Override
-                        public void acceptAction(AcceptCancelWindow window) {
-                            removeSelected();
-                            windowAccept.close();
-                        }
+                    windowAccept.addAcceptActionListener(window -> {
+                        removeSelected();
+                        windowAccept.close();
                     });
                     windowAccept.showCentered();
                 }
@@ -586,7 +577,7 @@ public class FormDesigner extends FormWebPageComponent {
 
     private void addSubanswer() {
         TreeObject selectedRow = formTreeTable.getTreeObjectSelected();
-        if (selectedRow != null && selectedRow instanceof BaseAnswer) {
+        if (selectedRow instanceof BaseAnswer) {
             try {
                 Answer newAnswer = new Answer();
                 setCreator(newAnswer);
@@ -643,14 +634,10 @@ public class FormDesigner extends FormWebPageComponent {
                 UserSessionHandler.getFormController().save();
                 clearAndUpdateFormTable();
                 MessageManager.showInfo(LanguageCodes.INFO_DATA_STORED);
-            } catch (DuplicatedVariableException e) {
+            } catch (DuplicatedVariableException | ConstraintViolationException e) {
                 MessageManager.showError(LanguageCodes.ERROR_DATABASE_DUPLICATED_FORM_VARIABLE,
                         LanguageCodes.ERROR_DATABASE_DUPLICATED_FORM_VARIABLE_CAPTION);
                 AbcdLogger.errorMessage(this.getClass().getName(), e);
-            } catch (ConstraintViolationException cve) {
-                MessageManager.showError(LanguageCodes.ERROR_DATABASE_DUPLICATED_FORM_VARIABLE,
-                        LanguageCodes.ERROR_DATABASE_DUPLICATED_FORM_VARIABLE_CAPTION);
-                AbcdLogger.errorMessage(this.getClass().getName(), cve);
             } catch (UnexpectedDatabaseException | ElementCannotBePersistedException e) {
                 MessageManager.showError(LanguageCodes.ERROR_ACCESSING_DATABASE,
                         LanguageCodes.ERROR_ACCESSING_DATABASE_DESCRIPTION);

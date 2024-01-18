@@ -1,15 +1,16 @@
 package com.biit.abcd.persistence.entity.diagram;
 
+import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.serialization.diagram.DiagramObjectDeserializer;
 import com.biit.abcd.serialization.diagram.DiagramObjectSerializer;
-import com.biit.abcd.serialization.diagram.DiagramRepeatDeserializer;
-import com.biit.abcd.serialization.diagram.DiagramRepeatSerializer;
 import com.biit.form.jackson.serialization.ObjectMapperFactory;
 import com.biit.persistence.entity.StorableObject;
 import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 import com.biit.usermanager.entity.IUser;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
@@ -108,7 +109,43 @@ public abstract class DiagramObject extends StorableObject {
 
     public static DiagramObject fromJson(String jsonString) {
         try {
-            return ObjectMapperFactory.getObjectMapper().readValue(jsonString, DiagramObject.class);
+            final ObjectMapper mapper = ObjectMapperFactory.getObjectMapper();
+            JsonNode elements = mapper.readTree(jsonString);
+            final DiagramObjectType diagramObjectType = DiagramObjectType.getByJsonType(elements.get("type").textValue());
+            final Class<?> classType;
+            switch (diagramObjectType) {
+                case LINK:
+                    classType = DiagramLink.class;
+                    break;
+                case CALCULATION:
+                    classType = DiagramExpression.class;
+                    break;
+                case FORK:
+                    classType = DiagramFork.class;
+                    break;
+                case DIAGRAM_CHILD:
+                    classType = DiagramChild.class;
+                    break;
+                case RULE:
+                    classType = DiagramRule.class;
+                    break;
+                case SINK:
+                    classType = DiagramSink.class;
+                    break;
+                case SOURCE:
+                    classType = DiagramSource.class;
+                    break;
+                case TABLE:
+                    classType = DiagramTable.class;
+                    break;
+                case REPEAT:
+                    classType = DiagramRepeat.class;
+                    break;
+                default:
+                    AbcdLogger.severe(DiagramObject.class.getName(), "Invalid type found '" + diagramObjectType + "'.");
+                    classType = DiagramObject.class;
+            }
+            return (DiagramObject) ObjectMapperFactory.getObjectMapper().readValue(jsonString, classType);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }

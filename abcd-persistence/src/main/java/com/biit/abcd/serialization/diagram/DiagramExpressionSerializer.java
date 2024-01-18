@@ -10,6 +10,8 @@ public class DiagramExpressionSerializer extends DiagramElementSerializer<Diagra
     @Override
     public void serialize(DiagramExpression src, JsonGenerator jgen) throws IOException {
         super.serialize(src, jgen);
-        jgen.writeObjectField("expression", src.getExpression());
+        if (src.getExpression() != null) {
+            jgen.writeObjectField("expressionId", src.getExpression().getComparationId());
+        }
     }
 }

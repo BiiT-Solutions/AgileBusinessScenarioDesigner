@@ -13,6 +13,7 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,6 +26,11 @@ public class DiagramExpression extends DiagramElement {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "expression")
     private ExpressionChain expression;
+
+
+    //For json purposes.
+    @Transient
+    private transient String expressionId;
 
     public DiagramExpression() {
         super();
@@ -77,5 +83,14 @@ public class DiagramExpression extends DiagramElement {
             throw new NotValidStorableObjectException("Object '" + object
                     + "' is not an instance of DiagramCalculation.");
         }
+    }
+
+
+    public String getExpressionId() {
+        return expressionId;
+    }
+
+    public void setExpressionId(String expressionId) {
+        this.expressionId = expressionId;
     }
 }

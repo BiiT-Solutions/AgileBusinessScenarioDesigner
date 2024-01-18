@@ -8,6 +8,7 @@ import com.biit.abcd.persistence.entity.diagram.DiagramLink;
 import com.biit.abcd.persistence.entity.diagram.DiagramObject;
 import com.biit.abcd.persistence.entity.diagram.DiagramRule;
 import com.biit.abcd.persistence.entity.diagram.DiagramTable;
+import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueGenericCustomVariable;
@@ -832,6 +833,33 @@ public class Form extends BaseForm {
         for (CustomVariable customVariable : getCustomVariables()) {
             if (customVariable != null && Objects.equals(customVariable.getComparationId(), comparationId)) {
                 return customVariable;
+            }
+        }
+        return null;
+    }
+
+    public TableRule getTableByComparationId(String comparationId) {
+        for (TableRule tableRule : getTableRules()) {
+            if (tableRule != null && Objects.equals(tableRule.getComparationId(), comparationId)) {
+                return tableRule;
+            }
+        }
+        return null;
+    }
+
+    public Rule getRulesByComparationId(String comparationId) {
+        for (Rule rule : getRules()) {
+            if (rule != null && Objects.equals(rule.getComparationId(), comparationId)) {
+                return rule;
+            }
+        }
+        return null;
+    }
+
+    public ExpressionChain getExpressionsByComparationId(String comparationId) {
+        for (ExpressionChain expressionChain : getExpressionChains()) {
+            if (expressionChain != null && Objects.equals(expressionChain.getComparationId(), comparationId)) {
+                return expressionChain;
             }
         }
         return null;

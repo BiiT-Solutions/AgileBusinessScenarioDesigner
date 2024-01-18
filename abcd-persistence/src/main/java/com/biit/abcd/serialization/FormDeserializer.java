@@ -7,6 +7,7 @@ import com.biit.abcd.persistence.entity.FormWorkStatus;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
 import com.biit.abcd.persistence.entity.diagram.DiagramExpression;
 import com.biit.abcd.persistence.entity.diagram.DiagramObject;
+import com.biit.abcd.persistence.entity.diagram.DiagramRule;
 import com.biit.abcd.persistence.entity.diagram.DiagramTable;
 import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
@@ -74,11 +75,19 @@ public class FormDeserializer extends BaseFormDeserializer<Form> {
         for (Diagram diagram : element.getDiagrams()) {
             for (DiagramObject diagramObject : diagram.getDiagramObjects()) {
                 if (diagramObject instanceof DiagramTable) {
-                    final TableRule tableRule = ((DiagramTable) diagramObject).getTable();
+                    final TableRule tableRule = element.getTableByComparationId(((DiagramTable) diagramObject).getTableId());
+                    ((DiagramTable) diagramObject).setTable(tableRule);
                     update(element, tableRule);
                 }
+                if (diagramObject instanceof DiagramRule) {
+                    final Rule rule = element.getRulesByComparationId(((DiagramRule) diagramObject).getRuleId());
+                    ((DiagramRule) diagramObject).setRule(rule);
+                    update(element, rule);
+                }
                 if (diagramObject instanceof DiagramExpression) {
-                    update(element, ((DiagramExpression) diagramObject).getExpression());
+                    final ExpressionChain expression = element.getExpressionsByComparationId(((DiagramExpression) diagramObject).getExpressionId());
+                    ((DiagramExpression) diagramObject).setExpression(expression);
+                    update(element, expression);
                 }
             }
         }

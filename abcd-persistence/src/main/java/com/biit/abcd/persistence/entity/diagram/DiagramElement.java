@@ -98,14 +98,6 @@ public abstract class DiagramElement extends DiagramObject {
         this.text = biitText;
     }
 
-    public static DiagramElement fromJson(String jsonString) {
-        try {
-            return ObjectMapperFactory.getObjectMapper().readValue(jsonString, DiagramElement.class);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     @Override
     public String toJson() {
         try {

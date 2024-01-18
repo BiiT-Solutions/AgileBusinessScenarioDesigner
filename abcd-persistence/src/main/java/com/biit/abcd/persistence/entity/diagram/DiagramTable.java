@@ -13,6 +13,7 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -26,6 +27,10 @@ public class DiagramTable extends DiagramElement {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "table_rule")
     private TableRule table;
+
+    //For json conversion.
+    @Transient
+    private transient String tableId;
 
     public DiagramTable() {
         super();
@@ -73,5 +78,13 @@ public class DiagramTable extends DiagramElement {
         } else {
             throw new NotValidStorableObjectException("Object '" + object + "' is not an instance of DiagramTable.");
         }
+    }
+
+    public String getTableId() {
+        return tableId;
+    }
+
+    public void setTableId(String tableId) {
+        this.tableId = tableId;
     }
 }
