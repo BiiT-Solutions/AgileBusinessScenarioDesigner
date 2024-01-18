@@ -170,10 +170,9 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
 	 * @return
 	 */
 	private DiagramObject getObjectOfDiagram(String jsonString) {
-		DiagramObject tempElement = DiagramObject.fromJson(jsonString);
+		final DiagramObject tempElement = DiagramObject.fromJson(jsonString);
 		if (diagramElements.containsKey(tempElement.getJointjsId())) {
-			DiagramObject currentElement = diagramElements.get(tempElement.getJointjsId());
-			return currentElement;
+            return diagramElements.get(tempElement.getJointjsId());
 		} else {
 			addObjectToDiagram(tempElement);
 			return tempElement;

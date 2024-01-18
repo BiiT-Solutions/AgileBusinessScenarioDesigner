@@ -1,11 +1,17 @@
 package com.biit.abcd.persistence.entity.diagram;
 
+import com.biit.abcd.serialization.diagram.DiagramObjectDeserializer;
+import com.biit.abcd.serialization.diagram.DiagramObjectSerializer;
+import com.biit.abcd.serialization.diagram.DiagramRepeatDeserializer;
+import com.biit.abcd.serialization.diagram.DiagramRepeatSerializer;
 import com.biit.form.jackson.serialization.ObjectMapperFactory;
 import com.biit.persistence.entity.StorableObject;
 import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 import com.biit.usermanager.entity.IUser;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import javax.persistence.Cacheable;
 import javax.persistence.Column;
@@ -22,6 +28,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
+@JsonDeserialize(using = DiagramObjectDeserializer.class)
+@JsonSerialize(using = DiagramObjectSerializer.class)
 @Table(name = "diagram_objects")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @Cacheable(true)
@@ -46,6 +54,10 @@ public abstract class DiagramObject extends StorableObject {
 
 
     private int z;
+
+    public DiagramObject() {
+        super();
+    }
 
     public DiagramObjectType getType() {
         return type;

@@ -122,28 +122,32 @@ public abstract class DiagramElement extends DiagramObject {
             DiagramElement element = (DiagramElement) object;
 
             tooltip = element.getTooltip();
-            size.setWidth(element.getSize().getWidth());
-            size.setHeight(element.getSize().getHeight());
-            position.setX(element.getPosition().getX());
-            position.setY(element.getPosition().getY());
+            if (element.getSize() != null) {
+                size.setWidth(element.getSize().getWidth());
+                size.setHeight(element.getSize().getHeight());
+            }
+            if (element.getPosition() != null) {
+                position.setX(element.getPosition().getX());
+                position.setY(element.getPosition().getY());
+            }
             angle = element.getAngle();
 
             if ((text == null) && (element.getText() != null)) {
                 text = element.getText();
             } else {
-                if (element.getText().getText() != null) {
+                if (element.getText() != null && element.getText().getText() != null) {
                     text.setText(element.getText().getText());
                 }
-                if (element.getText().getFill() != null) {
+                if (element.getText() != null && element.getText().getFill() != null) {
                     text.setFill(element.getText().getFill());
                 }
-                if (element.getText().getFontSize() != null) {
+                if (element.getText() != null && element.getText().getFontSize() != null) {
                     text.setFontSize(element.getText().getFontSize());
                 }
-                if (element.getText().getStroke() != null) {
+                if (element.getText() != null && element.getText().getStroke() != null) {
                     text.setStroke(element.getText().getStroke());
                 }
-                if (element.getText().getStrokeWidth() != null) {
+                if (element.getText() != null && element.getText().getStrokeWidth() != null) {
                     text.setStrokeWidth(element.getText().getStrokeWidth());
                 }
             }
