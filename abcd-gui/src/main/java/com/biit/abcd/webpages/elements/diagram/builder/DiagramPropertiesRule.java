@@ -65,7 +65,6 @@ public class DiagramPropertiesRule extends SecuredDiagramElementProperties<Diagr
 			}
 		});
 		fieldWithSearchButton.addRemoveClickListener(new ClickListener() {
-			private static final long serialVersionUID = -3314196233359245226L;
 
 			@Override
 			public void buttonClick(ClickEvent event) {

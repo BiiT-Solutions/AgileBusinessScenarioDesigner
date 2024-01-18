@@ -17,8 +17,12 @@ public class DiagramSource extends DiagramElement {
 
     public DiagramSource() {
         super();
-        DiagramText biitText = new DiagramText();
-        biitText.setText("Start");
-        setText(biitText);
+    }
+
+    @Override
+    public DiagramText getText() {
+        final DiagramText diagramText = new DiagramText();
+        diagramText.setText("Start");
+        return diagramText;
     }
 }

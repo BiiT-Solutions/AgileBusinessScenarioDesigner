@@ -42,9 +42,17 @@ public class DiagramRule extends DiagramElement {
 
     public DiagramRule() {
         super();
-        DiagramText biitText = new DiagramText();
-        biitText.setText("Rule");
-        setText(biitText);
+    }
+
+    @Override
+    public DiagramText getText() {
+        final DiagramText diagramText = new DiagramText();
+        if (getRule() != null) {
+            diagramText.setText(getRule().getName());
+        } else {
+            diagramText.setText("Rule");
+        }
+        return diagramText;
     }
 
     @Override

@@ -28,8 +28,6 @@ import java.util.Set;
 public abstract class DiagramElement extends DiagramObject {
     private static final long serialVersionUID = -2842225781954290086L;
 
-    private String tooltip;
-
     @OneToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     @JoinColumn(name = "size")
     private Size size;
@@ -40,16 +38,11 @@ public abstract class DiagramElement extends DiagramObject {
 
     private float angle;
 
-    @OneToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
-    @JoinColumn(name = "text")
-    private DiagramText text;
-
     public String getTooltip() {
-        return tooltip;
-    }
-
-    public void setTooltip(String tooltip) {
-        this.tooltip = tooltip;
+        if (getText() != null) {
+            return getText().getText();
+        }
+        return "";
     }
 
     @Override
@@ -60,9 +53,6 @@ public abstract class DiagramElement extends DiagramObject {
         }
         if (position != null) {
             position.resetIds();
-        }
-        if (text != null) {
-            text.resetIds();
         }
     }
 
@@ -90,13 +80,7 @@ public abstract class DiagramElement extends DiagramObject {
         this.size = size;
     }
 
-    public DiagramText getText() {
-        return text;
-    }
-
-    public void setText(DiagramText biitText) {
-        this.text = biitText;
-    }
+    public abstract DiagramText getText();
 
     @Override
     public String toJson() {
@@ -113,7 +97,6 @@ public abstract class DiagramElement extends DiagramObject {
         if (object instanceof DiagramElement) {
             DiagramElement element = (DiagramElement) object;
 
-            tooltip = element.getTooltip();
             if (element.getSize() != null) {
                 size.setWidth(element.getSize().getWidth());
                 size.setHeight(element.getSize().getHeight());
@@ -123,26 +106,6 @@ public abstract class DiagramElement extends DiagramObject {
                 position.setY(element.getPosition().getY());
             }
             angle = element.getAngle();
-
-            if ((text == null) && (element.getText() != null)) {
-                text = element.getText();
-            } else {
-                if (element.getText() != null && element.getText().getText() != null) {
-                    text.setText(element.getText().getText());
-                }
-                if (element.getText() != null && element.getText().getFill() != null) {
-                    text.setFill(element.getText().getFill());
-                }
-                if (element.getText() != null && element.getText().getFontSize() != null) {
-                    text.setFontSize(element.getText().getFontSize());
-                }
-                if (element.getText() != null && element.getText().getStroke() != null) {
-                    text.setStroke(element.getText().getStroke());
-                }
-                if (element.getText() != null && element.getText().getStrokeWidth() != null) {
-                    text.setStrokeWidth(element.getText().getStrokeWidth());
-                }
-            }
         }
     }
 
@@ -157,19 +120,16 @@ public abstract class DiagramElement extends DiagramObject {
     @Override
     public void setCreatedBy(IUser<Long> user) {
         super.setCreatedBy(user);
-        text.setCreatedBy(user);
     }
 
     @Override
     public void setUpdatedBy(IUser<Long> user) {
         super.setUpdatedBy(user);
-        text.setUpdatedBy(user);
     }
 
     @Override
     public void setUpdateTime(Timestamp dateUpdated) {
         super.setUpdateTime(dateUpdated);
-        text.setUpdateTime(dateUpdated);
     }
 
     /**
@@ -186,10 +146,6 @@ public abstract class DiagramElement extends DiagramObject {
             innerStorableObjects.add(position);
             innerStorableObjects.addAll(position.getAllInnerStorableObjects());
         }
-        if (text != null) {
-            innerStorableObjects.add(text);
-            innerStorableObjects.addAll(text.getAllInnerStorableObjects());
-        }
         return innerStorableObjects;
     }
 
@@ -199,10 +155,7 @@ public abstract class DiagramElement extends DiagramObject {
             super.copyData(object);
 
             DiagramElement diagramSource = (DiagramElement) object;
-            tooltip = diagramSource.getTooltip();
             angle = diagramSource.getAngle();
-            text = new DiagramText();
-            text.copyData(diagramSource.getText());
 
             if (diagramSource.getSize() != null) {
                 Size size = new Size();

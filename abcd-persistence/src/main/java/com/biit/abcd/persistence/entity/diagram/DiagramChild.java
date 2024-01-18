@@ -28,9 +28,6 @@ public class DiagramChild extends DiagramElement {
 
     public DiagramChild() {
         super();
-        DiagramText biitText = new DiagramText();
-        biitText.setText("Diagram");
-        setText(biitText);
     }
 
     @Override
@@ -39,6 +36,17 @@ public class DiagramChild extends DiagramElement {
         if (diagram != null) {
             diagram.resetIds();
         }
+    }
+
+    @Override
+    public DiagramText getText() {
+        final DiagramText diagramText = new DiagramText();
+        if (getDiagram() != null) {
+            diagramText.setText(diagram.getName());
+        } else {
+            diagramText.setText("Diagram");
+        }
+        return diagramText;
     }
 
     public Diagram getDiagram() {

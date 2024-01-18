@@ -27,9 +27,6 @@ public class DiagramPropertiesSource extends SecuredDiagramElementProperties<Dia
 		instance = element;
 
 		diagramElementLabel = new TextField(ServerTranslate.translate(LanguageCodes.PROPERTIES_TECHNICAL_NAME));
-		if (instance.getText() == null) {
-			instance.setText(new DiagramText());
-		}
 		diagramElementLabel.setValue(instance.getText().getText());
 
 		FormLayout categoryForm = new FormLayout();

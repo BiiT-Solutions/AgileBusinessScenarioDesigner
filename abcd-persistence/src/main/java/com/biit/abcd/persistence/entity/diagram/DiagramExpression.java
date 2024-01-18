@@ -34,9 +34,17 @@ public class DiagramExpression extends DiagramElement {
 
     public DiagramExpression() {
         super();
-        DiagramText biitText = new DiagramText();
-        biitText.setText("Calculation");
-        setText(biitText);
+    }
+
+    @Override
+    public DiagramText getText() {
+        final DiagramText diagramText = new DiagramText();
+        if (getExpression() != null) {
+            diagramText.setText(getExpression().getName());
+        } else {
+            diagramText.setText("Calculation");
+        }
+        return diagramText;
     }
 
     public ExpressionChain getExpression() {

@@ -41,15 +41,10 @@ public abstract class PropertiesForClassComponent<T> extends CustomComponent {
 		setWidth("100%");
 		setHeight(null);
 
-		addDetachListener(new DetachListener() {
-			private static final long serialVersionUID = -1283647887712898710L;
-
-			@Override
-			public void detach(DetachEvent event) {
-				focus();
-				updateAndExit();
-			}
-		});
+		addDetachListener((DetachListener) event -> {
+            focus();
+            updateAndExit();
+        });
 	}
 
 	@Override
@@ -81,17 +76,15 @@ public abstract class PropertiesForClassComponent<T> extends CustomComponent {
 	}
 
 	private void addValueChangeListenerToFieldsInContainer(AbstractComponentContainer container) {
-		Iterator<Component> itr = container.iterator();
-		while (itr.hasNext()) {
-			Component component = itr.next();
-			if (component instanceof AbstractComponentContainer) {
-				addValueChangeListenerToFieldsInContainer(container);
-			} else {
-				if (component instanceof AbstractField<?>) {
-					addValueChangeListenerToField((AbstractField<?>) component);
-				}
-			}
-		}
+        for (Component component : container) {
+            if (component instanceof AbstractComponentContainer) {
+                addValueChangeListenerToFieldsInContainer(container);
+            } else {
+                if (component instanceof AbstractField<?>) {
+                    addValueChangeListenerToField((AbstractField<?>) component);
+                }
+            }
+        }
 	}
 
 	private void addValueChangeListenerToField(AbstractField<?> component) {
@@ -114,7 +107,7 @@ public abstract class PropertiesForClassComponent<T> extends CustomComponent {
 	protected abstract void firePropertyUpdateOnExitListener();
 
 	private void updateAndExit() {
-		// Check UI is different of null due to the detach is also triggered when UI.close() is called.
+		// Check UI is different of null due to detach is also triggered when UI.close() is called.
 		if (UI.getCurrent() != null) {
 			updateElement();
 			firePropertyUpdateOnExitListener();

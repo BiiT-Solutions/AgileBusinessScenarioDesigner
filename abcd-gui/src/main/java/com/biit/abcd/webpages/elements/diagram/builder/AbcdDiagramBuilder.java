@@ -261,7 +261,7 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
                 setEnabled(true);
             }
             diagramElements = createMapOfDiagramObjects(diagram);
-            fromJson(diagram.toJoinJsJson());
+            fromJson(diagram.toJson());
         } else {
             setEnabled(false);
         }
@@ -280,39 +280,35 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
     }
 
     public void updateDiagram(final DiagramUpdated callback) {
-        toJson(new DiagramBuilderJsonGenerationListener() {
-
-            @Override
-            public void generatedJsonString(String jsonString) {
-                // Create the new diagram from Json and get the map of elements.
-                Diagram tempDiagram = Diagram.fromJson(jsonString);
-                HashMap<String, DiagramObject> newElements = createMapOfDiagramObjects(tempDiagram);
-                // Remove any key in the original mapping and diagram that do
-                // not exist in the new
-                Iterator<String> itr = diagramElements.keySet().iterator();
-                while (itr.hasNext()) {
-                    String key = itr.next();
-                    if (!newElements.containsKey(key)) {
-                        DiagramObject objectToRemove = diagramElements.get(key);
-                        diagram.removeDiagramObject(objectToRemove);
-                        itr.remove();
-                    }
+        toJson(jsonString -> {
+            // Create the new diagram from Json and get the map of elements.
+            Diagram tempDiagram = Diagram.fromJson(jsonString);
+            HashMap<String, DiagramObject> newElements = createMapOfDiagramObjects(tempDiagram);
+            // Remove any key in the original mapping and diagram that do
+            // not exist in the new
+            Iterator<String> itr = diagramElements.keySet().iterator();
+            while (itr.hasNext()) {
+                String key = itr.next();
+                if (!newElements.containsKey(key)) {
+                    DiagramObject objectToRemove = diagramElements.get(key);
+                    diagram.removeDiagramObject(objectToRemove);
+                    itr.remove();
                 }
-                // Now insert new elements and update old ones.
-                for (DiagramObject object : tempDiagram.getDiagramObjects()) {
-                    if (diagramElements.containsKey(object.getJointjsId())) {
-                        // Already exist, update
-                        DiagramObject currentValue = diagramElements.get(object.getJointjsId());
-                        currentValue.update(object, UserSessionHandler.getUser());
-                    } else {
-                        // Doesn't exist, insert
-                        diagram.addDiagramObject(object);
-                        diagramElements.put(object.getJointjsId(), object);
-                    }
+            }
+            // Now insert new elements and update old ones.
+            for (DiagramObject object : tempDiagram.getDiagramObjects()) {
+                if (diagramElements.containsKey(object.getJointjsId())) {
+                    // Already exist, update
+                    DiagramObject currentValue = diagramElements.get(object.getJointjsId());
+                    currentValue.update(object, UserSessionHandler.getUser());
+                } else {
+                    // Doesn't exist, insert
+                    diagram.addDiagramObject(object);
+                    diagramElements.put(object.getJointjsId(), object);
                 }
-                if (callback != null) {
-                    callback.updated(diagram);
-                }
+            }
+            if (callback != null) {
+                callback.updated(diagram);
             }
         });
     }

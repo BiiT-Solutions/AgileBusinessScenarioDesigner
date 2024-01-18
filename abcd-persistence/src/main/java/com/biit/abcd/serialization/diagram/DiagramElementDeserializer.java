@@ -16,7 +16,6 @@ public class DiagramElementDeserializer<T extends DiagramElement> extends Diagra
     @Override
     public void deserialize(T element, JsonNode jsonObject, DeserializationContext context) throws IOException {
         super.deserialize(element, jsonObject, context);
-        element.setTooltip(parseString("tooltip", jsonObject));
         if (jsonObject.get("size") != null) {
             element.setSize(ObjectMapperFactory.getObjectMapper().readValue(jsonObject.get("size").toString(), Size.class));
         }
@@ -24,28 +23,21 @@ public class DiagramElementDeserializer<T extends DiagramElement> extends Diagra
             element.setPosition(ObjectMapperFactory.getObjectMapper().readValue(jsonObject.get("position").toString(), Point.class));
         }
         element.setAngle(parseFloat("angle", jsonObject));
-        if (jsonObject.get("text") != null) {
-            element.setText(ObjectMapperFactory.getObjectMapper().readValue(jsonObject.get("text").toString(), DiagramText.class));
-        }
 
         //Attrs has a text inside.
-        JsonNode attrs = jsonObject.get("attrs");
-        if (attrs != null) {
-            if (attrs.isArray()) {
-                for (JsonNode childNode : attrs) {
-                    try {
-                        JsonNode biitTextElement = childNode.get(".biitText");
-                        if (biitTextElement != null) {
-                            DiagramText biitText = ObjectMapperFactory.getObjectMapper().readValue(childNode.toPrettyString(), DiagramText.class);
-                            element.setText(biitText);
-                        }
-                    } catch (NullPointerException e) {
-                        AbcdLogger.severe(this.getClass().getName(), "Invalid diagram object:\n" + jsonObject.toPrettyString());
-                        AbcdLogger.errorMessage(this.getClass().getName(), e);
-                        throw new RuntimeException(e);
-                    }
-                }
-            }
-        }
+//        JsonNode attrs = jsonObject.get("attrs");
+//        if (attrs != null) {
+//            try {
+//                JsonNode biitTextElement = attrs.get(".biitText");
+//                if (biitTextElement != null) {
+//                    DiagramText biitText = ObjectMapperFactory.getObjectMapper().readValue(biitTextElement.toPrettyString(), DiagramText.class);
+//                    element.setText(biitText);
+//                }
+//            } catch (NullPointerException e) {
+//                AbcdLogger.severe(this.getClass().getName(), "Invalid diagram object:\n" + jsonObject.toPrettyString());
+//                AbcdLogger.errorMessage(this.getClass().getName(), e);
+//                throw new RuntimeException(e);
+//            }
+//        }
     }
 }

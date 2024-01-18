@@ -17,8 +17,12 @@ public class DiagramRepeat extends DiagramElement {
 
     public DiagramRepeat() {
         super();
-        DiagramText biitText = new DiagramText();
-        biitText.setText("Repeat");
-        setText(biitText);
+    }
+
+    @Override
+    public DiagramText getText() {
+        final DiagramText diagramText = new DiagramText();
+        diagramText.setText("Repeat");
+        return diagramText;
     }
 }

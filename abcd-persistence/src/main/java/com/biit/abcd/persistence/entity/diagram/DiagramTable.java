@@ -34,9 +34,17 @@ public class DiagramTable extends DiagramElement {
 
     public DiagramTable() {
         super();
-        DiagramText biitText = new DiagramText();
-        biitText.setText("Table");
-        setText(biitText);
+    }
+
+    @Override
+    public DiagramText getText() {
+        final DiagramText diagramText = new DiagramText();
+        if (getTable() != null) {
+            diagramText.setText(getTable().getName());
+        } else {
+            diagramText.setText("Table");
+        }
+        return diagramText;
     }
 
     public TableRule getTable() {
@@ -45,7 +53,9 @@ public class DiagramTable extends DiagramElement {
 
     public void setTable(TableRule table) {
         this.table = table;
-        getText().setText(table.getName());
+        if (table != null) {
+            getText().setText(table.getName());
+        }
     }
 
     @Override

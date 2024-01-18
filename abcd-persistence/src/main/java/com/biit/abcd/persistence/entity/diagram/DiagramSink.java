@@ -19,9 +19,13 @@ public class DiagramSink extends DiagramExpression {
 
     public DiagramSink() {
         super();
-        DiagramText biitText = new DiagramText();
-        biitText.setText("End");
-        setText(biitText);
+    }
+
+    @Override
+    public DiagramText getText() {
+        final DiagramText diagramText = new DiagramText();
+        diagramText.setText("End");
+        return diagramText;
     }
 
     @Override
