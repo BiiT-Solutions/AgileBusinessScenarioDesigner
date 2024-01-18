@@ -11,7 +11,7 @@ public class PointSerializer extends CustomSerializer<Point> {
     @Override
     public void serialize(Point src, JsonGenerator jgen) throws IOException {
         super.serialize(src, jgen);
-        jgen.writeStringField("x", String.valueOf(src.getX()));
-        jgen.writeStringField("y", String.valueOf(src.getY()));
+        jgen.writeNumberField("x", src.getX());
+        jgen.writeNumberField("y", src.getY());
     }
 }

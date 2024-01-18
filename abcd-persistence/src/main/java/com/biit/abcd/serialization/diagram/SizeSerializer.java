@@ -11,7 +11,7 @@ public class SizeSerializer extends CustomSerializer<Size> {
     @Override
     public void serialize(Size src, JsonGenerator jgen) throws IOException {
         super.serialize(src, jgen);
-        jgen.writeStringField("height", String.valueOf(src.getHeight()));
-        jgen.writeStringField("width", String.valueOf(src.getWidth()));
+        jgen.writeNumberField("height", src.getHeight());
+        jgen.writeNumberField("width", src.getWidth());
     }
 }

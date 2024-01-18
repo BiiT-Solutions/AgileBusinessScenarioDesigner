@@ -11,8 +11,8 @@ public class ExpressionValueCustomVariableDeserializer extends ExpressionValueDe
     @Override
     public void deserialize(ExpressionValueCustomVariable element, JsonNode jsonObject, DeserializationContext context) throws IOException {
         super.deserialize(element, jsonObject, context);
-        if (jsonObject.get("variable") != null) {
-            element.setVariableId(parseString("variable", jsonObject));
+        if (jsonObject.get("variableId") != null) {
+            element.setVariableId(parseString("variableId", jsonObject));
         }
 
     }

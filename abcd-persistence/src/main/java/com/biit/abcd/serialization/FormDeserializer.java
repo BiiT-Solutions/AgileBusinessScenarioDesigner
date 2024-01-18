@@ -100,6 +100,11 @@ public class FormDeserializer extends BaseFormDeserializer<Form> {
         updateExpressionValueTreeObjectReference(form, expression);
         updateExpressionValueCustomVariable(form, expression);
         updateExpressionValueGenericCustomVariable(form, expression);
+        if (expression instanceof ExpressionChain) {
+            for (Expression child : ((ExpressionChain) expression).getExpressions()) {
+                updateExpression(form, child);
+            }
+        }
     }
 
     private void updateExpressionValueTreeObjectReference(Form form, Expression expression) {

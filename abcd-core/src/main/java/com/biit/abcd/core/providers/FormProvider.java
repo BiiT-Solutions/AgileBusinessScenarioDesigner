@@ -36,6 +36,7 @@ public class FormProvider {
 
     public Form saveForm(Form form) {
         form.setJson(form.toJson());
+        //Save from json.
         try {
             Form mutilatedForm = form.copy(form.getCreatedBy(), form.getLabel());
             mutilatedForm.setId(form.getId());
@@ -54,11 +55,15 @@ public class FormProvider {
             } else {
                 mutilatedForm = formDao.makePersistent(mutilatedForm);
                 form.setId(mutilatedForm.getId());
+                //Store id on json
+                mutilatedForm.setJson(mutilatedForm.toJson());
+                formDao.merge(mutilatedForm);
                 return form;
             }
         } catch (CharacterNotAllowedException | NotValidStorableObjectException | FieldTooLongException e) {
             AbcdLogger.errorMessage(this.getClass().getName(), e);
         }
+        //Save old way
         if (form.getId() != null) {
             return formDao.merge(form);
         } else {
@@ -81,12 +86,14 @@ public class FormProvider {
         final SimpleFormViewWithContent simpleFormViewWithContent = simpleFormViewDao.get(simpleFormView.getId());
         if (simpleFormViewWithContent.getJson() != null && !simpleFormViewWithContent.getJson().isEmpty()) {
             try {
+                AbcdLogger.debug(this.getClass().getName(), "Obtaining form '" + simpleFormView.getLabel() + "' from json structure.");
                 return Form.fromJson(simpleFormViewWithContent.getJson());
             } catch (JsonProcessingException e) {
                 AbcdLogger.errorMessage(this.getClass().getName(), e);
                 return formDao.get(simpleFormView.getId());
             }
         }
+        AbcdLogger.debug(this.getClass().getName(), "Obtaining form '" + simpleFormView.getLabel() + "' from standard database.");
         return formDao.get(simpleFormView.getId());
     }
 }

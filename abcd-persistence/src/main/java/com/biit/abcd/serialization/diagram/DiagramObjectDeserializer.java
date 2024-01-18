@@ -40,7 +40,7 @@ public class DiagramObjectDeserializer<T extends DiagramObject> extends Storable
     @Override
     public T deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
         final JsonNode jsonObject = jsonParser.getCodec().readTree(jsonParser);
-        final DiagramObjectType diagramObjectType = DiagramObjectType.get(jsonObject.get("type").textValue());
+        final DiagramObjectType diagramObjectType = DiagramObjectType.getByJsonType(jsonObject.get("type").textValue());
         final Class<?> classType;
         switch (diagramObjectType) {
             case LINK:
