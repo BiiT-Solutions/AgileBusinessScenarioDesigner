@@ -45,6 +45,7 @@ public class DiagramTable extends DiagramElement {
 
     public void setTable(TableRule table) {
         this.table = table;
+        getText().setText(table.getName());
     }
 
     @Override

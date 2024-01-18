@@ -39,7 +39,6 @@ public class DiagramPropertiesTable extends SecuredDiagramElementProperties<Diag
 			fieldWithSearchButton.setValue(instance.getTable(), instance.getTable().getName());
 		}
 		fieldWithSearchButton.addClickListener(new ClickListener() {
-			private static final long serialVersionUID = 2075223046207815648L;
 
 			@Override
 			public void buttonClick(ClickEvent event) {

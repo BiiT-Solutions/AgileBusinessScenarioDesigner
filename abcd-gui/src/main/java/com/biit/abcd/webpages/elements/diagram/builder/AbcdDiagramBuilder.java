@@ -43,8 +43,8 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
     public AbcdDiagramBuilder() {
         super();
         diagramElements = new HashMap<>();
-        pickListeners = new ArrayList<AbcdDiagramBuilder.DiagramObjectPickedListener>();
-        jumpToListeners = new ArrayList<JumpToListener>();
+        pickListeners = new ArrayList<>();
+        jumpToListeners = new ArrayList<>();
         objectAddedListeners = new ArrayList<>();
         objectUpdatedListeners = new ArrayList<>();
 

@@ -106,6 +106,7 @@ public class Diagram extends StorableObject implements INameAttribute {
 
     public void removeDiagramObject(DiagramObject object) {
         diagramObjects.remove(object);
+
         // Some orphan removal are not working correctly. Force it!
         if (object instanceof DiagramFork) {
             ((DiagramFork) object).setReference(null);
