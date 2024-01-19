@@ -1,25 +1,9 @@
 package com.biit.abcd.persistence.entity.diagram;
 
-import com.biit.abcd.serialization.diagram.DiagramTextDeserializer;
-import com.biit.abcd.serialization.diagram.DiagramTextSerializer;
-import com.biit.persistence.entity.StorableObject;
-import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
-import javax.persistence.Cacheable;
 import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import java.util.HashSet;
-import java.util.Set;
+import java.io.Serializable;
 
-@Entity
-@JsonDeserialize(using = DiagramTextDeserializer.class)
-@JsonSerialize(using = DiagramTextSerializer.class)
-@Table(name = "diagram_text")
-@Cacheable(true)
-public class DiagramText extends StorableObject {
+public class DiagramText implements Serializable {
     private static final long serialVersionUID = 1533578154303621298L;
     private String text;
     private String fill;
@@ -89,29 +73,5 @@ public class DiagramText extends StorableObject {
     public String toString() {
         return "{text: " + text + ", fill: " + fill + ", font-size:" + fontSize + ", stroke:" + stroke
                 + ", stroke-width:" + strokeWidth;
-    }
-
-    /**
-     * Has no inner elements. Returns an empty set.
-     */
-    @Override
-    public Set<StorableObject> getAllInnerStorableObjects() {
-        Set<StorableObject> innerStorableObjects = new HashSet<>();
-        return innerStorableObjects;
-    }
-
-    @Override
-    public void copyData(StorableObject object) throws NotValidStorableObjectException {
-        if (object instanceof DiagramText) {
-            super.copyBasicInfo(object);
-            DiagramText diagramBiitText = (DiagramText) object;
-            text = diagramBiitText.getText();
-            fill = diagramBiitText.getFill();
-            fontSize = diagramBiitText.getFontSize();
-            stroke = diagramBiitText.getStroke();
-            strokeWidth = diagramBiitText.getStrokeWidth();
-        } else {
-            throw new NotValidStorableObjectException("Object '" + object + "' is not an instance of DiagramBiitText.");
-        }
     }
 }

@@ -12,7 +12,7 @@ import com.biit.abcd.persistence.entity.diagram.DiagramRule;
 import com.biit.abcd.persistence.entity.diagram.DiagramSink;
 import com.biit.abcd.persistence.entity.diagram.DiagramSource;
 import com.biit.abcd.persistence.entity.diagram.DiagramTable;
-import com.biit.form.jackson.serialization.StorableObjectDeserializer;
+import com.biit.form.jackson.serialization.CustomDeserializer;
 import com.biit.form.log.FormStructureLogger;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
@@ -21,7 +21,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
-public class DiagramObjectDeserializer<T extends DiagramObject> extends StorableObjectDeserializer<T> {
+public class DiagramObjectDeserializer<T extends DiagramObject> extends CustomDeserializer<T> {
 
     @Override
     public void deserialize(T element, JsonNode jsonObject, DeserializationContext context) throws IOException {

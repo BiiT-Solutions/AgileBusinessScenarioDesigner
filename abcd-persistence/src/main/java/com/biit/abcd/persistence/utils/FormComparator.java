@@ -521,9 +521,6 @@ public class FormComparator {
 		if (object1 == null && object2 == null) {
 			return;
 		}
-		if (object1 instanceof StorableObject || object2 instanceof StorableObject) {
-			compare((StorableObject) object1, (StorableObject) object2);
-		}
 
 		if ((object1.getText() != null && object2.getText() == null)
 				|| (object1.getText() == null && object2.getText() != null)
