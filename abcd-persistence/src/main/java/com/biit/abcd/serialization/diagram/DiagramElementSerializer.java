@@ -13,7 +13,7 @@ public class DiagramElementSerializer<T extends DiagramElement> extends DiagramO
         jgen.writeStringField("tooltip", src.getTooltip());
         jgen.writeObjectField("size", src.getSize());
         jgen.writeObjectField("position", src.getPosition());
-        jgen.writeStringField("angle", String.valueOf(src.getAngle()));
+        jgen.writeNumberField("angle", src.getAngle());
 
         // Create biitText JsonNode
         // Create Attrs node and insert biitText needed on frontend
