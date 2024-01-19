@@ -38,13 +38,11 @@ public class DiagramExpression extends DiagramElement {
 
     @Override
     public DiagramText getText() {
-        final DiagramText diagramText = new DiagramText();
         if (getExpression() != null) {
-            diagramText.setText(getExpression().getName());
+            return new DiagramText(getExpression().getName());
         } else {
-            diagramText.setText("Calculation");
+            return new DiagramText("Calculation");
         }
-        return diagramText;
     }
 
     public ExpressionChain getExpression() {

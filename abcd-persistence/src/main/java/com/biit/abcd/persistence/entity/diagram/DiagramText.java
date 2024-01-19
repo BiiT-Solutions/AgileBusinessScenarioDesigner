@@ -40,6 +40,11 @@ public class DiagramText extends StorableObject {
         strokeWidth = "0";
     }
 
+    public DiagramText(String text) {
+        this();
+        setText(text);
+    }
+
     public String getText() {
         return text;
     }

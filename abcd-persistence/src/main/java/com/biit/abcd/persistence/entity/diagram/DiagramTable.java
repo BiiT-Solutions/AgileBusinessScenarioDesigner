@@ -38,13 +38,11 @@ public class DiagramTable extends DiagramElement {
 
     @Override
     public DiagramText getText() {
-        final DiagramText diagramText = new DiagramText();
         if (getTable() != null) {
-            diagramText.setText(getTable().getName());
+            return new DiagramText(getTable().getName());
         } else {
-            diagramText.setText("Table");
+            return new DiagramText("Table");
         }
-        return diagramText;
     }
 
     public TableRule getTable() {

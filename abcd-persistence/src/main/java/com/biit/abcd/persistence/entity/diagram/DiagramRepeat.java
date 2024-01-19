@@ -21,8 +21,6 @@ public class DiagramRepeat extends DiagramElement {
 
     @Override
     public DiagramText getText() {
-        final DiagramText diagramText = new DiagramText();
-        diagramText.setText("Repeat");
-        return diagramText;
+        return new DiagramText("Repeat");
     }
 }

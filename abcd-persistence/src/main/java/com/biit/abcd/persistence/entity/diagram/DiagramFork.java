@@ -40,9 +40,7 @@ public class DiagramFork extends DiagramElement {
 
     @Override
     public DiagramText getText() {
-        final DiagramText diagramText = new DiagramText();
-        diagramText.setText("Fork");
-        return diagramText;
+        return new DiagramText("Fork");
     }
 
     @Override

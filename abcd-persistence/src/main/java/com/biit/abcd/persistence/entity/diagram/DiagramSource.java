@@ -21,8 +21,6 @@ public class DiagramSource extends DiagramElement {
 
     @Override
     public DiagramText getText() {
-        final DiagramText diagramText = new DiagramText();
-        diagramText.setText("Start");
-        return diagramText;
+        return new DiagramText("Start");
     }
 }

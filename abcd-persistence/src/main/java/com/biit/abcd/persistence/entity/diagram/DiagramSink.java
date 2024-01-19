@@ -23,9 +23,7 @@ public class DiagramSink extends DiagramExpression {
 
     @Override
     public DiagramText getText() {
-        final DiagramText diagramText = new DiagramText();
-        diagramText.setText("End");
-        return diagramText;
+        return new DiagramText("End");
     }
 
     @Override

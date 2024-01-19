@@ -46,13 +46,11 @@ public class DiagramRule extends DiagramElement {
 
     @Override
     public DiagramText getText() {
-        final DiagramText diagramText = new DiagramText();
         if (getRule() != null) {
-            diagramText.setText(getRule().getName());
+            return new DiagramText(getRule().getName());
         } else {
-            diagramText.setText("Rule");
+            return new DiagramText("Rule");
         }
-        return diagramText;
     }
 
     @Override

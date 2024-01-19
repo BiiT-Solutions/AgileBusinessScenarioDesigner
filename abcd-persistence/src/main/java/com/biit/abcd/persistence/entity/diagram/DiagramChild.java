@@ -40,13 +40,11 @@ public class DiagramChild extends DiagramElement {
 
     @Override
     public DiagramText getText() {
-        final DiagramText diagramText = new DiagramText();
         if (getDiagram() != null) {
-            diagramText.setText(diagram.getName());
+            return new DiagramText(diagram.getName());
         } else {
-            diagramText.setText("Diagram");
+            return new DiagramText("Diagram");
         }
-        return diagramText;
     }
 
     public Diagram getDiagram() {
