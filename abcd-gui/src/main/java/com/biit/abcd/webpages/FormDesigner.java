@@ -134,15 +134,12 @@ public class FormDesigner extends FormWebPageComponent {
 
         propertiesComponent = new FormDesignerPropertiesComponent();
         propertiesComponent.setSizeFull();
-        propertiesComponent.addPropertyUpdateListener(new PropertieUpdateListener() {
-            @Override
-            public void propertyUpdate(Object element) {
-                if (tableIsGoingToDetach) {
-                    return;
-                }
-                formTreeTable.updateItem((TreeObject) element);
-                updateUpperMenu(formTreeTable.getTreeObjectSelected());
+        propertiesComponent.addPropertyUpdateListener(element -> {
+            if (tableIsGoingToDetach) {
+                return;
             }
+            formTreeTable.updateItem((TreeObject) element);
+            updateUpperMenu(formTreeTable.getTreeObjectSelected());
         });
 
         HorizontalLayout rootLayout = new HorizontalLayout();

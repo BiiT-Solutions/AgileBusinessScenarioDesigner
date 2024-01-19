@@ -92,10 +92,11 @@ public class DiagramPropertiesDiagramChild extends SecuredDiagramElementProperti
 
 			@Override
 			public void buttonClick(ClickEvent event) {
+				AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
+						+ "' removed 'Table rule' from Table node with diagram:"
+						+ (instance.getDiagram() != null ? instance.getDiagram().getName() : null) + "'.");
 				instance.setDiagram(null);
 				firePropertyUpdateListener(instance);
-				AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
-						+ "' removed diagram from Diagram node with ID:" + instance.getId() + "'.");
 			}
 		});
 		childForm.addComponent(fieldWithSearchButton);
