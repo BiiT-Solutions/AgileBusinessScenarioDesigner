@@ -70,7 +70,7 @@
 											<fileset dir="./license" includes="**/*" />
 										</copy>
 										<!-- create the final file -->
-										<zip basedir="${temporal-folder}/" destfile="../${destination-file}-${project.version}.zip" />
+										<zip basedir="${temporal-folder}/" destfile="../${destination-file}.zip" />
 									</target>
 								</configuration>
 								<goals>
