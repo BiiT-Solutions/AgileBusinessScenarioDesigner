@@ -89,4 +89,9 @@ public class Node extends StorableObject {
             throw new NotValidStorableObjectException("Object '" + object + "' is not an instance of Node.");
         }
     }
+
+    @Override
+    public String toString() {
+        return "Node{" + '\'' + jointjsId + '\'' + '}';
+    }
 }

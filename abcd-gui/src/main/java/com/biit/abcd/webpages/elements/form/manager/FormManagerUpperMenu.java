@@ -105,24 +105,14 @@ public class FormManagerUpperMenu extends UpperMenu {
 
         createPdf = new SaveAsButton(LanguageCodes.CAPTION_CREATE_PDF, ThemeIcon.CREATE_PDF,
                 LanguageCodes.TOOLTIP_CREATE_PDF, IconSize.MEDIUM, new SaveAsPdfAction());
-        ((SaveAsButton) createPdf).addSaveActionListener(new SaveActionListener() {
-            @Override
-            public void saveAction() {
-                launchListeners();
-            }
-        });
+        ((SaveAsButton) createPdf).addSaveActionListener(this::launchListeners);
         if (AbcdConfigurationReader.getInstance().isPdfEnabled()) {
             exportButtons.add(createPdf);
         }
 
         exportJson = new SaveAsButton(LanguageCodes.FORM_MANAGER_EXPORT_FORM, ThemeIcon.FORM_MANAGER_EXPORT_FORM,
                 LanguageCodes.FORM_MANAGER_EXPORT_FORM, IconSize.MEDIUM, new SaveAsJsonAction());
-        ((SaveAsButton) exportJson).addSaveActionListener(new SaveActionListener() {
-            @Override
-            public void saveAction() {
-                launchListeners();
-            }
-        });
+        ((SaveAsButton) exportJson).addSaveActionListener(this::launchListeners);
         exportButtons.add(exportJson);
 
         // Create rules and launch drools engine
@@ -141,23 +131,17 @@ public class FormManagerUpperMenu extends UpperMenu {
 
         // Create new test scenario
         createTestScenario = new IconButton(LanguageCodes.FORM_MANAGER_CREATE_TEST_SCENARIOS, ThemeIcon.FORM_TEST_PAGE,
-                LanguageCodes.FORM_MANAGER_CREATE_TEST_SCENARIOS, IconSize.MEDIUM, new ClickListener() {
-            private static final long serialVersionUID = -1628560253598118060L;
-
-            @Override
-            public void buttonClick(ClickEvent event) {
-                // Accept button update the form from the
-                // simpleViewForm.
-                launchListeners();
-                ApplicationFrame.navigateTo(WebMap.TEST_SCENARIOS);
-            }
-        });
+                LanguageCodes.FORM_MANAGER_CREATE_TEST_SCENARIOS, IconSize.MEDIUM, (ClickListener) event -> {
+                    // Accept button update the form from the
+                    // simpleViewForm.
+                    launchListeners();
+                    ApplicationFrame.navigateTo(WebMap.TEST_SCENARIOS);
+                });
 
         // Launch test scenario
         launchTestScenario = new IconButton(LanguageCodes.FORM_MANAGER_LAUNCH_TEST_SCENARIOS,
                 ThemeIcon.FORM_TEST_LAUNCH, LanguageCodes.FORM_MANAGER_LAUNCH_TEST_SCENARIOS, IconSize.MEDIUM,
                 new ClickListener() {
-                    private static final long serialVersionUID = 2538065448920025133L;
 
                     @Override
                     public void buttonClick(ClickEvent event) {

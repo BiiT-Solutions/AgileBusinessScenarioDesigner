@@ -73,14 +73,7 @@ public class SelectDiagramTable extends TreeTable {
 		item.getItemProperty(MenuProperties.UPDATE_TIME).setValue(
 				DateManager.convertDateToStringWithHours((diagram.getUpdateTime())));
 		editCellComponent.addEditButtonClickListener(new CellEditButtonClickListener(diagram));
-		editCellComponent.addLayoutClickListener(new LayoutClickListener() {
-			private static final long serialVersionUID = -4750839674064167369L;
-
-			@Override
-			public void layoutClick(LayoutClickEvent event) {
-				setValue(diagram);
-			}
-		});
+		editCellComponent.addLayoutClickListener((LayoutClickListener) event -> setValue(diagram));
 		setChildrenAllowed(diagram, false);
 		updateItemInGui(diagram);
 	}
@@ -145,22 +138,19 @@ public class SelectDiagramTable extends TreeTable {
 
 			newTableCellEditWindow.setValue(diagram.getName());
 			newTableCellEditWindow.showCentered();
-			newTableCellEditWindow.addAcceptActionListener(new AcceptActionListener() {
-				@Override
-				public void acceptAction(AcceptCancelWindow window) {
-					for (Diagram existingDiagram : UserSessionHandler.getFormController().getForm().getDiagrams()) {
-						if (existingDiagram != diagram
-								&& existingDiagram.getName().equals(newTableCellEditWindow.getValue())) {
-							MessageManager.showError(LanguageCodes.ERROR_REPEATED_DROOLS_RULE_NAME);
-							return;
-						}
-					}
-					diagram.setName(newTableCellEditWindow.getValue());
-					diagram.setUpdateTime();
-					updateItemInGui(diagram);
-					newTableCellEditWindow.close();
-				}
-			});
+			newTableCellEditWindow.addAcceptActionListener(window -> {
+                for (Diagram existingDiagram : UserSessionHandler.getFormController().getForm().getDiagrams()) {
+                    if (existingDiagram != diagram
+                            && existingDiagram.getName().equals(newTableCellEditWindow.getValue())) {
+                        MessageManager.showError(LanguageCodes.ERROR_REPEATED_DROOLS_RULE_NAME);
+                        return;
+                    }
+                }
+                diagram.setName(newTableCellEditWindow.getValue());
+                diagram.setUpdateTime();
+                updateItemInGui(diagram);
+                newTableCellEditWindow.close();
+            });
 		}
 	}
 

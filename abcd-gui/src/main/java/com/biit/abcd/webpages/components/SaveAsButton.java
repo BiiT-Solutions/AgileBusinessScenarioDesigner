@@ -36,13 +36,13 @@ public class SaveAsButton extends IconButton {
 	public SaveAsButton(final LanguageCodes caption, ThemeIcon icon, LanguageCodes tooltip, IconSize size,
 			SaveAction saveActionCall) {
 		super(caption, icon, tooltip, size);
-		acceptListeners = new ArrayList<SaveActionListener>();
+		acceptListeners = new ArrayList<>();
 		createAction(caption, saveActionCall);
 	}
 
 	public SaveAsButton(final LanguageCodes caption, ThemeIcon icon, LanguageCodes tooltip, SaveAction saveActionCall) {
 		super(caption, icon, tooltip);
-		acceptListeners = new ArrayList<SaveActionListener>();
+		acceptListeners = new ArrayList<>();
 		createAction(caption, saveActionCall);
 	}
 
@@ -63,7 +63,6 @@ public class SaveAsButton extends IconButton {
 						// a focus listener to ensure that the windows is
 						// displayed with the message.
 						newSaveWindow.addFocusListener(new FocusListener() {
-							private static final long serialVersionUID = -1059102685829827949L;
 
 							@Override
 							public void focus(FocusEvent event) {

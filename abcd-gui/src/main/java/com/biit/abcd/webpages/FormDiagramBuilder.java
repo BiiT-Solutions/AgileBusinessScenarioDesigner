@@ -48,7 +48,6 @@ public class FormDiagramBuilder extends FormWebPageComponent {
             Arrays.asList(AbcdActivity.READ));
     private SelectDiagramTable diagramBuilderTable;
     private AbcdDiagramBuilder diagramBuilder;
-    private FormDiagramBuilderUpperMenu diagramBuilderUpperMenu;
     private DiagramPropertiesComponent propertiesContainer;
     private DiagramTableValueChange diagramTableValueChange;
 
@@ -299,7 +298,7 @@ public class FormDiagramBuilder extends FormWebPageComponent {
 
     private void initUpperMenu() {
         final FormDiagramBuilder thisPage = this;
-        diagramBuilderUpperMenu = new FormDiagramBuilderUpperMenu();
+        FormDiagramBuilderUpperMenu diagramBuilderUpperMenu = new FormDiagramBuilderUpperMenu();
         diagramBuilderUpperMenu.addNewDiagramButtonClickListener((ClickListener) event -> UI.getCurrent().addWindow(
                 new WindowNewDiagram(thisPage, LanguageCodes.FORM_DIAGRAM_BUILDER_NEW_DIAGRAM_CAPTION,
                         LanguageCodes.FORM_DIAGRAM_BUILDER_NEW_DIAGRAM_TEXTFIELD)));
@@ -430,7 +429,6 @@ public class FormDiagramBuilder extends FormWebPageComponent {
     }
 
     private class DiagramTableValueChange implements ValueChangeListener {
-        private static final long serialVersionUID = 8142953635201344140L;
 
         @Override
         public void valueChange(ValueChangeEvent event) {

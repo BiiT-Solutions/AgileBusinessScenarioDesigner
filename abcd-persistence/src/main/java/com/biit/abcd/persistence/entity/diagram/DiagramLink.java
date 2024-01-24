@@ -407,4 +407,12 @@ public class DiagramLink extends DiagramObject {
             throw new NotValidStorableObjectException("Object '" + object + "' is not an instance of DiagramLink.");
         }
     }
+
+    @Override
+    public String toString() {
+        return "DiagramLink{" +
+                "source=" + source +
+                ", target=" + target +
+                '}';
+    }
 }

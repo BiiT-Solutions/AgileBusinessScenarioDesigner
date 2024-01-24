@@ -77,7 +77,7 @@
 
 	<!-- Apache Tomcat session expire -->
 	<session-config>
-		<session-timeout>31</session-timeout>
+		<session-timeout>1300</session-timeout>
 	</session-config>
 
 	<!-- Uncomment following filter if you want fast deployment in jetty -->
