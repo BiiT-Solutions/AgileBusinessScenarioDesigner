@@ -18,6 +18,7 @@ public class DiagramSerializer extends StorableObjectSerializer<Diagram> {
         jgen.writeFieldName("cells");
         jgen.writeStartArray("cells");
         for (DiagramObject child : src.getDiagramObjects()) {
+            child.setId(null);
             jgen.writeObject(child);
         }
         jgen.writeEndArray();

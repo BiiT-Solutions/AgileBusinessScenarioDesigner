@@ -19,6 +19,6 @@ public class DiagramLinkSerializer extends DiagramObjectSerializer<DiagramLink> 
         jgen.writeBooleanField("smooth", src.isSmooth());
         jgen.writeBooleanField("manhattan", src.isSmooth());
         jgen.writeStringField("attrs", src.getAttrs());
-        jgen.writeStringField("vertices", src.getVertices());
+        //jgen.writeStringField("vertices", src.getVertices());
     }
 }

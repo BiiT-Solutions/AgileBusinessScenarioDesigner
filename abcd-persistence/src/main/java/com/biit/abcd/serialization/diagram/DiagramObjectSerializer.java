@@ -10,12 +10,13 @@ public class DiagramObjectSerializer<T extends DiagramObject> extends CustomSeri
 
     @Override
     public void serialize(T src, JsonGenerator jgen) throws IOException {
-        super.serialize(src, jgen);
         if (src.getType() != null) {
             jgen.writeStringField("type", src.getType().getJsonType());
         }
         if (src.getId() != null) {
             jgen.writeNumberField("databaseId", src.getId());
+            //Remove id as JointJs has already the jointjsid on this field.
+            src.setId(null);
         }
         if (src.getJointjsId() != null) {
             jgen.writeStringField("id", src.getJointjsId());
@@ -26,5 +27,6 @@ public class DiagramObjectSerializer<T extends DiagramObject> extends CustomSeri
             jgen.writeStringField("embeds", src.getEmbeds());
         }
         jgen.writeNumberField("z", src.getZ());
+        super.serialize(src, jgen);
     }
 }
