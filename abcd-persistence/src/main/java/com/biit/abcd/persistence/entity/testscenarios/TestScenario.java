@@ -148,7 +148,7 @@ public class TestScenario extends StorableObject implements INameAttribute {
 			}
 		} else if (formTreeObject instanceof Question) {
 			TreeObject testScenarioQuestion = addChild(formTreeObject, testScenarioTreeObjectParent, new TestScenarioQuestion());
-			createTestScenatioAnswer((Question) formTreeObject, (TestScenarioQuestion) testScenarioQuestion);
+			createTestScenarioAnswer((Question) formTreeObject, (TestScenarioQuestion) testScenarioQuestion);
 		}
 	}
 
@@ -160,7 +160,7 @@ public class TestScenario extends StorableObject implements INameAttribute {
 		return testScenarioChild;
 	}
 
-	private void createTestScenatioAnswer(Question formQuestion, TestScenarioQuestion testQuestion) {
+	private void createTestScenarioAnswer(Question formQuestion, TestScenarioQuestion testQuestion) {
 		switch (formQuestion.getAnswerType()) {
 		case RADIO:
 			testQuestion.setTestAnswer(new TestAnswerRadioButton());

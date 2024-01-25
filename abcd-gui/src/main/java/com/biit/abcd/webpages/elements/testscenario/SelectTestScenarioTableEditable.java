@@ -42,8 +42,7 @@ public class SelectTestScenarioTableEditable extends TableCellLabelEdit {
 	}
 
 	private class CellEditButtonClickListener implements ClickListener {
-		private static final long serialVersionUID = 2470467428282560338L;
-		private TestScenario testScenario;
+		private final TestScenario testScenario;
 
 		public CellEditButtonClickListener(TestScenario testScenario) {
 			this.testScenario = testScenario;
@@ -56,28 +55,25 @@ public class SelectTestScenarioTableEditable extends TableCellLabelEdit {
 
 			newTableCellEditWindow.setValue(testScenario.getName());
 			newTableCellEditWindow.showCentered();
-			newTableCellEditWindow.addAcceptActionListener(new AcceptActionListener() {
-				@Override
-				public void acceptAction(AcceptCancelWindow window) {
-					for (TestScenario existingTestScenario : UserSessionHandler.getTestScenariosController()
-							.getTestScenarios(UserSessionHandler.getFormController().getForm())) {
-						if (existingTestScenario != testScenario
-								&& existingTestScenario.getName().equals(newTableCellEditWindow.getValue())) {
-							MessageManager.showError(LanguageCodes.ERROR_REPEATED_TEST_SCENARIO_NAME);
-							return;
-						}
-					}
-					try {
-						testScenario.setName(newTableCellEditWindow.getValue());
-						testScenario.setUpdateTime();
-						updateItemTableRuleInGui(testScenario);
-						newTableCellEditWindow.close();
-					} catch (FieldTooLongException e) {
-						MessageManager.showWarning(LanguageCodes.WARNING_TITLE,
-								LanguageCodes.TEST_SCENARIOS_WARNING_NAME_TOO_LONG);
-					}
-				}
-			});
+			newTableCellEditWindow.addAcceptActionListener(window -> {
+                for (TestScenario existingTestScenario : UserSessionHandler.getTestScenariosController()
+                        .getTestScenarios(UserSessionHandler.getFormController().getForm())) {
+                    if (existingTestScenario != testScenario
+                            && existingTestScenario.getName().equals(newTableCellEditWindow.getValue())) {
+                        MessageManager.showError(LanguageCodes.ERROR_REPEATED_TEST_SCENARIO_NAME);
+                        return;
+                    }
+                }
+                try {
+                    testScenario.setName(newTableCellEditWindow.getValue());
+                    testScenario.setUpdateTime();
+                    updateItemTableRuleInGui(testScenario);
+                    newTableCellEditWindow.close();
+                } catch (FieldTooLongException e) {
+                    MessageManager.showWarning(LanguageCodes.WARNING_TITLE,
+                            LanguageCodes.TEST_SCENARIOS_WARNING_NAME_TOO_LONG);
+                }
+            });
 		}
 	}
 
