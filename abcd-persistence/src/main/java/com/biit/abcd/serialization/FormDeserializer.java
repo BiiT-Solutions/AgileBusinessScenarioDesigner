@@ -103,6 +103,14 @@ public class FormDeserializer extends BaseFormDeserializer<Form> {
         for (Rule rules : element.getRules()) {
             update(element, rules);
         }
+
+        for (CustomVariable customVariable : element.getCustomVariables()) {
+            update(element, customVariable);
+        }
+    }
+
+    private void update(Form form, CustomVariable customVariable) {
+        customVariable.setForm(form);
     }
 
     private void updateExpression(Form form, Expression expression) {

@@ -56,7 +56,7 @@ public class FormProvider {
                 mutilatedForm = formDao.makePersistent(mutilatedForm);
                 form.setId(mutilatedForm.getId());
                 //Store id on json
-                mutilatedForm.setJson(mutilatedForm.toJson());
+                mutilatedForm.setJson(form.toJson());
                 formDao.merge(mutilatedForm);
                 return form;
             }
@@ -95,5 +95,9 @@ public class FormProvider {
         }
         AbcdLogger.debug(this.getClass().getName(), "Obtaining form '" + simpleFormView.getLabel() + "' from standard database.");
         return formDao.get(simpleFormView.getId());
+    }
+
+    public boolean exists(String value, long organizationId) {
+        return formDao.exists(value, organizationId);
     }
 }
