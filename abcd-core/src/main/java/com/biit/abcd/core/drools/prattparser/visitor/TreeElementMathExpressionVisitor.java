@@ -94,11 +94,11 @@ public class TreeElementMathExpressionVisitor implements ITreeElementVisitor {
 			if ((treeObject instanceof Question) && ((Question) treeObject).getAnswerType().equals(AnswerType.INPUT)) {
 				switch (((Question) treeObject).getAnswerFormat()) {
 				case NUMBER:
-					builder.append("(Double)$" + id + ".getAnswer('" + AnswerFormat.NUMBER.toString() + "')");
+					builder.append("(Double) $" + id + ".getAnswer('" + AnswerFormat.NUMBER + "')");
 					break;
 				case DATE:
 					if (expVal.getUnit() != null) {
-						builder.append(expVal.getUnit().getDroolsFunction() + "( $" + id + ".getAnswer('" + AnswerFormat.DATE.toString() + "'))");
+						builder.append(expVal.getUnit().getDroolsFunction() + "($" + id + ".getAnswer('" + AnswerFormat.DATE + "'))");
 					}
 					break;
 				case TEXT:

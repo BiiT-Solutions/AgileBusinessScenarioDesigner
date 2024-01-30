@@ -336,7 +336,7 @@ public class AbcdDiagramBuilder extends DiagramBuilder {
     }
 
     public void updateChangesToDiagram(DiagramObject element) {
-        if (diagram.getDiagramObjects().contains(element)) {
+        if (diagram != null && diagram.getDiagramObjects() != null && diagram.getDiagramObjects().contains(element)) {
             if (element instanceof DiagramElement) {
                 updateCellJson(element.toJson());
             } else {

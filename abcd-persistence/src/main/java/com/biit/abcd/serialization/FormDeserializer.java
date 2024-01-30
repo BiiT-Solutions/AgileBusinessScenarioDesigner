@@ -5,7 +5,10 @@ import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.FormWorkStatus;
 import com.biit.abcd.persistence.entity.diagram.Diagram;
+import com.biit.abcd.persistence.entity.diagram.DiagramChild;
 import com.biit.abcd.persistence.entity.diagram.DiagramExpression;
+import com.biit.abcd.persistence.entity.diagram.DiagramFork;
+import com.biit.abcd.persistence.entity.diagram.DiagramLink;
 import com.biit.abcd.persistence.entity.diagram.DiagramObject;
 import com.biit.abcd.persistence.entity.diagram.DiagramRule;
 import com.biit.abcd.persistence.entity.diagram.DiagramTable;
@@ -52,12 +55,12 @@ public class FormDeserializer extends BaseFormDeserializer<Form> {
         }
 
         // Diagram objects deserialization
-        final JsonNode diagramObjects = jsonObject.get("rules");
-        if (diagramObjects != null) {
+        final JsonNode diagramRules = jsonObject.get("rules");
+        if (diagramRules != null) {
             //Handle children one by one.
-            if (diagramObjects.isArray()) {
+            if (diagramRules.isArray()) {
                 final Set<Rule> rules = new HashSet<>();
-                for (JsonNode childNode : diagramObjects) {
+                for (JsonNode childNode : diagramRules) {
                     try {
                         final Class<? extends Rule> classType = (Class<? extends Rule>) Class.forName(childNode.get("class").asText());
                         rules.add(ObjectMapperFactory.getObjectMapper().readValue(childNode.toPrettyString(), classType));
@@ -73,23 +76,7 @@ public class FormDeserializer extends BaseFormDeserializer<Form> {
 
         //Set ExpressionValueTreeObjectReference tree objects from referenceId.
         for (Diagram diagram : element.getDiagrams()) {
-            for (DiagramObject diagramObject : diagram.getDiagramObjects()) {
-                if (diagramObject instanceof DiagramTable) {
-                    final TableRule tableRule = element.getTableByComparationId(((DiagramTable) diagramObject).getTableId());
-                    ((DiagramTable) diagramObject).setTable(tableRule);
-                    update(element, tableRule);
-                }
-                if (diagramObject instanceof DiagramRule) {
-                    final Rule rule = element.getRulesByComparationId(((DiagramRule) diagramObject).getRuleId());
-                    ((DiagramRule) diagramObject).setRule(rule);
-                    update(element, rule);
-                }
-                if (diagramObject instanceof DiagramExpression) {
-                    final ExpressionChain expression = element.getExpressionsByComparationId(((DiagramExpression) diagramObject).getExpressionId());
-                    ((DiagramExpression) diagramObject).setExpression(expression);
-                    update(element, expression);
-                }
-            }
+            update(element, diagram);
         }
 
         for (TableRule tableRule : element.getTableRules()) {
@@ -106,6 +93,35 @@ public class FormDeserializer extends BaseFormDeserializer<Form> {
 
         for (CustomVariable customVariable : element.getCustomVariables()) {
             update(element, customVariable);
+        }
+    }
+
+    private void update(Form form, Diagram diagram) {
+        for (DiagramObject diagramObject : diagram.getDiagramObjects()) {
+            if (diagramObject instanceof DiagramTable) {
+                final TableRule tableRule = form.getTableByComparationId(((DiagramTable) diagramObject).getTableId());
+                ((DiagramTable) diagramObject).setTable(tableRule);
+                update(form, tableRule);
+            }
+            if (diagramObject instanceof DiagramRule) {
+                final Rule rule = form.getRulesByComparationId(((DiagramRule) diagramObject).getRuleId());
+                ((DiagramRule) diagramObject).setRule(rule);
+                update(form, rule);
+            }
+            if (diagramObject instanceof DiagramExpression) {
+                final ExpressionChain expression = form.getExpressionsByComparationId(((DiagramExpression) diagramObject).getExpressionId());
+                ((DiagramExpression) diagramObject).setExpression(expression);
+                update(form, expression);
+            }
+            if (diagramObject instanceof DiagramLink) {
+                update(form, ((DiagramLink) diagramObject).getExpressionChain());
+            }
+            if (diagramObject instanceof DiagramFork) {
+                update(form, ((DiagramFork) diagramObject).getReference());
+            }
+            if (diagramObject instanceof DiagramChild) {
+                update(form, ((DiagramChild) diagramObject).getDiagram());
+            }
         }
     }
 
@@ -127,9 +143,12 @@ public class FormDeserializer extends BaseFormDeserializer<Form> {
     private void updateExpressionValueTreeObjectReference(Form form, Expression expression) {
         //For ExpressionValueTreeObjectReference and ExpressionValueCustomVariable
         if (expression instanceof ExpressionValueTreeObjectReference) {
-            final ExpressionValueTreeObjectReference expressionValueTreeObjectReference = (ExpressionValueTreeObjectReference) expression;
-            expressionValueTreeObjectReference.setReference(form.getChildByComparationId(expressionValueTreeObjectReference.getReferenceId()));
+            update(form, (ExpressionValueTreeObjectReference) expression);
         }
+    }
+
+    private void update(Form form, ExpressionValueTreeObjectReference reference) {
+        reference.setReference(form.getChildByComparationId(reference.getReferenceId()));
     }
 
     private void updateExpressionValueCustomVariable(Form form, Expression expression) {

@@ -190,6 +190,8 @@ public class DroolsParser {
             ruleCore += "\tDroolsRulesLogger.info(\"DroolsRule\", \"Variable set (" + leftExpressionCustomVariable.getReference().getName() + ", \"" + "+$"
                     + getTreeObjectName(leftExpressionCustomVariable.getReference()) + ".getVariableValue('"
                     + leftExpressionCustomVariable.getVariable().getName() + "')+\")\");\n";
+            //Force the re-execution from drools as the variable has been changed.
+            //ruleCore += "\tupdate($droolsForm)\n";
         }
         return ruleCore;
     }
@@ -305,18 +307,22 @@ public class DroolsParser {
      * @throws NotCompatibleTypeException
      * @throws RuleNotImplementedException
      */
-    public static String createDroolsRule(List<Rule> rules, DroolsHelper droolsHelper)
+    public static String createDroolsRule(List<DroolsRule> rules, DroolsHelper droolsHelper)
             throws RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
             TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
             BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException {
         setDroolsHelper(droolsHelper);
         StringBuilder parsedText = new StringBuilder();
-        for (Rule rule : rules) {
+        for (DroolsRule rule : rules) {
             if (rule != null) {
                 // Parse the rules individually
                 String parsedRule = createDroolsRule(rule);
                 if (parsedRule != null) {
                     parsedText.append(rule.getName());
+                    //If rule has a specific salience, include it.
+                    if (rule.getSalience() != null) {
+                        parsedText.append("salience ").append(rule.getSalience()).append(" \n");
+                    }
                     parsedText.append(RuleGenerationUtils.getWhenRuleString());
 
                     // The rule
@@ -1095,7 +1101,8 @@ public class DroolsParser {
             mathematicalExpression = treePrint.getBuilder().toString();
             ruleCore.append("\t$").append(getTreeObjectName(leftExpressionCustomVariable.getReference())).append(".setVariableValue('").append(leftExpressionCustomVariable.getVariable().getName()).append("', ").append(mathematicalExpression).append(");\n");
             ruleCore.append("\tDroolsRulesLogger.info(\"DroolsRule\", \"Variable set (").append(leftExpressionCustomVariable.getReference().getName()).append(", ").append(leftExpressionCustomVariable.getVariable().getName()).append(", ").append(mathematicalExpression).append(")\");\n");
-
+            //Force the re-execution from drools as the variable has been changed.
+            //ruleCore.append("\tupdate($droolsForm)\n");
         }
         return ruleCore.toString();
     }
@@ -1374,7 +1381,8 @@ public class DroolsParser {
             ruleCore.append("\tObject callResult = ").append(pluginCall).append(";\n");
             ruleCore.append("\t$").append(getTreeObjectName(leftExpressionCustomVariable.getReference())).append(".setVariableValue('").append(leftExpressionCustomVariable.getVariable().getName()).append("', callResult);\n");
             ruleCore.append("\tDroolsRulesLogger.info(\"DroolsRule\", \"Variable set (").append(leftExpressionCustomVariable.getReference().getName()).append(", ").append(leftExpressionCustomVariable.getVariable().getName()).append(", callResult)\");\n");
-
+            //Force the re-execution from drools as the variable has been changed.
+            //ruleCore.append("\tupdate($droolsForm)\n");
         }
         // }
         return ruleCore.toString();
