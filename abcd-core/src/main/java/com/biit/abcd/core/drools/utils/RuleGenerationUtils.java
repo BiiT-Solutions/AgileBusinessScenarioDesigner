@@ -45,7 +45,7 @@ import java.util.UUID;
 public class RuleGenerationUtils {
 
     public static String getRuleName(String name) {
-        return getRuleName(name, null);
+        return name + "_" + getUniqueId();
     }
 
     public static String getRuleName(String name, ExpressionChain extraConditions) {

@@ -10,7 +10,7 @@ import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 public class DroolsRule extends Rule {
     private static final long serialVersionUID = 387304400306278717L;
 
-    private Integer salience;
+    private Long salience;
 
     public DroolsRule() {
         super();
@@ -23,16 +23,16 @@ public class DroolsRule extends Rule {
         setActions(rule.getActions());
     }
 
-    public DroolsRule(Rule rule, Integer salience) {
+    public DroolsRule(Rule rule, Long salience) {
         this(rule);
         setSalience(salience);
     }
 
-    public Integer getSalience() {
+    public Long getSalience() {
         return salience;
     }
 
-    public void setSalience(Integer salience) {
+    public void setSalience(Long salience) {
         this.salience = salience;
     }
 

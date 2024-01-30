@@ -198,7 +198,7 @@ public class DroolsRulesGenerator {
     private String createDefaultValueDroolsRules(Set<String> variablesList, ExpressionValueCustomVariable expressionValueCustomVariable)
             throws NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException {
         StringBuilder defaultCustomVariableValue = new StringBuilder();
-        String ruleName = "";
+        String ruleText = "";
         if ((expressionValueCustomVariable != null) && (expressionValueCustomVariable.getReference() != null)
                 && (expressionValueCustomVariable.getVariable() != null) && (expressionValueCustomVariable.getVariable().getDefaultValue() != null)
                 && (!(expressionValueCustomVariable.getVariable().getDefaultValue()).equals(""))) {
@@ -223,11 +223,12 @@ public class DroolsRulesGenerator {
             }
 
             // Rule name
-            ruleName = RuleGenerationUtils.getRuleName(expressionValueCustomVariable.getVariable().getName() + "_default_value");
+            String ruleName = RuleGenerationUtils.getRuleName(expressionValueCustomVariable.getVariable().getName() + "_default_value");
+            ruleText = "rule \"" + ruleName + "\"\n";
             // Default rules must be executed first.
-            ruleName += "salience " + Salience.VARIABLES_SALIENCE + " \n";
+            ruleText += "salience " + Salience.VARIABLES_SALIENCE + " \n";
             //Avoid the re-activation of a rule NO MATTER what the cause is. (Mainly by the update that is below).
-            ruleName += "lock-on-active\n";
+            ruleText += "lock-on-active\n";
             // Conditions
             defaultCustomVariableValue.append("when\n");
             defaultCustomVariableValue.append("\t$droolsForm: DroolsForm()\n");
@@ -242,11 +243,12 @@ public class DroolsRulesGenerator {
                     + customVariableDefaultValue + ")\");\n");
             //Force the re-execution from drools as the variable has been changed.
             //defaultCustomVariableValue.append("\tupdate($droolsForm)\n");
+            defaultCustomVariableValue.append("\tinsert(new FiredRule(\"" + ruleName + "\"));\n");
             defaultCustomVariableValue.append("end\n\n");
         }
         if (!variablesList.contains(defaultCustomVariableValue.toString())) {
             variablesList.add(defaultCustomVariableValue.toString());
-            return ruleName + defaultCustomVariableValue;
+            return ruleText + defaultCustomVariableValue;
         } else {
             return null;
         }

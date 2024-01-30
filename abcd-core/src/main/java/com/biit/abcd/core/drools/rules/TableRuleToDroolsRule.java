@@ -19,6 +19,7 @@ import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Transforms a Table rule to a list of drools rules.
@@ -38,7 +39,7 @@ public class TableRuleToDroolsRule {
      * @throws InvalidExpressionException
      * @throws PrattParserException
      */
-    public static List<DroolsRule> parse(DiagramElement node, TableRule tableRule, ExpressionChain extraConditions, Integer salience)
+    public static List<DroolsRule> parse(DiagramElement node, TableRule tableRule, ExpressionChain extraConditions, AtomicLong salience)
             throws ExpressionInvalidException, RuleNotImplementedException, ActionNotImplementedException,
             PrattParserException, InvalidExpressionException, NotCompatibleTypeException {
         List<DroolsRule> newRules = new ArrayList<>();
@@ -52,7 +53,7 @@ public class TableRuleToDroolsRule {
                     ExpressionChain rowConditionExpression = convertTableRowToExpressionChain(row.getConditions());
 
                     newRule.setName(RuleGenerationUtils.getRuleName(tableRuleName + "_row_" + i, extraConditions));
-                    newRule.setSalience(salience);
+                    newRule.setSalience(salience.decrementAndGet());
                     newRule.setConditions(RuleGenerationUtils.flattenExpressionChain(rowConditionExpression));
                     newRule.addExtraConditions(extraConditions);
                     newRule.setActions(row.getActions());

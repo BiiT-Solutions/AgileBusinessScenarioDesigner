@@ -44,8 +44,10 @@ import com.biit.drools.engine.DroolsHelper;
 import com.biit.form.entity.TreeObject;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class DiagramParser {
 
@@ -86,21 +88,23 @@ public class DiagramParser {
             PluginInvocationException, DroolsRuleCreationException, PrattParserException, InvalidRuleException, ActionNotImplementedException,
             InvalidExpressionException {
         final List<DroolsRule> newRules = parse(diagram, null);
+        //Sort rules
+        newRules.sort(Comparator.comparing(DroolsRule::getSalience, Comparator.nullsFirst(Comparator.naturalOrder())).reversed()
+                .thenComparing(Rule::getName, Comparator.nullsFirst(Comparator.naturalOrder())));
         return DroolsParser.createDroolsRule(newRules, getDroolsHelper());
     }
 
     private List<DroolsRule> parse(Diagram diagram, ExpressionChain extraConditions) throws ExpressionInvalidException, InvalidRuleException,
             RuleNotImplementedException, ActionNotImplementedException, NotCompatibleTypeException, PrattParserException, InvalidExpressionException {
-        return parse(diagram, extraConditions, Salience.DIAGRAM_STARTING_SALIENCE);
+        return parse(diagram, extraConditions, new AtomicLong(Salience.DIAGRAM_STARTING_SALIENCE));
     }
 
-    private List<DroolsRule> parse(Diagram diagram, ExpressionChain extraConditions, Integer salience) throws ExpressionInvalidException, InvalidRuleException,
+    private List<DroolsRule> parse(Diagram diagram, ExpressionChain extraConditions, AtomicLong salience) throws ExpressionInvalidException, InvalidRuleException,
             RuleNotImplementedException, ActionNotImplementedException, NotCompatibleTypeException, PrattParserException, InvalidExpressionException {
         List<DroolsRule> newRules = new ArrayList<>();
         Set<DiagramObject> diagramNodes = diagram.getDiagramObjects();
-        int diagramSalience = salience != null ? salience - 100 : 0;
+        AtomicLong diagramSalience = salience != null ? salience : new AtomicLong();
         for (DiagramObject diagramNode : diagramNodes) {
-            diagramSalience--;
             // Start the algorithm for each diagram source defined in the main diagram.
             if (diagramNode instanceof DiagramSource) {
                 parseDiagramElement((DiagramElement) diagramNode, extraConditions, newRules, diagramSalience);
@@ -121,7 +125,7 @@ public class DiagramParser {
      * @throws InvalidExpressionException
      * @throws PrattParserException
      */
-    private List<DroolsRule> parseDiagramElement(DiagramElement node, ExpressionChain extraConditions, List<DroolsRule> newRules, Integer salience)
+    private List<DroolsRule> parseDiagramElement(DiagramElement node, ExpressionChain extraConditions, List<DroolsRule> newRules, AtomicLong salience)
             throws ExpressionInvalidException, RuleNotImplementedException, ActionNotImplementedException, NotCompatibleTypeException,
             PrattParserException, InvalidExpressionException, InvalidRuleException {
         List<ExpressionChain> forkConditions = new ArrayList<>();
@@ -177,9 +181,9 @@ public class DiagramParser {
         // because they will add extra conditions to the following rules
         for (DiagramLink outLink : node.getOutgoingLinks()) {
             if (node.getType().equals(DiagramObjectType.FORK) && (forkConditions.size() > linkNumber)) {
-                parseDiagramElement(outLink.getTargetElement(), forkConditions.get(linkNumber), newRules, salience != null ? salience - 1 : null);
+                parseDiagramElement(outLink.getTargetElement(), forkConditions.get(linkNumber), newRules, salience);
             } else {
-                parseDiagramElement(outLink.getTargetElement(), extraConditions, newRules, salience != null ? salience - 1 : null);
+                parseDiagramElement(outLink.getTargetElement(), extraConditions, newRules, salience);
             }
             linkNumber++;
         }

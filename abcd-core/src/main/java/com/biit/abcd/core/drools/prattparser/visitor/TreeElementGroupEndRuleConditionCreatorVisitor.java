@@ -103,11 +103,10 @@ public class TreeElementGroupEndRuleConditionCreatorVisitor implements ITreeElem
 
 	@Override
 	public void visit(PrefixExpression prefix) throws NotCompatibleTypeException {
-
 		if (prefix.getOperator().equals(ExpressionTokenType.NOT)) {
 			getCompleteExpression().addExpression(new ExpressionValueString("not( "));
 		} else {
-			String droolsCondition = "FiredRule( getRuleName() == '" + prefix.getExpressionChain().getName().toString()
+			String droolsCondition = "FiredRule( getRuleName() == '" + prefix.getExpressionChain().getName()
 					+ "')\n";
 			getCompleteExpression().addExpression(new ExpressionValueString(droolsCondition));
 		}

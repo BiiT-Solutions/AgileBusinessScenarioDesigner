@@ -32,6 +32,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Transforms an Expression into a Drools rule.<br>
@@ -40,7 +41,7 @@ import java.util.Map;
  */
 public class ExpressionToDroolsRule {
 
-    public static List<DroolsRule> parse(DiagramElement node, DroolsRule droolsRule, Integer salience, DroolsHelper droolsHelper) throws ExpressionInvalidException,
+    public static List<DroolsRule> parse(DiagramElement node, DroolsRule droolsRule, AtomicLong salience, DroolsHelper droolsHelper) throws ExpressionInvalidException,
             RuleNotImplementedException, InvalidRuleException, NotCompatibleTypeException {
         List<DroolsRule> droolsRules;
 
@@ -67,7 +68,7 @@ public class ExpressionToDroolsRule {
         return droolsRules;
     }
 
-    private static List<DroolsRule> createExpressionDroolsRuleSet(DroolsRule droolsRule, Integer salience) {
+    private static List<DroolsRule> createExpressionDroolsRuleSet(DroolsRule droolsRule, AtomicLong salience) {
 
         List<DroolsRule> droolsRules = new ArrayList<>();
         ExpressionValueGenericCustomVariable expressionValueGenericCustomVariable = (ExpressionValueGenericCustomVariable) droolsRule.getActions()
@@ -107,7 +108,7 @@ public class ExpressionToDroolsRule {
         }
         // For each treeObject found, we generate the expression to create a new
         // rule
-        if (treeObjects != null && !treeObjects.isEmpty()) {
+        if (!treeObjects.isEmpty()) {
             for (TreeObject treeObject : treeObjects) {
                 ExpressionChain expressionChainCopy = (ExpressionChain) droolsRule.getActions().generateCopy();
                 ExpressionValueCustomVariable expValCat = new ExpressionValueCustomVariable(treeObject, expressionValueGenericCustomVariable.getVariable());
@@ -133,10 +134,10 @@ public class ExpressionToDroolsRule {
         return droolsRules;
     }
 
-    private static DroolsRule createExpressionDroolsRule(DroolsRule droolsRule, Integer salience) {
+    private static DroolsRule createExpressionDroolsRule(DroolsRule droolsRule, AtomicLong salience) {
         final DroolsRule newDroolsRule = generateDroolsRule(droolsRule);
         newDroolsRule.setName(RuleGenerationUtils.createRuleName(droolsRule));
-        newDroolsRule.setSalience(salience);
+        newDroolsRule.setSalience(salience.decrementAndGet());
         newDroolsRule.setConditions(droolsRule.getConditions());
         // If the expression chain contains generic variables, we have to unwrap
         // them
@@ -154,9 +155,9 @@ public class ExpressionToDroolsRule {
         return newDroolsRule;
     }
 
-    private static DroolsRule createExpressionDroolsRule(DroolsRule droolsRule, ExpressionChain actions, Integer salience) {
+    private static DroolsRule createExpressionDroolsRule(DroolsRule droolsRule, ExpressionChain actions, AtomicLong salience) {
         final DroolsRule newDroolsRule = generateDroolsRule(droolsRule);
-        newDroolsRule.setSalience(salience);
+        newDroolsRule.setSalience(salience.decrementAndGet());
         // newDroolsRule.setName(droolsRule.getName());
         newDroolsRule.setName(RuleGenerationUtils.createRuleName(droolsRule));
         newDroolsRule.setConditions(droolsRule.getConditions());
@@ -164,12 +165,7 @@ public class ExpressionToDroolsRule {
         // them
         if (checkForGenericVariables(actions)) {
             ExpressionChain expressionChainUnwrapped = unwrapGenericVariables(actions);
-            if (expressionChainUnwrapped != null) {
-                newDroolsRule.setActions(expressionChainUnwrapped);
-            } else {
-                // We don't want to create a rule if there is no actions
-                return null;
-            }
+            newDroolsRule.setActions(expressionChainUnwrapped);
         } else {
             newDroolsRule.setActions(actions);
         }
@@ -259,7 +255,7 @@ public class ExpressionToDroolsRule {
      */
     private static boolean checkForGenericVariables(ExpressionChain expressionChain) {
         for (Expression expression : expressionChain.getExpressions()) {
-            if ((expression instanceof ExpressionValueGenericCustomVariable) || (expression instanceof ExpressionValueGenericVariable)) {
+            if ((expression instanceof ExpressionValueGenericVariable)) {
                 return true;
             }
         }
@@ -367,58 +363,58 @@ public class ExpressionToDroolsRule {
 
                 } else if (leftTreeObject instanceof Category) {
                     // It is the same item (we don't want the brothers)
-                    treeObjects = Arrays.asList(leftTreeObject);
+                    treeObjects = Collections.singletonList(leftTreeObject);
 
                 } else if (leftTreeObject instanceof Question) {
                     TreeObject category = lefTreeObjectLimit.get(TreeObjectType.CATEGORY);
                     // We want the category that is the parent of the left object
                     if (category != null)
-                        treeObjects = Arrays.asList(category);
+                        treeObjects = Collections.singletonList(category);
                 }
                 break;
             case GROUP:
                 if (leftTreeObject instanceof Form) {
-                    treeObjects = new ArrayList<TreeObject>(leftTreeObject.getAll(Group.class));
+                    treeObjects = new ArrayList<>(leftTreeObject.getAll(Group.class));
 
                 } else if ((leftTreeObject instanceof Category) || (leftTreeObject instanceof Group)) {
-                    treeObjects = new ArrayList<TreeObject>(leftTreeObject.getChildren(Group.class));
+                    treeObjects = new ArrayList<>(leftTreeObject.getChildren(Group.class));
 
                 } else if (leftTreeObject instanceof Question) {
                     TreeObject group = lefTreeObjectLimit.get(TreeObjectType.GROUP);
                     if (group != null)
-                        treeObjects = Arrays.asList(group);
+                        treeObjects = Collections.singletonList(group);
                 }
                 break;
             case QUESTION_CATEGORY:
                 if (leftTreeObject instanceof Form) {
                     List<Category> categories = leftTreeObject.getAll(Category.class);
                     if (categories != null && !categories.isEmpty()) {
-                        treeObjects = new ArrayList<TreeObject>();
+                        treeObjects = new ArrayList<>();
                         for (TreeObject category : categories) {
                             treeObjects.addAll(category.getChildren(Question.class));
                         }
                     }
                 } else if (leftTreeObject instanceof Category) {
-                    treeObjects = new ArrayList<TreeObject>(leftTreeObject.getChildren(Question.class));
+                    treeObjects = new ArrayList<>(leftTreeObject.getChildren(Question.class));
 
                 } else if (leftTreeObject instanceof Question) {
-                    treeObjects = Arrays.asList(leftTreeObject);
+                    treeObjects = Collections.singletonList(leftTreeObject);
                 }
                 break;
             case QUESTION_GROUP:
                 if ((leftTreeObject instanceof Form) || (leftTreeObject instanceof Category)) {
                     List<Group> groups = leftTreeObject.getAll(Group.class);
                     if (groups != null && !groups.isEmpty()) {
-                        treeObjects = new ArrayList<TreeObject>();
+                        treeObjects = new ArrayList<>();
                         for (TreeObject group : groups) {
                             treeObjects.addAll(group.getChildren(Question.class));
                         }
                     }
                 } else if (leftTreeObject instanceof Group) {
-                    treeObjects = new ArrayList<TreeObject>(leftTreeObject.getChildren(Question.class));
+                    treeObjects = new ArrayList<>(leftTreeObject.getChildren(Question.class));
 
                 } else if (leftTreeObject instanceof Question) {
-                    treeObjects = Arrays.asList(leftTreeObject);
+                    treeObjects = Collections.singletonList(leftTreeObject);
                 }
                 break;
         }

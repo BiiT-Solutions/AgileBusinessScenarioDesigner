@@ -34,9 +34,9 @@ import com.biit.drools.engine.DroolsHelper;
 import com.biit.form.entity.TreeObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Transforms a Rule into a Drools rule.<br>
@@ -47,13 +47,13 @@ public class RuleToDroolsRule {
 
     private static DroolsHelper droolsHelper;
 
-    public static List<DroolsRule> parse(DiagramElement node, DroolsRule droolsRule, Integer salience, DroolsHelper droolsHelper) throws InvalidRuleException,
+    public static List<DroolsRule> parse(DiagramElement node, DroolsRule droolsRule, AtomicLong salience, DroolsHelper droolsHelper) throws InvalidRuleException,
             RuleNotImplementedException, ExpressionInvalidException, NotCompatibleTypeException {
         setDroolsHelper(droolsHelper);
         return parse(node, droolsRule, null, salience, droolsHelper);
     }
 
-    public static List<DroolsRule> parse(DiagramElement node, Rule rule, ExpressionChain extraConditions, Integer salience, DroolsHelper droolsHelper)
+    public static List<DroolsRule> parse(DiagramElement node, Rule rule, ExpressionChain extraConditions, AtomicLong salience, DroolsHelper droolsHelper)
             throws InvalidRuleException, RuleNotImplementedException, ExpressionInvalidException, NotCompatibleTypeException {
 
         List<DroolsRule> conditionsRules = new ArrayList<>();
@@ -75,7 +75,8 @@ public class RuleToDroolsRule {
                     if (droolsRuleList != null) {
                         droolsRuleList = parseAndOrNotConditions(droolsRuleList, salience);
                     } else {
-                        droolsRuleList = parseAndOrNotConditions(Collections.singletonList(new DroolsRule(ruleCopy, salience)), salience);
+                        droolsRuleList = parseAndOrNotConditions(
+                                Collections.singletonList(new DroolsRule(ruleCopy, salience.decrementAndGet())), salience);
                     }
                 } catch (NotCompatibleTypeException ncte) {
                     if (node != null) {
@@ -89,7 +90,7 @@ public class RuleToDroolsRule {
                 // Set the name for the rules
                 int ruleNumber = 0;
                 for (DroolsRule droolsRule : droolsRuleList) {
-                    droolsRule.setSalience(salience);
+                    droolsRule.setSalience(salience.decrementAndGet());
                     droolsRule.setName(RuleGenerationUtils.createRuleName(droolsRule, extraConditions, "_" + ruleNumber));
                     // Add identifiers to the drools rule end group
                     if (droolsRule instanceof DroolsRuleGroupEndRule) {
@@ -106,11 +107,11 @@ public class RuleToDroolsRule {
                     ruleNumber++;
                 }
             } else {
-                DroolsRule droolsRule = new DroolsRule(ruleCopy, salience);
+                DroolsRule droolsRule = new DroolsRule(ruleCopy, salience.decrementAndGet());
                 // TODO Uncomment when changed the validator to the parser
                 // RuleChecker.checkRuleValid(droolsRule);
                 droolsRule.setName(RuleGenerationUtils.createRuleName(droolsRule, extraConditions));
-                conditionsRules = Arrays.asList(droolsRule);
+                conditionsRules = Collections.singletonList(droolsRule);
             }
         }
 
@@ -141,7 +142,7 @@ public class RuleToDroolsRule {
         for (Expression expression : conditions.getExpressions()) {
             if (expression instanceof ExpressionChain) {
                 hasGenericVariables((ExpressionChain) expression);
-            } else if ((expression instanceof ExpressionValueGenericVariable) || (expression instanceof ExpressionValueGenericCustomVariable)) {
+            } else if (expression instanceof ExpressionValueGenericVariable) {
                 return true;
             }
         }
@@ -150,13 +151,13 @@ public class RuleToDroolsRule {
 
     // Generate complete drools rules (conditions/actions) with the conditions
     // variables unwrapped
-    private static List<DroolsRule> unwrapGenericVariables(Rule rule, Integer salience) {
+    private static List<DroolsRule> unwrapGenericVariables(Rule rule, AtomicLong salience) {
         List<DroolsRule> unwrappedRules = new ArrayList<DroolsRule>();
         List<TreeObject> unwrappedObjects = null;
 
         for (int originalExpressionIndex = 0; originalExpressionIndex < rule.getConditions().getExpressions().size(); originalExpressionIndex++) {
             Expression expression = rule.getConditions().getExpressions().get(originalExpressionIndex);
-            if ((expression instanceof ExpressionValueGenericCustomVariable) || (expression instanceof ExpressionValueGenericVariable)) {
+            if ((expression instanceof ExpressionValueGenericVariable)) {
                 // Unwrap the generic variables being analyzed
                 unwrappedObjects = getUnwrappedTreeObjects((ExpressionValueGenericCustomVariable) expression);
                 break;
@@ -179,7 +180,7 @@ public class RuleToDroolsRule {
                         droolsRule.getConditions().addExpression(expression);
                     }
                 }
-                droolsRule.setSalience(salience);
+                droolsRule.setSalience(salience.decrementAndGet());
                 unwrappedRules.add(droolsRule);
             }
         }
@@ -266,15 +267,15 @@ public class RuleToDroolsRule {
 
         if (!(expression instanceof ExpressionSymbol)) {
             expressionChain.getExpressions().add(notExpressionIndex + 1, new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET));
-        } else if (expression instanceof ExpressionSymbol && !(((ExpressionSymbol) expression).getValue().equals(AvailableSymbol.LEFT_BRACKET))) {
+        } else if (!((ExpressionSymbol) expression).getValue().equals(AvailableSymbol.LEFT_BRACKET)) {
             expressionChain.getExpressions().add(notExpressionIndex + 1, new ExpressionSymbol(AvailableSymbol.LEFT_BRACKET));
         }
     }
 
-    private static List<DroolsRule> parseAndOrNotConditions(List<DroolsRule> droolsRuleList, Integer salience) throws NotCompatibleTypeException {
+    private static List<DroolsRule> parseAndOrNotConditions(List<DroolsRule> droolsRuleList, AtomicLong salience) throws NotCompatibleTypeException {
         List<DroolsRule> newConditions = new ArrayList<>();
         for (DroolsRule droolsRule : droolsRuleList) {
-            droolsRule.setSalience(salience);
+            droolsRule.setSalience(salience.decrementAndGet());
             ITreeElement result = calculatePrattParserResult(droolsRule.getConditions());
             TreeElementGroupConditionFinderVisitor treeVisitor = new TreeElementGroupConditionFinderVisitor();
             result.accept(treeVisitor);
