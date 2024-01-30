@@ -323,6 +323,7 @@ public class DroolsParser {
                     if (rule.getSalience() != null) {
                         parsedText.append("salience ").append(rule.getSalience()).append(" \n");
                     }
+                    //parsedText.append("lock-on-active\n");
                     parsedText.append(RuleGenerationUtils.getWhenRuleString());
 
                     // The rule

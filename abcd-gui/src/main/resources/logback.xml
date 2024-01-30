@@ -47,11 +47,11 @@
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="DAILY"/>
     </logger>
-    <logger name="com.biit.abcd.logger.AbcdLogger" additivity="false" level="DEBUG">
+    <logger name="com.biit.abcd.logger.AbcdLogger" additivity="false" level="INFO">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="DAILY"/>
     </logger>
-    <logger name="com.biit.drools.logger.DroolsRulesLogger" additivity="false" level="INFO">
+    <logger name="com.biit.drools.logger.DroolsRulesLogger" additivity="false" level="DEBUG">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="DAILY"/>
     </logger>

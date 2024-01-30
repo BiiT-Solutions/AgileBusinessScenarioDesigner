@@ -28,6 +28,7 @@ import com.biit.abcd.persistence.entity.diagram.DiagramLink;
 import com.biit.abcd.persistence.entity.diagram.DiagramObject;
 import com.biit.abcd.persistence.entity.diagram.DiagramObjectType;
 import com.biit.abcd.persistence.entity.diagram.DiagramRule;
+import com.biit.abcd.persistence.entity.diagram.DiagramSource;
 import com.biit.abcd.persistence.entity.diagram.DiagramTable;
 import com.biit.abcd.persistence.entity.expressions.AvailableFunction;
 import com.biit.abcd.persistence.entity.expressions.AvailableOperator;
@@ -101,7 +102,7 @@ public class DiagramParser {
         for (DiagramObject diagramNode : diagramNodes) {
             diagramSalience--;
             // Start the algorithm for each diagram source defined in the main diagram.
-            if (diagramNode instanceof DiagramElement) {
+            if (diagramNode instanceof DiagramSource) {
                 parseDiagramElement((DiagramElement) diagramNode, extraConditions, newRules, diagramSalience);
             }
         }

@@ -1,11 +1,5 @@
 package com.biit.abcd.core.drools.utils;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
-
 import com.biit.abcd.core.drools.json.globalvariables.AbcdGlobalVariablesToJson;
 import com.biit.abcd.core.drools.rules.DroolsRuleGroup;
 import com.biit.abcd.core.drools.rules.DroolsRuleGroupEndRule;
@@ -37,6 +31,12 @@ import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.biit.drools.global.variables.DroolsGlobalVariable;
 import com.biit.drools.global.variables.json.DroolsGlobalVariablesFromJson;
 import com.biit.form.entity.TreeObject;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
 /**
  * This class gathers method that ease the drools rule definition and simplifies
@@ -97,7 +97,6 @@ public class RuleGenerationUtils {
             groupAction = "\tDroolsRulesLogger.debug(\"RuleFired\", \"Rule " + rule.getName() + " fired\");\n";
             groupAction += "\tinsert(new FiredRule(\"" + rule.getName() + "\"));\n";
         }
-
         return groupAction;
     }
 

@@ -165,20 +165,20 @@ public class DroolsRulesGenerator {
         Set<Diagram> diagrams = form.getDiagrams();
         if (diagrams != null) {
             // Look for the root diagrams
-            List<Diagram> rootDiagrams = new ArrayList<Diagram>();
+            List<Diagram> rootDiagrams = new ArrayList<>();
             for (Diagram diagram : diagrams) {
                 if (form.getDiagramParent(diagram) == null) {
                     rootDiagrams.add(diagram);
                 }
             }
             // Look for the custom variables
-            List<ExpressionValueCustomVariable> customVariablesList = new ArrayList<ExpressionValueCustomVariable>();
+            List<ExpressionValueCustomVariable> customVariablesList = new ArrayList<>();
             for (Diagram diagram : rootDiagrams) {
                 customVariablesList.addAll(RuleGenerationUtils.lookForCustomVariablesInDiagram(diagram));
             }
             // Create the drools rules based on the expression value custom
             // variable found
-            Set<String> variablesList = new HashSet<String>();
+            Set<String> variablesList = new HashSet<>();
 
             if (!customVariablesList.isEmpty()) {
                 getRulesBuilder().append("//******************************************************************************\n");
@@ -261,7 +261,7 @@ public class DroolsRulesGenerator {
      * @return The global constants in drools
      */
     private String parseGlobalVariables() {
-        String globalConstants = "";
+        StringBuilder globalConstants = new StringBuilder();
         // In the GUI are called global variables, but regarding the forms are
         // constants
         if ((this.globalVariables != null) && !this.globalVariables.isEmpty()) {
@@ -278,14 +278,14 @@ public class DroolsRulesGenerator {
                         // Sometimes endtime can be null, meaning that the
                         // variable data has no ending time
                         if ((currentTime.after(initTime) && (endTime == null)) || (currentTime.after(initTime) && currentTime.before(endTime))) {
-                            globalConstants += this.globalVariableString(globalVariable);
+                            globalConstants.append(this.globalVariableString(globalVariable));
                             break;
                         }
                     }
                 }
             }
         }
-        return globalConstants;
+        return globalConstants.toString();
     }
 
     /**
@@ -300,7 +300,6 @@ public class DroolsRulesGenerator {
                 return "global java.util.Date " + globalVariable.getName() + "\n";
             case TEXT:
             case MULTI_TEXT:
-                return "global java.lang.String " + globalVariable.getName() + "\n";
             case POSTAL_CODE:
                 return "global java.lang.String " + globalVariable.getName() + "\n";
             case NUMBER:
