@@ -17,7 +17,7 @@ public class DroolsRule extends Rule {
     }
 
     public DroolsRule(Rule rule) {
-        super();
+        this();
         setName(rule.getName());
         setConditions(rule.getConditions());
         setActions(rule.getActions());
@@ -34,6 +34,10 @@ public class DroolsRule extends Rule {
 
     public void setSalience(Long salience) {
         this.salience = salience;
+    }
+
+    public boolean isLockOnActive() {
+        return getConditions() == null || getConditions().getExpression() == null || getConditions().getExpression().isEmpty();
     }
 
 
