@@ -184,7 +184,7 @@ public class ExpressionsTest extends KidsFormCreator {
 
 	private Form initFormAndVariables() throws FieldTooLongException, CharacterNotAllowedException, NotValidChildException, InvalidAnswerFormatException,
 			NotValidTypeInVariableData, ElementIsReadOnly {
-		// Restart the form to avoid test cross references
+		// Restart the form to avoid test cross-references
 		Form form = createForm();
 		// Create custom variables
 		setYearsCustomVariable(new CustomVariable(form, YEARS, CustomVariableType.NUMBER, CustomVariableScope.FORM));

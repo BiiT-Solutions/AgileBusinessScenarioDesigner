@@ -11,6 +11,6 @@ public class ExpressionValueNumberSerializer extends ExpressionValueSerializer<E
     @Override
     public void serialize(ExpressionValueNumber src, JsonGenerator jgen) throws IOException {
         super.serialize(src, jgen);
-        jgen.writeStringField("value", String.valueOf(src.getValue()));
+        jgen.writeNumberField("value", src.getValue());
     }
 }
