@@ -16,6 +16,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -128,5 +129,23 @@ public class ExpressionValueCustomVariable extends ExpressionValueTreeObjectRefe
             return getVariable().getName();
         }
         return super.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        final ExpressionValueCustomVariable that = (ExpressionValueCustomVariable) o;
+        return Objects.equals(variable, that.variable) && Objects.equals(variableId, that.variableId)
+                && Objects.equals(getReference(), that.getReference());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(variable, variableId, getReference());
     }
 }

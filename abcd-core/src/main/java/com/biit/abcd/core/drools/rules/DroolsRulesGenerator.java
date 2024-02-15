@@ -162,7 +162,7 @@ public class DroolsRulesGenerator {
      */
     private void setCustomVariablesDefaultValues() throws NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException {
         // Look for the custom variables in the diagrams
-        Set<Diagram> diagrams = form.getDiagrams();
+        final Set<Diagram> diagrams = form.getDiagrams();
         if (diagrams != null) {
             // Look for the root diagrams
             List<Diagram> rootDiagrams = new ArrayList<>();
@@ -172,23 +172,23 @@ public class DroolsRulesGenerator {
                 }
             }
             // Look for the custom variables
-            List<ExpressionValueCustomVariable> customVariablesList = new ArrayList<>();
+            final Set<ExpressionValueCustomVariable> customVariables = new HashSet<>();
             for (Diagram diagram : rootDiagrams) {
-                customVariablesList.addAll(RuleGenerationUtils.lookForCustomVariablesInDiagram(diagram));
+                customVariables.addAll(RuleGenerationUtils.lookForCustomVariablesInDiagram(diagram));
             }
             // Create the drools rules based on the expression value custom
             // variable found
-            Set<String> variablesList = new HashSet<>();
+            Set<String> customVariablesDefaultRules = new HashSet<>();
 
-            if (!customVariablesList.isEmpty()) {
+            if (!customVariables.isEmpty()) {
                 getRulesBuilder().append("//******************************************************************************\n");
                 getRulesBuilder().append("//*                           DEFAULT VALUE VARIABLES                          *\n");
                 getRulesBuilder().append("//******************************************************************************\n");
 
-                for (ExpressionValueCustomVariable expressionValueCustomVariable : customVariablesList) {
-                    String customVariableRule = createDefaultValueDroolsRules(variablesList, expressionValueCustomVariable);
-                    if (customVariableRule != null) {
-                        getRulesBuilder().append(customVariableRule);
+                for (ExpressionValueCustomVariable expressionValueCustomVariable : customVariables) {
+                    String customVariableDefaultRule = createDefaultValueDroolsRules(customVariablesDefaultRules, expressionValueCustomVariable);
+                    if (customVariableDefaultRule != null) {
+                        getRulesBuilder().append(customVariableDefaultRule);
                     }
                 }
             }
@@ -201,19 +201,19 @@ public class DroolsRulesGenerator {
         String ruleText = "";
         if ((expressionValueCustomVariable != null) && (expressionValueCustomVariable.getReference() != null)
                 && (expressionValueCustomVariable.getVariable() != null) && (expressionValueCustomVariable.getVariable().getDefaultValue() != null)
-                && (!(expressionValueCustomVariable.getVariable().getDefaultValue()).equals(""))) {
+                && (!(expressionValueCustomVariable.getVariable().getDefaultValue()).isEmpty())) {
 
             String customVariableDefaultValue = "";
             switch (expressionValueCustomVariable.getVariable().getType()) {
                 case STRING:
-                    customVariableDefaultValue = "\'" + expressionValueCustomVariable.getVariable().getDefaultValue() + "\'";
+                    customVariableDefaultValue = "'" + expressionValueCustomVariable.getVariable().getDefaultValue() + "'";
                     break;
                 case NUMBER:
                     customVariableDefaultValue = expressionValueCustomVariable.getVariable().getDefaultValue() + "d";
                     break;
                 case DATE:
                     try {
-                        SimpleDateFormat userInputFormat = new SimpleDateFormat("dd/mm/yyyy");
+                        SimpleDateFormat userInputFormat = new SimpleDateFormat("dd/MM/yyyy");
                         customVariableDefaultValue = "(new Date(" + userInputFormat.parse(expressionValueCustomVariable.getVariable().getDefaultValue()).getTime()
                                 + "l))";
                     } catch (ParseException e) {
@@ -228,7 +228,7 @@ public class DroolsRulesGenerator {
             // Default rules must be executed first.
             ruleText += "salience " + Salience.VARIABLES_SALIENCE + " \n";
             //Avoid the re-activation of a rule NO MATTER what the cause is. (Mainly by the update that is below).
-            ruleText += "lock-on-active\n";
+            //ruleText += "lock-on-active\n";
             // Conditions
             defaultCustomVariableValue.append("when\n");
             defaultCustomVariableValue.append("\t$droolsForm: DroolsForm()\n");

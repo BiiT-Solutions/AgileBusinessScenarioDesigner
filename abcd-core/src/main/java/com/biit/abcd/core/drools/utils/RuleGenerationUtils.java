@@ -483,19 +483,19 @@ public class RuleGenerationUtils {
         }
     }
 
-    public static List<ExpressionValueCustomVariable> lookForCustomVariablesInDiagram(Diagram diagram) {
-        List<ExpressionValueCustomVariable> customVariablesList = new ArrayList<ExpressionValueCustomVariable>();
+    public static Set<ExpressionValueCustomVariable> lookForCustomVariablesInDiagram(Diagram diagram) {
+        Set<ExpressionValueCustomVariable> customVariables = new HashSet<>();
         Set<DiagramObject> diagramNodes = diagram.getDiagramObjects();
         for (DiagramObject diagramNode : diagramNodes) {
             if (diagramNode instanceof DiagramSource) {
-                customVariablesList.addAll(lookForCustomVariablesInDiagramNode((DiagramElement) diagramNode));
+                customVariables.addAll(lookForCustomVariablesInDiagramNode((DiagramElement) diagramNode));
             }
         }
-        return customVariablesList;
+        return customVariables;
     }
 
-    private static List<ExpressionValueCustomVariable> lookForCustomVariablesInDiagramNode(DiagramElement diagramNode) {
-        List<ExpressionValueCustomVariable> customVariablesList = new ArrayList<ExpressionValueCustomVariable>();
+    private static Set<ExpressionValueCustomVariable> lookForCustomVariablesInDiagramNode(DiagramElement diagramNode) {
+        Set<ExpressionValueCustomVariable> customVariablesList = new HashSet<>();
         switch (diagramNode.getType()) {
             case TABLE:
                 DiagramTable tableNode = (DiagramTable) diagramNode;
@@ -539,7 +539,7 @@ public class RuleGenerationUtils {
                     customVariablesList.add((ExpressionValueCustomVariable) forkNode.getReference());
                 }
                 for (DiagramLink outLink : forkNode.getOutgoingLinks()) {
-                    customVariablesList.addAll(lookForCustomVariableInExpressionChain((ExpressionChain) outLink
+                    customVariablesList.addAll(lookForCustomVariableInExpressionChain(outLink
                             .getExpressionChain()));
                 }
                 break;
@@ -552,9 +552,9 @@ public class RuleGenerationUtils {
         return customVariablesList;
     }
 
-    private static List<ExpressionValueCustomVariable> lookForCustomVariableInExpressionChain(
+    private static Set<ExpressionValueCustomVariable> lookForCustomVariableInExpressionChain(
             ExpressionChain expressionChain) {
-        List<ExpressionValueCustomVariable> customVariablesList = new ArrayList<ExpressionValueCustomVariable>();
+        Set<ExpressionValueCustomVariable> customVariablesList = new HashSet<>();
         for (Expression expression : expressionChain.getExpressions()) {
             if (expression instanceof ExpressionChain) {
                 lookForCustomVariableInExpressionChain((ExpressionChain) expression);
