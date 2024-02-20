@@ -4,7 +4,7 @@
     <groupId>com.biit</groupId>
     <artifactId>abcd-tool</artifactId>
     <packaging>pom</packaging>
-    <version>1.10.46-SNAPSHOT</version>
+    <version>1.11.1-SNAPSHOT</version>
     <name>Agile Business sCenario Designer Tool</name>
     <description>Rules Designer</description>
 
@@ -43,11 +43,16 @@
         <tag>abcd-tool</tag>
     </scm>
 
+    <properties>
+        <testng.version>7.5.1</testng.version>
+    </properties>
+
     <dependencies>
         <!-- Testing -->
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
+            <version>${testng.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>

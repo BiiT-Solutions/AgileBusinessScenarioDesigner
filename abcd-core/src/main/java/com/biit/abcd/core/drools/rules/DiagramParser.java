@@ -85,7 +85,7 @@ public class DiagramParser {
     public String getDroolsRulesAsText(Diagram diagram) throws RuleNotImplementedException, NotCompatibleTypeException,
             ExpressionInvalidException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException,
             NullCustomVariableException, NullExpressionValueException, BetweenFunctionInvalidException, DateComparisonNotPossibleException,
-            PluginInvocationException, DroolsRuleCreationException, PrattParserException, InvalidRuleException, ActionNotImplementedException,
+            DroolsRuleCreationException, PrattParserException, InvalidRuleException, ActionNotImplementedException,
             InvalidExpressionException {
         final List<DroolsRule> newRules = parse(diagram, null);
         //Sort rules

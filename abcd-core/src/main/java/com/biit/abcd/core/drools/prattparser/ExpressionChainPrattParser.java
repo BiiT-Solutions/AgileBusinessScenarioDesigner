@@ -30,7 +30,7 @@ public class ExpressionChainPrattParser extends PrattParser {
 	}
 
 	/**
-	 * Register all of the parselets for the grammar.
+	 * Register all the parselets for the grammar.
 	 */
 	private void registerParselets() {
 		// Register the ones that need special parselets.
