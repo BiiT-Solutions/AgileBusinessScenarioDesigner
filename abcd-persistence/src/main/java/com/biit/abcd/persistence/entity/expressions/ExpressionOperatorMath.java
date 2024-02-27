@@ -26,7 +26,7 @@ import java.util.Set;
 @Table(name = "expression_operator_math")
 public class ExpressionOperatorMath extends ExpressionOperator {
     private static final long serialVersionUID = 1688182189700104309L;
-    private static final List<AvailableOperator> ALLOWED_OPERATORS = new ArrayList<AvailableOperator>(Arrays.asList(
+    private static final List<AvailableOperator> ALLOWED_OPERATORS = new ArrayList<>(Arrays.asList(
             AvailableOperator.NULL, AvailableOperator.ASSIGNATION, AvailableOperator.PLUS, AvailableOperator.MINUS,
             AvailableOperator.MULTIPLICATION, AvailableOperator.DIVISION));
 

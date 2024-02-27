@@ -58,9 +58,11 @@ import com.biit.plugins.interfaces.exceptions.NoPluginFoundException;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Objects;
+import java.util.Set;
 
 public class DroolsParser {
 
@@ -165,7 +167,7 @@ public class DroolsParser {
     }
 
     private static String generateDroolsVariableName(TreeObject reference, String variable) {
-        return "var_" + reference.getUniqueNameReadable() + "_" + variable;
+        return "var_" + reference.getUniqueNameReadable().replaceAll("-", "_") + "_" + variable.replaceAll("-", "_");
     }
 
     public static String generateDroolsVariableCondition(
@@ -230,8 +232,8 @@ public class DroolsParser {
         } else {
             //Temp variable name.
             stringBuilder.append("\t$").append(generateDroolsVariableName(reference, variable)).append(" : ").append(
-                    //Condition
-                    "VariableValue( reference == \"").append(reference.getUniqueNameReadable()).append("\", variable == \"").append(variable).append("\", value ")
+                            //Condition
+                            "VariableValue( reference == \"").append(reference.getUniqueNameReadable()).append("\", variable == \"").append(variable).append("\", value ")
                     .append(operator.getValue()).append(customVariableType.equals(CustomVariableType.STRING) ? " '" : " ")
                     .append(value).append(customVariableType.equals(CustomVariableType.STRING) ? "' )\n" : " )\n");
         }
@@ -239,13 +241,18 @@ public class DroolsParser {
     }
 
     public static String getVariableConditionDeclaration(Rule rule) {
+        final Set<String> userVariables = new HashSet<>();
         final StringBuilder stringBuilder = new StringBuilder();
         if ((rule.getActions() != null) && (rule.getActions().getExpressions() != null) && (!rule.getActions().getExpressions().isEmpty())) {
             for (Expression expression : rule.getActions().getExpressions()) {
                 // Look for possible variables that need assignation
                 if (expression instanceof ExpressionValueCustomVariable) {
                     final ExpressionValueCustomVariable expressionValueCustomVariable = (ExpressionValueCustomVariable) expression;
-                    stringBuilder.append(getVariableInActionDeclaration(expressionValueCustomVariable.getReference(), expressionValueCustomVariable.getVariable().getName()));
+                    //Avoid duplicated declarations.
+                    if (!userVariables.contains(expressionValueCustomVariable.getReference().getXPath() + "_" + expressionValueCustomVariable.getVariable().getName())) {
+                        stringBuilder.append(getVariableInActionDeclaration(expressionValueCustomVariable.getReference(), expressionValueCustomVariable.getVariable().getName()));
+                        userVariables.add(expressionValueCustomVariable.getReference().getXPath() + "_" + expressionValueCustomVariable.getVariable().getName());
+                    }
                 }
             }
         }
@@ -453,7 +460,10 @@ public class DroolsParser {
                     parsedText.append(RuleGenerationUtils.getWhenRuleString());
 
                     //Add variable declaration.
-                    parsedText.append(getVariableConditionDeclaration(rule));
+                    final String variableDeclaration = getVariableConditionDeclaration(rule);
+                    if (!parsedText.toString().contains(variableDeclaration) && !parsedRule.contains(variableDeclaration)) {
+                        parsedText.append(variableDeclaration);
+                    }
 
                     // The rule
                     if (rule instanceof DroolsRuleGroupEndRule) {

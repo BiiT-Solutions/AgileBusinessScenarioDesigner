@@ -119,7 +119,7 @@ public class DroolsRulesGenerator {
         getRulesBuilder().append("import com.biit.orbeon.form.* \n");
         getRulesBuilder().append("import com.biit.drools.utils.* \n");
 
-        if (PluginController.getInstance().existsPlugins()) {
+        if (PluginController.getInstance() != null && PluginController.getInstance().existsPlugins()) {
             getRulesBuilder().append("import com.biit.plugins.PluginController \n");
             getRulesBuilder().append("import com.biit.plugins.interfaces.IPlugin \n");
             getRulesBuilder().append("import java.lang.reflect.Method \n");
@@ -242,7 +242,7 @@ public class DroolsRulesGenerator {
             // Default rules must be executed first.
             ruleText.append("salience ").append(Salience.VARIABLES_SALIENCE).append(" \n");
             //Avoid the re-activation of a rule NO MATTER what the cause is. (Mainly by the update that is below).
-            ruleText.append("lock-on-active\n");
+            //ruleText.append("lock-on-active\n");
             // Conditions
             defaultCustomVariableValue.append(RuleGenerationUtils.getWhenRuleString());
             defaultCustomVariableValue.append("\t$droolsForm: DroolsForm()\n");

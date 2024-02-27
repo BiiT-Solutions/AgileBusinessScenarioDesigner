@@ -879,7 +879,7 @@ public class FormComparator {
             DiagramObject diagramObject2 = diagramObjectsIterator2.next();
             // ExpressionChain inside an ExpressionChain.
             if (diagramObject1 instanceof DiagramObject) {
-                compare((DiagramObject) diagramObject1, (DiagramObject) diagramObject2, checkIds);
+                compare(diagramObject1, diagramObject2, checkIds);
             }
         }
     }
