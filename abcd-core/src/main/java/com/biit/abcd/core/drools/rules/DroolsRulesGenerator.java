@@ -198,7 +198,7 @@ public class DroolsRulesGenerator {
     private String createDefaultValueDroolsRules(Set<String> variablesList, ExpressionValueCustomVariable expressionValueCustomVariable)
             throws NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException {
         StringBuilder defaultCustomVariableValue = new StringBuilder();
-        String ruleText = "";
+        StringBuilder ruleText = new StringBuilder();
         if ((expressionValueCustomVariable != null) && (expressionValueCustomVariable.getReference() != null)
                 && (expressionValueCustomVariable.getVariable() != null)) {
 
@@ -207,9 +207,9 @@ public class DroolsRulesGenerator {
                 case STRING:
                     if ((expressionValueCustomVariable.getVariable().getDefaultValue() != null)
                             && !(expressionValueCustomVariable.getVariable().getDefaultValue()).isEmpty()) {
-                        customVariableDefaultValue = "'" + expressionValueCustomVariable.getVariable().getDefaultValue() + "'";
+                        customVariableDefaultValue = "\"" + expressionValueCustomVariable.getVariable().getDefaultValue() + "\"";
                     } else {
-                        customVariableDefaultValue = "''";
+                        customVariableDefaultValue = "\"\"";
                     }
                     break;
                 case NUMBER:
@@ -238,11 +238,11 @@ public class DroolsRulesGenerator {
 
             // Rule name
             String ruleName = RuleGenerationUtils.getRuleName(expressionValueCustomVariable.getVariable().getName() + "_default_value");
-            ruleText = "rule \"" + ruleName + "\"\n";
+            ruleText.append("rule \"").append(ruleName).append("\"\n");
             // Default rules must be executed first.
-            ruleText += "salience " + Salience.VARIABLES_SALIENCE + " \n";
+            ruleText.append("salience ").append(Salience.VARIABLES_SALIENCE).append(" \n");
             //Avoid the re-activation of a rule NO MATTER what the cause is. (Mainly by the update that is below).
-            //ruleText += "lock-on-active\n";
+            ruleText.append("lock-on-active\n");
             // Conditions
             defaultCustomVariableValue.append(RuleGenerationUtils.getWhenRuleString());
             defaultCustomVariableValue.append("\t$droolsForm: DroolsForm()\n");
@@ -257,10 +257,7 @@ public class DroolsRulesGenerator {
             defaultCustomVariableValue.append("\tDroolsRulesLogger.info(\"DroolsRule\", \"Default variable value set (")
                     .append(expressionValueCustomVariable.getReference().getName()).append(", ")
                     .append(expressionValueCustomVariable.getVariable().getName()).append(", ")
-                    .append(customVariableDefaultValue).append(")\");\n");
-//            defaultCustomVariableValue.append(DroolsParser.generateDroolsVariableAction(expressionValueCustomVariable.getReference(),
-//                    expressionValueCustomVariable.getVariable().getName(),
-//                    customVariableDefaultValue, false));
+                    .append(customVariableDefaultValue != null ? customVariableDefaultValue.replaceAll("\"", "'") : customVariableDefaultValue).append(")\");\n");
             defaultCustomVariableValue.append(DroolsParser.generateDroolsVariableInitialization(expressionValueCustomVariable.getReference(), expressionValueCustomVariable.getVariable().getName(), customVariableDefaultValue));
             //Force the re-execution from drools as the variable has been changed.
             //defaultCustomVariableValue.append("\tupdate($droolsForm)\n");
@@ -269,7 +266,8 @@ public class DroolsRulesGenerator {
         }
         if (!variablesList.contains(defaultCustomVariableValue.toString())) {
             variablesList.add(defaultCustomVariableValue.toString());
-            return ruleText + defaultCustomVariableValue;
+            ruleText.append(defaultCustomVariableValue);
+            return ruleText.toString();
         } else {
             return null;
         }

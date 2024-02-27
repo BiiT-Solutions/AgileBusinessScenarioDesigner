@@ -449,6 +449,7 @@ public class DroolsParser {
                         //Not working !!
                         //parsedText.append("lock-on-active\n");
                     }
+                    //parsedText.append("no-loop\n");
                     parsedText.append(RuleGenerationUtils.getWhenRuleString());
 
                     //Add variable declaration.
@@ -1275,9 +1276,9 @@ public class DroolsParser {
                     return null;
 
                 }
-                // Its the first position because the parser removes the equals
+                // It's the first position because the parser removes the equals
                 // in the expression functions
-                // Could be changed to standardize the behavior of the parser
+                // Could be changed to standardize the behavior of the parser,
                 // but it works fine
                 else if (prattParserResultExpressionChain.getExpressions().get(1) instanceof ExpressionFunction) {
                     switch (((ExpressionFunction) prattParserResultExpressionChain.getExpressions().get(1)).getValue()) {
