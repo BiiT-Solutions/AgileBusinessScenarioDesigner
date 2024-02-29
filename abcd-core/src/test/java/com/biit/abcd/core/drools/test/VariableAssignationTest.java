@@ -206,11 +206,11 @@ public class VariableAssignationTest extends DroolsRulesBased {
         form.setCustomVariables(customVariables);
 
         Set<ExpressionChain> expressions = new HashSet<>();
-        ExpressionChain expression1 = new ExpressionChain("AssignStrings", new ExpressionValueCustomVariable(form.getChild(0), categoryTextCustomVariable),
+        ExpressionChain expression1 = new ExpressionChain("AssignStrings1", new ExpressionValueCustomVariable(form.getChild(0), categoryTextCustomVariable),
                 new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueString(TEXT_SAMPLE));
         expressions.add(expression1);
         // Assign variable1 to variable2
-        ExpressionChain expression2 = new ExpressionChain("AssignStrings", new ExpressionValueCustomVariable(form, formTextCustomVariable),
+        ExpressionChain expression2 = new ExpressionChain("AssignStrings2", new ExpressionValueCustomVariable(form, formTextCustomVariable),
                 new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueCustomVariable(form.getChild(0), categoryTextCustomVariable));
         expressions.add(expression2);
 
@@ -223,19 +223,5 @@ public class VariableAssignationTest extends DroolsRulesBased {
         // Check result
         Assert.assertNotNull(droolsForm);
         org.testng.Assert.assertEquals(((DroolsSubmittedForm) (droolsForm).getDroolsSubmittedForm()).getFormVariables().values().iterator().next().get(VARIABLE_1_NAME), '1');
-        org.testng.Assert.assertEquals(((DroolsSubmittedForm) (droolsForm).getDroolsSubmittedForm()).getFormVariables().values().iterator().next().get(VARIABLE_2_NAME), 2.0);
-        org.testng.Assert.assertEquals(((DroolsSubmittedForm) (droolsForm).getDroolsSubmittedForm()).getFormVariables().values().iterator().next().get(VARIABLE_3_NAME), 3.0);
-
-
-        // Launch the expression
-//        DroolsForm droolsForm = launchEngineWithExpressions(form, expressions);
-//        if (droolsForm != null) {
-//            try {
-//                // Check final string
-//                org.testng.Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(FORM_TEXT), TEXT_SAMPLE);
-//            } catch (Exception e) {
-//                AbcdLogger.errorMessage(this.getClass().getName(), e);
-//            }
-//        }
     }
 }

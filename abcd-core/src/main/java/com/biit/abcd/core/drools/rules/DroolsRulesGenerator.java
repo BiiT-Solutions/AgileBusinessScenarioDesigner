@@ -249,7 +249,10 @@ public class DroolsRulesGenerator {
             defaultCustomVariableValue.append(SimpleConditionsGenerator.getTreeObjectConditions(expressionValueCustomVariable.getReference()));
 
             //Add variable declaration.
-            //defaultCustomVariableValue.append(DroolsParser.getVariableInActionDeclaration(expressionValueCustomVariable.getReference(), expressionValueCustomVariable.getVariable().getName()));
+//            final String variable = DroolsParser.getVariableInActionDeclaration(expressionValueCustomVariable.getReference(), expressionValueCustomVariable.getVariable().getName());
+//            if (!defaultCustomVariableValue.toString().contains(variable)) {
+//                defaultCustomVariableValue.append(variable);
+//            }
 
             // Actions
             defaultCustomVariableValue.append(RuleGenerationUtils.getThenRuleString());
