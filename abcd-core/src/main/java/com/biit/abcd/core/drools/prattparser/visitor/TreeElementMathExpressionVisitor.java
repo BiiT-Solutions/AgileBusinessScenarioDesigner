@@ -71,26 +71,26 @@ public class TreeElementMathExpressionVisitor implements ITreeElementVisitor {
             String id = treeObject.getUniqueNameReadable();
             //String id = DroolsParser.generateDroolsVariableName(treeObject, customVariableName);
 
-            builder.append(DroolsParser.generateDroolsVariableName(treeObject, customVariableName)).append(".getValue()");
+           // builder.append(DroolsParser.generateDroolsVariableName(treeObject, customVariableName)).append(".getValue()");
 
-//			switch (expVal.getVariable().getType()) {
-//			case NUMBER:
-//				builder.append("(Double)$").append(id).append(".getVariableValue('").append(customVariableName).append("')");
-//				break;
-//			case DATE:
-//				if (expVal.getUnit() != null) {
-//					builder.append(expVal.getUnit().getDroolsFunction()).append("($").append(id).append(".getVariableValue('").append(customVariableName).append("'))");
-//				} else {
-//					builder.append("$").append(id).append(".getVariableValue('").append(customVariableName).append("')");
-//					break;
-//				}
-//				break;
-//			case STRING:
-//				builder.append("$").append(id).append(".getVariableValue('").append(customVariableName).append("')");
-//				break;
-//				//throw new NotCompatibleTypeException("Using a text variable inside a mathematical operation: '" + name.getExpressionChain().toString() + "'.",
-//				//		expVal);
-//			}
+			switch (expVal.getVariable().getType()) {
+			case NUMBER:
+				builder.append("((Double)").append(DroolsParser.generateDroolsVariableName(treeObject, customVariableName)).append(".getValue())");
+				break;
+			case DATE:
+				if (expVal.getUnit() != null) {
+					builder.append(expVal.getUnit().getDroolsFunction()).append("(").append(DroolsParser.generateDroolsVariableName(treeObject, customVariableName)).append(".getValue())");
+				} else {
+					builder.append(DroolsParser.generateDroolsVariableName(treeObject, customVariableName)).append(".getValue()");
+					break;
+				}
+				break;
+			case STRING:
+				builder.append(DroolsParser.generateDroolsVariableName(treeObject, customVariableName)).append(".getValue()");
+				break;
+				//throw new NotCompatibleTypeException("Using a text variable inside a mathematical operation: '" + name.getExpressionChain().toString() + "'.",
+				//		expVal);
+			}
         } else if (name.getExpressionChain().getExpressions().get(0) instanceof ExpressionValueTreeObjectReference) {
             ExpressionValueTreeObjectReference expVal = (ExpressionValueTreeObjectReference) name.getExpressionChain().getExpressions().get(0);
             TreeObject treeObject = expVal.getReference();
