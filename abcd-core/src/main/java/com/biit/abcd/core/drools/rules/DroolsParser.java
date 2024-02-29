@@ -248,6 +248,13 @@ public class DroolsParser {
                 // Look for possible variables that need assignation
                 if (expression instanceof ExpressionValueCustomVariable) {
                     final ExpressionValueCustomVariable expressionValueCustomVariable = (ExpressionValueCustomVariable) expression;
+                    //If it is in a condition, has been already declared as a condition. No need to duplicate.
+                    for (Expression conditionExpressions : rule.getConditions().getExpressions()) {
+                        if (Objects.equals(conditionExpressions, expressionValueCustomVariable)) {
+                            usedVariables.add(expressionValueCustomVariable.getReference().getXPath() + "_" + expressionValueCustomVariable.getVariable().getName());
+                            break;
+                        }
+                    }
                     //Avoid duplicated declarations.
                     if (!usedVariables.contains(expressionValueCustomVariable.getReference().getXPath() + "_" + expressionValueCustomVariable.getVariable().getName())) {
                         variableDeclarations.add(getVariableInActionDeclaration(expressionValueCustomVariable.getReference(), expressionValueCustomVariable.getVariable().getName()));

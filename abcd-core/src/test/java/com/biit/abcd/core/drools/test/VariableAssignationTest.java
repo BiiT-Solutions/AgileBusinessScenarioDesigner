@@ -24,12 +24,18 @@ import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.CustomVariableScope;
 import com.biit.abcd.persistence.entity.CustomVariableType;
 import com.biit.abcd.persistence.entity.Form;
+import com.biit.abcd.persistence.entity.GenericTreeObjectType;
 import com.biit.abcd.persistence.entity.Question;
+import com.biit.abcd.persistence.entity.expressions.AvailableFunction;
 import com.biit.abcd.persistence.entity.expressions.AvailableOperator;
+import com.biit.abcd.persistence.entity.expressions.AvailableSymbol;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
+import com.biit.abcd.persistence.entity.expressions.ExpressionFunction;
 import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorLogic;
 import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorMath;
+import com.biit.abcd.persistence.entity.expressions.ExpressionSymbol;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueGenericCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueNumber;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueString;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
@@ -206,6 +212,38 @@ public class VariableAssignationTest extends DroolsRulesBased {
         form.setExpressionChains(expressions);
         defineDiagram(form);
 
+        DroolsSubmittedForm submittedForm = createSubmittedForm();
+
+        DroolsForm droolsForm = executeDroolsEngine(form, submittedForm, new ArrayList<>());
+        // Check result
+        Assert.assertNotNull(droolsForm);
+        org.testng.Assert.assertEquals(((DroolsSubmittedForm) (droolsForm).getDroolsSubmittedForm()).getFormVariables().values().iterator().next().get(VARIABLE_1_NAME), '1');
+    }
+
+    @Test()
+    public void executeCondition() throws FieldTooLongException, CharacterNotAllowedException, NotValidChildException,
+            ElementIsReadOnly, TooManyResultsFoundException, BetweenFunctionInvalidException, PluginInvocationException,
+            ActionNotImplementedException, ExpressionInvalidException, NullCustomVariableException, PrattParserException,
+            NullTreeObjectException, DroolsRuleExecutionException, TreeObjectParentNotValidException, NotCompatibleTypeException,
+            TreeObjectInstanceNotRecognizedException, NullExpressionValueException, DateComparisonNotPossibleException,
+            DroolsRuleCreationException, RuleNotImplementedException, DroolsRuleGenerationException, InvalidExpressionException,
+            InvalidRuleException {
+        // Create a new form
+        Form form = createForm();
+        CustomVariable categoryCustomVariable = new CustomVariable(form, "catScore", CustomVariableType.NUMBER, CustomVariableScope.QUESTION);
+
+        Set<ExpressionChain> expressions = new HashSet<>();
+        // If expression
+        ExpressionChain expression = new ExpressionChain("ifExpression", new ExpressionValueGenericCustomVariable(GenericTreeObjectType.QUESTION_CATEGORY,
+                categoryCustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionFunction(AvailableFunction.IF),
+                new ExpressionValueGenericCustomVariable(GenericTreeObjectType.QUESTION_CATEGORY, categoryCustomVariable), new ExpressionOperatorLogic(
+                AvailableOperator.LESS_THAN), new ExpressionValueNumber(56.), new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueNumber(
+                7.1), new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueNumber(1.7), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
+        expressions.add(expression);
+        form.setExpressionChains(expressions);
+
+        defineDiagram(form);
+        // Create the rules and launch the engine
         DroolsSubmittedForm submittedForm = createSubmittedForm();
 
         DroolsForm droolsForm = executeDroolsEngine(form, submittedForm, new ArrayList<>());
