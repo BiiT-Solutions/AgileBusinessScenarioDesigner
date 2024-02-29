@@ -113,7 +113,7 @@ public class DroolsParser {
             // First part of the action 'setVariable'
             ruleCore.append("\t$").append(getTreeObjectName(leftExpressionCustomVariable.getReference())).append(".setVariableValue('").append(leftExpressionCustomVariable.getVariable().getName()).append("', ");
             // Second part of the action 'setVariable' (depends on the function)
-            ruleCore.append(calculateFunctionRule(actions, leftExpressionCustomVariable.getReference(), function.getValue()));
+            ruleCore.append(calculateFunctionRule(actions, leftExpressionCustomVariable.getReference(), function.getValue())).append(");\n");
             // Set the value calculated
             ruleCore.append("\tDroolsRulesLogger.info(\"DroolsRule\", \"Variable set (").append(leftExpressionCustomVariable.getReference().getName()).append(", \"").append("+$").append(getTreeObjectName(leftExpressionCustomVariable.getReference())).append(".getVariableValue('").append(leftExpressionCustomVariable.getVariable().getName()).append("')+\")\");\n");
             //Store in a drools variable.
@@ -128,29 +128,29 @@ public class DroolsParser {
         try {
             switch (availableFunction) {
                 case ELEMENT_PATH:
-                    return "'" + cleanSpecialCharactersFromRule(reference.getPathName()) + "');\n";
+                    return "'" + cleanSpecialCharactersFromRule(reference.getPathName()) + "'";
                 case ELEMENT_XPATH:
-                    return "'" + cleanSpecialCharactersFromRule(reference.getXPath()) + "');\n";
+                    return "'" + cleanSpecialCharactersFromRule(reference.getXPath()) + "'";
                 case ELEMENT_NAME:
-                    return "'" + cleanSpecialCharactersFromRule(reference.getName()) + "');\n";
+                    return "'" + cleanSpecialCharactersFromRule(reference.getName()) + "'";
                 case ELEMENT_ID:
                     return "'" + reference.getId() + "');\n";
                 case MAX:
-                    return "RulesOperators.calculateMaxValueFunction(variablesList));\n";
+                    return "RulesOperators.calculateMaxValueFunction(variablesList)";
                 case MIN:
-                    return "RulesOperators.calculateMinValueFunction(variablesList));\n";
+                    return "RulesOperators.calculateMinValueFunction(variablesList)";
                 case AVG:
-                    return "RulesOperators.calculateAvgValueFunction(variablesList));\n";
+                    return "RulesOperators.calculateAvgValueFunction(variablesList)";
                 case SUM:
-                    return "RulesOperators.calculateSumValueFunction(variablesList));\n";
+                    return "RulesOperators.calculateSumValueFunction(variablesList)";
                 case PMT:
-                    return "RulesOperators.calculatePmtValueFunction(variablesList));\n";
+                    return "RulesOperators.calculatePmtValueFunction(variablesList)";
                 case LOG:
-                    return "RulesOperators.calculateLogarithmFunction(variablesList));\n";
+                    return "RulesOperators.calculateLogarithmFunction(variablesList)";
                 case CONCAT:
-                    return "RulesOperators.concatenateStringsFunction(variablesList));\n";
+                    return "RulesOperators.concatenateStringsFunction(variablesList)";
                 case CONCAT_SEPARATOR:
-                    return "RulesOperators.concatenateStringsSeaparatedFunction(variablesList));\n";
+                    return "RulesOperators.concatenateStringsSeaparatedFunction(variablesList)";
                 default:
                     throw new DroolsRuleCreationException("Error parsing an Action. Function '" + availableFunction + "' not found.", actions);
             }
@@ -320,7 +320,7 @@ public class DroolsParser {
                     .append(leftExpressionCustomVariable.getVariable().getName()).append("')+\")\");\n");
             ruleCore.append(DroolsParser.generateDroolsVariableAction(leftExpressionCustomVariable.getReference(),
                     leftExpressionCustomVariable.getVariable().getName(),
-                    calculateFunctionRule(actions, leftExpressionCustomVariable.getReference(), function.getValue()), true));
+                    calculateFunctionRule(actions, leftExpressionCustomVariable.getReference(), function.getValue()), true)).append(");\n");
             //Force the re-execution from drools as the variable has been changed.
             //ruleCore += "\tupdate($droolsForm)\n";
         }

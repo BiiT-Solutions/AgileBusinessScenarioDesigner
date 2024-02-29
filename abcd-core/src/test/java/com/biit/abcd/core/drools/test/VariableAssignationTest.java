@@ -25,15 +25,6 @@ import com.biit.abcd.persistence.entity.CustomVariableScope;
 import com.biit.abcd.persistence.entity.CustomVariableType;
 import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.Question;
-import com.biit.abcd.persistence.entity.diagram.Diagram;
-import com.biit.abcd.persistence.entity.diagram.DiagramElement;
-import com.biit.abcd.persistence.entity.diagram.DiagramExpression;
-import com.biit.abcd.persistence.entity.diagram.DiagramLink;
-import com.biit.abcd.persistence.entity.diagram.DiagramObjectType;
-import com.biit.abcd.persistence.entity.diagram.DiagramRule;
-import com.biit.abcd.persistence.entity.diagram.DiagramSink;
-import com.biit.abcd.persistence.entity.diagram.DiagramSource;
-import com.biit.abcd.persistence.entity.diagram.Node;
 import com.biit.abcd.persistence.entity.expressions.AvailableOperator;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorLogic;
@@ -43,7 +34,6 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueNumber;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueString;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.persistence.entity.expressions.Rule;
-import com.biit.abcd.persistence.utils.IdGenerator;
 import com.biit.drools.engine.exceptions.DroolsRuleExecutionException;
 import com.biit.drools.form.DroolsForm;
 import com.biit.drools.form.DroolsSubmittedForm;
@@ -62,7 +52,6 @@ import org.testng.annotations.Test;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Test(groups = "droolsVariableTest")
