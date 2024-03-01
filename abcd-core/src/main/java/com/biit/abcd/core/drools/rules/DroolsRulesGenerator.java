@@ -256,11 +256,13 @@ public class DroolsRulesGenerator {
 
             // Actions
             defaultCustomVariableValue.append(RuleGenerationUtils.getThenRuleString());
-            defaultCustomVariableValue.append("\t$").append(TreeObjectDroolsIdMap.get(expressionValueCustomVariable.getReference())).append(".setVariableValue('").append(expressionValueCustomVariable.getVariable().getName()).append("', ").append(customVariableDefaultValue).append(");\n");
+            defaultCustomVariableValue.append("\t$").append(TreeObjectDroolsIdMap.get(expressionValueCustomVariable.getReference()))
+                    .append(".setVariableValue(\"").append(expressionValueCustomVariable.getVariable().getName()).append("\", ")
+                    .append(customVariableDefaultValue).append(");\n");
             defaultCustomVariableValue.append("\tDroolsRulesLogger.info(\"DroolsRule\", \"Default variable value set (")
                     .append(expressionValueCustomVariable.getReference().getName()).append(", ")
                     .append(expressionValueCustomVariable.getVariable().getName()).append(", ")
-                    .append(customVariableDefaultValue != null ? customVariableDefaultValue.replaceAll("\"", "'") : customVariableDefaultValue).append(")\");\n");
+                    .append((customVariableDefaultValue != null ? customVariableDefaultValue.replaceAll("\"", "'") : customVariableDefaultValue)).append(")\");\n");
             defaultCustomVariableValue.append(DroolsParser.generateDroolsVariableInitialization(expressionValueCustomVariable.getReference(), expressionValueCustomVariable.getVariable().getName(), customVariableDefaultValue));
             //Force the re-execution from drools as the variable has been changed.
             //defaultCustomVariableValue.append("\tupdate($droolsForm)\n");
