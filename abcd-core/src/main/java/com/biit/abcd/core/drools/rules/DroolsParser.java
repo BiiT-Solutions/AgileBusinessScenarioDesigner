@@ -237,6 +237,12 @@ public class DroolsParser {
                     .append(operator.getValue()).append(customVariableType.equals(CustomVariableType.STRING) ? " '" : " ")
                     .append(value).append(customVariableType.equals(CustomVariableType.STRING) ? "' )\n" : " )\n");
         }
+        try {
+            stringBuilder.append(SimpleConditionsGenerator.getTreeObjectConditions(reference));
+        } catch (NullTreeObjectException | TreeObjectInstanceNotRecognizedException |
+                 TreeObjectParentNotValidException e) {
+            throw new RuntimeException(e);
+        }
         return stringBuilder.toString();
     }
 
@@ -279,7 +285,7 @@ public class DroolsParser {
     public static String generateDroolsVariableAction(TreeObject treeObject, String variable, Object value, boolean alreadyExists) {
         final String variableName = generateDroolsVariableName(treeObject, variable);
         return "\t" + variableName + ".setValue(" + value + ");"
-                + "\n\t" + (alreadyExists ? "update(" + variableName + ");\n" : "insert(" + variableName + ");\n");
+                + "\n\t" + (alreadyExists ? "modify(" + variableName + "){setValue(" + value + ")};\n" : "insert(" + variableName + ");\n");
     }
 
     private static String assignationElementFunctionAction(ExpressionChain actions) throws NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
@@ -547,7 +553,7 @@ public class DroolsParser {
         return result;
     }
 
-    public static String getNeededTreeObjectsDefinitions(Rule rule) {
+    public static String getNeededTreeObjectsDefinitions(Rule rule) throws TreeObjectInstanceNotRecognizedException, NullTreeObjectException, TreeObjectParentNotValidException {
         final Set<String> usedVariables = new HashSet<>();
         final StringBuilder stringBuilder = new StringBuilder();
         if ((rule.getActions() != null) && (rule.getActions().getExpressions() != null) && (!rule.getActions().getExpressions().isEmpty())) {
@@ -558,7 +564,7 @@ public class DroolsParser {
                     //Avoid duplicated declarations.
                     if (!usedVariables.contains(expressionValueCustomVariable.getReference().getXPath() + "_" + expressionValueCustomVariable.getVariable().getName())) {
                         //stringBuilder.append(getTreeObjectInActionDeclaration(expressionValueCustomVariable.getReference(), expressionValueCustomVariable.getVariable().getName()));
-
+                        //stringBuilder.append(SimpleConditionsGenerator.getTreeObjectConditions(expressionValueCustomVariable.getReference()));
                         usedVariables.add(expressionValueCustomVariable.getReference().getXPath() + "_" + expressionValueCustomVariable.getVariable().getName());
                     }
                 }

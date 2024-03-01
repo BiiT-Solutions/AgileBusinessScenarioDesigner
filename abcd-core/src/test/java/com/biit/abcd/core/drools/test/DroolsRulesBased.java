@@ -83,20 +83,22 @@ public class DroolsRulesBased {
         diagramEndNode.setType(DiagramObjectType.SINK);
 
         List<DiagramElement> diagramElements = new ArrayList<>();
-        for (Rule rule : form.getRules()) {
-            DiagramRule diagramRule = new DiagramRule();
-            diagramRule.setRule(rule);
-            diagramRule.setJointjsId(IdGenerator.createId());
-            diagramRule.setType(DiagramObjectType.RULE);
-            diagramElements.add(diagramRule);
-        }
 
+        //First expressions, later rules.
         for (ExpressionChain expressionChain : form.getExpressionChains()) {
             DiagramExpression diagramExpression = new DiagramExpression();
             diagramExpression.setExpression(expressionChain);
             diagramExpression.setJointjsId(IdGenerator.createId());
             diagramExpression.setType(DiagramObjectType.CALCULATION);
             diagramElements.add(diagramExpression);
+        }
+
+        for (Rule rule : form.getRules()) {
+            DiagramRule diagramRule = new DiagramRule();
+            diagramRule.setRule(rule);
+            diagramRule.setJointjsId(IdGenerator.createId());
+            diagramRule.setType(DiagramObjectType.RULE);
+            diagramElements.add(diagramRule);
         }
 
         //Convert elements to diagram nodes
