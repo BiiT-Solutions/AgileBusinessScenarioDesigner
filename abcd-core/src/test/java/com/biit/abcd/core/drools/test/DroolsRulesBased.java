@@ -31,6 +31,7 @@ import com.biit.abcd.persistence.entity.diagram.DiagramSink;
 import com.biit.abcd.persistence.entity.diagram.DiagramSource;
 import com.biit.abcd.persistence.entity.diagram.Node;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
+import com.biit.abcd.persistence.entity.expressions.ExpressionSort;
 import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
 import com.biit.abcd.persistence.utils.IdGenerator;
@@ -40,6 +41,7 @@ import com.biit.drools.form.DroolsForm;
 import com.biit.form.submitted.ISubmittedForm;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class DroolsRulesBased {
@@ -85,7 +87,9 @@ public class DroolsRulesBased {
         List<DiagramElement> diagramElements = new ArrayList<>();
 
         //First expressions, later rules.
-        for (ExpressionChain expressionChain : form.getExpressionChains()) {
+        List<ExpressionChain> expressionChains = new ArrayList<>(form.getExpressionChains());
+        expressionChains.sort(new ExpressionSort());
+        for (ExpressionChain expressionChain : expressionChains) {
             DiagramExpression diagramExpression = new DiagramExpression();
             diagramExpression.setExpression(expressionChain);
             diagramExpression.setJointjsId(IdGenerator.createId());
@@ -93,7 +97,9 @@ public class DroolsRulesBased {
             diagramElements.add(diagramExpression);
         }
 
-        for (Rule rule : form.getRules()) {
+        List<Rule> rules = new ArrayList<>(form.getRules());
+        rules.sort(Comparator.comparing(Rule::getName).reversed());
+        for (Rule rule : rules) {
             DiagramRule diagramRule = new DiagramRule();
             diagramRule.setRule(rule);
             diagramRule.setJointjsId(IdGenerator.createId());

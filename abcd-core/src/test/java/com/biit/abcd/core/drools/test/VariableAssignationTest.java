@@ -203,10 +203,12 @@ public class VariableAssignationTest extends DroolsRulesBased {
         Set<ExpressionChain> expressions = new HashSet<>();
         ExpressionChain expression1 = new ExpressionChain("AssignStrings1", new ExpressionValueCustomVariable(form.getChild(0), categoryTextCustomVariable),
                 new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueString(TEXT_SAMPLE));
+        expression1.setSortSeq(0);
         expressions.add(expression1);
         // Assign variable1 to variable2
         ExpressionChain expression2 = new ExpressionChain("AssignStrings2", new ExpressionValueCustomVariable(form, formTextCustomVariable),
                 new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueCustomVariable(form.getChild(0), categoryTextCustomVariable));
+        expression2.setSortSeq(1);
         expressions.add(expression2);
 
         form.setExpressionChains(expressions);
@@ -217,7 +219,7 @@ public class VariableAssignationTest extends DroolsRulesBased {
         DroolsForm droolsForm = executeDroolsEngine(form, submittedForm, new ArrayList<>());
         // Check result
         Assert.assertNotNull(droolsForm);
-        org.testng.Assert.assertEquals(((DroolsSubmittedForm) (droolsForm).getDroolsSubmittedForm()).getFormVariables().values().iterator().next().get(VARIABLE_1_NAME), '1');
+        org.testng.Assert.assertEquals(((DroolsSubmittedForm) (droolsForm).getDroolsSubmittedForm()).getFormVariables().values().iterator().next().get(FORM_TEXT), TEXT_SAMPLE);
     }
 
     @Test()
@@ -231,10 +233,14 @@ public class VariableAssignationTest extends DroolsRulesBased {
         // Create a new form
         Form form = createForm();
         CustomVariable categoryCustomVariable = new CustomVariable(form, "catScore", CustomVariableType.NUMBER, CustomVariableScope.QUESTION);
+        categoryCustomVariable.setDefaultValue("1");
+        Set<CustomVariable> customVariables = new HashSet<>();
+        customVariables.add(categoryCustomVariable);
+        form.setCustomVariables(customVariables);
 
         final Set<ExpressionChain> expressions = new HashSet<>();
         // If expression
-        ExpressionChain expression = new ExpressionChain("ifExpression", new ExpressionValueGenericCustomVariable(GenericTreeObjectType.QUESTION_CATEGORY,
+        ExpressionChain expression = new ExpressionChain("ifExpression", new ExpressionValueCustomVariable(form,
                 categoryCustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionFunction(AvailableFunction.IF),
                 new ExpressionValueGenericCustomVariable(GenericTreeObjectType.QUESTION_CATEGORY, categoryCustomVariable), new ExpressionOperatorLogic(
                 AvailableOperator.LESS_THAN), new ExpressionValueNumber(56.), new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueNumber(
@@ -249,7 +255,7 @@ public class VariableAssignationTest extends DroolsRulesBased {
         DroolsForm droolsForm = executeDroolsEngine(form, submittedForm, new ArrayList<>());
         // Check result
         Assert.assertNotNull(droolsForm);
-        //org.testng.Assert.assertEquals(((DroolsSubmittedForm) (droolsForm).getDroolsSubmittedForm()).getFormVariables().values().iterator().next().get(VARIABLE_1_NAME), '1');
+        org.testng.Assert.assertEquals(((DroolsSubmittedForm) (droolsForm).getDroolsSubmittedForm()).getFormVariables().values().iterator().next().get(VARIABLE_1_NAME), '1');
     }
 
     @Test()
