@@ -126,14 +126,10 @@ public class SaveAsButton extends IconButton {
 		}
 
 		private void addCloseAction() {
-			addCloseListener(new Window.CloseListener() {
-				private static final long serialVersionUID = -1063176225590181269L;
-
-				public void windowClose(CloseEvent e) {
-					// Reset data to allow recreation.
-					data = null;
-				}
-			});
+			addCloseListener((CloseListener) e -> {
+                // Reset data to allow recreation.
+                data = null;
+            });
 		}
 
 		public void loadResource() {
@@ -145,7 +141,6 @@ public class SaveAsButton extends IconButton {
 
 				Button downloadButton = new IconButton(LanguageCodes.BUTTON_DOWNLOAD, ThemeIcon.DOWNLOAD,
 						LanguageCodes.BUTTON_DOWNLOAD, IconSize.SMALL, new ClickListener() {
-							private static final long serialVersionUID = 7392438078365724416L;
 
 							@Override
 							public void buttonClick(ClickEvent event) {
@@ -182,14 +177,7 @@ public class SaveAsButton extends IconButton {
 			StreamResource resource = null;
 			try {
 				// Vaadin manage it like a file to download.
-				StreamSource streamSource = new StreamSource() {
-					private static final long serialVersionUID = -5808640417093080511L;
-
-					@Override
-					public InputStream getStream() {
-						return new ByteArrayInputStream(data);
-					}
-				};
+				StreamSource streamSource = () -> new ByteArrayInputStream(data);
 
 				// Allow user to download it.
 				resource = new StreamResource(streamSource, saveAction.getFileName());
