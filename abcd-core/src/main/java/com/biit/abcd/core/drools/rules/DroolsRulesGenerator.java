@@ -119,7 +119,7 @@ public class DroolsRulesGenerator {
         getRulesBuilder().append("import com.biit.orbeon.form.* \n");
         getRulesBuilder().append("import com.biit.drools.utils.* \n");
 
-        if (PluginController.getInstance().existsPlugins()) {
+        if (PluginController.getInstance() != null && PluginController.getInstance().existsPlugins()) {
             getRulesBuilder().append("import com.biit.plugins.PluginController \n");
             getRulesBuilder().append("import com.biit.plugins.interfaces.IPlugin \n");
             getRulesBuilder().append("import java.lang.reflect.Method \n");
@@ -198,57 +198,81 @@ public class DroolsRulesGenerator {
     private String createDefaultValueDroolsRules(Set<String> variablesList, ExpressionValueCustomVariable expressionValueCustomVariable)
             throws NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException {
         StringBuilder defaultCustomVariableValue = new StringBuilder();
-        String ruleText = "";
+        StringBuilder ruleText = new StringBuilder();
         if ((expressionValueCustomVariable != null) && (expressionValueCustomVariable.getReference() != null)
-                && (expressionValueCustomVariable.getVariable() != null) && (expressionValueCustomVariable.getVariable().getDefaultValue() != null)
-                && (!(expressionValueCustomVariable.getVariable().getDefaultValue()).isEmpty())) {
+                && (expressionValueCustomVariable.getVariable() != null)) {
 
             String customVariableDefaultValue = "";
             switch (expressionValueCustomVariable.getVariable().getType()) {
                 case STRING:
-                    customVariableDefaultValue = "'" + expressionValueCustomVariable.getVariable().getDefaultValue() + "'";
+                    if ((expressionValueCustomVariable.getVariable().getDefaultValue() != null)
+                            && !(expressionValueCustomVariable.getVariable().getDefaultValue()).isEmpty()) {
+                        customVariableDefaultValue = "\"" + expressionValueCustomVariable.getVariable().getDefaultValue() + "\"";
+                    } else {
+                        customVariableDefaultValue = "\"\"";
+                    }
                     break;
                 case NUMBER:
-                    customVariableDefaultValue = expressionValueCustomVariable.getVariable().getDefaultValue() + "d";
+                    if ((expressionValueCustomVariable.getVariable().getDefaultValue() != null)
+                            && !(expressionValueCustomVariable.getVariable().getDefaultValue()).isEmpty()) {
+                        customVariableDefaultValue = expressionValueCustomVariable.getVariable().getDefaultValue() + "d";
+                    } else {
+                        customVariableDefaultValue = null;
+                    }
                     break;
                 case DATE:
-                    try {
-                        SimpleDateFormat userInputFormat = new SimpleDateFormat("dd/MM/yyyy");
-                        customVariableDefaultValue = "(new Date(" + userInputFormat.parse(expressionValueCustomVariable.getVariable().getDefaultValue()).getTime()
-                                + "l))";
-                    } catch (ParseException e) {
-                        AbcdLogger.errorMessage(this.getClass().getName(), e);
+                    if ((expressionValueCustomVariable.getVariable().getDefaultValue() != null)
+                            && !(expressionValueCustomVariable.getVariable().getDefaultValue()).isEmpty()) {
+                        try {
+                            SimpleDateFormat userInputFormat = new SimpleDateFormat("dd/MM/yyyy");
+                            customVariableDefaultValue = "(new Date(" + userInputFormat.parse(expressionValueCustomVariable.getVariable().getDefaultValue()).getTime()
+                                    + "l))";
+                        } catch (ParseException e) {
+                            AbcdLogger.errorMessage(this.getClass().getName(), e);
+                        }
+                    } else {
+                        customVariableDefaultValue = null;
                     }
                     break;
             }
 
             // Rule name
             String ruleName = RuleGenerationUtils.getRuleName(expressionValueCustomVariable.getVariable().getName() + "_default_value");
-            ruleText = "rule \"" + ruleName + "\"\n";
+            ruleText.append("rule \"").append(ruleName).append("\"\n");
             // Default rules must be executed first.
-            ruleText += "salience " + Salience.VARIABLES_SALIENCE + " \n";
+            ruleText.append("salience ").append(Salience.VARIABLES_SALIENCE).append(" \n");
             //Avoid the re-activation of a rule NO MATTER what the cause is. (Mainly by the update that is below).
-            //ruleText += "lock-on-active\n";
+            //ruleText.append("lock-on-active\n");
             // Conditions
-            defaultCustomVariableValue.append("when\n");
+            defaultCustomVariableValue.append(RuleGenerationUtils.getWhenRuleString());
             defaultCustomVariableValue.append("\t$droolsForm: DroolsForm()\n");
-
             defaultCustomVariableValue.append(SimpleConditionsGenerator.getTreeObjectConditions(expressionValueCustomVariable.getReference()));
+
+            //Add variable declaration.
+//            final String variable = DroolsParser.getVariableInActionDeclaration(expressionValueCustomVariable.getReference(), expressionValueCustomVariable.getVariable().getName());
+//            if (!defaultCustomVariableValue.toString().contains(variable)) {
+//                defaultCustomVariableValue.append(variable);
+//            }
+
             // Actions
-            defaultCustomVariableValue.append("then\n");
-            defaultCustomVariableValue.append("\t$" + TreeObjectDroolsIdMap.get(expressionValueCustomVariable.getReference()) + ".setVariableValue('"
-                    + expressionValueCustomVariable.getVariable().getName() + "', " + customVariableDefaultValue + ");\n");
-            defaultCustomVariableValue.append("\tDroolsRulesLogger.info(\"DroolsRule\", \"Default variable value set ("
-                    + expressionValueCustomVariable.getReference().getName() + ", " + expressionValueCustomVariable.getVariable().getName() + ", "
-                    + customVariableDefaultValue + ")\");\n");
+            defaultCustomVariableValue.append(RuleGenerationUtils.getThenRuleString());
+            defaultCustomVariableValue.append("\t$").append(TreeObjectDroolsIdMap.get(expressionValueCustomVariable.getReference()))
+                    .append(".setVariableValue(\"").append(expressionValueCustomVariable.getVariable().getName()).append("\", ")
+                    .append(customVariableDefaultValue).append(");\n");
+            defaultCustomVariableValue.append("\tDroolsRulesLogger.info(\"DroolsRule\", \"Default variable value set (")
+                    .append(expressionValueCustomVariable.getReference().getName()).append(", ")
+                    .append(expressionValueCustomVariable.getVariable().getName()).append(", ")
+                    .append((customVariableDefaultValue != null ? customVariableDefaultValue.replaceAll("\"", "'") : customVariableDefaultValue)).append(")\");\n");
+            defaultCustomVariableValue.append(DroolsParser.generateDroolsVariableInitialization(expressionValueCustomVariable.getReference(), expressionValueCustomVariable.getVariable().getName(), customVariableDefaultValue));
             //Force the re-execution from drools as the variable has been changed.
             //defaultCustomVariableValue.append("\tupdate($droolsForm)\n");
-            defaultCustomVariableValue.append("\tinsert(new FiredRule(\"" + ruleName + "\"));\n");
+            defaultCustomVariableValue.append("\tinsert(new FiredRule(\"").append(ruleName).append("\"));\n");
             defaultCustomVariableValue.append("end\n\n");
         }
         if (!variablesList.contains(defaultCustomVariableValue.toString())) {
             variablesList.add(defaultCustomVariableValue.toString());
-            return ruleText + defaultCustomVariableValue;
+            ruleText.append(defaultCustomVariableValue);
+            return ruleText.toString();
         } else {
             return null;
         }

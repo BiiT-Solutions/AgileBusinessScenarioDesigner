@@ -82,7 +82,7 @@ public class PluginsTest extends KidsFormCreator {
             TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
             BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException,
             InvalidRuleException, ActionNotImplementedException, InvalidExpressionException {
-        // Restart the form to avoid test cross references
+        // Restart the form to avoid test cross-references
         Form form = createForm();
         CustomVariable customvariableToAssign = new CustomVariable(form, CUSTOM_VARIABLE_RESULT, CustomVariableType.STRING, CustomVariableScope.FORM);
         ExpressionChain expression = new ExpressionChain("helloWorldExpression", new ExpressionValueCustomVariable(form, customvariableToAssign),

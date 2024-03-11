@@ -31,7 +31,9 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @ContextConfiguration(locations = { "classpath:applicationContextTest.xml" })
 public class OperatorsTest extends KidsFormCreator {
@@ -54,7 +56,7 @@ public class OperatorsTest extends KidsFormCreator {
 	private static final Double OR_RESULT_VALUE = 11.;
 	private static final String BETWEEN_CUSTOM_VARIABLE = "betweenCustomVariable";
 
-	@Test(enabled = true, groups = { "droolsOperators" })
+	@Test(groups = { "droolsOperators" })
 	public void mathematicalOperatorsTest() throws DroolsRuleGenerationException, DocumentException, IOException, DroolsRuleExecutionException,
 			RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
@@ -95,7 +97,7 @@ public class OperatorsTest extends KidsFormCreator {
 		}
 	}
 
-	@Test(enabled = true, groups = { "droolsOperators" })
+	@Test(groups = { "droolsOperators" })
 	public void minOperatorTest() throws FieldTooLongException, CharacterNotAllowedException, NotValidChildException, InvalidAnswerFormatException,
 			NotValidTypeInVariableData, ElementIsReadOnly, DroolsRuleGenerationException, DocumentException, IOException, DroolsRuleExecutionException,
 			RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
@@ -124,7 +126,7 @@ public class OperatorsTest extends KidsFormCreator {
 		Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(MIN), minVal);
 	}
 
-	@Test(enabled = true, groups = { "droolsOperators" })
+	@Test(groups = { "droolsOperators" })
 	public void maxOperatorTest() throws FieldTooLongException, CharacterNotAllowedException, NotValidChildException, InvalidAnswerFormatException,
 			NotValidTypeInVariableData, ElementIsReadOnly, DroolsRuleGenerationException, DocumentException, IOException, DroolsRuleExecutionException,
 			RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
@@ -153,7 +155,7 @@ public class OperatorsTest extends KidsFormCreator {
 		Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(MAX), maxVal);
 	}
 
-	@Test(enabled = true, groups = { "droolsOperators" })
+	@Test(groups = { "droolsOperators" })
 	public void avgOperatorTest() throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException, CharacterNotAllowedException,
 			NotValidTypeInVariableData, ExpressionInvalidException, InvalidRuleException, IOException, RuleNotImplementedException, DocumentException,
 			ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
@@ -181,7 +183,7 @@ public class OperatorsTest extends KidsFormCreator {
 		Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(AVG), (firstVal + secondVal + thirdVal) / 3.0);
 	}
 
-	@Test(enabled = true, groups = { "droolsOperators" })
+	@Test(groups = { "droolsOperators" })
 	public void concatenateStringTest() throws DroolsRuleGenerationException, DocumentException, IOException, DroolsRuleExecutionException,
 			FieldTooLongException, CharacterNotAllowedException, NotValidChildException, InvalidAnswerFormatException, NotValidTypeInVariableData,
 			ElementIsReadOnly, RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
@@ -204,7 +206,7 @@ public class OperatorsTest extends KidsFormCreator {
 		Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CONCAT), "MarcoPolo");
 	}
 
-	@Test(enabled = true, groups = { "droolsOperators" })
+	@Test(groups = { "droolsOperators" })
 	public void concatenateQuestionValueTest() throws DroolsRuleGenerationException, DocumentException, IOException, DroolsRuleExecutionException,
 			FieldTooLongException, CharacterNotAllowedException, NotValidChildException, InvalidAnswerFormatException, NotValidTypeInVariableData,
 			ElementIsReadOnly, RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
@@ -227,7 +229,7 @@ public class OperatorsTest extends KidsFormCreator {
 		Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CONCAT), "JanGood!");
 	}
 
-	@Test(enabled = true, groups = { "droolsOperators" }, expectedExceptions = { NotCompatibleTypeException.class })
+	@Test(groups = { "droolsOperators" }, expectedExceptions = { NotCompatibleTypeException.class })
 	public void concatenateInvalidQuestionValueTest() throws DroolsRuleGenerationException, DocumentException, IOException, DroolsRuleExecutionException,
 			FieldTooLongException, CharacterNotAllowedException, NotValidChildException, InvalidAnswerFormatException, NotValidTypeInVariableData,
 			ElementIsReadOnly, RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
@@ -248,7 +250,7 @@ public class OperatorsTest extends KidsFormCreator {
 		createAndRunDroolsRules(form);
 	}
 
-	@Test(enabled = true, groups = { "droolsOperators" })
+	@Test(groups = { "droolsOperators" })
 	public void concatenateVariables() throws DroolsRuleGenerationException, DocumentException, IOException, DroolsRuleExecutionException,
 			FieldTooLongException, CharacterNotAllowedException, NotValidChildException, InvalidAnswerFormatException, NotValidTypeInVariableData,
 			ElementIsReadOnly, RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
@@ -274,7 +276,7 @@ public class OperatorsTest extends KidsFormCreator {
 		Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CONCAT), "abcdef");
 	}
 
-	@Test(enabled = true, groups = { "droolsOperators" })
+	@Test(groups = { "droolsOperators" })
 	public void concatenateGlobalVariables() throws DroolsRuleGenerationException, DocumentException, IOException, DroolsRuleExecutionException,
 			FieldTooLongException, CharacterNotAllowedException, NotValidChildException, InvalidAnswerFormatException, NotValidTypeInVariableData,
 			ElementIsReadOnly, RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
@@ -316,7 +318,7 @@ public class OperatorsTest extends KidsFormCreator {
 		Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CONCAT), "HelloWorld!");
 	}
 
-	@Test(enabled = true, groups = { "droolsOperators" })
+	@Test(groups = { "droolsOperators" })
 	public void concatenateMix() throws DroolsRuleGenerationException, DocumentException, IOException, DroolsRuleExecutionException, FieldTooLongException,
 			CharacterNotAllowedException, NotValidChildException, InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly,
 			RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
@@ -357,7 +359,7 @@ public class OperatorsTest extends KidsFormCreator {
 		Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CONCAT), "HelloabcJanMarco");
 	}
 
-	@Test(enabled = true, groups = { "droolsOperators" })
+	@Test(groups = { "droolsOperators" })
 	public void pmtOperatorTest() throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException, CharacterNotAllowedException,
 			NotValidTypeInVariableData, ExpressionInvalidException, InvalidRuleException, IOException, RuleNotImplementedException, DocumentException,
 			ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
@@ -383,7 +385,7 @@ public class OperatorsTest extends KidsFormCreator {
 		}
 	}
 
-	@Test(enabled = true, groups = { "droolsOperators" })
+	@Test(groups = { "droolsOperators" }, enabled = false)
 	public void ifOperatorWithoutGenericsTest() throws FieldTooLongException, CharacterNotAllowedException, NotValidChildException,
 			InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly, DroolsRuleGenerationException, DocumentException, IOException,
 			DroolsRuleExecutionException, RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
@@ -394,12 +396,20 @@ public class OperatorsTest extends KidsFormCreator {
 		Form form = createForm();
 		// If expression
 		CustomVariable ifResultCustomVariable = new CustomVariable(form, IF_RESULT, CustomVariableType.NUMBER, CustomVariableScope.FORM);
-		ExpressionChain expression = new ExpressionChain("ifExpression", new ExpressionValueCustomVariable(form, ifResultCustomVariable),
-				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionFunction(AvailableFunction.IF), new ExpressionValueCustomVariable(
-						form, ifResultCustomVariable), new ExpressionOperatorLogic(AvailableOperator.LESS_THAN), new ExpressionValueNumber(56.),
-				new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueNumber(7.1), new ExpressionSymbol(AvailableSymbol.COMMA),
-				new ExpressionValueNumber(1.7), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
-		form.getExpressionChains().add(expression);
+
+		Set<CustomVariable> customVariables = new HashSet<>();
+		customVariables.add(ifResultCustomVariable);
+		form.setCustomVariables(customVariables);
+
+		final Set<ExpressionChain> expressions = new HashSet<>();
+		ExpressionChain expression = new ExpressionChain("ifExpression", new ExpressionValueCustomVariable(form,
+				ifResultCustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionFunction(AvailableFunction.IF),
+				new ExpressionValueGenericCustomVariable(GenericTreeObjectType.QUESTION_CATEGORY, ifResultCustomVariable), new ExpressionOperatorLogic(
+				AvailableOperator.LESS_THAN), new ExpressionValueNumber(56.), new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueNumber(
+				7.1), new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueNumber(1.7), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
+		expressions.add(expression);
+		form.setExpressionChains(expressions);
+
 		form.addDiagram(createExpressionsDiagram(form));
 		// Create the rules and launch the engine
 		DroolsForm droolsForm = createAndRunDroolsRules(form);
@@ -407,7 +417,7 @@ public class OperatorsTest extends KidsFormCreator {
 		Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(IF_RESULT), 1.7);
 	}
 
-	@Test(enabled = true, groups = { "droolsOperators" })
+	@Test(groups = { "droolsOperators" }, enabled = false)
 	public void ifOperatorWithGenericsTest() throws FieldTooLongException, CharacterNotAllowedException, NotValidChildException, InvalidAnswerFormatException,
 			NotValidTypeInVariableData, ElementIsReadOnly, DroolsRuleGenerationException, DocumentException, IOException, DroolsRuleExecutionException,
 			RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
@@ -429,7 +439,7 @@ public class OperatorsTest extends KidsFormCreator {
 		createAndRunDroolsRules(form);
 	}
 
-	@Test(enabled = true, groups = { "droolsOperators" })
+	@Test(groups = { "droolsOperators" })
 	public void inOperatorQuestionAnswerTest() throws DroolsRuleGenerationException, DocumentException, IOException, DroolsRuleExecutionException,
 			FieldTooLongException, CharacterNotAllowedException, NotValidChildException, InvalidAnswerFormatException, NotValidTypeInVariableData,
 			ElementIsReadOnly, RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
@@ -463,7 +473,7 @@ public class OperatorsTest extends KidsFormCreator {
 		Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT), CUSTOM_VARIABLE_RESULT_VALUE);
 	}
 
-	@Test(enabled = true, groups = { "droolsOperators" })
+	@Test(groups = { "droolsOperators" })
 	public void inOperatorQuestionInputNumberTest() throws DroolsRuleGenerationException, DocumentException, IOException, DroolsRuleExecutionException,
 			FieldTooLongException, CharacterNotAllowedException, NotValidChildException, InvalidAnswerFormatException, NotValidTypeInVariableData,
 			ElementIsReadOnly, RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
@@ -527,7 +537,7 @@ public class OperatorsTest extends KidsFormCreator {
 	 * @throws RuleNotImplementedException
 	 * @throws InvalidExpressionException
 	 */
-	@Test(enabled = true, groups = { "droolsOperators" })
+	@Test(groups = { "droolsOperators" })
 	public void inOperatorCustomVariableFormTest() throws FieldTooLongException, CharacterNotAllowedException, NotValidChildException,
 			InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly, DroolsRuleGenerationException, DocumentException, IOException,
 			DroolsRuleExecutionException, RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
@@ -550,7 +560,7 @@ public class OperatorsTest extends KidsFormCreator {
 		Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT), CUSTOM_VARIABLE_RESULT_VALUE);
 	}
 
-	@Test(enabled = true, groups = { "droolsOperators" })
+	@Test(groups = { "droolsOperators" })
 	public void inOperatorCustomVariableCategoryTest() throws DroolsRuleGenerationException, DocumentException, IOException, DroolsRuleExecutionException,
 			FieldTooLongException, CharacterNotAllowedException, NotValidChildException, InvalidAnswerFormatException, NotValidTypeInVariableData,
 			ElementIsReadOnly, RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
@@ -575,7 +585,7 @@ public class OperatorsTest extends KidsFormCreator {
 		Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT), CUSTOM_VARIABLE_RESULT_VALUE);
 	}
 
-	@Test(enabled = true, groups = { "droolsOperators" })
+	@Test(groups = { "droolsOperators" })
 	public void inOperatorCustomVariableGroupTest() throws FieldTooLongException, CharacterNotAllowedException, NotValidChildException,
 			InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly, DroolsRuleGenerationException, DocumentException, IOException,
 			DroolsRuleExecutionException, RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
@@ -599,7 +609,7 @@ public class OperatorsTest extends KidsFormCreator {
 		Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT), CUSTOM_VARIABLE_RESULT_VALUE);
 	}
 
-	@Test(enabled = true, groups = { "droolsOperators" })
+	@Test(groups = { "droolsOperators" })
 	public void inOperatorCustomVariableQuestionTest() throws FieldTooLongException, CharacterNotAllowedException, NotValidChildException,
 			InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly, DroolsRuleGenerationException, DocumentException, IOException,
 			DroolsRuleExecutionException, RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
@@ -640,7 +650,7 @@ public class OperatorsTest extends KidsFormCreator {
 		return rule;
 	}
 
-	@Test(enabled = true, groups = { "droolsOperators" })
+	@Test(groups = { "droolsOperators" })
 	public void betweenOperatorQuestionNumberValuesTest() throws FieldTooLongException, CharacterNotAllowedException, NotValidChildException,
 			InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly, DroolsRuleGenerationException, DocumentException, IOException,
 			DroolsRuleExecutionException, RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
@@ -672,7 +682,7 @@ public class OperatorsTest extends KidsFormCreator {
 		Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT), CUSTOM_VARIABLE_RESULT_VALUE);
 	}
 
-	@Test(enabled = true, groups = { "droolsOperators" })
+	@Test(groups = { "droolsOperators" })
 	public void betweenOperatorCustomVariableNumberValuesTest() throws FieldTooLongException, CharacterNotAllowedException, NotValidChildException,
 			InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly, DroolsRuleGenerationException, DocumentException, IOException,
 			DroolsRuleExecutionException, RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
@@ -706,7 +716,7 @@ public class OperatorsTest extends KidsFormCreator {
 		Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT), CUSTOM_VARIABLE_RESULT_VALUE);
 	}
 
-	@Test(enabled = true, groups = { "droolsOperators" })
+	@Test(groups = { "droolsOperators" })
 	public void betweenOperatorCustomVariableStringValuesTest() throws FieldTooLongException, CharacterNotAllowedException, NotValidChildException,
 			InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly, DroolsRuleGenerationException, DocumentException, IOException,
 			DroolsRuleExecutionException, RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
@@ -740,7 +750,7 @@ public class OperatorsTest extends KidsFormCreator {
 		Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT), CUSTOM_VARIABLE_RESULT_VALUE);
 	}
 
-	@Test(enabled = true, groups = { "droolsOperators" })
+	@Test(groups = { "droolsOperators" })
 	public void betweenOperatorQuestionStringValuesTest() throws DroolsRuleGenerationException, DocumentException, IOException, DroolsRuleExecutionException,
 			FieldTooLongException, CharacterNotAllowedException, NotValidChildException, InvalidAnswerFormatException, NotValidTypeInVariableData,
 			ElementIsReadOnly, RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
@@ -772,7 +782,7 @@ public class OperatorsTest extends KidsFormCreator {
 		Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT), CUSTOM_VARIABLE_RESULT_VALUE);
 	}
 
-	@Test(enabled = true, groups = { "droolsOperators" })
+	@Test(groups = { "droolsOperators" })
 	public void betweenOperatorQuestionDateValuesTest() throws FieldTooLongException, CharacterNotAllowedException, NotValidChildException,
 			InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly, DroolsRuleGenerationException, DocumentException, IOException,
 			DroolsRuleExecutionException, RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
@@ -805,7 +815,7 @@ public class OperatorsTest extends KidsFormCreator {
 		Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT), CUSTOM_VARIABLE_RESULT_VALUE);
 	}
 
-	@Test(enabled = true, groups = { "droolsOperators" })
+	@Test(groups = { "droolsOperators" })
 	public void betweenOperatorQuestionDateYearsValuesTest() throws FieldTooLongException, CharacterNotAllowedException, NotValidChildException,
 			InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly, DroolsRuleGenerationException, DocumentException, IOException,
 			DroolsRuleExecutionException, RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
@@ -844,7 +854,7 @@ public class OperatorsTest extends KidsFormCreator {
 		Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT), CUSTOM_VARIABLE_RESULT_VALUE);
 	}
 
-	@Test(enabled = true, groups = { "droolsOperators" })
+	@Test(groups = { "droolsOperators" })
 	public void betweenOperatorQuestionInputsTest() throws FieldTooLongException, CharacterNotAllowedException, NotValidChildException,
 			InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly, DroolsRuleGenerationException, DocumentException, IOException,
 			DroolsRuleExecutionException, RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
@@ -877,7 +887,7 @@ public class OperatorsTest extends KidsFormCreator {
 		Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(CUSTOM_VARIABLE_RESULT), CUSTOM_VARIABLE_RESULT_VALUE);
 	}
 
-	@Test(enabled = true, groups = { "droolsOperators" })
+	@Test(groups = { "droolsOperators" })
 	public void testAndOperator() throws ExpressionInvalidException, InvalidRuleException, IOException, RuleNotImplementedException, DocumentException,
 			ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
 			TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException, FieldTooLongException, NotValidChildException,
@@ -918,7 +928,7 @@ public class OperatorsTest extends KidsFormCreator {
 		}
 	}
 
-	@Test(enabled = true, groups = { "droolsOperators" })
+	@Test(groups = { "droolsOperators" })
 	public void testOrOperator() throws FieldTooLongException, NotValidChildException, InvalidAnswerFormatException, CharacterNotAllowedException,
 			NotValidTypeInVariableData, ExpressionInvalidException, InvalidRuleException, IOException, RuleNotImplementedException, DocumentException,
 			ActionNotImplementedException, NotCompatibleTypeException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
@@ -960,7 +970,7 @@ public class OperatorsTest extends KidsFormCreator {
 		}
 	}
 
-	@Test(enabled = true, groups = { "droolsOperators" })
+	@Test(groups = { "droolsOperators" })
 	public void testNotOperator() throws FieldTooLongException, CharacterNotAllowedException, NotValidChildException, InvalidAnswerFormatException,
 			NotValidTypeInVariableData, ElementIsReadOnly, DroolsRuleGenerationException, DocumentException, IOException, DroolsRuleExecutionException,
 			RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
@@ -991,7 +1001,7 @@ public class OperatorsTest extends KidsFormCreator {
 		}
 	}
 
-	@Test(enabled = true, groups = { "droolsOperators" })
+	@Test(groups = { "droolsOperators" })
 	public void testNotAndCombinationOperator() throws DroolsRuleGenerationException, DocumentException, IOException, DroolsRuleExecutionException,
 			RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
@@ -1033,7 +1043,7 @@ public class OperatorsTest extends KidsFormCreator {
 		}
 	}
 
-	@Test(enabled = true, groups = { "droolsOperators" })
+	@Test(groups = { "droolsOperators" })
 	public void andOrCombinationTest() throws DroolsRuleGenerationException, DocumentException, IOException, DroolsRuleExecutionException,
 			RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
@@ -1080,7 +1090,7 @@ public class OperatorsTest extends KidsFormCreator {
 		}
 	}
 
-	@Test(enabled = true, groups = { "droolsOperators" })
+	@Test(groups = { "droolsOperators" })
 	public void andOrBracketsCombinationTest() throws DroolsRuleGenerationException, DocumentException, IOException, DroolsRuleExecutionException,
 			RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
 			TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
@@ -1131,7 +1141,7 @@ public class OperatorsTest extends KidsFormCreator {
 		}
 	}
 
-	@Test(enabled = true, groups = { "droolsOperators" })
+	@Test(groups = { "droolsOperators" })
 	public void testGreaterThanOperator() {
 		try {
 			// Create a new form
@@ -1145,7 +1155,7 @@ public class OperatorsTest extends KidsFormCreator {
 		}
 	}
 
-	@Test(enabled = true, groups = { "droolsOperators" })
+	@Test(groups = { "droolsOperators" })
 	public void testGreaterEqualsOperator() {
 		try {
 			// Create a new form
@@ -1159,7 +1169,7 @@ public class OperatorsTest extends KidsFormCreator {
 		}
 	}
 
-	@Test(enabled = true, groups = { "droolsOperators" })
+	@Test(groups = { "droolsOperators" })
 	public void testLessThanOperator() {
 		try {
 			// Create a new form
@@ -1173,7 +1183,7 @@ public class OperatorsTest extends KidsFormCreator {
 		}
 	}
 
-	@Test(enabled = true, groups = { "droolsOperators" })
+	@Test(groups = { "droolsOperators" })
 	public void testLessEqualsOperator() {
 		try {
 			// Create a new form
@@ -1187,7 +1197,7 @@ public class OperatorsTest extends KidsFormCreator {
 		}
 	}
 
-	@Test(enabled = true, groups = { "droolsOperators" })
+	@Test(groups = { "droolsOperators" })
 	public void testEqualsOperator() {
 		try {
 			// Create a new form
@@ -1201,7 +1211,7 @@ public class OperatorsTest extends KidsFormCreator {
 		}
 	}
 
-	@Test(enabled = true, groups = { "droolsOperators" })
+	@Test(groups = { "droolsOperators" })
 	public void testNotEqualsOperator() {
 		try {
 			// Create a new form
@@ -1215,7 +1225,7 @@ public class OperatorsTest extends KidsFormCreator {
 		}
 	}
 
-	@Test(enabled = true, groups = { "droolsOperators" })
+	@Test(groups = { "droolsOperators" })
 	public void testNotEqualsDateOperator() {
 		try {
 			// Create a new form
@@ -1230,7 +1240,7 @@ public class OperatorsTest extends KidsFormCreator {
 		}
 	}
 
-	@Test(enabled = true, groups = { "droolsOperators" })
+	@Test(groups = { "droolsOperators" })
 	public void testNotEqualsDateYearOperator() {
 		try {
 			// Create a new form

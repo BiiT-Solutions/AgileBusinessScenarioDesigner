@@ -3,7 +3,7 @@ package com.biit.abcd.persistence.entity;
 public enum CustomVariableType {
     STRING("class.String", " "),
 
-    NUMBER("class.Number", null),
+    NUMBER("class.Number", "0"),
 
     DATE("class.Date", null);
 

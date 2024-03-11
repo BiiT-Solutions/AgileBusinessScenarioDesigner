@@ -32,7 +32,6 @@ import com.biit.drools.global.variables.DroolsGlobalVariable;
 import com.biit.drools.global.variables.json.DroolsGlobalVariablesFromJson;
 import com.biit.form.entity.TreeObject;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -129,9 +128,9 @@ public class RuleGenerationUtils {
                 // In the last row, remove the ands (if any)
                 if ((i < (auxSplit.length - 1)) && (auxSplit[i + 1] != null) && auxSplit[i + 1].equals("then")
                         && compareTo.endsWith("and")) {
-                    result.append(compareTo.substring(0, compareTo.length() - 3) + "\n");
+                    result.append(compareTo, 0, compareTo.length() - 3).append("\n");
                 } else {
-                    result.append(compareTo + "\n");
+                    result.append(compareTo).append("\n");
                 }
             }
         }
@@ -139,13 +138,12 @@ public class RuleGenerationUtils {
     }
 
     public static String checkForDuplicatedVariables(String ruleCore) {
-        String cleanedResults = "";
+        StringBuilder cleanedResults = new StringBuilder();
         // boolean insideRHS = false;
-        HashSet<String> variablesAssigned = new HashSet<String>();
+        HashSet<String> variablesAssigned = new HashSet<>();
         String[] lines = ruleCore.split("\n");
         // int sameVariableIndex = 0;
-        for (int lineIndex = 0; lineIndex < lines.length; lineIndex++) {
-            String line = lines[lineIndex];
+        for (String line : lines) {
             // if (line.equals("then")) {
             // insideRHS = true;
             // }
@@ -164,26 +162,26 @@ public class RuleGenerationUtils {
                 }
 
                 if (!auxRuleArray[0].equals("\t")) {
-                    cleanedResults += auxRuleArray[0] + " : ";
+                    cleanedResults.append(auxRuleArray[0]).append(" : ");
                 } else {
-                    cleanedResults += auxRuleArray[0];
+                    cleanedResults.append(auxRuleArray[0]);
                 }
                 for (int i = 1; i < auxRuleArray.length; i++) {
                     if (i == (auxRuleArray.length - 1)) {
-                        cleanedResults += auxRuleArray[i] + "\n";
+                        cleanedResults.append(auxRuleArray[i]).append("\n");
                     } else {
-                        cleanedResults += auxRuleArray[i] + " : ";
+                        cleanedResults.append(auxRuleArray[i]).append(" : ");
                     }
                 }
             } else {
-                cleanedResults += line + "\n";
+                cleanedResults.append(line).append("\n");
             }
         }
-        return cleanedResults;
+        return cleanedResults.toString();
     }
 
     public static String removeExtraParenthesis(String ruleCore) {
-        String cleanedResults = "";
+        StringBuilder cleanedResults = new StringBuilder();
         String[] lines = ruleCore.split("\n");
         for (int lineIndex = 0; lineIndex < lines.length; lineIndex++) {
             String line = lines[lineIndex];
@@ -195,41 +193,40 @@ public class RuleGenerationUtils {
                 }
             }
         }
-        for (int lineIndex = 0; lineIndex < lines.length; lineIndex++) {
-            String line = lines[lineIndex];
+        for (String line : lines) {
             if (line != null) {
-                cleanedResults += line + "\n";
+                cleanedResults.append(line).append("\n");
             }
         }
-        return cleanedResults;
+        return cleanedResults.toString();
     }
 
     public static String addThenIfNeeded(String ruleCore) {
-        String cleanedResults = "";
+        StringBuilder cleanedResults = new StringBuilder();
         boolean thenClause = false;
         String[] lines = ruleCore.split("\n");
-        for (int lineIndex = 0; lineIndex < lines.length; lineIndex++) {
-            String line = lines[lineIndex];
+        for (String line : lines) {
             if (line.equals("then")) {
                 thenClause = true;
+                break;
             }
         }
         for (int lineIndex = 0; lineIndex < lines.length; lineIndex++) {
             if ((lineIndex == (lines.length - 1)) && (!thenClause)) {
-                cleanedResults += getThenRuleString();
+                cleanedResults.append(getThenRuleString());
             }
-            cleanedResults += lines[lineIndex] + "\n";
+            cleanedResults.append(lines[lineIndex]).append("\n");
         }
-        return cleanedResults;
+        return cleanedResults.toString();
     }
 
     public static String removeLastNLines(String ruleCore, int n) {
-        String cleanedResults = "";
+        StringBuilder cleanedResults = new StringBuilder();
         String[] lines = ruleCore.split("\n");
         for (int i = 0; i < (lines.length - n); i++) {
-            cleanedResults += lines[i] + "\n";
+            cleanedResults.append(lines[i]).append("\n");
         }
-        return cleanedResults;
+        return cleanedResults.toString();
     }
 
     public static Integer getNumberOfLines(String ruleCore) {
@@ -238,29 +235,29 @@ public class RuleGenerationUtils {
     }
 
     public static String replaceLine(String ruleCore, String lineToSet, int lineNumber) {
-        String cleanedResults = "";
+        StringBuilder cleanedResults = new StringBuilder();
         String[] lines = ruleCore.split("\n");
         for (int i = 0; i < lines.length; i++) {
             if (i == lineNumber) {
-                cleanedResults += lineToSet + "\n";
+                cleanedResults.append(lineToSet).append("\n");
             } else {
-                cleanedResults += lines[i] + "\n";
+                cleanedResults.append(lines[i]).append("\n");
             }
         }
-        return cleanedResults;
+        return cleanedResults.toString();
     }
 
     public static String replaceLastLine(String ruleCore, String lineToSet) {
-        String cleanedResults = "";
+        StringBuilder cleanedResults = new StringBuilder();
         String[] lines = ruleCore.split("\n");
         for (int i = 0; i < lines.length; i++) {
             if (i == (lines.length - 1)) {
-                cleanedResults += lineToSet + "\n";
+                cleanedResults.append(lineToSet).append("\n");
             } else {
-                cleanedResults += lines[i] + "\n";
+                cleanedResults.append(lines[i]).append("\n");
             }
         }
-        return cleanedResults;
+        return cleanedResults.toString();
     }
 
     public static String getLine(String ruleCore, int lineNumber) {
@@ -284,22 +281,26 @@ public class RuleGenerationUtils {
     }
 
     public static String fixOrCondition(String ruleCore) {
-        String cleanedResults = "";
+        StringBuilder cleanedResults = new StringBuilder();
         int finishCondition = -1;
-        HashSet<Integer> skipLines = new HashSet<Integer>();
+        HashSet<Integer> skipLines = new HashSet<>();
 
         String[] lines = ruleCore.split("\n");
+        label:
         for (int i = 0; i < lines.length; i++) {
-            if (lines[i].equals("\tor")) {
-                skipLines.add(i - 1);
-                skipLines.add(i);
-                skipLines.add(i + 1);
-            } else if (lines[i].equals("\tnot(")) {
-                skipLines.add(i);
-            } else if (lines[i].equals("then")) {
-                skipLines.add(i - 1);
-                finishCondition = i;
-                break;
+            switch (lines[i]) {
+                case "\tor":
+                    skipLines.add(i - 1);
+                    skipLines.add(i);
+                    skipLines.add(i + 1);
+                    break;
+                case "\tnot(":
+                    skipLines.add(i);
+                    break;
+                case "then":
+                    skipLines.add(i - 1);
+                    finishCondition = i;
+                    break label;
             }
         }
         for (int i = 0; i < lines.length; i++) {
@@ -317,15 +318,15 @@ public class RuleGenerationUtils {
                 lines[i] = lines[i] + " and";
             }
         }
-        for (int i = 0; i < lines.length; i++) {
-            cleanedResults += lines[i] + "\n";
+        for (String line : lines) {
+            cleanedResults.append(line).append("\n");
         }
 
-        return cleanedResults;
+        return cleanedResults.toString();
     }
 
     public static String addAndToMultipleConditionsAction(String ruleCore) {
-        String cleanedResults = "";
+        StringBuilder cleanedResults = new StringBuilder();
         String[] lines = ruleCore.split("\n");
         for (int i = 0; i < lines.length; i++) {
             if (lines[i].equals("then")) {
@@ -338,10 +339,10 @@ public class RuleGenerationUtils {
                 lines[i] = lines[i].concat(" and");
             }
         }
-        for (int i = 0; i < lines.length; i++) {
-            cleanedResults += lines[i] + "\n";
+        for (String line : lines) {
+            cleanedResults.append(line).append("\n");
         }
-        return cleanedResults;
+        return cleanedResults.toString();
     }
 
     public static String returnSimpleTreeObjectNameFunction(TreeObject treeObject) {

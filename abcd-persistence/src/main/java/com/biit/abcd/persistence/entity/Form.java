@@ -8,7 +8,6 @@ import com.biit.abcd.persistence.entity.diagram.DiagramLink;
 import com.biit.abcd.persistence.entity.diagram.DiagramObject;
 import com.biit.abcd.persistence.entity.diagram.DiagramRule;
 import com.biit.abcd.persistence.entity.diagram.DiagramTable;
-import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueGenericCustomVariable;
@@ -586,8 +585,8 @@ public class Form extends BaseForm {
      * @return the custom variable or null if not found
      */
     public CustomVariable getCustomVariable(String name, String scope) {
-        for (CustomVariable customVariable : getCustomVariables()) {
-            if (customVariable.getName().equals(name) && customVariable.getScope().toString().equals(scope)) {
+        for (CustomVariable customVariable : customVariables) {
+            if (Objects.equals(customVariable.getName(), name) && customVariable.getScope().toString().equals(scope)) {
                 return customVariable;
             }
         }
