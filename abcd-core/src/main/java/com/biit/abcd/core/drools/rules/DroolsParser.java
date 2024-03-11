@@ -277,8 +277,7 @@ public class DroolsParser {
      */
     public static String getVariableInActionDeclaration(TreeObject treeObject, String variable) {
         //To avoid loops, we have a fired rule.
-        return "\tnot(FiredRule(getRuleName() == '" + generateVariableFiredActionName(treeObject, variable) + "'))\n" +
-                "\t" + generateDroolsVariableName(treeObject, variable) + " : " +
+        return "\t" + generateDroolsVariableName(treeObject, variable) + " : " +
                 //Condition
                 "VariableValue( reference == \"" + treeObject.getUniqueNameReadable() +
                 "\", variable == \"" + variable + "\" )\n";
@@ -287,8 +286,7 @@ public class DroolsParser {
     public static String generateDroolsVariableAction(TreeObject treeObject, String variable, Object value, boolean alreadyExists) {
         final String variableName = generateDroolsVariableName(treeObject, variable);
         return "\t" + variableName + ".setValue(" + value + ");"
-                + "\n\t" + (alreadyExists ? "modify(" + variableName + "){setValue(" + value + ")};\n" : "insert(" + variableName + ");\n")
-                + "\tinsert(new FiredRule('" + generateVariableFiredActionName(treeObject, variable) + "'));\n";
+                + "\n\t" + (alreadyExists ? "modify(" + variableName + "){setValue(" + value + ")};\n" : "insert(" + variableName + ");\n");
     }
 
     private static String generateVariableFiredActionName(TreeObject treeObject, String variable) {
@@ -484,6 +482,10 @@ public class DroolsParser {
 
                     //Add variable declaration.
                     final List<String> variableDeclarations = getVariableConditionDeclaration(rule);
+                    if (!variableDeclarations.isEmpty()) {
+                        //Add rule check to avoid loops;
+                        ruleText.append("\tnot(FiredRule( getRuleName() == '" + getFiredRuleName(rule) + "'))\n");
+                    }
                     for (String variableDeclaration : variableDeclarations) {
                         if (!parsedRule.contains(variableDeclaration)) {
                             ruleText.append(variableDeclaration);
@@ -503,13 +505,21 @@ public class DroolsParser {
                         }
                         ruleText.append(RuleGenerationUtils.getGroupRuleActions((DroolsRuleGroup) rule));
                     }
+                    if (!variableDeclarations.isEmpty()) {
+                        //Add rule check to avoid loops;
+                        ruleText.append("\tinsert(new FiredRule('").append(getFiredRuleName(rule)).append("'));\n");
+                    }
                     ruleText.append(RuleGenerationUtils.getEndRuleString());
                 }
-                //parsedText.append(removeDuplicatedDeclarations(ruleText));
-                parsedText.append(ruleText);
+                parsedText.append(removeDuplicatedDeclarations(ruleText));
+                //parsedText.append(ruleText);
             }
         }
         return parsedText.toString();
+    }
+
+    private static String getFiredRuleName(Rule rule) {
+        return "Assignation_" + rule.hashCode();
     }
 
     /**
