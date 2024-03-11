@@ -163,11 +163,11 @@ public class ExpressionsTest extends KidsFormCreator {
 		// Generate the form
 		Form form = initFormAndVariables();
 		List<ExpressionChain> expressions = new ArrayList<>();
-		ExpressionChain expression1 = new ExpressionChain("AssignStrings", new ExpressionValueCustomVariable(form.getChild(0), categoryTextCustomVariable),
+		ExpressionChain expression1 = new ExpressionChain("AssignStrings1", new ExpressionValueCustomVariable(form.getChild(0), categoryTextCustomVariable),
 				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueString(TEXT_SAMPLE));
 		expressions.add(expression1);
 		// Assign variable1 to variable2
-		ExpressionChain expression2 = new ExpressionChain("AssignStrings", new ExpressionValueCustomVariable(form, formTextCustomVariable),
+		ExpressionChain expression2 = new ExpressionChain("AssignStrings2", new ExpressionValueCustomVariable(form, formTextCustomVariable),
 				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueCustomVariable(form.getChild(0), categoryTextCustomVariable));
 		expressions.add(expression2);
 		// Launch the expression

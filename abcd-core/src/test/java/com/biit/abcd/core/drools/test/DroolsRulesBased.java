@@ -29,11 +29,13 @@ import com.biit.abcd.persistence.entity.diagram.DiagramObjectType;
 import com.biit.abcd.persistence.entity.diagram.DiagramRule;
 import com.biit.abcd.persistence.entity.diagram.DiagramSink;
 import com.biit.abcd.persistence.entity.diagram.DiagramSource;
+import com.biit.abcd.persistence.entity.diagram.DiagramTable;
 import com.biit.abcd.persistence.entity.diagram.Node;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.ExpressionSort;
 import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
+import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.utils.IdGenerator;
 import com.biit.drools.engine.DroolsRulesEngine;
 import com.biit.drools.engine.exceptions.DroolsRuleExecutionException;
@@ -105,6 +107,17 @@ public class DroolsRulesBased {
             diagramRule.setJointjsId(IdGenerator.createId());
             diagramRule.setType(DiagramObjectType.RULE);
             diagramElements.add(diagramRule);
+        }
+
+        //Tables
+        List<TableRule> tables = new ArrayList<>(form.getTableRules());
+        tables.sort(Comparator.comparing(TableRule::getName).reversed());
+        for (TableRule tableRule : tables) {
+            DiagramTable diagramTableRuleNode = new DiagramTable();
+            diagramTableRuleNode.setTable(tableRule);
+            diagramTableRuleNode.setJointjsId(IdGenerator.createId());
+            diagramTableRuleNode.setType(DiagramObjectType.TABLE);
+            diagramElements.add(diagramTableRuleNode);
         }
 
         //Convert elements to diagram nodes

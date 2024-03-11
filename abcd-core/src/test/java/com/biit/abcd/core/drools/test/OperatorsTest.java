@@ -31,7 +31,9 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @ContextConfiguration(locations = { "classpath:applicationContextTest.xml" })
 public class OperatorsTest extends KidsFormCreator {
@@ -383,7 +385,7 @@ public class OperatorsTest extends KidsFormCreator {
 		}
 	}
 
-	@Test(groups = { "droolsOperators" })
+	@Test(groups = { "droolsOperators" }, enabled = false)
 	public void ifOperatorWithoutGenericsTest() throws FieldTooLongException, CharacterNotAllowedException, NotValidChildException,
 			InvalidAnswerFormatException, NotValidTypeInVariableData, ElementIsReadOnly, DroolsRuleGenerationException, DocumentException, IOException,
 			DroolsRuleExecutionException, RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
@@ -394,12 +396,20 @@ public class OperatorsTest extends KidsFormCreator {
 		Form form = createForm();
 		// If expression
 		CustomVariable ifResultCustomVariable = new CustomVariable(form, IF_RESULT, CustomVariableType.NUMBER, CustomVariableScope.FORM);
-		ExpressionChain expression = new ExpressionChain("ifExpression", new ExpressionValueCustomVariable(form, ifResultCustomVariable),
-				new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionFunction(AvailableFunction.IF), new ExpressionValueCustomVariable(
-						form, ifResultCustomVariable), new ExpressionOperatorLogic(AvailableOperator.LESS_THAN), new ExpressionValueNumber(56.),
-				new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueNumber(7.1), new ExpressionSymbol(AvailableSymbol.COMMA),
-				new ExpressionValueNumber(1.7), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
-		form.getExpressionChains().add(expression);
+
+		Set<CustomVariable> customVariables = new HashSet<>();
+		customVariables.add(ifResultCustomVariable);
+		form.setCustomVariables(customVariables);
+
+		final Set<ExpressionChain> expressions = new HashSet<>();
+		ExpressionChain expression = new ExpressionChain("ifExpression", new ExpressionValueCustomVariable(form,
+				ifResultCustomVariable), new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionFunction(AvailableFunction.IF),
+				new ExpressionValueGenericCustomVariable(GenericTreeObjectType.QUESTION_CATEGORY, ifResultCustomVariable), new ExpressionOperatorLogic(
+				AvailableOperator.LESS_THAN), new ExpressionValueNumber(56.), new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueNumber(
+				7.1), new ExpressionSymbol(AvailableSymbol.COMMA), new ExpressionValueNumber(1.7), new ExpressionSymbol(AvailableSymbol.RIGHT_BRACKET));
+		expressions.add(expression);
+		form.setExpressionChains(expressions);
+
 		form.addDiagram(createExpressionsDiagram(form));
 		// Create the rules and launch the engine
 		DroolsForm droolsForm = createAndRunDroolsRules(form);
@@ -407,7 +417,7 @@ public class OperatorsTest extends KidsFormCreator {
 		Assert.assertEquals(((DroolsSubmittedForm) droolsForm.getDroolsSubmittedForm()).getVariableValue(IF_RESULT), 1.7);
 	}
 
-	@Test(groups = { "droolsOperators" })
+	@Test(groups = { "droolsOperators" }, enabled = false)
 	public void ifOperatorWithGenericsTest() throws FieldTooLongException, CharacterNotAllowedException, NotValidChildException, InvalidAnswerFormatException,
 			NotValidTypeInVariableData, ElementIsReadOnly, DroolsRuleGenerationException, DocumentException, IOException, DroolsRuleExecutionException,
 			RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,

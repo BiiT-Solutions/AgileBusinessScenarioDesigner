@@ -276,7 +276,9 @@ public class DroolsParser {
      * Variables used in actions, must be obtained in the condition area.
      */
     public static String getVariableInActionDeclaration(TreeObject treeObject, String variable) {
-        return "\t" + generateDroolsVariableName(treeObject, variable) + " : " +
+        //To avoid loops, we have a fired rule.
+        return "\tnot(FiredRule(getRuleName() == '" + generateVariableFiredActionName(treeObject, variable) + "'))\n" +
+                "\t" + generateDroolsVariableName(treeObject, variable) + " : " +
                 //Condition
                 "VariableValue( reference == \"" + treeObject.getUniqueNameReadable() +
                 "\", variable == \"" + variable + "\" )\n";
@@ -285,7 +287,12 @@ public class DroolsParser {
     public static String generateDroolsVariableAction(TreeObject treeObject, String variable, Object value, boolean alreadyExists) {
         final String variableName = generateDroolsVariableName(treeObject, variable);
         return "\t" + variableName + ".setValue(" + value + ");"
-                + "\n\t" + (alreadyExists ? "modify(" + variableName + "){setValue(" + value + ")};\n" : "insert(" + variableName + ");\n");
+                + "\n\t" + (alreadyExists ? "modify(" + variableName + "){setValue(" + value + ")};\n" : "insert(" + variableName + ");\n")
+                + "\tinsert(new FiredRule('" + generateVariableFiredActionName(treeObject, variable) + "'));\n";
+    }
+
+    private static String generateVariableFiredActionName(TreeObject treeObject, String variable) {
+        return getTreeObjectName(treeObject) + "_" + variable;
     }
 
     private static String assignationElementFunctionAction(ExpressionChain actions) throws NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
@@ -397,7 +404,7 @@ public class DroolsParser {
             throws NullTreeObjectException, TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException {
         if (treeObject != null) {
             if (getTreeObjectName(treeObject) == null) {
-                // The variable don't exist and can't have a value assigned so
+                // The variable don't exist and can't have a value assigned, so
                 // we have to create it
                 return SimpleConditionsGenerator.getTreeObjectConditions(treeObject);
             }
@@ -409,7 +416,7 @@ public class DroolsParser {
     }
 
     /**
-     * Checks the existence of a binding in drools with the the reference of the
+     * Checks the existence of a binding in drools with the reference of the
      * variable passed If there is no binding, creates a new one (i.e. $var :
      * Question() ...)
      *
@@ -458,48 +465,85 @@ public class DroolsParser {
         setDroolsHelper(droolsHelper);
         StringBuilder parsedText = new StringBuilder();
         for (DroolsRule rule : rules) {
+            StringBuilder ruleText = new StringBuilder();
             if (rule != null) {
                 // Parse the rules individually
                 String parsedRule = createDroolsRule(rule);
                 if (parsedRule != null) {
-                    parsedText.append(rule.getName());
+                    ruleText.append(rule.getName());
                     //If rule has a specific salience, include it.
                     if (rule.getSalience() != null) {
-                        parsedText.append("salience ").append(rule.getSalience()).append(" \n");
+                        ruleText.append("salience ").append(rule.getSalience()).append(" \n");
                     }
                     if (rule.isLockOnActive()) {
                         //Not working !!
-                        //parsedText.append("lock-on-active\n");
+                        //ruleText.append("lock-on-active\n");
                     }
-                    //parsedText.append("no-loop\n");
-                    parsedText.append(RuleGenerationUtils.getWhenRuleString());
+                    //ruleText.append("no-loop\n");
+                    ruleText.append(RuleGenerationUtils.getWhenRuleString());
 
                     //Add variable declaration.
                     final List<String> variableDeclarations = getVariableConditionDeclaration(rule);
                     for (String variableDeclaration : variableDeclarations) {
                         if (!parsedRule.contains(variableDeclaration)) {
-                            parsedText.append(variableDeclaration);
+                            ruleText.append(variableDeclaration);
                         }
                     }
 
                     // The rule
                     if (rule instanceof DroolsRuleGroupEndRule) {
-                        parsedText.append(RuleGenerationUtils.getGroupEndRuleExtraCondition((DroolsRuleGroupEndRule) rule));
+                        ruleText.append(RuleGenerationUtils.getGroupEndRuleExtraCondition((DroolsRuleGroupEndRule) rule));
                     }
 
-                    parsedText.append(parsedRule);
+                    ruleText.append(parsedRule);
 
                     if (rule instanceof DroolsRuleGroup) {
                         if (!(rule instanceof DroolsRuleGroupEndRule)) {
-                            parsedText.append(RuleGenerationUtils.getThenRuleString());
+                            ruleText.append(RuleGenerationUtils.getThenRuleString());
                         }
-                        parsedText.append(RuleGenerationUtils.getGroupRuleActions((DroolsRuleGroup) rule));
+                        ruleText.append(RuleGenerationUtils.getGroupRuleActions((DroolsRuleGroup) rule));
                     }
-                    parsedText.append(RuleGenerationUtils.getEndRuleString());
+                    ruleText.append(RuleGenerationUtils.getEndRuleString());
                 }
+                //parsedText.append(removeDuplicatedDeclarations(ruleText));
+                parsedText.append(ruleText);
             }
         }
         return parsedText.toString();
+    }
+
+    /**
+     * Removes any duplicated variable declaration.
+     *
+     * @param ruleText
+     * @return
+     */
+    private static String removeDuplicatedDeclarations(StringBuilder ruleText) {
+        final String text = ruleText.toString();
+        final StringBuilder rule = new StringBuilder();
+
+        rule.append(text, 0, text.indexOf(RuleGenerationUtils.getWhenRuleString()));
+
+        String action = text.substring(text.indexOf(RuleGenerationUtils.getWhenRuleString()), text.indexOf(RuleGenerationUtils.getThenRuleString()));
+
+        String[] lines = action.split("\n");
+
+        final Set<String> declaredVariables = new HashSet<>();
+        //Remove duplicated variables
+        for (String line : lines) {
+            //Not a variable
+            if (!line.startsWith("\t$var_")) {
+                rule.append(line).append("\n");
+            } else {
+                if (!declaredVariables.contains(line)) {
+                    rule.append(line).append("\n");
+                    declaredVariables.add(line);
+                }
+            }
+        }
+
+        rule.append(text.substring(text.indexOf(RuleGenerationUtils.getThenRuleString())));
+        return rule.toString();
     }
 
     /**

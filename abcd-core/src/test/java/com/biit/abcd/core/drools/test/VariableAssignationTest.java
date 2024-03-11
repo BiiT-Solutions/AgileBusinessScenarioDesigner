@@ -40,6 +40,8 @@ import com.biit.abcd.persistence.entity.expressions.ExpressionValueNumber;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueString;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.persistence.entity.expressions.Rule;
+import com.biit.abcd.persistence.entity.rules.TableRule;
+import com.biit.abcd.persistence.entity.rules.TableRuleRow;
 import com.biit.drools.engine.exceptions.DroolsRuleExecutionException;
 import com.biit.drools.form.DroolsForm;
 import com.biit.drools.form.DroolsSubmittedForm;
@@ -69,7 +71,9 @@ public class VariableAssignationTest extends DroolsRulesBased {
 
     public static final String CATEGORY_NAME = "Category1";
     public static final String QUESTION_NAME = "question1";
-    public static final String ANSWER_NAME = "answer1";
+    public static final String ANSWER1_NAME = "answer1";
+    public static final String ANSWER2_NAME = "answer2";
+    public static final String ANSWER3_NAME = "answer3";
     public static final String VARIABLE_1_NAME = "Var1";
     public static final String VARIABLE_2_NAME = "Var2";
     public static final String VARIABLE_3_NAME = "Var3";
@@ -86,11 +90,13 @@ public class VariableAssignationTest extends DroolsRulesBased {
         form.addChild(category);
 
         Question question1 = new Question(QUESTION_NAME);
-        Answer answer1 = new Answer(ANSWER_NAME);
-        Answer answer2 = new Answer("answer2");
+        Answer answer1 = new Answer(ANSWER1_NAME);
+        Answer answer2 = new Answer(ANSWER2_NAME);
+        Answer answer3 = new Answer(ANSWER3_NAME);
         question1.setAnswerType(AnswerType.RADIO);
         question1.addChild(answer1);
         question1.addChild(answer2);
+        question1.addChild(answer3);
 
         category.addChild(question1);
 
@@ -120,9 +126,9 @@ public class VariableAssignationTest extends DroolsRulesBased {
         CustomVariable v2 = form.getCustomVariable(VARIABLE_2_NAME, CustomVariableScope.FORM.toString());
         CustomVariable v3 = form.getCustomVariable(VARIABLE_3_NAME, CustomVariableScope.FORM.toString());
 
-        //q1 == a1 -> va1 = 1
+        //q1 == a1 -> v1 = 1
         ExpressionChain condition1 = new ExpressionChain(v1.getName(), new ExpressionValueTreeObjectReference(form.getChild(Question.class, QUESTION_NAME)),
-                new ExpressionOperatorLogic(AvailableOperator.EQUALS), new ExpressionValueTreeObjectReference(form.getChild(Answer.class, ANSWER_NAME)));
+                new ExpressionOperatorLogic(AvailableOperator.EQUALS), new ExpressionValueTreeObjectReference(form.getChild(Answer.class, ANSWER1_NAME)));
         ExpressionChain action1 = new ExpressionChain(v1.getName(), new ExpressionValueCustomVariable(form, v1),
                 new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueString("1"));
         Rule ruleR1 = new Rule("R1", condition1, action1);
@@ -155,7 +161,7 @@ public class VariableAssignationTest extends DroolsRulesBased {
         submittedForm.addChild(categoryResult);
 
         SubmittedQuestion question1 = new SubmittedQuestion(QUESTION_NAME);
-        question1.addAnswer(ANSWER_NAME);
+        question1.addAnswer(ANSWER1_NAME);
         categoryResult.addChild(question1);
         return submittedForm;
     }
@@ -232,7 +238,7 @@ public class VariableAssignationTest extends DroolsRulesBased {
             InvalidRuleException {
         // Create a new form
         Form form = createForm();
-        CustomVariable categoryCustomVariable = new CustomVariable(form, "catScore", CustomVariableType.NUMBER, CustomVariableScope.QUESTION);
+        CustomVariable categoryCustomVariable = new CustomVariable(form, "catScore", CustomVariableType.NUMBER, CustomVariableScope.FORM);
         categoryCustomVariable.setDefaultValue("1");
         Set<CustomVariable> customVariables = new HashSet<>();
         customVariables.add(categoryCustomVariable);
@@ -265,7 +271,7 @@ public class VariableAssignationTest extends DroolsRulesBased {
             NullTreeObjectException, DroolsRuleExecutionException, TreeObjectParentNotValidException, NotCompatibleTypeException,
             TreeObjectInstanceNotRecognizedException, NullExpressionValueException, DateComparisonNotPossibleException,
             DroolsRuleCreationException, RuleNotImplementedException, DroolsRuleGenerationException, InvalidExpressionException,
-            InvalidRuleException, ChildrenNotFoundException {
+            InvalidRuleException {
         // Create a new form
         Form form = createForm();
 
@@ -306,6 +312,70 @@ public class VariableAssignationTest extends DroolsRulesBased {
         DroolsForm droolsForm = executeDroolsEngine(form, submittedForm, new ArrayList<>());
         // Check result
         Assert.assertNotNull(droolsForm);
-        org.testng.Assert.assertEquals(((DroolsSubmittedForm) (droolsForm).getDroolsSubmittedForm()).getFormVariables().values().iterator().next().get("stringCustomVariable"), TEXT_SAMPLE);
+        Assert.assertEquals(((DroolsSubmittedForm) (droolsForm).getDroolsSubmittedForm()).getFormVariables().values().iterator().next().get("stringCustomVariable"), TEXT_SAMPLE);
+    }
+
+    @Test()
+    private void testTableRule() throws FieldTooLongException, NotValidChildException, TooManyResultsFoundException, ElementIsReadOnly,
+            CharacterNotAllowedException, BetweenFunctionInvalidException, PluginInvocationException, ActionNotImplementedException,
+            ExpressionInvalidException, NullCustomVariableException, PrattParserException, NullTreeObjectException, DroolsRuleExecutionException,
+            TreeObjectParentNotValidException, NotCompatibleTypeException, TreeObjectInstanceNotRecognizedException, NullExpressionValueException,
+            DateComparisonNotPossibleException, DroolsRuleCreationException, RuleNotImplementedException, DroolsRuleGenerationException,
+            InvalidExpressionException, InvalidRuleException {
+        // Create a simple form
+        Form form = createForm();
+
+        CustomVariable categoryVariable = new CustomVariable(form, VARIABLE_1_NAME, CustomVariableType.NUMBER, CustomVariableScope.CATEGORY, "0.0");
+
+        Set<CustomVariable> customVariables = new HashSet<>();
+        customVariables.add(categoryVariable);
+        form.setCustomVariables(customVariables);
+
+        ExpressionChain commonAction = new ExpressionChain(new ExpressionValueCustomVariable(form.getChild(Category.class, CATEGORY_NAME), categoryVariable),
+                new ExpressionOperatorMath(AvailableOperator.ASSIGNATION), new ExpressionValueCustomVariable(form.getChild(Category.class, CATEGORY_NAME),
+                categoryVariable), new ExpressionOperatorMath(AvailableOperator.PLUS), new ExpressionValueNumber(1.0));
+
+        // Create the tableRule
+        // Only with one conditions column
+        TableRule tableRule = new TableRule("TestTable");
+        // Question == Answer
+        TableRuleRow ruleRow = new TableRuleRow();
+
+        if (form.getChild(Answer.class, ANSWER1_NAME) != null) {
+            ruleRow.addCondition(new ExpressionValueTreeObjectReference(form.getChild(Question.class, QUESTION_NAME)));
+            ruleRow.addCondition(new ExpressionChain(new ExpressionValueTreeObjectReference(form.getChild(Answer.class, ANSWER1_NAME))));
+            ruleRow.setActions(commonAction);
+            tableRule.getRules().add(ruleRow);
+        }
+
+        if (form.getChild(Answer.class, ANSWER2_NAME) != null) {
+            ruleRow = new TableRuleRow();
+            ruleRow.addCondition(new ExpressionValueTreeObjectReference(form.getChild(Question.class, QUESTION_NAME)));
+            ruleRow.addCondition(new ExpressionChain(new ExpressionValueTreeObjectReference(form.getChild(Answer.class, ANSWER2_NAME))));
+            ruleRow.setActions(commonAction);
+            tableRule.getRules().add(ruleRow);
+        }
+
+        if (form.getChild(Answer.class, ANSWER3_NAME) != null) {
+            ruleRow = new TableRuleRow();
+            ruleRow.addCondition(new ExpressionValueTreeObjectReference(form.getChild(Question.class, QUESTION_NAME)));
+            ruleRow.addCondition(new ExpressionChain(new ExpressionValueTreeObjectReference(form.getChild(Answer.class, ANSWER3_NAME))));
+            ruleRow.setActions(commonAction);
+            tableRule.getRules().add(ruleRow);
+        }
+
+        // Add the table rule
+        form.getTableRules().add(tableRule);
+        // Creation of a simple diagram to load the table rule
+        defineDiagram(form);
+
+        // Create the rules and launch the engine
+        DroolsSubmittedForm submittedForm = createSubmittedForm();
+        // Check result
+        Assert.assertNotNull(submittedForm);
+
+        DroolsForm droolsForm = executeDroolsEngine(form, submittedForm, new ArrayList<>());
+
+        Assert.assertEquals(((DroolsSubmittedForm) (droolsForm).getDroolsSubmittedForm()).getFormVariables().values().iterator().next().get("stringCustomVariable"), 3.0);
     }
 }
