@@ -286,7 +286,8 @@ public class DroolsParser {
     public static String generateDroolsVariableAction(TreeObject treeObject, String variable, Object value, boolean alreadyExists) {
         final String variableName = generateDroolsVariableName(treeObject, variable);
         return "\t" + variableName + ".setValue(" + value + ");"
-                + "\n\t" + (alreadyExists ? "modify(" + variableName + "){setValue(" + value + ")};\n" : "insert(" + variableName + ");\n");
+                // + "\n\t" + (alreadyExists ? "modify(" + variableName + "){setValue(" + value + ")};\n" : "insert(" + variableName + ");\n");
+                + "\n\t" + (alreadyExists ? "update(" + variableName + ");\n" : "insert($" + variableName + ");\n");
     }
 
     private static String generateVariableFiredActionName(TreeObject treeObject, String variable) {
@@ -529,7 +530,9 @@ public class DroolsParser {
      * @return
      */
     private static String removeDuplicatedDeclarations(StringBuilder ruleText) {
-        final String text = ruleText.toString();
+        String text = ruleText.toString();
+        //'and' and 'or' are added on same line than variable declaration. We need to move to a different line to detect duplicates.
+        text = text.replaceAll(" and\n", "\n\tand\n").replaceAll(" or\n", "\n\tor\n");
         final StringBuilder rule = new StringBuilder();
 
         rule.append(text, 0, text.indexOf(RuleGenerationUtils.getWhenRuleString()));
@@ -553,7 +556,7 @@ public class DroolsParser {
         }
 
         rule.append(text.substring(text.indexOf(RuleGenerationUtils.getThenRuleString())));
-        return rule.toString();
+        return rule.toString().replaceAll("\tand\n\tand\n", "\tand\n");
     }
 
     /**
