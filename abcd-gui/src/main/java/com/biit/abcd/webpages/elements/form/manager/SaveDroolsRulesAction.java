@@ -76,7 +76,7 @@ public class SaveDroolsRulesAction implements SaveAction {
     @Override
     public String getFileName() {
         return UserSessionHandler.getFormController().getForm().getLabel() + "_v"
-                + UserSessionHandler.getFormController().getForm().getVersion() + " - rules" + getExtension();
+                + UserSessionHandler.getFormController().getForm().getVersion() + " - rules." + getExtension();
     }
 
 }
