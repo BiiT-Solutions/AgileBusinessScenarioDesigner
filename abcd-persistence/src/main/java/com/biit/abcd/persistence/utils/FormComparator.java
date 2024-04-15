@@ -77,7 +77,7 @@ public class FormComparator {
                     "One of the Storable objects is null: '" + object1 + "' and '" + object2 + "'.");
         }
 
-        if (object1 == null && object2 == null) {
+        if (object1 == null) {
             return;
         }
 
@@ -111,6 +111,15 @@ public class FormComparator {
 
     private void compare(CustomVariable object1, CustomVariable object2)
             throws CustomVariableNotEqualsException, StorableObjectNotEqualsException {
+
+        if ((object1 != null && object2 == null) || (object1 == null && object2 != null)) {
+            throw new StorableObjectNotEqualsException(
+                    "One of the custom variables objects is null: '" + object1 + "' and '" + object2 + "'.");
+        }
+
+        if (object1 == null) {
+            return;
+        }
 
         if (object1 instanceof StorableObject || object2 instanceof StorableObject) {
             compare(object1, object2, false);
