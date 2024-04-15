@@ -157,8 +157,8 @@ public class Form extends BaseForm {
             FieldTooLongException {
         Form copiedForm = (Form) generateCopy(false, true);
         copiedForm.setLabel(label);
-        copiedForm.setVersion(1);
         copiedForm.resetIds();
+        copiedForm.setVersion(this.getVersion() != null ? this.getVersion() : 1);
         copiedForm.setCreatedBy(userId);
         copiedForm.setUpdatedBy(userId);
         copiedForm.setCreationTime();
