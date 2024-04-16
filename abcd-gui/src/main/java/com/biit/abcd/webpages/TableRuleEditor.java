@@ -617,13 +617,14 @@ public class TableRuleEditor extends FormWebPageComponent implements EditExpress
 
 			newAnswerWindow.showCentered();
 			newAnswerWindow.addAcceptActionListener(new AcceptActionListener() {
+
 				@Override
 				public void acceptAction(AcceptCancelWindow window) {
 					if (newAnswerWindow.getExpressionChain() != null) {
 						answerExpression.setExpressions(newAnswerWindow.getExpressionChain().getExpressions());
 						ruleTable.update(getSelectedTableRule());
 					} else {
-						removeAnswer(row, (Integer) propertyId);
+						removeAnswer(row, propertyId);
 					}
 
 					AbcdLogger.info(this.getClass().getName(), "User '"
@@ -635,12 +636,9 @@ public class TableRuleEditor extends FormWebPageComponent implements EditExpress
 					newAnswerWindow.close();
 				}
 			});
-			newAnswerWindow.addCancelActionListener(new CancelActionListener() {
-				@Override
-				public void cancelAction(AcceptCancelWindow window) {
-					// newActionValueWindow.getExpressionWithoutFirstElement();
-				}
-			});
+			newAnswerWindow.addCancelActionListener(window -> {
+                // newActionValueWindow.getExpressionWithoutFirstElement();
+            });
 			newAnswerWindow.addClearActionListener(new ClearElementsActionListener() {
 
 				@Override

@@ -23,7 +23,7 @@ public class AddNewConditionExpressionWindow extends AddNewAnswerExpressionWindo
 		// Create content
 		setExpressionEditorComponent(new SimpleConditionEditorComponent());
 		getExpressionEditorComponent().setSizeFull();
-		// The first expression of the expresion chain must be not editable
+		// The first expression of the expression chain must be not editable
 		((SimpleExpressionEditorComponent) getExpressionEditorComponent())
 				.refreshExpressionEditor(expressionChain);
 

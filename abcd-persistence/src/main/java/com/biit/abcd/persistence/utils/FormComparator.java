@@ -232,7 +232,7 @@ public class FormComparator {
             return;
         }
         if (object1 instanceof StorableObject || object2 instanceof StorableObject) {
-            compare((StorableObject) object1, (StorableObject) object2, checkIds);
+            compare(object1, (StorableObject) object2, checkIds);
         }
         if (!object1.getClass().equals(object2.getClass())) {
             throw new ExpressionNotEqualsException(

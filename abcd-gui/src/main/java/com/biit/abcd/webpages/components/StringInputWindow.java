@@ -30,7 +30,7 @@ public class StringInputWindow extends AcceptCancelWindow {
 	private static final long serialVersionUID = 361486551550136464L;
 	private static final String WIDTH = "400px";
 	private static final String HEIGHT = "250px";
-	private static final String FIELD_WIDTH = "150px";
+	private static final String FIELD_WIDTH = "75%";
 
 	private AbstractField<?> expressionValue;
 	private ComboBox expressionType;
@@ -40,7 +40,7 @@ public class StringInputWindow extends AcceptCancelWindow {
 	public StringInputWindow() {
 		super();
 		setContent(generateContent());
-		setResizable(false);
+		setResizable(true);
 		setDraggable(false);
 		setClosable(false);
 		setModal(true);
@@ -87,16 +87,11 @@ public class StringInputWindow extends AcceptCancelWindow {
 			expressionType.setItemCaption(answerFormatUi.getAnswerFormat(), ServerTranslate.translate(answerFormatUi.getLanguageCode()));
 		}
 		expressionType.setValue(AnswerFormatUi.values()[0].getAnswerFormat());
-		expressionType.addValueChangeListener(new ValueChangeListener() {
-			private static final long serialVersionUID = -415040440196580949L;
-
-			@Override
-			public void valueChange(ValueChangeEvent event) {
-				createTextField();
-				setLocale();
-				setPromt();
-			}
-		});
+		expressionType.addValueChangeListener((ValueChangeListener) event -> {
+            createTextField();
+            setLocale();
+            setPromt();
+        });
 
 		expressionType.setNullSelectionAllowed(false);
 		expressionType.setWidth(FIELD_WIDTH);

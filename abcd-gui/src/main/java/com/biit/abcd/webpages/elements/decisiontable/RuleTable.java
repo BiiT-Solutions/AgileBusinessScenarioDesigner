@@ -27,26 +27,18 @@ public class RuleTable extends CustomComponent {
 
 		conditionTable = new ConditionTable();
 		conditionTable.setSizeFull();
-		conditionTable.addCellSelectionListener(new CellSelectionListener() {
-			@Override
-			public void cellSelectionChanged(CellRowSelector selector) {
-				actionTable.selectRows(selector.getSelectedRows(), false);
-			}
-		});
+		conditionTable.addCellSelectionListener(selector
+				-> actionTable.selectRows(selector.getSelectedRows(), false));
 
 		actionTable = new ActionTable();
 		actionTable.setSizeFull();
-		actionTable.addCellSelectionListener(new CellSelectionListener() {
-			@Override
-			public void cellSelectionChanged(CellRowSelector selector) {
-				conditionTable.selectRows(selector.getSelectedRows(), false);
-			}
-		});
+		actionTable.addCellSelectionListener(selector
+				-> conditionTable.selectRows(selector.getSelectedRows(), false));
 
 		conditionTable.setId("main-table");
 		actionTable.setId("freeze-pane");
 
-		// Sincronize both Action Table and Question Answer.
+		// Synchronize both Action Table and Question Answer.
 		JavaScript
 				.getCurrent()
 				.execute(
