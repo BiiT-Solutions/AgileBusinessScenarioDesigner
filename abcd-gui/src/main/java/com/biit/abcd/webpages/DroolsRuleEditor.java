@@ -20,21 +20,20 @@ import com.biit.abcd.webpages.elements.drools.rule.SecuredConditionActionEditorC
 import com.biit.abcd.webpages.elements.drools.rule.WindowNewRule;
 import com.biit.abcd.webpages.elements.expression.viewer.ExpressionEditorComponent;
 import com.biit.form.exceptions.DependencyExistException;
-import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.UI;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
 public class DroolsRuleEditor extends FormWebPageComponent {
     private static final long serialVersionUID = -1017932957756165996L;
-    private static final List<AbcdActivity> activityPermissions = new ArrayList<AbcdActivity>(
-            Arrays.asList(AbcdActivity.READ));
+    private static final List<AbcdActivity> activityPermissions = new ArrayList<>(
+            Collections.singletonList(AbcdActivity.READ));
     private DroolsRuleEditorUpperMenu droolsRuleEditorUpperMenu;
     private SelectDroolsRuleEditable tableSelectRule;
     private ExpressionEditorComponent ruleExpressionEditorComponent;
@@ -55,15 +54,9 @@ public class DroolsRuleEditor extends FormWebPageComponent {
         tableSelectRule = new SelectDroolsRuleEditable();
         tableSelectRule.setWidth("100%");
         tableSelectRule.setHeight("100%");
-        tableSelectRule.addValueChangeListener(new ValueChangeListener() {
-            private static final long serialVersionUID = -7103550436798085895L;
-
-            @Override
-            public void valueChange(ValueChangeEvent event) {
-                UserSessionHandler.getFormController().setLastAccessRule(getSelectedRule());
-                refreshRuleEditor();
-            }
-
+        tableSelectRule.addValueChangeListener((ValueChangeListener) event -> {
+            UserSessionHandler.getFormController().setLastAccessRule(getSelectedRule());
+            refreshRuleEditor();
         });
         collapsibleLayout.createMenu(tableSelectRule);
 
@@ -89,7 +82,7 @@ public class DroolsRuleEditor extends FormWebPageComponent {
                 tableSelectRule.setSelectedExpression(UserSessionHandler.getFormController().getLastAccessRule());
             } else {
                 // Select the first one if available.
-                if (UserSessionHandler.getFormController().getForm().getRules().size() > 0) {
+                if (!UserSessionHandler.getFormController().getForm().getRules().isEmpty()) {
 
                     Iterator<Rule> iterator = (UserSessionHandler.getFormController().getForm().getRules().iterator());
                     tableSelectRule.setSelectedExpression(iterator.next());
@@ -106,28 +99,13 @@ public class DroolsRuleEditor extends FormWebPageComponent {
         final DroolsRuleEditor thisPage = this;
         droolsRuleEditorUpperMenu = new DroolsRuleEditorUpperMenu();
 
-        droolsRuleEditorUpperMenu.addSaveButtonClickListener(new ClickListener() {
-            private static final long serialVersionUID = 6036676119057486519L;
+        droolsRuleEditorUpperMenu.addSaveButtonClickListener((ClickListener) event -> save());
 
-            @Override
-            public void buttonClick(ClickEvent event) {
-                save();
-            }
-        });
-
-        droolsRuleEditorUpperMenu.addNewRuleButtonClickListener(new ClickListener() {
-            private static final long serialVersionUID = 377976184801401863L;
-
-            @Override
-            public void buttonClick(ClickEvent event) {
-                UI.getCurrent().addWindow(
-                        new WindowNewRule(thisPage, LanguageCodes.BOTTOM_MENU_DROOLS_EDITOR,
-                                LanguageCodes.DROOLS_RULES_EDITOR_NEW_RULE_TEXTFIELD));
-            }
-        });
+        droolsRuleEditorUpperMenu.addNewRuleButtonClickListener((ClickListener) event -> UI.getCurrent().addWindow(
+                new WindowNewRule(thisPage, LanguageCodes.BOTTOM_MENU_DROOLS_EDITOR,
+                        LanguageCodes.DROOLS_RULES_EDITOR_NEW_RULE_TEXTFIELD)));
 
         droolsRuleEditorUpperMenu.addRemoveRuleButtonClickListener(new ClickListener() {
-            private static final long serialVersionUID = -3561685413299735048L;
 
             @Override
             public void buttonClick(ClickEvent event) {
@@ -165,8 +143,9 @@ public class DroolsRuleEditor extends FormWebPageComponent {
                 rule.resetIds();
                 rule.setCreatedBy(UserSessionHandler.getUser().getUniqueId());
                 UserSessionHandler.getFormController().getForm().getRules().add(rule);
-                addRulefromWindow(rule);
+                addRuleFromWindow(rule);
                 sortTableMenu();
+                tableSelectRule.openEditRuleNameWindow(rule);
             }
         });
 
@@ -216,7 +195,7 @@ public class DroolsRuleEditor extends FormWebPageComponent {
         refreshRuleEditor();
     }
 
-    public void addRulefromWindow(Rule rule) {
+    public void addRuleFromWindow(Rule rule) {
         tableSelectRule.addRow(rule);
         tableSelectRule.setSelectedExpression(rule);
     }

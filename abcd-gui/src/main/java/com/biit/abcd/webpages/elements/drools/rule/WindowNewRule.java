@@ -30,7 +30,7 @@ public class WindowNewRule extends WindowCreateNewObject {
 		rule.setUpdatedBy(UserSessionHandler.getUser());
 		rule.setUpdateTime();
 		UserSessionHandler.getFormController().getForm().getRules().add(rule);
-		((DroolsRuleEditor) getParentWindow()).addRulefromWindow(rule);
+		((DroolsRuleEditor) getParentWindow()).addRuleFromWindow(rule);
 		((DroolsRuleEditor) getParentWindow()).sortTableMenu();
 
 		AbcdLogger.info(this.getClass().getName(), "User '" + UserSessionHandler.getUser().getEmailAddress()
