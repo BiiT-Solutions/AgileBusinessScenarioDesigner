@@ -19,12 +19,12 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-public class DiagramPropertiesCalculation extends SecuredDiagramElementProperties<DiagramExpression> {
+public class DiagramPropertiesExpressions extends SecuredDiagramElementProperties<DiagramExpression> {
     private static final long serialVersionUID = 5356130114169313201L;
     private DiagramExpression instance;
     private FieldWithSearchButton fieldWithSearchButton;
 
-    public DiagramPropertiesCalculation() {
+    public DiagramPropertiesExpressions() {
         super(DiagramExpression.class);
     }
 

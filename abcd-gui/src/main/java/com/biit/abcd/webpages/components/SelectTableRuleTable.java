@@ -11,8 +11,7 @@ import com.vaadin.ui.Table;
 public class SelectTableRuleTable extends Table {
 	private static final long serialVersionUID = -5723571725991709050L;
 
-	enum MenuProperties {
-		TABLE_NAME, UPDATE_TIME;
+	enum MenuProperties {		TABLE_NAME, UPDATE_TIME;
 	};
 
 	public SelectTableRuleTable() {

@@ -34,7 +34,8 @@ public class SelectTableWindow extends AcceptCancelWindow {
 		for(TableRule tableRule: UserSessionHandler.getFormController().getForm().getTableRules()){
 			selectRuleTable.addRow(tableRule);
 		}
-		
+
+		selectRuleTable.sort();
 		rootLayout.addComponent(selectRuleTable);
 
 		return rootLayout;

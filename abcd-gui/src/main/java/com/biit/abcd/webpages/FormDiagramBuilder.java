@@ -39,13 +39,14 @@ import com.vaadin.ui.UI;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
 public class FormDiagramBuilder extends FormWebPageComponent {
     private static final long serialVersionUID = 3237410805898133935L;
     private static final List<AbcdActivity> activityPermissions = new ArrayList<>(
-            Arrays.asList(AbcdActivity.READ));
+            Collections.singletonList(AbcdActivity.READ));
     private SelectDiagramTable diagramBuilderTable;
     private AbcdDiagramBuilder diagramBuilder;
     private DiagramPropertiesComponent propertiesContainer;

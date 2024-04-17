@@ -12,7 +12,7 @@ public class DiagramPropertiesComponent extends PropertiesComponent {
 		registerPropertiesComponent(new DiagramPropertiesFork());
 		registerPropertiesComponent(new DiagramPropertiesDiagramChild());
 		registerPropertiesComponent(new DiagramPropertiesTable());
-		registerPropertiesComponent(new DiagramPropertiesCalculation());
+		registerPropertiesComponent(new DiagramPropertiesExpressions());
 		registerPropertiesComponent(new DiagramPropertiesLink());
 		registerPropertiesComponent(new DiagramPropertiesRule());
 	}
