@@ -27,9 +27,9 @@ import java.util.Date;
 
 public class StringInputWindow extends AcceptCancelWindow {
     private static final long serialVersionUID = 361486551550136464L;
-    private static final String WIDTH = "400px";
+    private static final String WIDTH = "600px";
     private static final String HEIGHT = "250px";
-    private static final String FIELD_WIDTH = "75%";
+    private static final String FIELD_WIDTH = "85%";
 
     private AbstractField<?> expressionValue;
     private ComboBox expressionType;
@@ -39,7 +39,7 @@ public class StringInputWindow extends AcceptCancelWindow {
     public StringInputWindow() {
         super();
         setContent(generateContent());
-        setResizable(true);
+        setResizable(false);
         setDraggable(false);
         setClosable(false);
         setModal(true);
