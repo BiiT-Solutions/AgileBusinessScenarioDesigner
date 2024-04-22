@@ -1,12 +1,9 @@
 package com.biit.abcd.serialization.diagram;
 
-import com.biit.abcd.persistence.entity.diagram.DiagramFork;
 import com.biit.abcd.persistence.entity.diagram.DiagramLink;
-import com.biit.abcd.persistence.entity.diagram.DiagramRepeat;
 import com.biit.abcd.persistence.entity.diagram.Node;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.form.jackson.serialization.ObjectMapperFactory;
-import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -28,8 +25,12 @@ public class DiagramLinkDeserializer extends DiagramObjectDeserializer<DiagramLi
         }
         element.setText(parseString("text", jsonObject));
         element.setManhattan(parseBoolean("manhattan", jsonObject));
-        element.setAttrs(parseString("attrs", jsonObject));
-        element.setVertices(parseString("vertices", jsonObject));
+        if (jsonObject.get("attrs") != null) {
+            element.setAttrs(jsonObject.get("attrs").toString());
+        }
+        if (jsonObject.get("vertices") != null) {
+            element.setVertices(jsonObject.get("vertices").toString());
+        }
         element.setSmooth(parseBoolean("smooth", jsonObject));
     }
 

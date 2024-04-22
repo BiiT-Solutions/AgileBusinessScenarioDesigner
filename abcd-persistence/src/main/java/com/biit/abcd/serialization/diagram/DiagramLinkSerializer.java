@@ -1,6 +1,8 @@
 package com.biit.abcd.serialization.diagram;
 
 import com.biit.abcd.persistence.entity.diagram.DiagramLink;
+import com.biit.abcd.persistence.entity.diagram.Point;
+import com.biit.form.jackson.serialization.ObjectMapperFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
 
 import java.io.IOException;
@@ -18,7 +20,13 @@ public class DiagramLinkSerializer extends DiagramObjectSerializer<DiagramLink> 
         jgen.writeStringField("text", src.getText());
         jgen.writeBooleanField("smooth", src.isSmooth());
         jgen.writeBooleanField("manhattan", src.isSmooth());
-        jgen.writeStringField("attrs", src.getAttrs());
-        //jgen.writeStringField("vertices", src.getVertices());
+        if (src.getAttrs() != null && !src.getAttrs().isEmpty()) {
+            //jgen.writeObjectField("attrs", src.getAttrs());
+            jgen.writeFieldName("attrs");
+            jgen.writeRawValue(src.getAttrs());
+        }
+        if (src.getVertices() != null && !src.getVertices().isEmpty()) {
+            jgen.writeObjectField("vertices", ObjectMapperFactory.getObjectMapper().readValue(src.getVertices(), Point[].class));
+        }
     }
 }
