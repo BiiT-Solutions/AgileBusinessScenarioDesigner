@@ -804,6 +804,7 @@
         available_from datetime(6) not null,
         available_to datetime(6),
         status varchar(255),
+       json longtext,
         primary key (id)
     ) engine=InnoDB;
 
