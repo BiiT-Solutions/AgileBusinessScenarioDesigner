@@ -64,10 +64,8 @@ public class DiagramParser {
      *
      * @param diagram The diagram to be parsed
      * @return The string with all the rules generated
-     * @throws DroolsRuleGenerationException
      * @throws PrattParserException
      * @throws DroolsRuleCreationException
-     * @throws PluginInvocationException
      * @throws DateComparisonNotPossibleException
      * @throws BetweenFunctionInvalidException
      * @throws NullExpressionValueException

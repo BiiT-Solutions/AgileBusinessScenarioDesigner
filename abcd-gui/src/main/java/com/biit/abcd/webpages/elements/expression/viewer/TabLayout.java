@@ -20,8 +20,8 @@ public abstract class TabLayout extends VerticalLayout {
 	private List<ElementUpdatedListener> elementUpdatedListener;
 
 	protected TabLayout() {
-		elementAddedListener = new ArrayList<ElementAddedListener>();
-		elementUpdatedListener = new ArrayList<ElementUpdatedListener>();
+		elementAddedListener = new ArrayList<>();
+		elementUpdatedListener = new ArrayList<>();
 		setHeight(null);
 		setWidth("100%");
 		setMargin(true);

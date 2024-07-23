@@ -15,6 +15,7 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import java.util.Objects;
 
 /**
  * Basic class for defining an expression. Any other expression must inherit
@@ -112,4 +113,17 @@ public abstract class Expression extends StorableObject {
 
     public abstract Object getValue();
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Expression that = (Expression) o;
+        return Objects.equals(getComparationId(), that.getComparationId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), getComparationId());
+    }
 }

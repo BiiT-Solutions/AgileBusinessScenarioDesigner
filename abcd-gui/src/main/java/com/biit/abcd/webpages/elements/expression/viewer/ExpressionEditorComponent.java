@@ -53,67 +53,35 @@ public abstract class ExpressionEditorComponent extends ExpressionEditorTabCompo
 	public void initTabs() {
 		// First Tab
 		TabFormVariablesLayout formVariablesLayout = new ExpressionTabFormVariablesLayout();
-		formVariablesLayout.addNewElementListener(new ElementAddedListener() {
-
-			@Override
-			public void elementAdded(Object newElement) {
-				addElementToView(newElement);
-			}
-		});
+		formVariablesLayout.addNewElementListener(this::addElementToView);
 		// Adding units to dates need to refresh the GUI.
-		formVariablesLayout.addUpdateElementListener(new ElementUpdatedListener() {
-			@Override
-			public void elementUpdated(Object newElement) {
-				if (getSelectedViewer() != null) {
-					// Update all GUI to reflect changes.
-					getSelectedViewer().updateExpression();
-				}
-			}
-		});
+		formVariablesLayout.addUpdateElementListener(newElement -> {
+            if (getSelectedViewer() != null) {
+                // Update all GUI to reflect changes.
+                getSelectedViewer().updateExpression();
+            }
+        });
 		setTab(formVariablesLayout, "", ThemeIcon.EXPRESSION_EDITOR_TAB_FORM_VARIABLES.getThemeResource());
 
 		// Second Tab
 		operatorLayout = new TabOperatorLayout();
-		operatorLayout.addNewElementListener(new ElementAddedListener() {
-
-			@Override
-			public void elementAdded(Object newElement) {
-				addElementToView(newElement);
-			}
-		});
+		operatorLayout.addNewElementListener(this::addElementToView);
 		setTab(operatorLayout, "", ThemeIcon.EXPRESSION_EDITOR_TAB_MATHS.getThemeResource());
 
 		// Third Tab
 		TabFormGenericTreeObjectLayout formVariablesScopeLayout = new TabFormGenericTreeObjectLayout();
-		formVariablesScopeLayout.addNewElementListener(new ElementAddedListener() {
-			@Override
-			public void elementAdded(Object newElement) {
-				addElementToView(newElement);
-			}
-		});
+		formVariablesScopeLayout.addNewElementListener(this::addElementToView);
 		setTab(formVariablesScopeLayout, "", ThemeIcon.EXPRESSION_EDITOR_TAB_FORM_GENERIC_VARIABLES.getThemeResource());
 
 		// Fourth tab
 		TabGlobalConstantsLayout globalConstantLayout = new TabGlobalConstantsLayout();
-		globalConstantLayout.addNewElementListener(new ElementAddedListener() {
-
-			@Override
-			public void elementAdded(Object newElement) {
-				addElementToView(newElement);
-			}
-
-		});
+		globalConstantLayout.addNewElementListener(this::addElementToView);
 		setTab(globalConstantLayout, "", ThemeIcon.EXPRESSION_EDITOR_TAB_GLOBAL_CONSTANTS.getThemeResource());
 
 		// Fifth tab (Plugins tab)
 		if (PluginController.getInstance().existsPlugins()) {
 			TabPluginsLayout pluginsLayout = new TabPluginsLayout();
-			pluginsLayout.addNewElementListener(new ElementAddedListener() {
-				@Override
-				public void elementAdded(Object newElement) {
-					addElementToView(newElement);
-				}
-			});
+			pluginsLayout.addNewElementListener(this::addElementToView);
 			setTab(pluginsLayout, "", ThemeIcon.EXPRESSION_EDITOR_TAB_PLUGIN.getThemeResource());
 		}
 	}

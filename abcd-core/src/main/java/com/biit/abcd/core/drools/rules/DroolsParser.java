@@ -445,7 +445,6 @@ public class DroolsParser {
      * @return String with the drools rule
      * @throws PrattParserException
      * @throws DroolsRuleCreationException
-     * @throws PluginInvocationException
      * @throws DateComparisonNotPossibleException
      * @throws BetweenFunctionInvalidException
      * @throws NullExpressionValueException
