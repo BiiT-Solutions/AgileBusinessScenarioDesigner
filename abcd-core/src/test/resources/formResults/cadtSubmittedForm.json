@@ -1,0 +1,106 @@
+{
+  "creationTime" : "2024-07-19T13:11:01.197Z",
+  "updateTime" : "2024-07-19T13:11:01.197Z",
+  "class" : "com.biit.form.result.FormResult",
+  "children" : [ {
+    "creationTime" : "2024-07-19T13:11:01.197Z",
+    "updateTime" : "2024-07-19T13:11:01.197Z",
+    "class" : "com.biit.form.result.CategoryResult",
+    "name" : "archetype",
+    "label" : "Archetype cards",
+    "comparationId" : "84f2312d-6d84-4365-9ef8-2304c9dd879e",
+    "children" : [ {
+      "creationTime" : "2024-07-19T13:11:01.197Z",
+      "updateTime" : "2024-07-19T13:11:01.197Z",
+      "class" : "com.biit.form.result.RepeatableGroupResult",
+      "name" : "inspiration",
+      "label" : "Group 1",
+      "comparationId" : "9baa4b6e-09e7-4023-9863-4bdfd5c91b7a",
+      "children" : [ {
+        "creationTime" : "2024-07-19T13:11:01.197Z",
+        "updateTime" : "2024-07-19T13:11:01.197Z",
+        "class" : "com.biit.form.result.QuestionWithValueResult",
+        "values" : [ "receptive" ],
+        "answerLabels" : [ ],
+        "name" : "nhm_card_choice1",
+        "label" : "Choose the card you like the most",
+        "comparationId" : "0bac123d-acd2-4277-a478-ae856159b02f"
+      }, {
+        "creationTime" : "2024-07-19T13:11:01.197Z",
+        "updateTime" : "2024-07-19T13:11:01.197Z",
+        "class" : "com.biit.form.result.QuestionWithValueResult",
+        "values" : [ "visionary" ],
+        "answerLabels" : [ ],
+        "name" : "nhm_card_choice2",
+        "label" : "Choose the card you appeal the least",
+        "comparationId" : "9ef152d1-9f5e-4802-bfd1-aed13eb31a93"
+      }, {
+        "creationTime" : "2024-07-19T13:11:01.197Z",
+        "updateTime" : "2024-07-19T13:11:01.197Z",
+        "class" : "com.biit.form.result.QuestionWithValueResult",
+        "values" : [ "innovator" ],
+        "answerLabels" : [ ],
+        "name" : "nhm_card_choice3",
+        "label" : "Choose your second favourite card",
+        "comparationId" : "72c50f2f-e2c0-4897-a002-48c40612e1ff"
+      } ]
+    }, {
+      "creationTime" : "2024-07-19T13:11:01.197Z",
+      "updateTime" : "2024-07-19T13:11:01.197Z",
+      "class" : "com.biit.form.result.RepeatableGroupResult",
+      "name" : "structure",
+      "label" : "Group 2",
+      "comparationId" : "e25db61b-1fcc-4471-a827-8c526809ecee",
+      "children" : [ {
+        "creationTime" : "2024-07-19T13:11:01.197Z",
+        "updateTime" : "2024-07-19T13:11:01.197Z",
+        "class" : "com.biit.form.result.QuestionWithValueResult",
+        "values" : [ "banker" ],
+        "answerLabels" : [ ],
+        "name" : "nhm_card_choice4",
+        "label" : "Choose the card you like the most",
+        "comparationId" : "b1d281c0-e427-41c2-8fc6-a1b51f96c172"
+      }, {
+        "creationTime" : "2024-07-19T13:11:01.197Z",
+        "updateTime" : "2024-07-19T13:11:01.197Z",
+        "class" : "com.biit.form.result.QuestionWithValueResult",
+        "values" : [ "leader" ],
+        "answerLabels" : [ ],
+        "name" : "nhm_card_choice5",
+        "label" : "Choose the card you appeal the least",
+        "comparationId" : "32f34e41-280d-4052-9391-d560b08ece0b"
+      }, {
+        "creationTime" : "2024-07-19T13:11:01.197Z",
+        "updateTime" : "2024-07-19T13:11:01.197Z",
+        "class" : "com.biit.form.result.QuestionWithValueResult",
+        "values" : [ "scientist" ],
+        "answerLabels" : [ ],
+        "name" : "nhm_card_choice6",
+        "label" : "Choose your second favourite card",
+        "comparationId" : "60929e39-3aec-422d-8365-1522d8d71fdb"
+      } ]
+    } ]
+  }, {
+    "creationTime" : "2024-07-19T13:11:01.197Z",
+    "updateTime" : "2024-07-19T13:11:01.197Z",
+    "class" : "com.biit.form.result.CategoryResult",
+    "name" : "competency",
+    "label" : "Competency cards",
+    "comparationId" : "4248130d-ea66-4897-8dc5-7eb625f61e45",
+    "children" : [ {
+      "creationTime" : "2024-07-19T13:11:01.197Z",
+      "updateTime" : "2024-07-19T13:11:01.197Z",
+      "class" : "com.biit.form.result.QuestionWithValueResult",
+      "values" : [ "conscientiousness", "client-oriented", "cooperation", "persuasiveness", "decisiveness", "planification", "tenacity", "direction", "business-minded", "problem-analysis" ],
+      "answerLabels" : [ ],
+      "name" : "competency_choice",
+      "label" : "Choose from the 24 competences below, the 10 competences you think they are well developed in you.",
+      "comparationId" : "22eaec79-2da2-40ff-953f-c8a7aec50e92"
+    } ]
+  } ],
+  "comparationId" : "2fddc47b-5b94-439f-886f-dafaf99b0ae7",
+  "label" : "CADT",
+  "version" : 1,
+  "name" : "Form",
+  "organization" : "Aperture Science"
+}

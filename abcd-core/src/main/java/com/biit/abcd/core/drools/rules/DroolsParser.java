@@ -556,7 +556,7 @@ public class DroolsParser {
         }
 
         rule.append(text.substring(text.indexOf(RuleGenerationUtils.getThenRuleString())));
-        return rule.toString().replaceAll("\tand\n\tand\n", "\tand\n");
+        return rule.toString().replaceAll("(\tand\n){2,}", "\tand\n");
     }
 
     /**

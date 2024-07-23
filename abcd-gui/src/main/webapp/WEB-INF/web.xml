@@ -107,5 +107,13 @@
 		<filter-name>AuthenticationFilter</filter-name>
 		<url-pattern>/rest/*</url-pattern>
 	</filter-mapping>
+	<filter>
+		<filter-name>cors</filter-name>
+		<filter-class>com.biit.abcd.core.rest.CorsFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>cors</filter-name>
+		<url-pattern>/rest/*</url-pattern>
+	</filter-mapping>
 </web-app>
 

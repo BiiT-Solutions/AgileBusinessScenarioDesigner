@@ -32,14 +32,17 @@ import com.biit.abcd.persistence.entity.Form;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
 import com.biit.drools.engine.DroolsRulesEngine;
 import com.biit.drools.engine.exceptions.DroolsRuleExecutionException;
+import com.biit.drools.form.provider.DroolsFormProvider;
 import com.biit.drools.global.variables.interfaces.IGlobalVariable;
+import com.biit.form.entity.BaseForm;
+import com.biit.form.result.FormResult;
 import com.biit.form.submitted.ISubmittedForm;
 
 public class FormToDroolsExporter {
 
     /**
      * Parses the abcd form and loads the rules generated in the drools engine. <br>
-     * If this method doesn't fails it means that the drools rules are correctly
+     * If this method doesn't fail, it means that the drools rules are correctly
      * defined. <br>
      *
      * @param form            form to be parsed
@@ -62,7 +65,7 @@ public class FormToDroolsExporter {
      * @throws RuleNotImplementedException
      * @throws InvalidExpressionException
      */
-    public DroolsRulesGenerator generateDroolRules(Form form, List<GlobalVariable> globalVariables) throws DroolsRuleGenerationException,
+    public static DroolsRulesGenerator generateDroolRules(Form form, List<GlobalVariable> globalVariables) throws DroolsRuleGenerationException,
             RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
             TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
             BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException,
@@ -75,7 +78,7 @@ public class FormToDroolsExporter {
             try {
                 Files.write(Paths.get(System.getProperty("java.io.tmpdir") + File.separator + "generatedRules.drl"), formRules.getRules().getBytes("UTF-8"));
             } catch (IOException e) {
-                AbcdLogger.errorMessage(this.getClass().getName(), e);
+                AbcdLogger.errorMessage(FormToDroolsExporter.class.getName(), e);
             }
             return formRules;
 
@@ -83,7 +86,7 @@ public class FormToDroolsExporter {
         return null;
     }
 
-    public String getDroolRules(Form form, List<GlobalVariable> globalVariables) throws DroolsRuleGenerationException, RuleNotImplementedException,
+    public static String getDroolRules(Form form, List<GlobalVariable> globalVariables) throws DroolsRuleGenerationException, RuleNotImplementedException,
             NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException, TreeObjectInstanceNotRecognizedException,
             TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException, BetweenFunctionInvalidException,
             DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException, InvalidRuleException,
@@ -122,7 +125,7 @@ public class FormToDroolsExporter {
      * @throws RuleNotImplementedException
      * @throws InvalidExpressionException
      */
-    public ISubmittedForm processForm(Form form, List<GlobalVariable> globalVariables, ISubmittedForm submittedForm) throws DroolsRuleGenerationException,
+    public static ISubmittedForm processForm(Form form, List<GlobalVariable> globalVariables, ISubmittedForm submittedForm) throws DroolsRuleGenerationException,
             DroolsRuleExecutionException, RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
             TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
             BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException,
@@ -137,5 +140,17 @@ public class FormToDroolsExporter {
                     new ArrayList<>(RuleGenerationUtils.convertGlobalVariablesToDroolsGlobalVariables(globalVariables)));
         } else
             return null;
+    }
+
+    private static ISubmittedForm createDroolsSubmittedForm(BaseForm submittedBaseForm) {
+        return DroolsFormProvider.createStructure(submittedBaseForm).getDroolsSubmittedForm();
+    }
+
+    public static ISubmittedForm processForm(Form form, List<GlobalVariable> globalVariables, FormResult submittedForm) throws DroolsRuleGenerationException,
+            DroolsRuleExecutionException, RuleNotImplementedException, NotCompatibleTypeException, ExpressionInvalidException, NullTreeObjectException,
+            TreeObjectInstanceNotRecognizedException, TreeObjectParentNotValidException, NullCustomVariableException, NullExpressionValueException,
+            BetweenFunctionInvalidException, DateComparisonNotPossibleException, PluginInvocationException, DroolsRuleCreationException, PrattParserException,
+            InvalidRuleException, ActionNotImplementedException, InvalidExpressionException {
+        return processForm(form, globalVariables, createDroolsSubmittedForm(submittedForm));
     }
 }

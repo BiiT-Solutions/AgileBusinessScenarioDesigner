@@ -398,8 +398,7 @@ public class FormManager extends FormWebPageComponent {
 
     private String getDroolsRules() {
         try {
-            FormToDroolsExporter droolsExporter = new FormToDroolsExporter();
-            return droolsExporter.getDroolRules(formProvider.get(getForm()), UserSessionHandler.getGlobalVariablesController().getGlobalVariables());
+            return FormToDroolsExporter.getDroolRules(formProvider.get(getForm()), UserSessionHandler.getGlobalVariablesController().getGlobalVariables());
         } catch (DroolsRuleGenerationException | RuleNotImplementedException | ExpressionInvalidException |
                  NullTreeObjectException
                  | TreeObjectInstanceNotRecognizedException | TreeObjectParentNotValidException |

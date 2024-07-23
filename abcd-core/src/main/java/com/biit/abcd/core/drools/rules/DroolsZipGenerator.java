@@ -25,8 +25,7 @@ public class DroolsZipGenerator {
             InvalidExpressionException {
         List<String> filesToZip = new ArrayList<>();
         List<String> namesOfFiles = new ArrayList<>();
-        FormToDroolsExporter droolsExporter = new FormToDroolsExporter();
-        String rules = droolsExporter.getDroolRules(form, globalVariables);
+        String rules = FormToDroolsExporter.getDroolRules(form, globalVariables);
         filesToZip.add(rules);
         Integer formVersion = form.getVersion();
         String formName = form.getLabel();

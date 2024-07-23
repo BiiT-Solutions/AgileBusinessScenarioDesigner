@@ -18,6 +18,7 @@
 				<include name="usesOfElement" />
 				<include name="multiSelectAnswer" />
 				<include name="graphviz" />
+				<include name="incrementalScore" />
 				<!-- Not working! -->
 				<exclude name="droolsVariableTest" />
 			</run>
@@ -39,6 +40,7 @@
 			<class name="com.biit.abcd.core.UsesOfElementTester" />
 			<class name="com.biit.abcd.core.drools.test.MultiSelectAnswerTest" />
 			<class name="com.biit.abcd.core.drools.test.VariableAssignationTest" />
+			<class name="com.biit.abcd.core.drools.test.IncrementalScoreTest" />
 			<class name="com.biit.abcd.core.GraphvizTests" />
 		</classes>
 	</test>

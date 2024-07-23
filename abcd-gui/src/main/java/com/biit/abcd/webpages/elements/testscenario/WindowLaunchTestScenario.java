@@ -78,7 +78,7 @@ public class WindowLaunchTestScenario extends AcceptCancelWindow {
 	 */
 	private void initializeTestScenarioData(SimpleFormView formView) {
 		if (formView != null) {
-			testScenarioData = new ArrayList<SimpleTestScenarioView>();
+			testScenarioData = new ArrayList<>();
 			testScenarioData.addAll(simpleTestScenarioViewDao.getSimpleTestScenariosByFormId(formView.getId()));
 			// To show first the newer versions
 			Collections.reverse(testScenarioData);
@@ -90,7 +90,6 @@ public class WindowLaunchTestScenario extends AcceptCancelWindow {
 	 * At the end it orders each form list by version number.
 	 * 
 	 * @return
-	 * @throws NotConnectedToDatabaseException
 	 */
 	private void initializeFormData(SimpleFormView formView) {
 		if (formView != null) {

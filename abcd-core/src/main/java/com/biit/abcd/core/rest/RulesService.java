@@ -98,8 +98,7 @@ public class RulesService {
                 return Response.status(Response.Status.NOT_FOUND).entity("{\"error\":\"Unknown form with name '" + parsedPetition.getFormName() +
                         "' and version '" + parsedPetition.getVersion() + "' in organization '" + parsedPetition.getOrganizationId() + "'.\"}").build();
             }
-            FormToDroolsExporter droolsExporter = new FormToDroolsExporter();
-            String rules = droolsExporter.getDroolRules(form, globalVariablesDao.getAll());
+            String rules = FormToDroolsExporter.getDroolRules(form, globalVariablesDao.getAll());
             AbcdLogger.debug(RulesService.class.getName(), "Rules retrieved successfully!");
             return Response.ok(rules, MediaType.APPLICATION_JSON).build();
         } catch (JsonSyntaxException ex) {

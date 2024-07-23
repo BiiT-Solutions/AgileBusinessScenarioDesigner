@@ -162,12 +162,12 @@ public class FormManagerUpperMenu extends UpperMenu {
                                         // Generate the submitted form based on
                                         // the test scenario
                                         TestScenarioDroolsSubmittedForm testAnswerImporter = new TestScenarioDroolsSubmittedForm();
-                                        final ISubmittedForm generatedSumbittedForm = testAnswerImporter
+                                        final ISubmittedForm generatedSubmittedForm = testAnswerImporter
                                                 .createSubmittedForm(UserSessionHandler.getFormController().getForm(),
                                                         testScenarioDB.getTestScenarioForm());
                                         try {
                                             AbcdLogger.debug(this.getClass().getName(),
-                                                    "Form Answers:\n" + generatedSumbittedForm.toJson());
+                                                    "Form Answers:\n" + generatedSubmittedForm.toJson());
                                         } catch (Exception e) {
                                             AbcdLogger.debug(this.getClass().getName(), "Form Answers: null");
                                         }
@@ -178,21 +178,18 @@ public class FormManagerUpperMenu extends UpperMenu {
                                             final ValidationReportWindow windowAccept = new ValidationReportWindow(
                                                     LanguageCodes.WARNING_TEST_SCENARIOS_VALIDATOR_WINDOW_CAPTION,
                                                     testAnswerImporter.getTestScenarioModifications());
-                                            windowAccept.addAcceptActionListener(new AcceptActionListener() {
-                                                @Override
-                                                public void acceptAction(AcceptCancelWindow window) {
-                                                    acceptActionTestScenarioReportWindow(droolsExporter,
-                                                            generatedSumbittedForm);
-                                                    windowAccept.close();
-                                                    launchTestScenarioWindow.close();
-                                                }
+                                            windowAccept.addAcceptActionListener(window1 -> {
+                                                acceptActionTestScenarioReportWindow(droolsExporter,
+                                                        generatedSubmittedForm);
+                                                windowAccept.close();
+                                                launchTestScenarioWindow.close();
                                             });
                                             windowAccept.showCentered();
                                         } else {
-                                            resultsFromDrools = droolsExporter.processForm(
+                                            resultsFromDrools = FormToDroolsExporter.processForm(
                                                     UserSessionHandler.getFormController().getForm(), UserSessionHandler
                                                             .getGlobalVariablesController().getGlobalVariables(),
-                                                    generatedSumbittedForm);
+                                                    generatedSubmittedForm);
                                             if (resultsFromDrools instanceof DroolsForm) {
                                                 logTestForms(resultsFromDrools);
                                                 final DroolsSubmittedFormResultWindow droolsResultWindow = new DroolsSubmittedFormResultWindow(
