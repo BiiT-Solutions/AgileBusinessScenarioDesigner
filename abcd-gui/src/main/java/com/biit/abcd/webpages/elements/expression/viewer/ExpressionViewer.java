@@ -493,7 +493,7 @@ public class ExpressionViewer extends CssLayout {
         // Checks if there is at least one expression
         if (expressions != null) {
             int index = expressions.getExpressions().indexOf(getSelectedExpression()) + 1;
-            if ((index >= 0) && (index < expressions.getExpressions().size())) {
+            if (index < expressions.getExpressions().size()) {
                 expressions.addExpression(index, newElement);
             } else {
                 expressions.addExpression(newElement);
