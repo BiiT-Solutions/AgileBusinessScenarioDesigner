@@ -493,10 +493,7 @@ public class RuleGenerationUtils {
                 customVariables.addAll(lookForCustomVariablesInDiagramNode((DiagramElement) diagramNode));
             }
         }
-        final Set<String> comparatorIds = new HashSet<>();
-        return customVariables.stream()
-                .filter(e -> comparatorIds.add(e.getComparationId()))
-                .collect(Collectors.toSet());
+        return customVariables;
     }
 
     private static Set<ExpressionValueCustomVariable> lookForCustomVariablesInDiagramNode(DiagramElement diagramNode) {
