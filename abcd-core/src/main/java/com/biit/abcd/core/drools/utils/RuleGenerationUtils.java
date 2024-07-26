@@ -36,6 +36,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * This class gathers method that ease the drools rule definition and simplifies
@@ -492,7 +493,10 @@ public class RuleGenerationUtils {
                 customVariables.addAll(lookForCustomVariablesInDiagramNode((DiagramElement) diagramNode));
             }
         }
-        return customVariables;
+        final Set<String> comparatorIds = new HashSet<>();
+        return customVariables.stream()
+                .filter(e -> comparatorIds.add(e.getComparationId()))
+                .collect(Collectors.toSet());
     }
 
     private static Set<ExpressionValueCustomVariable> lookForCustomVariablesInDiagramNode(DiagramElement diagramNode) {
