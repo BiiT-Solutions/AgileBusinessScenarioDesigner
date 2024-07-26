@@ -49,19 +49,19 @@ public class ExpressionValueCustomVariable extends ExpressionValueTreeObjectRefe
     public ExpressionValueCustomVariable(TreeObject reference, CustomVariable variable) {
         super();
         setReference(reference);
-        this.variable = variable;
+        setVariable(variable);
     }
 
     public ExpressionValueCustomVariable(TreeObject reference, CustomVariable variable, QuestionDateUnit dateUnit) {
         super();
         setReference(reference);
         setUnit(dateUnit);
-        this.variable = variable;
+        setVariable(variable);
     }
 
     @Override
     public String getRepresentation(boolean showWhiteCharacter) {
-        String expressionString = new String();
+        String expressionString = "";
         if ((getReference() != null) && (variable != null)) {
             expressionString += getReference().getName();
             if (getUnit() != null) {
@@ -79,6 +79,7 @@ public class ExpressionValueCustomVariable extends ExpressionValueTreeObjectRefe
 
     public void setVariable(CustomVariable variable) {
         this.variable = variable;
+        this.variableId = (variable != null ? variable.getComparationId() : null);
     }
 
     @Override

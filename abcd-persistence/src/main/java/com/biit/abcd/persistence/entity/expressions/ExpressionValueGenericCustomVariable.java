@@ -75,6 +75,7 @@ public class ExpressionValueGenericCustomVariable extends ExpressionValueGeneric
 
     public void setVariable(CustomVariable variable) {
         this.variable = variable;
+        this.variableId = (variable != null ? variable.getComparationId() : null);
     }
 
     @Override

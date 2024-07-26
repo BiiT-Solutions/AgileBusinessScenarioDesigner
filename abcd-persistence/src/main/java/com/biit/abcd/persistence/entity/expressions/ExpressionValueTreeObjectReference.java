@@ -44,12 +44,12 @@ public class ExpressionValueTreeObjectReference extends ExpressionValue<TreeObje
 
     public ExpressionValueTreeObjectReference(TreeObject reference) {
         super();
-        this.reference = reference;
+        setReference(reference);
     }
 
     public ExpressionValueTreeObjectReference(TreeObject reference, QuestionDateUnit unit) {
         super();
-        this.reference = reference;
+        setReference(reference);
         this.unit = unit;
     }
 
@@ -59,6 +59,7 @@ public class ExpressionValueTreeObjectReference extends ExpressionValue<TreeObje
 
     public void setReference(TreeObject reference) {
         this.reference = reference;
+        this.referenceId = (reference != null ? reference.getComparationId() : null);
     }
 
     public synchronized QuestionDateUnit getUnit() {
