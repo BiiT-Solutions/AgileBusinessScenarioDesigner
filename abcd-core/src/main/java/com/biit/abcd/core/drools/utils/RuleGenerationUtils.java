@@ -32,11 +32,11 @@ import com.biit.drools.global.variables.DroolsGlobalVariable;
 import com.biit.drools.global.variables.json.DroolsGlobalVariablesFromJson;
 import com.biit.form.entity.TreeObject;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 /**
  * This class gathers method that ease the drools rule definition and simplifies
@@ -493,6 +493,9 @@ public class RuleGenerationUtils {
                 customVariables.addAll(lookForCustomVariablesInDiagramNode((DiagramElement) diagramNode));
             }
         }
+        //Remove duplicated variables. As hascode and equals is not working here as comparationId is different.
+        final HashSet<Object> seen = new HashSet<>();
+        customVariables.removeIf(c -> !seen.add(Arrays.asList(c.getVariableId(), c.getReferenceId())));
         return customVariables;
     }
 

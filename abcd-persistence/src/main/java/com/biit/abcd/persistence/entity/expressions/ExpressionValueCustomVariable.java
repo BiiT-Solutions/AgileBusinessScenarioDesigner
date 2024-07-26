@@ -124,19 +124,7 @@ public class ExpressionValueCustomVariable extends ExpressionValueTreeObjectRefe
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof ExpressionValueCustomVariable)) {
-            return false;
-        }
-        ExpressionValueCustomVariable that = (ExpressionValueCustomVariable) o;
-        return Objects.equals(variableId, that.variableId) && Objects.equals(getReferenceId(), that.getReferenceId());
-    }
-
-    @Override
     public int hashCode() {
-        return Objects.hash(variableId, getReferenceId());
+        return Objects.hash(variable, variableId, getReference());
     }
 }
