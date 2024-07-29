@@ -14,7 +14,6 @@ import com.biit.abcd.core.drools.rules.exceptions.ExpressionInvalidException;
 import com.biit.abcd.core.drools.rules.exceptions.NullCustomVariableException;
 import com.biit.abcd.core.drools.rules.exceptions.NullExpressionValueException;
 import com.biit.abcd.core.drools.rules.exceptions.NullTreeObjectException;
-import com.biit.abcd.core.drools.rules.exceptions.PluginInvocationException;
 import com.biit.abcd.core.drools.rules.exceptions.RuleNotImplementedException;
 import com.biit.abcd.core.drools.rules.exceptions.TreeObjectInstanceNotRecognizedException;
 import com.biit.abcd.core.drools.rules.exceptions.TreeObjectParentNotValidException;
@@ -487,8 +486,12 @@ public class DroolsParser {
                         ruleText.append("\tnot(FiredRule( getRuleName() == '" + getFiredRuleName(rule) + "'))\n");
                     }
                     for (String variableDeclaration : variableDeclarations) {
-                        if (!parsedRule.contains(variableDeclaration)) {
-                            ruleText.append(variableDeclaration);
+                        //Get variable name
+                        if (variableDeclaration.contains(":")) {
+                            final String variableName = variableDeclaration.split(":")[0];
+                            if (!parsedRule.contains(variableName)) {
+                                ruleText.append(variableDeclaration);
+                            }
                         }
                     }
 
