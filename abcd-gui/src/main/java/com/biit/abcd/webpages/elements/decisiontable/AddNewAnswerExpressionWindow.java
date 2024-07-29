@@ -78,7 +78,6 @@ public class AddNewAnswerExpressionWindow extends AcceptCancelClearWindow {
         answerTable.setRootElement(question);
         answerTable.setNullSelectionAllowed(true);
         answerTable.setSelectable(true);
-        answerTable.addValueChangeListener((ValueChangeListener) event -> setSelectedTableElement());
         answerTable.setSizeFull();
         if (!expressionChain.getExpressions().isEmpty()
                 && (expressionChain.getExpressions().get(expressionChain.getExpressions().size() - 1) instanceof ExpressionValueTreeObjectReference)) {
@@ -87,18 +86,20 @@ public class AddNewAnswerExpressionWindow extends AcceptCancelClearWindow {
         } else {
             answerTable.setValue(null);
         }
-        setSelectedTableElement();
+
         answerTable.addItemClickListener((ItemClickEvent.ItemClickListener) event -> {
             if ((event.isDoubleClick() || event.isCtrlKey()) && answerTable.getValue() != null) {
                 this.fireAcceptActionListeners();
             }
         });
+        answerTable.addValueChangeListener((ValueChangeListener) event -> setSelectedTableElement());
 
         operatorComboBox = new ComboBox(ServerTranslate.translate(LanguageCodes.EXPRESSION_CHANGE_OPERATOR_WINDOW_COMBOBOX));
         operatorComboBox.setNullSelectionAllowed(false);
 
         //Check if the operator has been defined.
-        Expression expressionOperator = getExpressionChain().getExpressions().get(0);
+        Expression expressionOperator = expressionChain.getExpressions().isEmpty() ? new ExpressionOperatorLogic(AvailableOperator.EQUALS)
+                : expressionChain.getExpressions().get(0);
         for (AvailableOperator operator : TABLE_ANSWER_ALLOWED_OPERATORS) {
             operatorComboBox.addItem(operator);
         }
@@ -120,6 +121,7 @@ public class AddNewAnswerExpressionWindow extends AcceptCancelClearWindow {
         operatorComboBox.setHeight("50px");
         layout.addComponent(operatorComboBox);
 
+        setSelectedTableElement();
 
         layout.addComponent(answerTable);
         layout.addComponent(operatorComboBox);
@@ -133,7 +135,7 @@ public class AddNewAnswerExpressionWindow extends AcceptCancelClearWindow {
     private void setSelectedTableElement() {
         expressionChain.removeAllExpressions();
         if (answerTable.getValue() != null) {
-            expressionChain.addExpression(new ExpressionOperatorLogic(AvailableOperator.EQUALS));
+            expressionChain.addExpression(new ExpressionOperatorLogic((AvailableOperator) operatorComboBox.getValue()));
             expressionChain.addExpression(new ExpressionValueTreeObjectReference(answerTable.getValue()));
         }
     }

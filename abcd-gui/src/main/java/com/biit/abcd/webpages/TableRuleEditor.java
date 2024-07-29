@@ -612,7 +612,7 @@ public class TableRuleEditor extends FormWebPageComponent implements EditExpress
             answerExpressionWithQuestion.getExpressions().get(0).setEditable(false);
 
             final AddNewAnswerExpressionWindow newAnswerWindow = new AddNewConditionExpressionWindow(
-                    questionExpression, answerExpressionWithQuestion);
+                    questionExpression, answerExpression);
 
             newAnswerWindow.showCentered();
             newAnswerWindow.addAcceptActionListener(new AcceptActionListener() {
