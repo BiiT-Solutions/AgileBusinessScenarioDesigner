@@ -4,7 +4,9 @@ import com.biit.abcd.language.LanguageCodes;
 import com.biit.abcd.language.ServerTranslate;
 import com.biit.abcd.persistence.entity.AnswerType;
 import com.biit.abcd.persistence.entity.Question;
+import com.biit.abcd.persistence.entity.expressions.AvailableOperator;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
+import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorLogic;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.webpages.components.AcceptCancelClearWindow;
@@ -79,6 +81,7 @@ public class AddNewAnswerExpressionWindow extends AcceptCancelClearWindow {
     private void setSelectedTableElement() {
         expressionChain.removeAllExpressions();
         if (answerTable.getValue() != null) {
+            //expressionChain.addExpression(new ExpressionOperatorLogic(AvailableOperator.EQUALS));
             expressionChain.addExpression(new ExpressionValueTreeObjectReference(answerTable.getValue()));
         }
     }

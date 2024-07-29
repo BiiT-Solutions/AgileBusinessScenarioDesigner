@@ -143,19 +143,18 @@ public class ExpressionChain extends Expression implements INameAttribute {
      */
     @Override
     public String getExpression() {
-        String result = "";
-        for (int i = 0; i < expressions.size(); i++) {
+        StringBuilder result = new StringBuilder();
+        for (Expression expression : expressions) {
             // Dots are not allowed in the Evaluator Expression.
-            if ((expressions.get(i) instanceof ExpressionValueString)
-                    || (expressions.get(i) instanceof ExpressionValueTreeObjectReference)
-                    || (expressions.get(i) instanceof ExpressionValueCustomVariable)
-                    || (expressions.get(i) instanceof ExpressionValueGlobalVariable)) {
-                result += filterVariables(expressions.get(i)) + " ";
+            if ((expression instanceof ExpressionValueString)
+                    || (expression instanceof ExpressionValueTreeObjectReference)
+                    || (expression instanceof ExpressionValueGlobalVariable)) {
+                result.append(filterVariables(expression)).append(" ");
             } else {
-                result += expressions.get(i).getExpression() + " ";
+                result.append(expression.getExpression()).append(" ");
             }
         }
-        return result.trim();
+        return result.toString().trim();
     }
 
     public List<Expression> getExpressions() {

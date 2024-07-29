@@ -30,7 +30,7 @@ public class EditCellSortableByExpression extends SecuredEditCellComponent {
 	}
 
 	public TreeObject getQuestion() {
-		if (getExpression().getExpressions().size() > 0) {
+		if (!getExpression().getExpressions().isEmpty()) {
 			Expression expression1 = getExpression().getExpressions().get(0);
 			if (expression1 instanceof ExpressionValueTreeObjectReference) {
 				return ((ExpressionValueTreeObjectReference) expression1).getReference();

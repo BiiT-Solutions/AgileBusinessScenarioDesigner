@@ -607,7 +607,7 @@ public class TableRuleEditor extends FormWebPageComponent implements EditExpress
 		final ExpressionChain answerExpression = (ExpressionChain) ruleTable.getCellValue(row, propertyId);
 
 		if (questionExpression.getReference() != null) {
-			// Generate a expression with the question not editable.
+			// Generate an expression with the question not editable.
 			ExpressionChain answerExpressionWithQuestion = (ExpressionChain) answerExpression.generateCopy();
 			answerExpressionWithQuestion.addExpression(0, questionExpression);
 			answerExpressionWithQuestion.getExpressions().get(0).setEditable(false);

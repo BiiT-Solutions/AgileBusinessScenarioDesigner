@@ -25,9 +25,9 @@ public class ConditionTable extends Table {
 
     private static final long serialVersionUID = 2760300775584165320L;
     private static final int rowHeaderWidth = 32;
-    private CellRowSelector cellRowSelector;
-    private List<EditExpressionListener> editExpressionListeners;
-    private List<ClearExpressionListener> clearExpressionListeners;
+    private final CellRowSelector cellRowSelector;
+    private final List<EditExpressionListener> editExpressionListeners;
+    private final List<ClearExpressionListener> clearExpressionListeners;
 
     public ConditionTable() {
         super();
@@ -85,8 +85,8 @@ public class ConditionTable extends Table {
     }
 
     private class RowDoubleClickedListener implements CellDoubleClickedListener {
-        private Object row;
-        private Object propertyId;
+        private final Object row;
+        private final Object propertyId;
 
         public RowDoubleClickedListener(Object itemId, Object propertyId) {
             row = itemId;
@@ -100,10 +100,8 @@ public class ConditionTable extends Table {
     }
 
     private class CellEditButtonClickListener implements ClickListener {
-
-        private static final long serialVersionUID = 8366131692308964272L;
-        private Object row;
-        private Object propertyId;
+        private final Object row;
+        private final Object propertyId;
 
         public CellEditButtonClickListener(Object itemId, Object propertyId) {
             row = itemId;
@@ -117,10 +115,8 @@ public class ConditionTable extends Table {
     }
 
     private class CellClearButtonClickListener implements ClickListener {
-
-        private static final long serialVersionUID = 2915483408521823465L;
-        private Object row;
-        private Object propertyId;
+        private final Object row;
+        private final Object propertyId;
 
         public CellClearButtonClickListener(Object row, Object propertyId) {
             this.row = row;
@@ -134,11 +130,10 @@ public class ConditionTable extends Table {
     }
 
     private class LayoutClickPropagator implements LayoutClickListener {
-        private static final long serialVersionUID = 5504698883691497113L;
-        private Table conditionTable;
-        private Item item;
-        private Object itemId;
-        private Object propertyId;
+        private final Table conditionTable;
+        private final Item item;
+        private final Object itemId;
+        private final Object propertyId;
 
         public LayoutClickPropagator(Table conditiontable, Item item, Object itemId, Object propertyId) {
             conditionTable = conditiontable;
@@ -173,12 +168,8 @@ public class ConditionTable extends Table {
         cellRowSelector.addCellSelectionListener(listener);
     }
 
-    public void removeCellSelectionListener(CellSelectionListener listener) {
-        cellRowSelector.removeCellSelectionListener(listener);
-    }
-
     public void selectRows(Set<Object> rowIds, boolean propagate) {
-        Set<Cell> rows = new HashSet<Cell>();
+        Set<Cell> rows = new HashSet<>();
         for (Object rowId : rowIds) {
             for (Object colId : getContainerPropertyIds()) {
                 Cell tempCell = new Cell(rowId, colId);
@@ -193,7 +184,7 @@ public class ConditionTable extends Table {
     }
 
     public void addRow(TableRuleRow decisionRule) {
-        Item item = addItem(decisionRule);
+        final Item item = addItem(decisionRule);
         setDefaultNewItemPropertyValues(decisionRule, item);
         updateRow(decisionRule);
     }
@@ -206,8 +197,7 @@ public class ConditionTable extends Table {
                     ExpressionEditCell editCellComponent = new ExpressionEditCell();
                     editCellComponent.setExpression(itemId.getConditions());
                     editCellComponent.addEditButtonClickListener(new CellEditButtonClickListener(itemId, propertyId));
-                    editCellComponent
-                            .addRemoveButtonClickListener(new CellClearButtonClickListener(itemId, propertyId));
+                    editCellComponent.addRemoveButtonClickListener(new CellClearButtonClickListener(itemId, propertyId));
                     editCellComponent.addDoubleClickListener(new RowDoubleClickedListener(itemId, propertyId));
                     // Propagate element click.
                     editCellComponent.addLayoutClickListener(new LayoutClickPropagator(this, item, itemId, propertyId));
@@ -220,7 +210,7 @@ public class ConditionTable extends Table {
     public void updateRow(TableRuleRow decisionRule) {
         Item item = getItem(decisionRule);
         for (final Object propertyId : getContainerPropertyIds()) {
-            if (decisionRule.getConditions().getExpressions().size() > 0) {
+            if (!decisionRule.getConditions().getExpressions().isEmpty()) {
                 Expression expression = decisionRule.getConditions().getExpressions().get((Integer) propertyId);
                 ((ExpressionEditCell) item.getItemProperty(propertyId).getValue()).setLabel(expression
                         .getRepresentation(true));
@@ -230,7 +220,7 @@ public class ConditionTable extends Table {
     }
 
     public Collection<TableRuleRow> getSelectedRules() {
-        Set<TableRuleRow> rules = new HashSet<TableRuleRow>();
+        Set<TableRuleRow> rules = new HashSet<>();
         for (Cell cell : cellRowSelector.getSelectedCells()) {
             rules.add((TableRuleRow) cell.getRow());
         }
@@ -242,7 +232,7 @@ public class ConditionTable extends Table {
     }
 
     public Collection<Integer> getSelectedColumns() {
-        Set<Integer> columns = new HashSet<Integer>();
+        Set<Integer> columns = new HashSet<>();
         for (Cell cell : cellRowSelector.getSelectedCells()) {
             columns.add((Integer) cell.getCol());
         }
@@ -260,7 +250,7 @@ public class ConditionTable extends Table {
         }
         for (Object object : getItemIds()) {
             TableRuleRow row = (TableRuleRow) object;
-            List<Expression> values = new ArrayList<Expression>();
+            List<Expression> values = new ArrayList<>();
             for (Integer columnId : columnIds) {
                 values.add(getExpressionValue(row, columnId));
             }
