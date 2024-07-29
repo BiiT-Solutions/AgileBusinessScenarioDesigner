@@ -197,14 +197,14 @@ public class ExpressionChain extends Expression implements INameAttribute {
             return "null";
         }
 
-        String result = "";
+        StringBuilder result = new StringBuilder();
         for (Expression expression : expressions) {
-            result += expression.getRepresentation(showWhiteCharacter) + " ";
+            result.append(expression.getRepresentation(showWhiteCharacter)).append(" ");
         }
         if (showWhiteCharacter) {
-            return result.trim();
+            return result.toString().trim();
         } else {
-            return result.trim().replace(" ,", ",").replace("( ", "(").replace(" )", ")");
+            return result.toString().trim().replace(" ,", ",").replace("( ", "(").replace(" )", ")");
         }
     }
 
@@ -212,9 +212,7 @@ public class ExpressionChain extends Expression implements INameAttribute {
         Set<TreeObject> references = getReferencedTreeObjects();
         if (!references.isEmpty()) {
             TreeObject commonTreeObject = TreeObject.getCommonTreeObject(references);
-            if (commonTreeObject.equals(treeObject)) {
-                return true;
-            }
+            return commonTreeObject.equals(treeObject);
         }
         return false;
     }

@@ -26,7 +26,7 @@ import java.util.Set;
 @Table(name = "expression_operator_logic")
 public class ExpressionOperatorLogic extends ExpressionOperator {
     private static final long serialVersionUID = 5253554560944956269L;
-    private static final List<AvailableOperator> ALLOWED_OPERATORS = new ArrayList<AvailableOperator>(Arrays.asList(
+    private static final List<AvailableOperator> ALLOWED_OPERATORS = new ArrayList<>(Arrays.asList(
             AvailableOperator.NULL, AvailableOperator.AND, AvailableOperator.OR, AvailableOperator.EQUALS,
             AvailableOperator.NOT_EQUALS, AvailableOperator.LESS_EQUALS, AvailableOperator.LESS_THAN,
             AvailableOperator.GREATER_EQUALS, AvailableOperator.GREATER_THAN));

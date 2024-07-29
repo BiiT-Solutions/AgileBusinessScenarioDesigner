@@ -22,7 +22,7 @@ public class ValidatorDuplicateSubAnswerNameInSameQuestion implements Validator 
 
 	public ValidatorDuplicateSubAnswerNameInSameQuestion(TreeObject treeObject) {
 		this.treeObject = treeObject;
-		answerSubAnswerSet = new HashSet<String>();
+		answerSubAnswerSet = new HashSet<>();
 	}
 
 	@Override

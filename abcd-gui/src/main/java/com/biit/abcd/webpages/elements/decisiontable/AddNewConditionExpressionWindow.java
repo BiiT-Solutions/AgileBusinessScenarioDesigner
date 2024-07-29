@@ -1,11 +1,21 @@
 package com.biit.abcd.webpages.elements.decisiontable;
 
+import com.biit.abcd.language.LanguageCodes;
+import com.biit.abcd.language.ServerTranslate;
+import com.biit.abcd.persistence.entity.expressions.AvailableOperator;
+import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
+import com.biit.abcd.persistence.entity.expressions.ExpressionOperator;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.webpages.elements.expression.viewer.SimpleConditionEditorComponent;
 import com.biit.abcd.webpages.elements.expression.viewer.SimpleExpressionEditorComponent;
+import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.VerticalLayout;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class AddNewConditionExpressionWindow extends AddNewAnswerExpressionWindow {
 	private static final long serialVersionUID = -6236016121358126850L;

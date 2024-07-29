@@ -128,4 +128,12 @@ public class ExpressionValueCustomVariable extends ExpressionValueTreeObjectRefe
     public int hashCode() {
         return Objects.hash(variable, variableId, getReference());
     }
+
+    @Override
+    public String toString() {
+        if (getReference() != null) {
+            return getReference().getName() + "." + (getVariable() != null ? getVariable().getName() : null);
+        }
+        return super.toString();
+    }
 }

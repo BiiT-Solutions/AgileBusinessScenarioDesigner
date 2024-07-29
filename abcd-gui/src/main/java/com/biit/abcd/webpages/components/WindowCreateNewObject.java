@@ -44,8 +44,6 @@ public abstract class WindowCreateNewObject extends AcceptCancelWindow {
 		inputTextField = new TextField(ServerTranslate.translate(inputFieldCaption));
 		inputTextField.setWidth("100%");
 		inputTextField.addShortcutListener(new ShortcutListener("Enter as Accept", ShortcutAction.KeyCode.ENTER, null) {
-			private static final long serialVersionUID = -9055249857540860785L;
-
 			@Override
 			public void handleAction(Object sender, Object target) {
 				concreteAcceptAction(inputTextField);

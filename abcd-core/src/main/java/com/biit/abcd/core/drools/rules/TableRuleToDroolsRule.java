@@ -13,6 +13,7 @@ import com.biit.abcd.persistence.entity.expressions.AvailableOperator;
 import com.biit.abcd.persistence.entity.expressions.Expression;
 import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
 import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorLogic;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
 import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
 import com.biit.abcd.persistence.entity.rules.TableRule;
 import com.biit.abcd.persistence.entity.rules.TableRuleRow;
@@ -50,7 +51,13 @@ public class TableRuleToDroolsRule {
                 if (row.getActions() != null && row.getActions().getExpressions() != null
                         && !row.getActions().getExpressions().isEmpty()) {
                     DroolsRule newRule = new DroolsRule();
-                    ExpressionChain rowConditionExpression = convertTableRowToExpressionChain(row.getConditions());
+
+                    final ExpressionChain rowConditionExpression;
+                    if (!row.getConditions().getExpressions().isEmpty() && !(row.getConditions().getExpressions().get(0) instanceof ExpressionValueCustomVariable)) {
+                        rowConditionExpression = convertTableRowQuestionsToExpressionChain(row.getConditions());
+                    } else {
+                        rowConditionExpression = convertTableRowVariablesToExpressionChain(row.getConditions());
+                    }
 
                     newRule.setName(RuleGenerationUtils.getRuleName(tableRuleName + "_row_" + i, extraConditions));
                     newRule.setSalience(salience.decrementAndGet());
@@ -74,33 +81,64 @@ public class TableRuleToDroolsRule {
      * @param conditions
      * @return
      */
-    private static ExpressionChain convertTableRowToExpressionChain(ExpressionChain conditions) {
+    private static ExpressionChain convertTableRowQuestionsToExpressionChain(ExpressionChain conditions) {
         ExpressionChain preParsedConditions = new ExpressionChain();
 
         // For each pair of conditions adds an AND, and between each pair adds
         // an EQUALS
         for (int index = 0; index < conditions.getExpressions().size() - 1; index += 2) {
             Expression questionExpression = conditions.getExpressions().get(index);
-            Expression answerExpression = conditions.getExpressions().get(index + 1);
 
-            // Question not empty
+            final Expression answerExpression;
+            final ExpressionOperatorLogic operatorLogic;
+            //Operator is the first token from the answer area.
+            Expression expressionOperator = conditions.getExpressions().get(index + 1);
+            if (expressionOperator instanceof ExpressionOperatorLogic) {
+                operatorLogic = (ExpressionOperatorLogic) expressionOperator;
+                answerExpression = conditions.getExpressions().get(index + 2);
+                index++;
+            } else {
+                //Backwards compatibility. If no operator exists.
+                answerExpression = conditions.getExpressions().get(index + 1);
+                operatorLogic = new ExpressionOperatorLogic(AvailableOperator.EQUALS);
+            }
+
+            // The Question is not empty
             if ((questionExpression instanceof ExpressionValueTreeObjectReference)
                     && (((ExpressionValueTreeObjectReference) questionExpression).getReference() != null)
-                    &&
-                    // Answer not empty
-                    (answerExpression instanceof ExpressionChain)
+                    // The Answer is not empty
+                    && (answerExpression instanceof ExpressionChain)
                     && (((ExpressionChain) answerExpression).getExpressions() != null)
                     && (!((ExpressionChain) answerExpression).getExpressions().isEmpty())) {
 
-                if (index > 0) {
+                if (!preParsedConditions.getExpressions().isEmpty()) {
                     preParsedConditions.addExpression(new ExpressionOperatorLogic(AvailableOperator.AND));
                 }
                 preParsedConditions.addExpression(questionExpression);
 
                 if (((ExpressionChain) answerExpression).getExpressions().get(0) instanceof ExpressionValueTreeObjectReference) {
-                    preParsedConditions.addExpression(new ExpressionOperatorLogic(AvailableOperator.EQUALS));
+                    preParsedConditions.addExpression(operatorLogic);
                 }
                 preParsedConditions.addExpression(answerExpression);
+            }
+        }
+        return preParsedConditions;
+    }
+
+    private static ExpressionChain convertTableRowVariablesToExpressionChain(ExpressionChain conditions) {
+        ExpressionChain preParsedConditions = new ExpressionChain();
+
+        // For each pair of conditions adds an AND, and between each pair adds
+        // an EQUALS
+        for (int index = 0; index < conditions.getExpressions().size() - 1; index += 2) {
+            if (!preParsedConditions.getExpressions().isEmpty()) {
+                preParsedConditions.addExpression(new ExpressionOperatorLogic(AvailableOperator.AND));
+            }
+            preParsedConditions.addExpression(conditions.getExpressions().get(index));
+            if (conditions.getExpressions().get(index + 1) instanceof ExpressionChain) {
+                preParsedConditions.addExpressions(((ExpressionChain) conditions.getExpressions().get(index + 1)).getExpressions());
+            } else {
+                preParsedConditions.addExpression(conditions.getExpressions().get(index + 1));
             }
         }
         return preParsedConditions;

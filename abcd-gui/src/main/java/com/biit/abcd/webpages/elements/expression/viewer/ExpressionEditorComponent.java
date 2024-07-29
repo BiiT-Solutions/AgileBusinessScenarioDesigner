@@ -100,7 +100,7 @@ public abstract class ExpressionEditorComponent extends ExpressionEditorTabCompo
 	}
 
 	/**
-	 * A Expression editor can have more than one viewer. When user click into a viewer, this one gains the focus and is
+	 * An Expression editor can have more than one viewer. When a user clicks into a viewer, this one gains the focus and is
 	 * selected.
 	 */
 	public abstract ExpressionViewer getSelectedViewer();
