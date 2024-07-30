@@ -178,7 +178,11 @@ public class DroolsRulesGenerator {
             }
             // Create the drools rules based on the expression value custom
             // variable found
-            Set<String> customVariablesDefaultRules = new HashSet<>();
+            final Set<String> customVariablesDefaultRules = new HashSet<>();
+
+            //Remove duplicate declarations.
+            final Set<String> alreadyExists = new HashSet<>();
+            customVariables.removeIf(e -> !alreadyExists.add(e.getReferenceId() + "_" + e.getVariableId()));
 
             if (!customVariables.isEmpty()) {
                 getRulesBuilder().append("//******************************************************************************\n");
