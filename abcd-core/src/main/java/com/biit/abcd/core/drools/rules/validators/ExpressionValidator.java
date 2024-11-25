@@ -7,10 +7,29 @@ import com.biit.abcd.core.drools.prattparser.visitor.ITreeElement;
 import com.biit.abcd.core.drools.prattparser.visitor.TreeElementExpressionValidatorVisitor;
 import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
 import com.biit.abcd.core.drools.utils.RuleGenerationUtils;
+import com.biit.abcd.logger.AbcdLogger;
 import com.biit.abcd.persistence.entity.Answer;
 import com.biit.abcd.persistence.entity.CustomVariable;
 import com.biit.abcd.persistence.entity.Question;
-import com.biit.abcd.persistence.entity.expressions.*;
+import com.biit.abcd.persistence.entity.expressions.AvailableOperator;
+import com.biit.abcd.persistence.entity.expressions.AvailableSymbol;
+import com.biit.abcd.persistence.entity.expressions.Expression;
+import com.biit.abcd.persistence.entity.expressions.ExpressionChain;
+import com.biit.abcd.persistence.entity.expressions.ExpressionFunction;
+import com.biit.abcd.persistence.entity.expressions.ExpressionOperatorMath;
+import com.biit.abcd.persistence.entity.expressions.ExpressionPluginMethod;
+import com.biit.abcd.persistence.entity.expressions.ExpressionSymbol;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValue;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueBoolean;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueCustomVariable;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueGenericCustomVariable;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueGlobalVariable;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueNumber;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValuePostalCode;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueString;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueTimestamp;
+import com.biit.abcd.persistence.entity.expressions.ExpressionValueTreeObjectReference;
+import com.biit.abcd.persistence.entity.expressions.Rule;
 import com.biit.abcd.persistence.entity.globalvariables.GlobalVariable;
 import com.biit.form.entity.TreeObject;
 import com.biit.plugins.PluginController;
@@ -47,6 +66,7 @@ public class ExpressionValidator {
             rootTreeElement.accept(new TreeElementExpressionValidatorVisitor());
             ExpressionChain prattExpressionChain = rootTreeElement.getExpressionChain();
             if (hasPluginMethodExpression(cleanedExpression)) {
+                AbcdLogger.severe(ExpressionValidator.class.getName(), "Invalid type on expression '" + expressionChain + "'.");
                 throw new InvalidExpressionException("Invalid expression '" + expressionChain + "'.");
             } else {
                 // Check the number of elements returned by the Pratt parser
@@ -54,10 +74,12 @@ public class ExpressionValidator {
                 // invalid characters)
                 int parsedElements = countElementsInExpressionChain(prattExpressionChain);
                 if (cleanedExpression.getExpressions().size() != parsedElements) {
+                    AbcdLogger.severe(ExpressionValidator.class.getName(), "Invalid type on expression '" + expressionChain + "'.");
                     throw new InvalidExpressionException("Invalid expression .");
                 }
             }
         } else {
+            AbcdLogger.severe(ExpressionValidator.class.getName(), "Invalid type on expression '" + expressionChain + "'.");
             throw new InvalidExpressionException("Invalid expression '" + expressionChain + "'.");
         }
     }
