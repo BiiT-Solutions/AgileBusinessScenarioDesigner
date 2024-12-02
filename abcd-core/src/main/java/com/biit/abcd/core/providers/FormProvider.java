@@ -40,15 +40,16 @@ public class FormProvider {
         try {
             Form mutilatedForm = form.copy(form.getCreatedBy(), form.getLabel());
             mutilatedForm.setId(form.getId());
+            mutilatedForm.setComparationId(form.getComparationId());
             mutilatedForm.setJson(form.toJson());
             //Delete all children and rules from form to speed up save (as are stored as Json).
             mutilatedForm.getChildren().clear();
-            mutilatedForm.getCustomVariables().clear();
             mutilatedForm.getDiagrams().clear();
             mutilatedForm.getTableRules().clear();
             mutilatedForm.getCustomVariables().clear();
             mutilatedForm.getExpressionChains().clear();
             mutilatedForm.getRules().clear();
+            mutilatedForm.setCreationTime(form.getCreationTime());
             if (mutilatedForm.getId() != null) {
                 formDao.merge(mutilatedForm);
                 return form;

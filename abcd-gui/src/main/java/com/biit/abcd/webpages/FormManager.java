@@ -53,6 +53,7 @@ import com.biit.persistence.entity.exceptions.FieldTooLongException;
 import com.biit.persistence.entity.exceptions.NotValidStorableObjectException;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
+import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.ComboBox;
@@ -419,6 +420,15 @@ public class FormManager extends FormWebPageComponent {
 
     private String getMetadata() {
         return AbcdGlobalVariablesToJson.toJson(UserSessionHandler.getGlobalVariablesController().getGlobalVariables());
+    }
+
+    @Override
+    public void securedEnter(ViewChangeListener.ViewChangeEvent event) {
+        super.securedEnter(event);
+        try {
+            formTable.selectForm(UserSessionHandler.getFormController().getForm());
+        } catch (Exception ignored) {
+        }
     }
 
 }
