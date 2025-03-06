@@ -346,6 +346,7 @@ public class FormsVersionsTreeTable extends TreeTable {
                 if (form != null && tableForm.getId() != null && tableForm.getId().equals(form.getId())) {
                     setValue(tableForm);
                     select(tableForm);
+                    setCurrentPageFirstItemId(tableForm);
                 }
             }
         }
