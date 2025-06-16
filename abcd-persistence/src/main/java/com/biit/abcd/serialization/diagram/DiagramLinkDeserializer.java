@@ -34,7 +34,6 @@ public class DiagramLinkDeserializer extends DiagramObjectDeserializer<DiagramLi
         element.setSmooth(parseBoolean("smooth", jsonObject));
     }
 
-    @Override
     public DiagramLink getObject() {
         return new DiagramLink();
     }

@@ -16,7 +16,6 @@ public class DiagramRuleDeserializer extends DiagramElementDeserializer<DiagramR
         }
     }
 
-    @Override
     public DiagramRule getObject() {
         return new DiagramRule();
     }

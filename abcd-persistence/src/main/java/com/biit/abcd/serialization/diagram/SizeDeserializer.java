@@ -1,10 +1,7 @@
 package com.biit.abcd.serialization.diagram;
 
-import com.biit.abcd.persistence.entity.diagram.DiagramSink;
-import com.biit.abcd.persistence.entity.diagram.Point;
 import com.biit.abcd.persistence.entity.diagram.Size;
 import com.biit.form.jackson.serialization.CustomDeserializer;
-import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -19,7 +16,6 @@ public class SizeDeserializer extends CustomDeserializer<Size> {
         element.setWidth(parseInteger("width", jsonObject));
     }
 
-    @Override
     public Size getObject() {
         return new Size();
     }

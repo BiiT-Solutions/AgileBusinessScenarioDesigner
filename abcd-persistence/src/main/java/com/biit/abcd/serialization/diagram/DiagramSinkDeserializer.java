@@ -1,8 +1,6 @@
 package com.biit.abcd.serialization.diagram;
 
-import com.biit.abcd.persistence.entity.diagram.DiagramLink;
 import com.biit.abcd.persistence.entity.diagram.DiagramSink;
-import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -15,7 +13,6 @@ public class DiagramSinkDeserializer extends DiagramElementDeserializer<DiagramS
         super.deserialize(element, jsonObject, context);
     }
 
-    @Override
     public DiagramSink getObject() {
         return new DiagramSink();
     }
