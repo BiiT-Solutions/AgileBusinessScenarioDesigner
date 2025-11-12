@@ -59,7 +59,7 @@
 	<dependencies>
 		<!-- DESEncryption -->
 		<dependency>
-			<groupId>com.biit.security</groupId>
+			<groupId>com.biit-solutions.security</groupId>
 			<artifactId>DES-encryption</artifactId>
 		</dependency>
 		<!-- Vaadin plugins -->
