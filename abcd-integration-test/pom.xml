@@ -9,7 +9,7 @@
 	<parent>
 		<groupId>com.biit-solutions</groupId>
 		<artifactId>abcd-tool</artifactId>
-		<version>1.11.38-SNAPSHOT</version>
+		<version>1.11.38</version>
 	</parent>
 
 	<properties>
