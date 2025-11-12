@@ -229,7 +229,7 @@
 <!--                                    </fileset>-->
 <!--                                </delete>-->
 <!--                                &lt;!&ndash; Correct wrong definitions in script &ndash;&gt;-->
-<!--                                &lt;!&ndash; <replace token="label varchar(1000)" value="label varchar(190)" dir="${database.script.autogeneration.folder}"> <include name="**/*.sql" /> </replace> &ndash;&gt;-->
+<!--                                &lt;!&ndash; <replace token="label varchar(1000)" value="label varchar(190)" dir="${database.script.autogeneration.folder}"> <exclude name="**/*.sql" /> </replace> &ndash;&gt;-->
 <!--                            </target>-->
 <!--                        </configuration>-->
 <!--                        <goals>-->
