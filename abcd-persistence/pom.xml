@@ -47,7 +47,7 @@
         <!-- Expression Evaluator -->
         <!-- User, Groups -->
         <dependency>
-            <groupId>com.server.liferay</groupId>
+            <groupId>com.biit-solutions.liferay</groupId>
             <artifactId>liferay-service-common</artifactId>
         </dependency>
         <!-- logger -->
@@ -120,7 +120,7 @@
         </dependency>
         <!-- BiiT Drools Engine Interfaces -->
         <dependency>
-            <groupId>com.server.drools</groupId>
+            <groupId>com.biit-solutions.drools</groupId>
             <artifactId>drools-engine-interfaces</artifactId>
         </dependency>
         <dependency>
