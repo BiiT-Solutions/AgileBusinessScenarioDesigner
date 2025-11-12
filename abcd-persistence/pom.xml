@@ -5,7 +5,7 @@
     <packaging>jar</packaging>
     <name>Agile Business sCenario Designer Tool (Persistence)</name>
     <parent>
-        <groupId>com.server</groupId>
+        <groupId>com.biit-solutions</groupId>
         <artifactId>abcd-tool</artifactId>
         <version>1.11.37-SNAPSHOT</version>
     </parent>
@@ -36,12 +36,12 @@
         </dependency>
         <!-- JpaSchemaExporter -->
         <dependency>
-            <groupId>com.server</groupId>
+            <groupId>com.biit-solutions</groupId>
             <artifactId>jpa-schema-exporter</artifactId>
         </dependency>
         <!-- Form Structure -->
         <dependency>
-            <groupId>com.server</groupId>
+            <groupId>com.biit-solutions</groupId>
             <artifactId>form-structure</artifactId>
         </dependency>
         <!-- Expression Evaluator -->
@@ -131,7 +131,7 @@
         </dependency>
         <!-- Drools Form -->
         <dependency>
-            <groupId>com.server</groupId>
+            <groupId>com.biit-solutions</groupId>
             <artifactId>form-structure-drools</artifactId>
         </dependency>
     </dependencies>
