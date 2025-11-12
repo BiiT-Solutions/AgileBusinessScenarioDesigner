@@ -1,5 +1,26 @@
 package com.biit.abcd.utils;
 
+/*-
+ * #%L
+ * Agile Business sCenario Designer Tool (Core)
+ * %%
+ * Copyright (C) 2022 - 2025 BiiT Sourcing Solutions S.L.
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * #L%
+ */
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -40,7 +61,7 @@ public class GraphvizApp {
 	/**
 	 * Finds path to application. In order we give precedente to the path on the
 	 * config file. If not found, (If there was no file we don't say anything
-	 * 
+	 *
 	 * @throws PathToExecutableNotFound
 	 * @throws ExecutableCanNotBeExecuted
 	 */
@@ -58,7 +79,7 @@ public class GraphvizApp {
 	 * This function gets dot code in string form and generates a image of
 	 * {@code imgType} using temporal files. When the process is finished all
 	 * temporal files are deleted and the result image is returned as a byte array.
-	 * 
+	 *
 	 * @param dotCode dot code in string form
 	 * @param imgType image file format
 	 * @return
@@ -105,7 +126,7 @@ public class GraphvizApp {
 	/**
 	 * Generates the graph image of a form with the type {@code imgType} if
 	 * {@code filter} is null no filter is used and all the form is rendered.
-	 * 
+	 *
 	 * @param form    source form
 	 * @param diagram the diagram
 	 * @param imgType image file format

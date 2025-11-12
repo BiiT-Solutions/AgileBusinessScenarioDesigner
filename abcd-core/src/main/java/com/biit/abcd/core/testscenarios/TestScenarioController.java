@@ -1,5 +1,26 @@
 package com.biit.abcd.core.testscenarios;
 
+/*-
+ * #%L
+ * Agile Business sCenario Designer Tool (Core)
+ * %%
+ * Copyright (C) 2022 - 2025 BiiT Sourcing Solutions S.L.
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * #L%
+ */
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -27,7 +48,7 @@ public class TestScenarioController {
 
 	/**
 	 * Read all test scenarios from database. This method is synchronized.
-	 * 
+	 *
 	 * @return the list of test scenarios.
 	 */
 	public List<TestScenario> getTestScenarios(Form form) {
@@ -46,7 +67,7 @@ public class TestScenarioController {
 
 	/**
 	 * Return the test scenario with the Id passed
-	 * 
+	 *
 	 * @return a test scenario.
 	 */
 	public TestScenario getTestScenarioById(Long scenarioId) {
@@ -66,7 +87,7 @@ public class TestScenarioController {
 	/**
 	 * Remove all old test scenarios and store all the new ones. This method is
 	 * synchronized.
-	 * 
+	 *
 	 * @throws UnexpectedDatabaseException
 	 * @throws ElementCannotBeRemovedException
 	 * @throws ElementCannotBePersistedException

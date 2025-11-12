@@ -6,7 +6,7 @@
 	<name>Agile Business sCenario Designer Tool (Release)</name>
 
 	<parent>
-		<groupId>com.biit</groupId>
+		<groupId>com.biit-solutions</groupId>
 		<artifactId>abcd-tool</artifactId>
 		<version>1.11.37-SNAPSHOT</version>
 	</parent>

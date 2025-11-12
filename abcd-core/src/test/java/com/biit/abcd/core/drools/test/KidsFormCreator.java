@@ -1,5 +1,26 @@
 package com.biit.abcd.core.drools.test;
 
+/*-
+ * #%L
+ * Agile Business sCenario Designer Tool (Core)
+ * %%
+ * Copyright (C) 2022 - 2025 BiiT Sourcing Solutions S.L.
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * #L%
+ */
+
 import com.biit.abcd.core.drools.FormToDroolsExporter;
 import com.biit.abcd.core.drools.prattparser.exceptions.PrattParserException;
 import com.biit.abcd.core.drools.prattparser.visitor.exceptions.NotCompatibleTypeException;
@@ -114,7 +135,7 @@ public class KidsFormCreator extends AbstractTestNGSpringContextTests {
 
 	/**
 	 * Creates a category custom variable and assigns a value of 10
-	 * 
+	 *
 	 * @param customVariableName
 	 */
 	protected void createCategoryNumberCustomVariableExpression(Form form, Category category, String customVariableName) {
@@ -127,7 +148,7 @@ public class KidsFormCreator extends AbstractTestNGSpringContextTests {
 
 	/**
 	 * Creates a group custom variable and assigns a value of 10
-	 * 
+	 *
 	 * @param customVariableName
 	 */
 	protected ExpressionChain createGroupNumberCustomVariableExpression(Form form, Group group, String customVariableName) {
@@ -141,7 +162,7 @@ public class KidsFormCreator extends AbstractTestNGSpringContextTests {
 
 	/**
 	 * Creates a question custom variable and assigns a value of 10
-	 * 
+	 *
 	 * @param customVariableName
 	 */
 	protected ExpressionChain createQuestionNumberCustomVariableExpression(Form form, Question question, String customVariableName) {
@@ -155,7 +176,7 @@ public class KidsFormCreator extends AbstractTestNGSpringContextTests {
 
 	/**
 	 * Creates a diagram based in the elements of the arra diagramElements
-	 * 
+	 *
 	 */
 	protected void createDiagram(Form form) {
 		Diagram mainDiagram = new Diagram("main");
@@ -204,7 +225,7 @@ public class KidsFormCreator extends AbstractTestNGSpringContextTests {
 
 	/**
 	 * Adds a new expression element to the diagram
-	 * 
+	 *
 	 * @param expressionChain
 	 */
 	protected void createExpressionNode(ExpressionChain expressionChain) {
@@ -351,7 +372,7 @@ public class KidsFormCreator extends AbstractTestNGSpringContextTests {
 
 	/**
 	 * Adds a new table rule element to the diagram
-	 * 
+	 *
 	 * @param tableRule
 	 */
 	protected void createTableRuleNode(TableRule tableRule) {
@@ -448,7 +469,7 @@ public class KidsFormCreator extends AbstractTestNGSpringContextTests {
 	/**
 	 * Returns the tree object with the name specified. <br>
 	 * In our test scenario the names are unique
-	 * 
+	 *
 	 * @param childName
 	 * @return
 	 */

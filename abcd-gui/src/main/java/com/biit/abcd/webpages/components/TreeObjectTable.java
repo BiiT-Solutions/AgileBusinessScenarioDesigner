@@ -1,5 +1,26 @@
 package com.biit.abcd.webpages.components;
 
+/*-
+ * #%L
+ * Agile Business sCenario Designer Tool (GUI)
+ * %%
+ * Copyright (C) 2022 - 2025 BiiT Sourcing Solutions S.L.
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * #L%
+ */
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -24,9 +45,9 @@ import com.vaadin.ui.TreeTable;
 
 /**
  * TreeObjectTable component
- * 
+ *
  * This is a customized component to represent a TreeObject in a tree table.
- * 
+ *
  */
 public class TreeObjectTable extends TreeTable {
 	protected enum TreeObjectTableProperties {
@@ -44,7 +65,7 @@ public class TreeObjectTable extends TreeTable {
 	/**
 	 * Gets Name property to show form a TreeObject element. If the name can't
 	 * be defined, then raises a {@link UnsupportedOperationException}
-	 * 
+	 *
 	 * @param element
 	 * @return the item name.
 	 */
@@ -64,7 +85,7 @@ public class TreeObjectTable extends TreeTable {
 	/**
 	 * Adds item to table. This function is a specialization of
 	 * {@link TreeTable#addItem(Object)} for form members.
-	 * 
+	 *
 	 * @param element
 	 */
 	@SuppressWarnings("unchecked")
@@ -90,7 +111,7 @@ public class TreeObjectTable extends TreeTable {
 	/**
 	 * Adds item to table. This function is a specialization of
 	 * {@link TreeTable#addItemAfter(Object, Object)} for form members.
-	 * 
+	 *
 	 * @param element
 	 */
 	@SuppressWarnings("unchecked")
@@ -115,7 +136,7 @@ public class TreeObjectTable extends TreeTable {
 	/**
 	 * Collapse the tree in a specific hierarchy level to inner levels. The
 	 * level is specified by a class.
-	 * 
+	 *
 	 * @param collapseFrom
 	 */
 	public void collapseFrom(Class<?> collapseFrom) {
@@ -186,7 +207,7 @@ public class TreeObjectTable extends TreeTable {
 
 	/**
 	 * Input fields cannot have children. Therefore remove any if exists.
-	 * 
+	 *
 	 * @param element
 	 */
 	private void removeChildren(TreeObject element) throws DependencyExistException {
@@ -254,7 +275,7 @@ public class TreeObjectTable extends TreeTable {
 
 	/**
 	 * Set values and selects it by default.
-	 * 
+	 *
 	 * @param element
 	 */
 	public void setValue(TreeObject element) {
@@ -291,7 +312,7 @@ public class TreeObjectTable extends TreeTable {
 	 * array of filterClasses. If this is not specified, then every kind of
 	 * element is allowed. Else only the elements in the hierarchy whose path is
 	 * made of valid elements.
-	 * 
+	 *
 	 * @param element
 	 * @param parent
 	 */

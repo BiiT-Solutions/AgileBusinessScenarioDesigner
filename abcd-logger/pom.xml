@@ -8,14 +8,14 @@
 	<name>Agile Business sCenario Designer Tool (Logger)</name>
 
 	<parent>
-		<groupId>com.biit</groupId>
+		<groupId>com.biit-solutions</groupId>
 		<artifactId>abcd-tool</artifactId>
 		<version>1.11.37-SNAPSHOT</version>
 	</parent>
 
 	<dependencies>
 		<dependency>
-			<groupId>com.biit</groupId>
+			<groupId>com.biit-solutions</groupId>
 			<artifactId>common-utils</artifactId>
 		</dependency>
 		<!-- Spring framework -->

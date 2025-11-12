@@ -1,5 +1,26 @@
 package com.biit.abcd.webpages.components;
 
+/*-
+ * #%L
+ * Agile Business sCenario Designer Tool (GUI)
+ * %%
+ * Copyright (C) 2022 - 2025 BiiT Sourcing Solutions S.L.
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * #L%
+ */
+
 import com.biit.abcd.client.popover.PopoverRpc;
 import com.biit.abcd.client.popover.PopoverState;
 import com.vaadin.event.ShortcutAction;
@@ -66,7 +87,7 @@ public class Popover extends Window {
 
     /**
      * Constructs a new Popover with the given content.
-     * 
+     *
      * @param content
      *            the content for the popover.
      */
@@ -90,7 +111,7 @@ public class Popover extends Window {
      * bottom or top depending on the given related components position (in an
      * attempt to leave the related component visible, though this is not
      * guaranteed).
-     * 
+     *
      * @param relatedComponent
      *            the component next to which the popover is shown.
      */
@@ -107,7 +128,7 @@ public class Popover extends Window {
      * (taps) outside of it. Note that no close button is displayed by default,
      * so some other way to close the window must be arranged if set to
      * <code>false</code>.
-     * 
+     *
      * @param closable
      *            true to allow the user to close the Popover by tapping outside
      *            of it
@@ -129,7 +150,7 @@ public class Popover extends Window {
     /**
      * A convenience method that adds a component to the popover's content
      * container.
-     * 
+     *
      * @param c
      *            the component to add.
      */

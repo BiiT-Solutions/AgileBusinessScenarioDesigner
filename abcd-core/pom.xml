@@ -6,7 +6,7 @@
     <name>Agile Business sCenario Designer Tool (Core)</name>
 
     <parent>
-        <groupId>com.biit</groupId>
+        <groupId>com.biit-solutions</groupId>
         <artifactId>abcd-tool</artifactId>
         <version>1.11.37-SNAPSHOT</version>
     </parent>
@@ -109,13 +109,12 @@
         </dependency>
         <!-- BiiT Drools Engine (Complete) -->
         <dependency>
-            <groupId>com.biit</groupId>
+            <groupId>com.biit-solutions.drools</groupId>
             <artifactId>drools-engine-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.biit</groupId>
+            <groupId>com.biit-solutions</groupId>
             <artifactId>form-structure-drools</artifactId>
-            <version>1.0.70</version>
         </dependency>
         <!-- Jersey Client, Jersey Container, Jersey + Spring -->
         <dependency>
@@ -134,7 +133,7 @@
         </dependency>
         <!-- Rest Authentication -->
         <dependency>
-            <groupId>com.biit</groupId>
+            <groupId>com.biit-solutions</groupId>
             <artifactId>rest-services-security</artifactId>
         </dependency>
     </dependencies>

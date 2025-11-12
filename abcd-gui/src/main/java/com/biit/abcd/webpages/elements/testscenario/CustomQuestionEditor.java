@@ -1,5 +1,26 @@
 package com.biit.abcd.webpages.elements.testscenario;
 
+/*-
+ * #%L
+ * Agile Business sCenario Designer Tool (GUI)
+ * %%
+ * Copyright (C) 2022 - 2025 BiiT Sourcing Solutions S.L.
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * #L%
+ */
+
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.Collection;
@@ -79,7 +100,7 @@ public class CustomQuestionEditor extends CustomComponent {
 	/**
 	 * Creates the field based on the type of the question and retrieves the
 	 * answer information if there is any.
-	 * 
+	 *
 	 * @param testQuestion
 	 * @return
 	 */
@@ -234,7 +255,7 @@ public class CustomQuestionEditor extends CustomComponent {
 
 	/**
 	 * Sets the listeners and validators for the created fields
-	 * 
+	 *
 	 */
 	private class FieldValueChangeListener implements ValueChangeListener {
 		private static final long serialVersionUID = 2277281871213884287L;
@@ -266,7 +287,7 @@ public class CustomQuestionEditor extends CustomComponent {
 
 	/**
 	 * Stores the value of the field in the test scenario answer
-	 * 
+	 *
 	 * @param field
 	 */
 	private void updateTestScenario(Field field) {

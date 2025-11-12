@@ -1,5 +1,26 @@
 package com.biit.abcd.utils.exporters.dotgraph;
 
+/*-
+ * #%L
+ * Agile Business sCenario Designer Tool (Core)
+ * %%
+ * Copyright (C) 2022 - 2025 BiiT Sourcing Solutions S.L.
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * #L%
+ */
+
 /**
  * Generic class to export dot graph code.
  *
@@ -31,7 +52,7 @@ public abstract class ExporterDot<T> {
 
 	/**
 	 * Return the string version of the dot graph code for a T structure.
-	 * 
+	 *
 	 * @param structure
 	 * @return the versionS
 	 */
@@ -39,7 +60,7 @@ public abstract class ExporterDot<T> {
 
 	/**
 	 * Generates the list of nodes for a T structure.
-	 * 
+	 *
 	 * @param structure
 	 * @return the list of nodes as dot graph string syntax.
 	 */
@@ -47,7 +68,7 @@ public abstract class ExporterDot<T> {
 
 	/**
 	 * Generates the flow between nodes.
-	 * 
+	 *
 	 * @param structure
 	 * @return the flow as dot graph string syntax.
 	 */
@@ -55,7 +76,7 @@ public abstract class ExporterDot<T> {
 
 	/**
 	 * Generate the nodes enclosed in a element.
-	 * 
+	 *
 	 * @param structure
 	 * @return the node childs as dot graph string syntax.
 	 */
@@ -63,7 +84,7 @@ public abstract class ExporterDot<T> {
 
 	/**
 	 * Limit sizes of the drawing
-	 * 
+	 *
 	 * @return the size of the draw as dot graph string syntax.
 	 */
 	public String getSizeLimit() {
@@ -72,7 +93,7 @@ public abstract class ExporterDot<T> {
 
 	/**
 	 * Set the limits of the drawing
-	 * 
+	 *
 	 * @param sizeLimit
 	 */
 	public void setSizeLimit(String sizeLimit) {

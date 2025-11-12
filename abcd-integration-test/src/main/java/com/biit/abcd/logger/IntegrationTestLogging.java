@@ -1,5 +1,26 @@
 package com.biit.abcd.logger;
 
+/*-
+ * #%L
+ * Agile Business sCenario Designer Tool (Test)
+ * %%
+ * Copyright (C) 2022 - 2025 BiiT Sourcing Solutions S.L.
+ * %%
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * #L%
+ */
+
 
 import com.biit.logger.BiitLogger;
 import org.slf4j.Logger;
@@ -15,7 +36,7 @@ public class IntegrationTestLogging extends BiitLogger {
 	/**
 	 * Events that have business meaning (i.e. creating category, deleting form,
 	 * ...). To follow user actions.
-	 * 
+	 *
 	 * @param className the name of the class to log.
 	 * @param message   the text
 	 */
@@ -26,7 +47,7 @@ public class IntegrationTestLogging extends BiitLogger {
 	/**
 	 * Shows not critical errors. I.e. Email address not found, permissions not
 	 * allowed for this user, ...
-	 * 
+	 *
 	 * @param className the name of the class to log.
 	 * @param message   the text
 	 */
@@ -37,7 +58,7 @@ public class IntegrationTestLogging extends BiitLogger {
 	/**
 	 * For following the trace of the execution. I.e. Knowing if the application
 	 * access to a method, opening database connection, etc.
-	 * 
+	 *
 	 * @param className the name of the class to log.
 	 * @param message   the text
 	 */
@@ -47,7 +68,7 @@ public class IntegrationTestLogging extends BiitLogger {
 
 	/**
 	 * To log any not expected error that can cause application malfunction.
-	 * 
+	 *
 	 * @param className the name of the class to log.
 	 * @param message   the text
 	 */
@@ -58,7 +79,7 @@ public class IntegrationTestLogging extends BiitLogger {
 	/**
 	 * To log java exceptions and log also the stack trace. If enabled, also can
 	 * send an email to the administrator to alert of the error.
-	 * 
+	 *
 	 * @param className the name of the class to log.
 	 * @param throwable the exception
 	 */
@@ -73,7 +94,7 @@ public class IntegrationTestLogging extends BiitLogger {
 	/**
 	 * To log java exceptions and log also the stack trace. If enabled, also can
 	 * send an email to the administrator to alert of the error.
-	 * 
+	 *
 	 * @param className the name of the class to log.
 	 * @param error     the error message.
 	 */
