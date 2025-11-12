@@ -65,7 +65,7 @@
 		<!-- Vaadin plugins -->
 		<!-- JointJs Calendar Widget -->
 		<dependency>
-			<groupId>com.biit.vaadin</groupId>
+			<groupId>com.biit-solutions.vaadin</groupId>
 			<artifactId>jointjs-diagram-builder</artifactId>
 		</dependency>
 		<!-- Core -->
