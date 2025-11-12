@@ -75,7 +75,7 @@
 		<!-- DESEncryption -->
 		<dependency>
 			<groupId>com.biit-solutions.security</groupId>
-			<artifactId>DES-encryption</artifactId>
+			<artifactId>des-encryption</artifactId>
 		</dependency>
 		<!-- Vaadin plugins -->
 		<!-- JointJs Calendar Widget -->
