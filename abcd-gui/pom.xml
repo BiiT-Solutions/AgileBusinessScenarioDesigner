@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>com.biit-solutions</groupId>
 		<artifactId>abcd-tool</artifactId>
-		<version>1.11.37</version>
+		<version>1.11.38-SNAPSHOT</version>
 	</parent>
 	<properties>
 		<jetty.port>8081</jetty.port>
