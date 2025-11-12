@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>abcd-persistence</artifactId>
+    <packaging>jar</packaging>
+    <name>Agile Business sCenario Designer Tool (Persistence)</name>
+    <parent>
+        <groupId>com.server</groupId>
+        <artifactId>abcd-tool</artifactId>
+        <version>1.11.37-SNAPSHOT</version>
+    </parent>
+    <properties>
+        <root.directory>${basedir}/..</root.directory>
+        <jpaschemaexporter.script.autogeneration.folder>${root.directory}/abcd-release/database
+        </jpaschemaexporter.script.autogeneration.folder>
+        <jpaschemaexporter.script.autogeneration.file>create_mysql.sql</jpaschemaexporter.script.autogeneration.file>
+        <jpaschemaexporter.script.scan.packages>com.biit.abcd.persistence.entity
+        </jpaschemaexporter.script.scan.packages>
+        <jpaschemaexporter.script.output.dir>${project.build.directory}</jpaschemaexporter.script.output.dir>
+        <jpaschemaexporter.script.database.user>testuser</jpaschemaexporter.script.database.user>
+        <jpaschemaexporter.script.database.password>my-password</jpaschemaexporter.script.database.password>
+        <jpaschemaexporter.script.database.host>vagrant-mysql.server.com
+        </jpaschemaexporter.script.database.host>
+        <jpaschemaexporter.script.database.port>3306</jpaschemaexporter.script.database.port>
+        <jpaschemaexporter.script.database.name>abcd</jpaschemaexporter.script.database.name>
+        <jpaschemaexporter.script.database.scripts />
+        <jpaschemaexporter.script.database.creation.ignored.classes />
+        <jpaschemaexporter.script.database.update.ignored.classes />
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>${jaxb-api.version}</version>
+        </dependency>
+        <!-- JpaSchemaExporter -->
+        <dependency>
+            <groupId>com.server</groupId>
+            <artifactId>jpa-schema-exporter</artifactId>
+        </dependency>
+        <!-- Form Structure -->
+        <dependency>
+            <groupId>com.server</groupId>
+            <artifactId>form-structure</artifactId>
+        </dependency>
+        <!-- Expression Evaluator -->
+        <!-- User, Groups -->
+        <dependency>
+            <groupId>com.server.liferay</groupId>
+            <artifactId>liferay-service-common</artifactId>
+        </dependency>
+        <!-- logger -->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>abcd-logger</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- Database -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
+        <!-- Hibernate -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+        </dependency>
+        <!-- C3P0 -->
+        <dependency>
+            <groupId>com.mchange</groupId>
+            <artifactId>c3p0</artifactId>
+        </dependency>
+        <!--ehCache -->
+
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-ehcache</artifactId>
+        </dependency>
+        <!-- Spring framework -->
+        <!-- Object-to-Relation-Mapping (ORM) integration with Hibernate, JPA,
+            and iBatis. (depends on spring-core, spring-beans, spring-context, spring-tx)
+            Define this if you need ORM (org.springframework.orm.*) -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-orm</artifactId>
+        </dependency>
+        <!-- Various Application Context utilities, including EhCache, JavaMail,
+            Quartz, and Freemarker integration Define this if you need any of these integrations -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+        </dependency>
+        <!-- Spring AOP + AspectJ -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aop</artifactId>
+        </dependency>
+        <!-- Support for testing Spring applications with tools such as JUnit and
+            TestNG This artifact is generally always defined with a 'test' scope for
+            the integration testing framework and unit testing stubs -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjrt</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+        </dependency>
+        <!-- TEST -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!-- BiiT Drools Engine Interfaces -->
+        <dependency>
+            <groupId>com.server.drools</groupId>
+            <artifactId>drools-engine-interfaces</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>${testng.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- Drools Form -->
+        <dependency>
+            <groupId>com.server</groupId>
+            <artifactId>form-structure-drools</artifactId>
+        </dependency>
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven-surefire.version}</version>
+                <configuration>
+                    <useFile>false</useFile>
+                    <trimStackTrace>false</trimStackTrace>
+                    <suiteXmlFiles>
+                        <suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>
+                    </suiteXmlFiles>
+                    <useSystemClassLoader>false</useSystemClassLoader>
+                </configuration>
+            </plugin>
+            <!-- Creates the database script BEFORE testing -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>${exec-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <mainClass>com.biit.persistence.JpaSchemaExporter</mainClass>
+                    <skip>true</skip>
+                    <arguments>
+                        <argument>${jpaschemaexporter.script.autogeneration.folder}</argument>
+                        <argument>${jpaschemaexporter.script.autogeneration.file}</argument>
+                        <argument>${jpaschemaexporter.script.scan.packages}</argument>
+                        <argument>${jpaschemaexporter.script.database.user}</argument>
+                        <argument>${jpaschemaexporter.script.database.password}</argument>
+                        <argument>${jpaschemaexporter.script.database.host}</argument>
+                        <argument>${jpaschemaexporter.script.database.port}</argument>
+                        <argument>${jpaschemaexporter.script.database.name}</argument>
+                        <argument>${jpaschemaexporter.script.database.scripts}</argument>
+                        <argument>${jpaschemaexporter.script.database.creation.ignored.classes}</argument>
+                        <argument>${jpaschemaexporter.script.database.update.ignored.classes}</argument>
+                    </arguments>
+                </configuration>
+            </plugin>
+<!--            <plugin>-->
+<!--                <artifactId>maven-antrun-plugin</artifactId>-->
+<!--                <version>${maven-antrun-plugin.version}</version>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <phase>compile</phase>-->
+<!--                        <configuration>-->
+<!--                            <target>-->
+<!--                                <delete file="${jpaschemaexporter.script.autogeneration.folder}/${jpaschemaexporter.script.autogeneration.file}" failonerror="false" />-->
+<!--                                <java fork="false" failonerror="true" classname="com.biit.abcd.persistence.AbcdJpaSchemaExporter">-->
+<!--                                    <arg value="${jpaschemaexporter.script.autogeneration.folder}" />-->
+<!--                                    <arg value="${jpaschemaexporter.script.autogeneration.file}" />-->
+<!--                                    <arg value="${jpaschemaexporter.script.scan.packages}" />-->
+<!--                                    <arg value="${jpaschemaexporter.script.database.user}" />-->
+<!--                                    <arg value="${jpaschemaexporter.script.database.password}" />-->
+<!--                                    <arg value="${jpaschemaexporter.script.database.host}" />-->
+<!--                                    <arg value="${jpaschemaexporter.script.database.port}" />-->
+<!--                                    <arg value="${jpaschemaexporter.script.database.name}" />-->
+<!--                                    <arg value="${jpaschemaexporter.script.database.scripts}" />-->
+<!--                                    <arg value="${jpaschemaexporter.script.database.creation.ignored.classes}" />-->
+<!--                                    <arg value="${jpaschemaexporter.script.database.update.ignored.classes}" />-->
+<!--                                    <classpath refid="maven.compile.classpath" />-->
+<!--                                </java>-->
+<!--                            </target>-->
+<!--                        </configuration>-->
+<!--                        <goals>-->
+<!--                            <goal>run</goal>-->
+<!--                        </goals>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
+<!--            &lt;!&ndash; Deletes empty database files AFTER creation of scripts &ndash;&gt;-->
+<!--            <plugin>-->
+<!--                <artifactId>maven-antrun-plugin</artifactId>-->
+<!--                <version>${maven-antrun-plugin.version}</version>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <id>compile</id>-->
+<!--                        <phase>process-test-resources</phase>-->
+<!--                        <configuration>-->
+<!--                            <target>-->
+<!--                                &lt;!&ndash; delete useless update files &ndash;&gt;-->
+<!--                                <delete failonerror="false">-->
+<!--                                    <fileset dir="${jpaschemaexporter.script.autogeneration.folder}" includes="**/*.sql">-->
+<!--                                        <size value="0" when="equal" />-->
+<!--                                    </fileset>-->
+<!--                                </delete>-->
+<!--                                &lt;!&ndash; Correct wrong definitions in script &ndash;&gt;-->
+<!--                                &lt;!&ndash; <replace token="label varchar(1000)" value="label varchar(190)" dir="${database.script.autogeneration.folder}"> <include name="**/*.sql" /> </replace> &ndash;&gt;-->
+<!--                            </target>-->
+<!--                        </configuration>-->
+<!--                        <goals>-->
+<!--                            <goal>run</goal>-->
+<!--                        </goals>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
+        </plugins>
+    </build>
+    <profiles>
+        <!-- Skip unitary tests if this profile is selected. Jenkins Integration
+        branch can disable tests of core -->
+        <profile>
+            <id>skipUnitaryTests</id>
+            <properties>
+                <maven.test.skip>true</maven.test.skip>
+            </properties>
+        </profile>
+        <!-- Skip database file generation in release -->
+        <profile>
+            <id>skipDatabaseFileGeneration</id>
+            <properties>
+                <maven.antrun.skip>true</maven.antrun.skip>
+            </properties>
+        </profile>
+    </profiles>
+</project>
