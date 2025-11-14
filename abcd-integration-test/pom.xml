@@ -1,491 +1,500 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-	<modelVersion>4.0.0</modelVersion>
-	<artifactId>abcd-integration-test</artifactId>
-	<packaging>war</packaging>
-	<name>Agile Business sCenario Designer Tool (Test)</name>
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>abcd-integration-test</artifactId>
+    <packaging>war</packaging>
+    <name>Agile Business sCenario Designer Tool (Test)</name>
 
-	<parent>
-		<groupId>com.biit-solutions</groupId>
-		<artifactId>abcd-tool</artifactId>
-		<version>1.11.39-SNAPSHOT</version>
-	</parent>
+    <parent>
+        <groupId>com.biit-solutions</groupId>
+        <artifactId>abcd-tool</artifactId>
+        <version>1.11.40-SNAPSHOT</version>
+    </parent>
 
-	<properties>
-		<!-- Project cloned for testing -->
-		<source.gui.project>abcd-gui</source.gui.project>
-		<source.release.project>abcd-release</source.release.project>
-		<!-- Database server -->
-		<database.server>vagrant-mysql.biit-solutions.com</database.server>
-		<!-- Replace original database for a database for testing -->
-		<original.database>abcd</original.database>
-		<test.database>abcdtest</test.database>
-		<!-- Jetty client configuration -->
-		<jetty.test.port>9081</jetty.test.port>
-		<jetty.test.stop.port>8866</jetty.test.stop.port>
-	</properties>
+    <properties>
+        <!-- Project cloned for testing -->
+        <source.gui.project>abcd-gui</source.gui.project>
+        <source.release.project>abcd-release</source.release.project>
+        <!-- Database server -->
+        <database.server>vagrant-mysql.biit-solutions.com</database.server>
+        <!-- Replace original database for a database for testing -->
+        <original.database>abcd</original.database>
+        <test.database>abcdtest</test.database>
+        <!-- Jetty client configuration -->
+        <jetty.test.port>9081</jetty.test.port>
+        <jetty.test.stop.port>8866</jetty.test.stop.port>
+    </properties>
 
 
-	<repositories>
-		<repository>
-			<id>vaadin-addons</id>
-			<url>https://maven.vaadin.com/vaadin-addons</url>
-		</repository>
-		<repository>
-			<id>vaadin-snapshots</id>
-			<url>https://oss.sonatype.org/content/repositories/vaadin-snapshots/</url>
-			<releases>
-				<enabled>false</enabled>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</repository>
-	</repositories>
-	<pluginRepositories>
-		<pluginRepository>
-			<id>vaadin-snapshots</id>
-			<url>https://oss.sonatype.org/content/repositories/vaadin-snapshots/</url>
-			<releases>
-				<enabled>false</enabled>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</pluginRepository>
-	</pluginRepositories>
+    <repositories>
+        <repository>
+            <id>vaadin-addons</id>
+            <url>https://maven.vaadin.com/vaadin-addons</url>
+        </repository>
+        <repository>
+            <id>vaadin-snapshots</id>
+            <url>https://oss.sonatype.org/content/repositories/vaadin-snapshots/</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>vaadin-snapshots</id>
+            <url>https://oss.sonatype.org/content/repositories/vaadin-snapshots/</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
 
-	<dependencies>
-		<!-- DESEncryption -->
-		<dependency>
-			<groupId>com.biit-solutions.security</groupId>
-			<artifactId>des-encryption</artifactId>
-		</dependency>
-		<!-- Vaadin plugins -->
-		<!-- JointJs Calendar Widget -->
-		<dependency>
-			<groupId>com.biit-solutions.vaadin</groupId>
-			<artifactId>jointjs-diagram-builder</artifactId>
-		</dependency>
-		<!-- Core -->
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>abcd-core</artifactId>
-			<version>${project.version}</version>
-			<type>jar</type>
-		</dependency>
-		<!-- Vaadin plugins -->
-		<!-- Vaadin -->
-		<dependency>
-			<groupId>com.vaadin</groupId>
-			<artifactId>vaadin-server</artifactId>
-			<version>${vaadin.version}</version>
-			<exclusions>
-			<exclusion>
-					<groupId>org.jsoup</groupId>
-					<artifactId>jsoup</artifactId>
-			</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-				<groupId>org.jsoup</groupId>
-				<artifactId>jsoup</artifactId>
-			<version>${jsoup-vaadin7.version}</version>
-		</dependency>		
-		<dependency>
-			<groupId>com.vaadin</groupId>
-			<artifactId>vaadin-client-compiled</artifactId>
-			<version>${vaadin.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.vaadin</groupId>
-			<artifactId>vaadin-client-compiler</artifactId>
-			<scope>provided</scope>
-			<version>${vaadin.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>commons-codec</groupId>
-					<artifactId>commons-codec</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>com.vaadin</groupId>
-			<artifactId>vaadin-client</artifactId>
-			<version>${vaadin.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.vaadin</groupId>
-			<artifactId>vaadin-push</artifactId>
-			<version>${vaadin.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.vaadin</groupId>
-			<artifactId>vaadin-themes</artifactId>
-			<version>${vaadin.version}</version>
-		</dependency>
-		<!-- Spring MVC framework -->
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-orm</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-aspects</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-core</artifactId>
-		</dependency>
-		<!-- Vaadin TestBench (Requires license) -->
-		<dependency>
-			<groupId>com.vaadin</groupId>
-			<artifactId>vaadin-testbench</artifactId>
-			<version>${vaadin-testbench.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.seleniumhq.selenium</groupId>
-			<artifactId>selenium-remote-driver</artifactId>
-			<version>${vaadin-selenium.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.seleniumhq.selenium</groupId>
-			<artifactId>selenium-java</artifactId>
-			<version>${vaadin-selenium.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.seleniumhq.selenium</groupId>
-			<artifactId>selenium-api</artifactId>
-			<version>${vaadin-selenium.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.seleniumhq.selenium</groupId>
-			<artifactId>selenium-support</artifactId>
-			<version>${vaadin-selenium.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.seleniumhq.selenium</groupId>
-			<artifactId>selenium-chrome-driver</artifactId>
-			<version>${vaadin-selenium.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.seleniumhq.selenium</groupId>
-			<artifactId>selenium-firefox-driver</artifactId>
-			<version>${vaadin-selenium.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.seleniumhq.selenium</groupId>
-			<artifactId>selenium-ie-driver</artifactId>
-			<version>${vaadin-selenium.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.seleniumhq.selenium</groupId>
-			<artifactId>selenium-htmlunit-driver</artifactId>
-			<version>${vaadin-selenium.version}</version>
-		</dependency>
-		<!-- ScriptRunner -->
-		<dependency>
-			<groupId>org.mybatis</groupId>
-			<artifactId>mybatis</artifactId>
-			<version>${mybatis.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.glassfish.jersey.inject</groupId>
-			<artifactId>jersey-hk2</artifactId>
-			<version>${jersey-hk2.version}</version>
-		</dependency>
-	</dependencies>
+    <dependencies>
+        <!-- DESEncryption -->
+        <dependency>
+            <groupId>com.biit-solutions.security</groupId>
+            <artifactId>des-encryption</artifactId>
+        </dependency>
+        <!-- Vaadin plugins -->
+        <!-- JointJs Calendar Widget -->
+        <dependency>
+            <groupId>com.biit-solutions.vaadin</groupId>
+            <artifactId>jointjs-diagram-builder</artifactId>
+        </dependency>
+        <!-- Core -->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>abcd-core</artifactId>
+            <version>${project.version}</version>
+            <type>jar</type>
+        </dependency>
+        <!-- Vaadin plugins -->
+        <!-- Vaadin -->
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-server</artifactId>
+            <version>${vaadin.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.jsoup</groupId>
+                    <artifactId>jsoup</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>${jsoup-vaadin7.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-client-compiled</artifactId>
+            <version>${vaadin.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-client-compiler</artifactId>
+            <scope>provided</scope>
+            <version>${vaadin.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-codec</groupId>
+                    <artifactId>commons-codec</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-client</artifactId>
+            <version>${vaadin.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-push</artifactId>
+            <version>${vaadin.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-themes</artifactId>
+            <version>${vaadin.version}</version>
+        </dependency>
+        <!-- Spring MVC framework -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-orm</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aspects</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+        </dependency>
+        <!-- Vaadin TestBench (Requires license) -->
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-testbench</artifactId>
+            <version>${vaadin-testbench.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-remote-driver</artifactId>
+            <version>${vaadin-selenium.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+            <version>${vaadin-selenium.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-api</artifactId>
+            <version>${vaadin-selenium.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-support</artifactId>
+            <version>${vaadin-selenium.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-chrome-driver</artifactId>
+            <version>${vaadin-selenium.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-firefox-driver</artifactId>
+            <version>${vaadin-selenium.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-ie-driver</artifactId>
+            <version>${vaadin-selenium.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-htmlunit-driver</artifactId>
+            <version>${vaadin-selenium.version}</version>
+        </dependency>
+        <!-- ScriptRunner -->
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis</artifactId>
+            <version>${mybatis.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.inject</groupId>
+            <artifactId>jersey-hk2</artifactId>
+            <version>${jersey-hk2.version}</version>
+        </dependency>
+    </dependencies>
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-war-plugin</artifactId>
-				<version>${maven-war-plugin.version}</version>
-				<configuration>
-					<failOnMissingWebXml>false</failOnMissingWebXml>
-				</configuration>
-			</plugin>
-			<!-- Do not deploy this module in artifact -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-deploy-plugin</artifactId>
-				<version>${maven-deploy-plugin.version}</version>
-				<configuration>
-					<skip>true</skip>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>${maven-surefire.version}</version>
-				<configuration>
-					<useSystemClassLoader>false</useSystemClassLoader>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>${maven-war-plugin.version}</version>
+                <configuration>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                </configuration>
+            </plugin>
+            <!-- Do not deploy this module in artifact -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>${maven-deploy-plugin.version}</version>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven-surefire.version}</version>
+                <configuration>
+                    <useSystemClassLoader>false</useSystemClassLoader>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
-	<!-- 'mvn install -PlaunchIntegrationTests' test all application with jenkins -->
-	<profiles>
-		<profile>
-			<id>launchIntegrationTests</id>
-			<activation>
-				<property>
-					<name>launchIntegrationTests</name>
-				</property>
-			</activation>
-			<build>
-				<plugins>
-					<!-- create a war with configuration to a test database -->
-					<plugin>
-						<artifactId>maven-antrun-plugin</artifactId>
-						<version>${maven-antrun-plugin.version}</version>
-						<executions>
-							<execution>
-								<phase>process-resources</phase>
-								<configuration>
-									<target>
-										<!-- Copy schema exporter for creating database tests -->
-										<delete file="./src/test/resources/database/abcd_base.sql" />
-										<copy file="../${source.release.project}/database/create_mysql.sql" tofile="./src/test/resources/database/abcd_base.sql" />
-										<replace file="./src/test/resources/database/abcd_base.sql" token="create table custom_variables (" value="SET UNIQUE_CHECKS=0;&#xA; SET FOREIGN_KEY_CHECKS = 0;&#xA; create table custom_variables (" />
-										<concat destfile="./src/test/resources/database/abcd_base.sql" append="true">SET UNIQUE_CHECKS=1;
-											SET FOREIGN_KEY_CHECKS = 1;</concat>
-										<!-- Replicate webapp folder, needed for jetty to run -->
-										<delete dir="src/main/webapp" failonerror="false" includeemptydirs="true" />
-										<copy todir="src/main/webapp">
-											<fileset dir="../${source.gui.project}/src/main/webapp" />
-										</copy>
-										<copy todir="target/classes">
-											<fileset dir="../${source.gui.project}/target/classes" />
-										</copy>
-										<!-- Modify database connection to use test database -->
-										<replace token="hibernate.connection.url=jdbc:mysql://${database.server}:3306/${original.database}?" value="hibernate.connection.url=jdbc:mysql://${database.server}:3306/${test.database}?" dir="target/classes">
-											<exclude name="**/*.properties" />
-										</replace>
-										<replace token="hibernate.connection.username=abcd" value="hibernate.connection.username=testuser" dir="target/classes">
-											<exclude name="**/*.properties" />
-										</replace>
-										<replace token="hibernate.hbm2ddl.auto=validate" value="hibernate.hbm2ddl.auto=create-drop" dir="target/classes">
-											<exclude name="**/*.properties" />
-										</replace>
-									</target>
-								</configuration>
-								<goals>
-									<goal>run</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-					<plugin>
-						<artifactId>maven-failsafe-plugin</artifactId>
-						<version>${maven-failsafe-plugin.version}</version>
-						<configuration>
-							<suiteXmlFiles>
-								<suiteXmlFile>src/test/testng.xml</suiteXmlFile>
-							</suiteXmlFiles>
-							<useSystemClassLoader>false</useSystemClassLoader>
-						</configuration>
-						<executions>
-							<execution>
-								<goals>
-									<goal>integration-test</goal>
-									<goal>verify</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-					<plugin>
-						<groupId>org.eclipse.jetty</groupId>
-						<artifactId>jetty-maven-plugin</artifactId>
-						<version>${jetty-maven-plugin.version}</version>
-						<configuration>
-							<systemProperties>
-								<systemProperty>
-									<name>jetty.port</name>
-									<value>${jetty.test.port}</value>
-								</systemProperty>
-							</systemProperties>
-						</configuration>
-						<executions>
-							<execution>
-								<id>start-jetty</id>
-								<phase>pre-integration-test</phase>
-								<goals>
-									<!-- stop any previous instance to free up the port -->
-									<goal>stop</goal>
-									<goal>start</goal>
-								</goals>
-								<configuration>
-									<scanIntervalSeconds>0</scanIntervalSeconds>
-									<stopKey>STOP</stopKey>
-									<stopPort>${jetty.test.stop.port}</stopPort>
-									<daemon>true</daemon>
-									<war>${project.parent.artifactId}-${project.version}-test.war</war>
-								</configuration>
-							</execution>
-							<execution>
-								<id>stop-jetty</id>
-								<phase>post-integration-test</phase>
-								<goals>
-									<goal>stop</goal>
-								</goals>
-								<configuration>
-									<stopKey>STOP</stopKey>
-									<stopPort>${jetty.test.stop.port}</stopPort>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-		<!-- 'mvn jetty:run -Plauncher creates war and launches tests -->
-		<profile>
-			<id>launcher</id>
-			<activation>
-				<property>
-					<name>launcher</name>
-				</property>
-			</activation>
-			<build>
-				<plugins>
-					<!-- create a war with configuration to a test database -->
-					<plugin>
-						<artifactId>maven-antrun-plugin</artifactId>
-						<version>${maven-antrun-plugin.version}</version>
-						<executions>
-							<execution>
-								<phase>process-resources</phase>
-								<configuration>
-									<target>
-										<!-- Copy schema exporter for creating database tests -->
-										<delete file="./src/test/resources/database/abcd_base.sql" />
-										<copy file="../${source.release.project}/database/create_mysql.sql" tofile="./src/test/resources/database/abcd_base.sql" />
-										<replace file="./src/test/resources/database/abcd_base.sql" token="create table custom_variables (" value="SET UNIQUE_CHECKS=0;&#xA; SET FOREIGN_KEY_CHECKS = 0;&#xA; create table custom_variables (" />
-										<concat destfile="./src/test/resources/database/abcd_base.sql" append="true">SET UNIQUE_CHECKS=1;
-											SET FOREIGN_KEY_CHECKS = 1;</concat>
-										<!-- Replicate webapp folder, needed for jetty to run -->
-										<delete dir="src/main/webapp" failonerror="false" includeemptydirs="true" />
-										<copy todir="src/main/webapp">
-											<fileset dir="../${source.gui.project}/src/main/webapp" />
-										</copy>
-										<copy todir="target/classes">
-											<fileset dir="../${source.gui.project}/target/classes" />
-										</copy>
-										<!-- Modify database connection to use test database -->
-										<replace token="hibernate.connection.url=jdbc:mysql://${database.server}:3306/${original.database}?" value="hibernate.connection.url=jdbc:mysql://${database.server}:3306/${test.database}?" dir="target/classes">
-											<exclude name="**/*.properties" />
-										</replace>
-										<replace token="hibernate.connection.username=abcd" value="hibernate.connection.username=testuser" dir="target/classes">
-											<exclude name="**/*.properties" />
-										</replace>
-										<replace token="hibernate.hbm2ddl.auto=validate" value="hibernate.hbm2ddl.auto=create-drop" dir="target/classes">
-											<exclude name="**/*.properties" />
-										</replace>
-									</target>
-								</configuration>
-								<goals>
-									<goal>run</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-					<plugin>
-						<groupId>org.eclipse.jetty</groupId>
-						<artifactId>jetty-maven-plugin</artifactId>
-						<version>${jetty-maven-plugin.version}</version>
-						<configuration>
-							<systemProperties>
-								<systemProperty>
-									<name>jetty.port</name>
-									<value>${jetty.test.port}</value>
-								</systemProperty>
-							</systemProperties>
-						</configuration>
-						<executions>
-							<execution>
-								<id>start-jetty</id>
-								<phase>pre-integration-test</phase>
-								<goals>
-									<!-- stop any previous instance to free up the port -->
-									<goal>stop</goal>
-									<goal>start</goal>
-								</goals>
-								<configuration>
-									<scanIntervalSeconds>0</scanIntervalSeconds>
-									<stopKey>STOP</stopKey>
-									<stopPort>${jetty.test.stop.port}</stopPort>
-									<daemon>true</daemon>
-									<war>${project.parent.artifactId}-${project.version}-test.war</war>
-								</configuration>
-							</execution>
-							<execution>
-								<id>stop-jetty</id>
-								<phase>post-integration-test</phase>
-								<goals>
-									<goal>stop</goal>
-								</goals>
-								<configuration>
-									<stopKey>STOP</stopKey>
-									<stopPort>${jetty.test.stop.port}</stopPort>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-		<!-- 'mvn install -Ptester' launches tests without jetty (must be run previously) -->
-		<profile>
-			<id>tester</id>
-			<activation>
-				<property>
-					<name>tester</name>
-				</property>
-			</activation>
-			<build>
-				<plugins>
-					<plugin>
-						<artifactId>maven-failsafe-plugin</artifactId>
-						<version>${maven-failsafe-plugin.version}</version>
-						<configuration>
-							<suiteXmlFiles>
-								<suiteXmlFile>src/test/config/testng.xml</suiteXmlFile>
-							</suiteXmlFiles>
-							<useSystemClassLoader>false</useSystemClassLoader>
-						</configuration>
-						<executions>
-							<execution>
-								<goals>
-									<goal>integration-test</goal>
-									<goal>verify</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-					<plugin>
-						<groupId>org.eclipse.jetty</groupId>
-						<artifactId>jetty-maven-plugin</artifactId>
-						<version>${jetty-maven-plugin.version}</version>
-						<configuration>
-							<systemProperties>
-								<systemProperty>
-									<name>jetty.port</name>
-									<value>${jetty.test.port}</value>
-								</systemProperty>
-							</systemProperties>
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
+    <!-- 'mvn install -PlaunchIntegrationTests' test all application with jenkins -->
+    <profiles>
+        <profile>
+            <id>launchIntegrationTests</id>
+            <activation>
+                <property>
+                    <name>launchIntegrationTests</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <!-- create a war with configuration to a test database -->
+                    <plugin>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>${maven-antrun-plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <phase>process-resources</phase>
+                                <configuration>
+                                    <target>
+                                        <!-- Copy schema exporter for creating database tests -->
+                                        <delete file="./src/test/resources/database/abcd_base.sql"/>
+                                        <copy file="../${source.release.project}/database/create_mysql.sql"
+                                              tofile="./src/test/resources/database/abcd_base.sql"/>
+                                        <replace file="./src/test/resources/database/abcd_base.sql" token="create table custom_variables ("
+                                                 value="SET UNIQUE_CHECKS=0;&#xA; SET FOREIGN_KEY_CHECKS = 0;&#xA; create table custom_variables ("/>
+                                        <concat destfile="./src/test/resources/database/abcd_base.sql" append="true">SET UNIQUE_CHECKS=1;
+                                            SET FOREIGN_KEY_CHECKS = 1;
+                                        </concat>
+                                        <!-- Replicate webapp folder, needed for jetty to run -->
+                                        <delete dir="src/main/webapp" failonerror="false" includeemptydirs="true"/>
+                                        <copy todir="src/main/webapp">
+                                            <fileset dir="../${source.gui.project}/src/main/webapp"/>
+                                        </copy>
+                                        <copy todir="target/classes">
+                                            <fileset dir="../${source.gui.project}/target/classes"/>
+                                        </copy>
+                                        <!-- Modify database connection to use test database -->
+                                        <replace token="hibernate.connection.url=jdbc:mysql://${database.server}:3306/${original.database}?"
+                                                 value="hibernate.connection.url=jdbc:mysql://${database.server}:3306/${test.database}?" dir="target/classes">
+                                            <exclude name="**/*.properties"/>
+                                        </replace>
+                                        <replace token="hibernate.connection.username=abcd" value="hibernate.connection.username=testuser" dir="target/classes">
+                                            <exclude name="**/*.properties"/>
+                                        </replace>
+                                        <replace token="hibernate.hbm2ddl.auto=validate" value="hibernate.hbm2ddl.auto=create-drop" dir="target/classes">
+                                            <exclude name="**/*.properties"/>
+                                        </replace>
+                                    </target>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <version>${maven-failsafe-plugin.version}</version>
+                        <configuration>
+                            <suiteXmlFiles>
+                                <suiteXmlFile>src/test/testng.xml</suiteXmlFile>
+                            </suiteXmlFiles>
+                            <useSystemClassLoader>false</useSystemClassLoader>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>integration-test</goal>
+                                    <goal>verify</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.eclipse.jetty</groupId>
+                        <artifactId>jetty-maven-plugin</artifactId>
+                        <version>${jetty-maven-plugin.version}</version>
+                        <configuration>
+                            <systemProperties>
+                                <systemProperty>
+                                    <name>jetty.port</name>
+                                    <value>${jetty.test.port}</value>
+                                </systemProperty>
+                            </systemProperties>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>start-jetty</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <!-- stop any previous instance to free up the port -->
+                                    <goal>stop</goal>
+                                    <goal>start</goal>
+                                </goals>
+                                <configuration>
+                                    <scanIntervalSeconds>0</scanIntervalSeconds>
+                                    <stopKey>STOP</stopKey>
+                                    <stopPort>${jetty.test.stop.port}</stopPort>
+                                    <daemon>true</daemon>
+                                    <war>${project.parent.artifactId}-${project.version}-test.war</war>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>stop-jetty</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>stop</goal>
+                                </goals>
+                                <configuration>
+                                    <stopKey>STOP</stopKey>
+                                    <stopPort>${jetty.test.stop.port}</stopPort>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <!-- 'mvn jetty:run -Plauncher creates war and launches tests -->
+        <profile>
+            <id>launcher</id>
+            <activation>
+                <property>
+                    <name>launcher</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <!-- create a war with configuration to a test database -->
+                    <plugin>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>${maven-antrun-plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <phase>process-resources</phase>
+                                <configuration>
+                                    <target>
+                                        <!-- Copy schema exporter for creating database tests -->
+                                        <delete file="./src/test/resources/database/abcd_base.sql"/>
+                                        <copy file="../${source.release.project}/database/create_mysql.sql"
+                                              tofile="./src/test/resources/database/abcd_base.sql"/>
+                                        <replace file="./src/test/resources/database/abcd_base.sql" token="create table custom_variables ("
+                                                 value="SET UNIQUE_CHECKS=0;&#xA; SET FOREIGN_KEY_CHECKS = 0;&#xA; create table custom_variables ("/>
+                                        <concat destfile="./src/test/resources/database/abcd_base.sql" append="true">SET UNIQUE_CHECKS=1;
+                                            SET FOREIGN_KEY_CHECKS = 1;
+                                        </concat>
+                                        <!-- Replicate webapp folder, needed for jetty to run -->
+                                        <delete dir="src/main/webapp" failonerror="false" includeemptydirs="true"/>
+                                        <copy todir="src/main/webapp">
+                                            <fileset dir="../${source.gui.project}/src/main/webapp"/>
+                                        </copy>
+                                        <copy todir="target/classes">
+                                            <fileset dir="../${source.gui.project}/target/classes"/>
+                                        </copy>
+                                        <!-- Modify database connection to use test database -->
+                                        <replace token="hibernate.connection.url=jdbc:mysql://${database.server}:3306/${original.database}?"
+                                                 value="hibernate.connection.url=jdbc:mysql://${database.server}:3306/${test.database}?" dir="target/classes">
+                                            <exclude name="**/*.properties"/>
+                                        </replace>
+                                        <replace token="hibernate.connection.username=abcd" value="hibernate.connection.username=testuser" dir="target/classes">
+                                            <exclude name="**/*.properties"/>
+                                        </replace>
+                                        <replace token="hibernate.hbm2ddl.auto=validate" value="hibernate.hbm2ddl.auto=create-drop" dir="target/classes">
+                                            <exclude name="**/*.properties"/>
+                                        </replace>
+                                    </target>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.eclipse.jetty</groupId>
+                        <artifactId>jetty-maven-plugin</artifactId>
+                        <version>${jetty-maven-plugin.version}</version>
+                        <configuration>
+                            <systemProperties>
+                                <systemProperty>
+                                    <name>jetty.port</name>
+                                    <value>${jetty.test.port}</value>
+                                </systemProperty>
+                            </systemProperties>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>start-jetty</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <!-- stop any previous instance to free up the port -->
+                                    <goal>stop</goal>
+                                    <goal>start</goal>
+                                </goals>
+                                <configuration>
+                                    <scanIntervalSeconds>0</scanIntervalSeconds>
+                                    <stopKey>STOP</stopKey>
+                                    <stopPort>${jetty.test.stop.port}</stopPort>
+                                    <daemon>true</daemon>
+                                    <war>${project.parent.artifactId}-${project.version}-test.war</war>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>stop-jetty</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>stop</goal>
+                                </goals>
+                                <configuration>
+                                    <stopKey>STOP</stopKey>
+                                    <stopPort>${jetty.test.stop.port}</stopPort>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <!-- 'mvn install -Ptester' launches tests without jetty (must be run previously) -->
+        <profile>
+            <id>tester</id>
+            <activation>
+                <property>
+                    <name>tester</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <version>${maven-failsafe-plugin.version}</version>
+                        <configuration>
+                            <suiteXmlFiles>
+                                <suiteXmlFile>src/test/config/testng.xml</suiteXmlFile>
+                            </suiteXmlFiles>
+                            <useSystemClassLoader>false</useSystemClassLoader>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>integration-test</goal>
+                                    <goal>verify</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.eclipse.jetty</groupId>
+                        <artifactId>jetty-maven-plugin</artifactId>
+                        <version>${jetty-maven-plugin.version}</version>
+                        <configuration>
+                            <systemProperties>
+                                <systemProperty>
+                                    <name>jetty.port</name>
+                                    <value>${jetty.test.port}</value>
+                                </systemProperty>
+                            </systemProperties>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
