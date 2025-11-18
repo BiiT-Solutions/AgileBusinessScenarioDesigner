@@ -47,7 +47,9 @@ public class DiagramLinkSerializer extends DiagramObjectSerializer<DiagramLink> 
             jgen.writeRawValue(src.getAttrs());
         }
         if (src.getVertices() != null && !src.getVertices().isEmpty()) {
-            jgen.writeObjectField("vertices", ObjectMapperFactory.getObjectMapper().readValue(src.getVertices(), Point[].class));
+            //jgen.writeObjectField("vertices", ObjectMapperFactory.getObjectMapper().readValue(src.getVertices(), Point[].class));
+            jgen.writeFieldName("vertices");
+            jgen.writeRawValue(src.getVertices());
         }
     }
 }
